@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+    // ---------------------------- States ---------------------------//
     const [ipData, setIpData] = useState({
         ip: "",
         cidr: "",
@@ -27,6 +28,12 @@ function App() {
 
     const [showImage, setShowImage] = useState(false);
 
+    const [attention, setAttention] = useState(true);
+
+    // --------------------------------------------------------- //
+
+    // --------------- Functions ------------------------------//
+
     const handleToggle = () => setShowImage((prev) => !prev);
 
     const resetInputBorders = () => {
@@ -35,7 +42,6 @@ function App() {
         });
     };
 
-    // Helpers
     const getRandomIp = () => {
         return Array(4)
             .fill(0)
@@ -84,6 +90,7 @@ function App() {
     };
 
     const handleStart = () => {
+        setAttention(false);
         resetInputBorders();
         const ip = getRandomIp();
         const cidr = getRandomCIDR();
@@ -229,6 +236,10 @@ function App() {
         });
     };
 
+    // -----------------------------------------------------------------//
+
+    // -------------------------- JSX ----------------------------------//
+
     return (
         <>
             <header>
@@ -251,7 +262,11 @@ function App() {
                 </div>
             </div>
 
-            <button className="start-btn" onClick={handleStart}>
+            <button
+                onClick={handleStart}
+                className={`${attention ? "attention" : ""} start-btn`}
+                MouseEnter={() => setAttention(false)}
+            >
                 IP erzeugen
             </button>
             <main>
