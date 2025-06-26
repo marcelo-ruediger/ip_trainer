@@ -247,7 +247,7 @@ function App() {
                 <div
                     className={`hidden ${showImage ? "visible" : "invisible"}`}
                 >
-                    <img src="../public/tabel.png" alt="Toggleable" />
+                    <img src="./table.png" alt="Toggleable" />
                 </div>
             </div>
 
