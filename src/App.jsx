@@ -25,6 +25,10 @@ function App() {
 
     const [mode, setMode] = useState("cidr"); // or 'mask'
 
+    const [showImage, setShowImage] = useState(false);
+
+    const handleToggle = () => setShowImage((prev) => !prev);
+
     const resetInputBorders = () => {
         document.querySelectorAll("input").forEach((input) => {
             input.classList.remove("correct", "wrong");
@@ -230,6 +234,23 @@ function App() {
             <header>
                 <h1>Übung macht den Meister</h1>
             </header>
+
+            <div className="image-toggle-container">
+                <label className="toggle-label">
+                    <input
+                        type="checkbox"
+                        checked={showImage}
+                        onChange={handleToggle}
+                    />
+                    Tabelle zeigen
+                </label>
+                <div
+                    className={`hidden ${showImage ? "visible" : "invisible"}`}
+                >
+                    <img src="../public/tabel.png" alt="Toggleable" />
+                </div>
+            </div>
+
             <button className="start-btn" onClick={handleStart}>
                 IP erzeugen
             </button>
@@ -237,21 +258,21 @@ function App() {
                 <div className="top-container">
                     <label>
                         IP-Adresse:
-                        <br />
+                        <br className="responsive-break" />
                         <input value={ipData.ip} disabled />
                     </label>
-                    <br />
+                    <br className="responsive-break" />
                     {mode === "cidr" ? (
                         <>
                             <label>
                                 CIDR:
-                                <br />
+                                <br className="responsive-break" />
                                 <input value={ipData.cidr} disabled />
                             </label>
-                            <br />
+                            <br className="responsive-break" />
                             <label>
                                 Subnetzmaske:
-                                <br />
+                                <br className="responsive-break" />
                                 <input
                                     id="subnetMask"
                                     value={renderValue("subnetMask")}
@@ -264,7 +285,7 @@ function App() {
                         <>
                             <label>
                                 CIDR:
-                                <br />
+                                <br className="responsive-break" />
                                 <input
                                     id="cidr"
                                     value={renderValue("cidr")}
@@ -272,10 +293,10 @@ function App() {
                                     disabled={showAnswers}
                                 />
                             </label>
-                            <br />
+                            <br className="responsive-break" />
                             <label>
                                 Subnetzmaske:
-                                <br />
+                                <br className="responsive-break" />
                                 <input value={ipData.subnetMask} disabled />
                             </label>
                         </>
@@ -285,7 +306,7 @@ function App() {
                 <div className="middle-container">
                     <label>
                         Netzwerkadresse:
-                        <br />
+                        <br className="responsive-break" />
                         <input
                             id="networkId"
                             value={renderValue("networkId")}
@@ -295,7 +316,7 @@ function App() {
                     </label>
                     <label>
                         Broadcast:
-                        <br />
+                        <br className="responsive-break" />
                         <input
                             id="broadcast"
                             value={renderValue("broadcast")}
@@ -308,7 +329,7 @@ function App() {
                 <div className="bottom-container">
                     <label>
                         IP-Klasse:
-                        <br />
+                        <br className="responsive-break" />
                         <input
                             id="ipClass"
                             value={renderValue("ipClass")}
@@ -318,7 +339,7 @@ function App() {
                     </label>
                     <label>
                         benutzbare IPs:
-                        <br />
+                        <br className="responsive-break" />
                         <input
                             id="usableIps"
                             value={renderValue("usableIps")}

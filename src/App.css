@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 #root {
     margin: auto;
     font-family: "Segoe UI", sans-serif;
@@ -22,6 +28,7 @@ input {
     border-radius: 6px;
     transition: box-shadow 0.3s, border-color 0.3s;
     outline: none;
+    margin-top: 0.5rem;
 }
 
 input.correct {
@@ -59,7 +66,8 @@ label {
     gap: 2rem;
     justify-content: space-between;
     margin-bottom: 2rem;
-    border: 1px solid #666666;
+    border: 2px solid #444444;
+    border-radius: 6px;
     padding: 2rem;
 }
 
@@ -71,4 +79,50 @@ label {
 
 footer {
     font-size: 12px;
+}
+
+.hidden.invisible {
+    display: none;
+}
+
+.hidden.visible {
+    display: block;
+}
+
+.hidden > img {
+    width: 100%;
+    border-radius: 6px;
+    background-color: #ffffff;
+    padding: 0.1rem;
+    margin-top: 1rem;
+}
+
+.image-toggle-container {
+    width: 600px;
+    margin: 1rem auto;
+    text-align: center;
+}
+
+.image-toggle-container > label > input {
+    width: 25px;
+}
+
+.image-toggle-container > label {
+    text-align: right;
+}
+
+/* Media Rules for Responsivness  */
+
+@media (max-width: 600px) {
+    .top-container,
+    .middle-container,
+    .bottom-container {
+        flex-direction: column;
+    }
+    .responsive-break {
+        display: none;
+    }
+    input {
+        margin-left: 1rem;
+    }
 }
