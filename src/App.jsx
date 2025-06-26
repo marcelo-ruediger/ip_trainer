@@ -242,7 +242,7 @@ function App() {
                         checked={showImage}
                         onChange={handleToggle}
                     />
-                    Tabelle zeigen
+                    Hilfstabelle
                 </label>
                 <div
                     className={`hidden ${showImage ? "visible" : "invisible"}`}
