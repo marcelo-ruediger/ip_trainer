@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import tableImg from "./table.png";
 
 function App() {
     // ---------------------------- States ---------------------------//
@@ -258,7 +259,7 @@ function App() {
                 <div
                     className={`hidden ${showImage ? "visible" : "invisible"}`}
                 >
-                    <img src="./table.png" alt="Toggleable" />
+                    <img src={tableImg} alt="Toggleable" />
                 </div>
             </div>
 
