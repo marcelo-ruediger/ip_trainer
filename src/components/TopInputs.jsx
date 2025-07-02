@@ -32,7 +32,11 @@ function TopInputs({
                     <label>
                         CIDR:
                         <br className="responsive-break" />
-                        <input value={ipData.cidr} disabled />
+                        <input
+                            value={ipData.cidr}
+                            className={ipValid === true && "wrong"}
+                            placeholder={ipValid === true && "Eingeben..."}
+                        />
                     </label>
                     <br className="responsive-break" />
                     <label>
@@ -40,6 +44,8 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             id="subnetMask"
+                            className={ipValid === true && "wrong"}
+                            placeholder={ipValid === true && "Eingeben..."}
                             value={renderValue("subnetMask")}
                             onChange={handleInputChange}
                             disabled={showAnswers}
@@ -53,6 +59,8 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             id="cidr"
+                            className={ipValid === true && "wrong"}
+                            placeholder={ipValid === true && "Eingeben..."}
                             value={renderValue("cidr")}
                             onChange={handleInputChange}
                             disabled={showAnswers}
@@ -62,7 +70,11 @@ function TopInputs({
                     <label>
                         Subnetzmaske:
                         <br className="responsive-break" />
-                        <input value={ipData.subnetMask} disabled />
+                        <input
+                            value={ipData.subnetMask}
+                            className={ipValid === true && "Wrong"}
+                            placeholder={ipValid === true && "Eingeben..."}
+                        />
                     </label>
                 </>
             )}
