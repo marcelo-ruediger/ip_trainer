@@ -1,9 +1,20 @@
 import { useState } from "react";
 import "./App.css";
-import tableImg from "./table.png";
+import tableImg from "../public/table.png";
+import Header from "./components/Header";
+import ImageToggle from "./components/ImageToggle";
+import TopInputs from "./components/TopInputs";
+import MiddleInputs from "./components/MiddleInputs";
+import BottomInputs from "./components/BottomInputs";
+import Footer from "./components/Footer";
+import BottomButtons from "./components/BottomButtons";
+import TopInputsIPv6 from "./components/TopInputsIPv6";
+import MiddleInputsIPv6 from "./components/MiddleInputsIPv6";
+import BottomInputsIPv6 from "./components/BottomInputsIPv6";
+import IpVersionButtons from "./components/IpVersionButtons";
 
+// ---------------------------- States ---------------------------//
 function App() {
-    // ---------------------------- States ---------------------------//
     const [ipData, setIpData] = useState({
         ip: "",
         cidr: "",
@@ -27,13 +38,43 @@ function App() {
 
     const [mode, setMode] = useState("cidr"); // or 'mask'
 
+    const [ipVersion, setIpVersion] = useState("ipv4"); // "ipv4" or "ipv6"
+
     const [showImage, setShowImage] = useState(false);
 
     const [attention, setAttention] = useState(true);
 
-    // --------------------------------------------------------- //
+    const [ipValid, setIpValid] = useState(null);
 
     // --------------- Functions ------------------------------//
+    const handleIpInput = (e) => {
+        const value = e.target.value;
+        setIpData((prev) => ({ ...prev, ip: value }));
+
+        // Prüfe, ob die IP gültig ist
+        const isValid =
+            /^(\d{1,3}\.){3}\d{1,3}$/.test(value) &&
+            value
+                .split(".")
+                .every((octet) => Number(octet) >= 0 && Number(octet) <= 255);
+
+        setIpValid(isValid);
+
+        if (isValid) {
+            // Berechne alles neu (z.B. CIDR, Subnetzmaske, etc.)
+            const cidr = ipData.cidr.replace("/", "") || 24; // oder Standardwert
+            const data = calculateNetworkData(value, cidr);
+            setIpData((prev) => ({
+                ...prev,
+                ...data,
+                ip: value,
+            }));
+            setUserInput((prev) => ({
+                ...prev,
+                ...data,
+            }));
+        }
+    };
 
     const handleToggle = () => setShowImage((prev) => !prev);
 
@@ -91,6 +132,7 @@ function App() {
     };
 
     const handleStart = () => {
+        // IPv4 - Generates a random IPv4 address and calculates network data//
         setAttention(false);
         resetInputBorders();
         const ip = getRandomIp();
@@ -117,6 +159,30 @@ function App() {
             usableIps: "",
             cidr: "",
             subnetMask: "",
+        });
+    };
+
+    const handleStartIPv6 = () => {
+        setAttention(false);
+        resetInputBorders();
+        const ipv6 = getRandomIPv6();
+        // You can set a random prefix length, e.g. /64
+        const netzpraefix = "/64";
+        setIpData({
+            ipv6,
+            netzpraefix,
+            abkuerzung: "", // You can add logic for abbreviation if needed
+            netzwerkadresse: "", // Fill as needed
+            // ...other IPv6 fields
+        });
+        setShowAnswers(false);
+        setUserInput({
+            abkuerzung: "",
+            netzwerkadresse: "",
+            netzpraefix: "",
+            typ: "",
+            benutzbareIps: "",
+            // ...other IPv6 fields
         });
     };
 
@@ -237,147 +303,93 @@ function App() {
         });
     };
 
-    // -----------------------------------------------------------------//
+    function getRandomIPv6() {
+        // Generates 8 groups of 4 hex digits
+        const groups = [];
+        for (let i = 0; i < 8; i++) {
+            let group = Math.floor(Math.random() * 0x10000).toString(16);
+            // Pad with leading zeros to ensure 4 digits
+            group = group.padStart(4, "0");
+            groups.push(group);
+        }
+        return groups.join(":");
+    }
 
     // -------------------------- JSX ----------------------------------//
 
     return (
         <>
-            <header>
-                <h1>Übung macht den Meister</h1>
-            </header>
+            <Header />
+            <ImageToggle
+                showImage={showImage}
+                onToggle={handleToggle}
+                tableImg={tableImg}
+            />
 
-            <div className="image-toggle-container">
-                <label className="toggle-label">
-                    <input
-                        type="checkbox"
-                        checked={showImage}
-                        onChange={handleToggle}
-                    />
-                    Hilfstabelle
-                </label>
-                <div
-                    className={`hidden ${showImage ? "visible" : "invisible"}`}
-                >
-                    <img src={tableImg} alt="Toggleable" />
-                </div>
-            </div>
+            <IpVersionButtons
+                ipVersion={ipVersion}
+                attention={attention}
+                setAttention={setAttention}
+                handleStartIPv4={() => {
+                    setIpVersion("ipv4");
+                    handleStart();
+                }}
+                handleStartIPv6={() => {
+                    setIpVersion("ipv6");
+                    handleStartIPv6();
+                }}
+            />
 
-            <button
-                onClick={handleStart}
-                className={`${attention ? "attention" : ""} start-btn`}
-                MouseEnter={() => setAttention(false)}
-            >
-                IP erzeugen
-            </button>
             <main>
-                <div className="top-container">
-                    <label>
-                        IP-Adresse:
-                        <br className="responsive-break" />
-                        <input value={ipData.ip} disabled />
-                    </label>
-                    <br className="responsive-break" />
-                    {mode === "cidr" ? (
-                        <>
-                            <label>
-                                CIDR:
-                                <br className="responsive-break" />
-                                <input value={ipData.cidr} disabled />
-                            </label>
-                            <br className="responsive-break" />
-                            <label>
-                                Subnetzmaske:
-                                <br className="responsive-break" />
-                                <input
-                                    id="subnetMask"
-                                    value={renderValue("subnetMask")}
-                                    onChange={handleInputChange}
-                                    disabled={showAnswers}
-                                />
-                            </label>
-                        </>
-                    ) : (
-                        <>
-                            <label>
-                                CIDR:
-                                <br className="responsive-break" />
-                                <input
-                                    id="cidr"
-                                    value={renderValue("cidr")}
-                                    onChange={handleInputChange}
-                                    disabled={showAnswers}
-                                />
-                            </label>
-                            <br className="responsive-break" />
-                            <label>
-                                Subnetzmaske:
-                                <br className="responsive-break" />
-                                <input value={ipData.subnetMask} disabled />
-                            </label>
-                        </>
-                    )}
-                </div>
-
-                <div className="middle-container">
-                    <label>
-                        Netzwerkadresse:
-                        <br className="responsive-break" />
-                        <input
-                            id="networkId"
-                            value={renderValue("networkId")}
-                            onChange={handleInputChange}
-                            disabled={showAnswers}
+                {ipVersion === "ipv4" ? (
+                    <>
+                        <TopInputs
+                            ipData={ipData}
+                            mode={mode}
+                            renderValue={renderValue}
+                            handleInputChange={handleInputChange}
+                            showAnswers={showAnswers}
+                            onIpInput={handleIpInput}
+                            ipValid={ipValid}
                         />
-                    </label>
-                    <label>
-                        Broadcast:
-                        <br className="responsive-break" />
-                        <input
-                            id="broadcast"
-                            value={renderValue("broadcast")}
-                            onChange={handleInputChange}
-                            disabled={showAnswers}
+                        <MiddleInputs
+                            renderValue={renderValue}
+                            handleInputChange={handleInputChange}
+                            showAnswers={showAnswers}
                         />
-                    </label>
-                </div>
-
-                <div className="bottom-container">
-                    <label>
-                        IP-Klasse:
-                        <br className="responsive-break" />
-                        <input
-                            id="ipClass"
-                            value={renderValue("ipClass")}
-                            onChange={handleInputChange}
-                            disabled={showAnswers}
+                        <BottomInputs
+                            renderValue={renderValue}
+                            handleInputChange={handleInputChange}
+                            showAnswers={showAnswers}
                         />
-                    </label>
-                    <label>
-                        benutzbare IPs:
-                        <br className="responsive-break" />
-                        <input
-                            id="usableIps"
-                            value={renderValue("usableIps")}
-                            onChange={handleInputChange}
-                            disabled={showAnswers}
+                    </>
+                ) : (
+                    <>
+                        <TopInputsIPv6
+                            ipData={ipData}
+                            mode={mode}
+                            renderValue={renderValue}
+                            handleInputChange={handleInputChange}
+                            showAnswers={showAnswers}
                         />
-                    </label>
-                </div>
+                        <MiddleInputsIPv6
+                            renderValue={renderValue}
+                            handleInputChange={handleInputChange}
+                            showAnswers={showAnswers}
+                        />
+                        <BottomInputsIPv6
+                            renderValue={renderValue}
+                            handleInputChange={handleInputChange}
+                            showAnswers={showAnswers}
+                        />
+                    </>
+                )}
             </main>
-
-            <div className="bottom-btns">
-                <button className="check-answers" onClick={handleCheck}>
-                    Überprüfen
-                </button>
-                <button className="show-answers" onClick={handleShowAnswers}>
-                    Antworten anzeigen
-                </button>
-            </div>
-
-            <footer>
-                <p>&copy; 2025 Marcelo Rüdiger · Netzwerktrainer</p>
-            </footer>
+            <BottomButtons
+                handleShowAnswers={handleShowAnswers}
+                handleCheck={handleCheck}
+            />
+            <Footer />
         </>
     );
 }

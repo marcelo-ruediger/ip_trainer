@@ -21,7 +21,8 @@ button {
     color: #cccccc;
 }
 
-input {
+input,
+select {
     width: 125px;
     background-color: #000;
     color: #cccccc;
@@ -32,6 +33,14 @@ input {
     transition: box-shadow 0.3s, border-color 0.3s;
     outline: none;
     margin-top: 0.5rem;
+}
+
+.ipv6-input {
+    width: 300px;
+}
+
+.netzpraefix {
+    width: 30px;
 }
 
 input.correct {
@@ -48,9 +57,10 @@ button:hover {
     transform: scale(1.05);
 }
 
-.start-btn {
-    display: block;
-    margin: 0 auto 1rem auto;
+.top-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
 }
 
 main {
@@ -62,17 +72,19 @@ label {
     display: block;
 }
 
-.top-container,
-.middle-container,
-.bottom-container {
+.default-container {
     display: flex;
+    justify-content: space-around;
     gap: 2rem;
-    justify-content: space-between;
     margin-bottom: 2rem;
     border: 2px solid #444444;
     border-radius: 6px;
     padding: 2rem;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
+}
+
+.three-inputs-container {
+    justify-content: space-between;
 }
 
 .bottom-btns {
