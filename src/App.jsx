@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import tableImg from "./table.png";
+import tableImg from "../public/table.png";
 
 function App() {
     // ---------------------------- States ---------------------------//
