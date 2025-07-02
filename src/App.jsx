@@ -58,10 +58,9 @@ function App() {
                 .split(".")
                 .every((octet) => Number(octet) >= 0 && Number(octet) <= 255);
 
-        setIpValid(isValid);
+        setIpValid(isValid); // --------------------------------------------------------------------- HERE -------------------------------//
 
         if (isValid) {
-            // Berechne alles neu (z.B. CIDR, Subnetzmaske, etc.)
             const cidr = ipData.cidr.replace("/", "") || 24; // oder Standardwert
             const data = calculateNetworkData(value, cidr);
             setIpData((prev) => ({
@@ -92,10 +91,13 @@ function App() {
     };
 
     const getRandomCIDR = () => {
-        const cidrs = [8, 16, 24, 25, 26, 27, 28, 29, 30];
-        return cidrs[Math.floor(Math.random() * cidrs.length)];
+        const commonCidrs = [8, 16, 24, 25, 26, 27, 28, 29, 30];
+        const allCidrs = Math.ceil(Math.random() * 31);
+        return Math.random() < 0.5
+            ? commonCidrs[Math.floor(Math.random() * commonCidrs.length)]
+            : allCidrs;
     };
-
+    // -------------------------------------------------------------------------------- HERE -------------------------------//
     const cidrToMask = (cidr) => {
         const mask = [];
         for (let i = 0; i < 4; i++) {
