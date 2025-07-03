@@ -1,8 +1,6 @@
 import { useState } from "react";
 import "./App.css";
 import tableImg from "../public/table.png";
-<<<<<<< HEAD
-=======
 import Header from "./components/Header";
 import ImageToggle from "./components/ImageToggle";
 import TopInputs from "./components/TopInputs";
@@ -14,7 +12,6 @@ import TopInputsIPv6 from "./components/TopInputsIPv6";
 import MiddleInputsIPv6 from "./components/MiddleInputsIPv6";
 import BottomInputsIPv6 from "./components/BottomInputsIPv6";
 import IpVersionButtons from "./components/IpVersionButtons";
->>>>>>> 49597512ed3f4bd9331adadb3db1d87e621ef408
 
 // ---------------------------- States ---------------------------//
 function App() {
