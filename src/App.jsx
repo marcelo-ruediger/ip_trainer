@@ -48,10 +48,11 @@ function App() {
 
     // --------------- Functions ------------------------------//
     const handleIpInput = (e) => {
+        setAttention(false);
         const value = e.target.value;
         setIpData((prev) => ({ ...prev, ip: value }));
 
-        // Prüfe, ob die IP gültig ist
+        // Validate IP address
         const isValid =
             /^(\d{1,3}\.){3}\d{1,3}$/.test(value) &&
             value
@@ -60,19 +61,19 @@ function App() {
 
         setIpValid(isValid); // --------------------------------------------------------------------- HERE -------------------------------//
 
-        if (isValid) {
-            const cidr = ipData.cidr.replace("/", "") || 24; // oder Standardwert
-            const data = calculateNetworkData(value, cidr);
-            setIpData((prev) => ({
-                ...prev,
-                ...data,
-                ip: value,
-            }));
-            setUserInput((prev) => ({
-                ...prev,
-                ...data,
-            }));
-        }
+        // if (isValid) {
+        //     const cidr = ipData.cidr.replace("/", "") || 24; // or Standard value
+        //     const data = calculateNetworkData(value, cidr);
+        //     setIpData((prev) => ({
+        //         ...prev,
+        //         ...data,
+        //         ip: value,
+        //     }));
+        //     setUserInput((prev) => ({
+        //         ...prev,
+        //         ...data,
+        //     }));
+        // }
     };
 
     const handleToggle = () => setShowImage((prev) => !prev);
@@ -228,7 +229,7 @@ function App() {
 
         fieldsToCheck.forEach((fieldId) => {
             const value = userInput[fieldId]?.trim();
-            if (value === undefined) return; // Keine Eingabe → überspringen
+            if (value === undefined) return; // Empty fields are ignored
 
             let isValid = false;
             let isCorrect = false;
@@ -353,6 +354,7 @@ function App() {
                             showAnswers={showAnswers}
                             onIpInput={handleIpInput}
                             ipValid={ipValid}
+                            attention={attention}
                         />
                         <MiddleInputs
                             renderValue={renderValue}

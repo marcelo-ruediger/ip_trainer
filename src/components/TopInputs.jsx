@@ -6,6 +6,7 @@ function TopInputs({
     showAnswers,
     onIpInput,
     ipValid,
+    attention,
 }) {
     return (
         <div className="default-container three-inputs-container">
@@ -17,13 +18,13 @@ function TopInputs({
                     placeholder="Eingeben..."
                     value={ipData.ip}
                     onChange={onIpInput}
-                    className={
-                        ipValid === true
-                            ? "correct"
-                            : ipValid === false
-                            ? "wrong"
-                            : ""
-                    }
+                    className={[
+                        attention && "attention",
+                        ipValid === true ? "correct" : "",
+                        ipValid === false ? "wrong" : "",
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}
                 />
             </label>
             <br className="responsive-break" />
@@ -34,7 +35,7 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             value={ipData.cidr}
-                            className={ipValid === true && "wrong"}
+                            className={ipValid === true && "attention"}
                             placeholder={ipValid === true && "Eingeben..."}
                         />
                     </label>
@@ -44,7 +45,7 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             id="subnetMask"
-                            className={ipValid === true && "wrong"}
+                            className={ipValid === true && "attention"}
                             placeholder={ipValid === true && "Eingeben..."}
                             value={renderValue("subnetMask")}
                             onChange={handleInputChange}
@@ -59,7 +60,7 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             id="cidr"
-                            className={ipValid === true && "wrong"}
+                            className={ipValid === true && "attention"}
                             placeholder={ipValid === true && "Eingeben..."}
                             value={renderValue("cidr")}
                             onChange={handleInputChange}
@@ -72,7 +73,7 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             value={ipData.subnetMask}
-                            className={ipValid === true && "Wrong"}
+                            className={ipValid === true && "attention"}
                             placeholder={ipValid === true && "Eingeben..."}
                         />
                     </label>

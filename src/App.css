@@ -128,7 +128,7 @@ footer {
     text-align: right;
 }
 
-button.attention {
+.attention {
     border: solid 1px #646cff;
     transform: scale(1.05);
 }
