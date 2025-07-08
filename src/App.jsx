@@ -46,9 +46,29 @@ function App() {
 
     const [ipValid, setIpValid] = useState(null);
 
+    const [generated, setGenerated] = useState({ cidr: "", subnetMask: "" });
+
     // --------------- Functions ------------------------------//
     const handleIpInput = (e) => {
+        setUserInput({
+            networkId: "",
+            broadcast: "",
+            ipClass: "",
+            usableIps: "",
+            cidr: "",
+            subnetMask: "",
+        });
+        setIpData({
+            ip: "",
+            cidr: "",
+            subnetMask: "",
+            networkId: "",
+            broadcast: "",
+            ipClass: "",
+            usableIps: "",
+        });
         setAttention(false);
+
         const value = e.target.value;
         setIpData((prev) => ({ ...prev, ip: value }));
 
@@ -59,21 +79,7 @@ function App() {
                 .split(".")
                 .every((octet) => Number(octet) >= 0 && Number(octet) <= 255);
 
-        setIpValid(isValid); // --------------------------------------------------------------------- HERE -------------------------------//
-
-        // if (isValid) {
-        //     const cidr = ipData.cidr.replace("/", "") || 24; // or Standard value
-        //     const data = calculateNetworkData(value, cidr);
-        //     setIpData((prev) => ({
-        //         ...prev,
-        //         ...data,
-        //         ip: value,
-        //     }));
-        //     setUserInput((prev) => ({
-        //         ...prev,
-        //         ...data,
-        //     }));
-        // }
+        setIpValid(isValid);
     };
 
     const handleToggle = () => setShowImage((prev) => !prev);
@@ -136,6 +142,7 @@ function App() {
 
     const handleStart = () => {
         // IPv4 - Generates a random IPv4 address and calculates network data//
+        setIpValid(null);
         setAttention(false);
         resetInputBorders();
         const ip = getRandomIp();
@@ -146,10 +153,16 @@ function App() {
         const newMode = Math.random() < 0.5 ? "cidr" : "mask";
         setMode(newMode);
 
-        setIpData({
-            ip,
+        // Save both generated values to show later as answers
+        setGenerated({
             cidr: `/${cidr}`,
             subnetMask,
+        });
+
+        setIpData({
+            ip,
+            cidr: newMode === "cidr" ? `/${cidr}` : "",
+            subnetMask: newMode === "mask" ? subnetMask : "",
             ...data,
         });
 
@@ -165,43 +178,28 @@ function App() {
         });
     };
 
-    const handleStartIPv6 = () => {
-        setAttention(false);
-        resetInputBorders();
-        const ipv6 = getRandomIPv6();
-        // You can set a random prefix length, e.g. /64
-        const netzpraefix = "/64";
-        setIpData({
-            ipv6,
-            netzpraefix,
-            abkuerzung: "", // You can add logic for abbreviation if needed
-            netzwerkadresse: "", // Fill as needed
-            // ...other IPv6 fields
-        });
-        setShowAnswers(false);
-        setUserInput({
-            abkuerzung: "",
-            netzwerkadresse: "",
-            netzpraefix: "",
-            typ: "",
-            benutzbareIps: "",
-            // ...other IPv6 fields
-        });
-    };
-
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setUserInput((prev) => ({ ...prev, [id]: value }));
     };
 
     const handleShowAnswers = () => {
-        setUserInput(ipData);
-        const ids = ["networkId", "broadcast", "ipClass", "usableIps"];
-        if (mode === "cidr") {
-            ids.push("subnetMask");
-        } else {
-            ids.push("cidr");
-        }
+        // Always fill both fields from ipData
+        setUserInput({
+            ...ipData,
+            cidr: generated.cidr,
+            subnetMask: generated.subnetMask,
+        });
+        setShowAnswers(true);
+
+        const ids = [
+            "networkId",
+            "broadcast",
+            "ipClass",
+            "usableIps",
+            "cidr",
+            "subnetMask",
+        ];
         ids.forEach((id) => {
             const input = document.getElementById(id);
             if (input) {
@@ -306,6 +304,31 @@ function App() {
         });
     };
 
+    // IPv6 --------------------------------------------------------------------//
+    const handleStartIPv6 = () => {
+        setAttention(false);
+        resetInputBorders();
+        const ipv6 = getRandomIPv6();
+        // You can set a random prefix length, e.g. /64
+        const netzpraefix = "/64";
+        setIpData({
+            ipv6,
+            netzpraefix,
+            abkuerzung: "", // You can add logic for abbreviation if needed
+            netzwerkadresse: "", // Fill as needed
+            // ...other IPv6 fields
+        });
+        setShowAnswers(false);
+        setUserInput({
+            abkuerzung: "",
+            netzwerkadresse: "",
+            netzpraefix: "",
+            typ: "",
+            benutzbareIps: "",
+            // ...other IPv6 fields
+        });
+    };
+
     function getRandomIPv6() {
         // Generates 8 groups of 4 hex digits
         const groups = [];
@@ -355,6 +378,7 @@ function App() {
                             onIpInput={handleIpInput}
                             ipValid={ipValid}
                             attention={attention}
+                            userInput={userInput}
                         />
                         <MiddleInputs
                             renderValue={renderValue}

@@ -8,7 +8,7 @@ function MiddleInputs({ renderValue, handleInputChange, showAnswers }) {
                     id="networkId"
                     value={renderValue("networkId")}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
+                    disabled={showAnswers} //---------------_HERE----------------
                 />
             </label>
             <label>
@@ -18,7 +18,7 @@ function MiddleInputs({ renderValue, handleInputChange, showAnswers }) {
                     id="broadcast"
                     value={renderValue("broadcast")}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
+                    disabled={showAnswers} // Not able to type subnet mask when mode == cidr and vice versa when mode == mask
                 />
             </label>
         </div>
