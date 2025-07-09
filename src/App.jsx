@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import tableImg from "../public/table.png";
+import tableImg from "./images/table.png";
 import Header from "./components/Header";
 import ImageToggle from "./components/ImageToggle";
 import TopInputs from "./components/TopInputs";
