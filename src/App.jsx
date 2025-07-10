@@ -58,6 +58,10 @@ function App() {
             cidr: "",
             subnetMask: "",
         });
+        setGenerated({
+            cidr: "",
+            subnetMask: "",
+        });
         setIpData({
             ip: "",
             cidr: "",
@@ -273,9 +277,15 @@ function App() {
 
                 if (!isValid) throw new Error("Ungültige Eingabe");
 
-                let correctValue = ipData[fieldId];
+                let correctValue;
+                if (fieldId === "cidr" || fieldId === "subnetMask") {
+                    correctValue = generated[fieldId];
+                } else {
+                    correctValue = ipData[fieldId];
+                }
+
                 if (fieldId === "cidr") {
-                    correctValue = ipData.cidr.replace("/", "");
+                    correctValue = correctValue.replace("/", "");
                 }
                 if (fieldId === "ipClass") {
                     correctValue = ipData.ipClass.toUpperCase().startsWith("D")
@@ -293,6 +303,16 @@ function App() {
                 if (inputElement) {
                     inputElement.classList.remove("correct", "wrong");
                     inputElement.classList.add(isCorrect ? "correct" : "wrong");
+                }
+
+                if (mode === "cidr") {
+                    const cidrInput = document.getElementById("cidr");
+                    if (cidrInput) {
+                        cidrInput.classList.remove("correct", "wrong");
+                        cidrInput.classList.add(
+                            isCorrect ? "correct" : "wrong"
+                        );
+                    }
                 }
             } catch (error) {
                 const inputElement = document.getElementById(fieldId);
@@ -372,13 +392,14 @@ function App() {
                         <TopInputs
                             ipData={ipData}
                             mode={mode}
-                            renderValue={renderValue}
+                            // renderValue={renderValue}
                             handleInputChange={handleInputChange}
-                            showAnswers={showAnswers}
+                            // showAnswers={showAnswers}
                             onIpInput={handleIpInput}
                             ipValid={ipValid}
                             attention={attention}
                             userInput={userInput}
+                            generated={generated}
                         />
                         <MiddleInputs
                             renderValue={renderValue}

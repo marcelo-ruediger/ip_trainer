@@ -1,13 +1,12 @@
 function TopInputs({
     ipData,
     mode,
-    renderValue,
     handleInputChange,
-    showAnswers,
     onIpInput,
     ipValid,
     attention,
     userInput,
+    generated,
 }) {
     return (
         <div className="default-container three-inputs-container">
@@ -37,9 +36,8 @@ function TopInputs({
                     id="cidr"
                     className={ipValid === true && "attention"}
                     placeholder={ipValid === true && "Eingeben..."}
-                    value={showAnswers ? userInput.cidr : ipData.cidr}
+                    value={mode === "cidr" ? generated.cidr : userInput.cidr}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
                 />
                 <p>{ipData.cidr}</p>
             </label>
@@ -52,10 +50,11 @@ function TopInputs({
                     className={ipValid === true && "attention"}
                     placeholder={ipValid === true && "Eingeben..."}
                     value={
-                        showAnswers ? userInput.subnetMask : ipData.subnetMask
+                        mode === "mask"
+                            ? generated.subnetMask
+                            : userInput.subnetMask
                     }
                     onChange={handleInputChange}
-                    disabled={showAnswers}
                 />
                 <p>{ipData.subnetMask}</p>
             </label>
