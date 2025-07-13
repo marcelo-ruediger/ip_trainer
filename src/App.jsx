@@ -393,8 +393,8 @@ function App() {
         if (showAnswers) {
             // Show answers mode - always use ipData
             return ipData[id];
-        } else if (userIsInputting && ipData[id] && id !== "ip" && id !== "cidr" && id !== "subnetMask") {
-            // User input mode with calculated network data - show calculated values for network fields
+        } else if (userIsInputting && ipData[id] && id !== "ip") {
+            // User input mode with calculated network data - show calculated values for all fields except IP
             return ipData[id];
         } else {
             // Practice mode or no calculated data - use userInput
@@ -415,8 +415,19 @@ function App() {
         ];
 
         fieldsToCheck.forEach((fieldId) => {
-            const value = userInput[fieldId]?.trim();
-            if (value === undefined) return; // Empty fields are ignored
+            // Use renderValue to get the actual displayed value instead of just userInput
+            const displayedValue = renderValue(fieldId);
+            const value = displayedValue?.toString().trim();
+            
+            // If field is empty, mark it as wrong
+            if (!value || value === "") {
+                const inputElement = document.getElementById(fieldId);
+                if (inputElement) {
+                    inputElement.classList.remove("correct");
+                    inputElement.classList.add("wrong");
+                }
+                return;
+            }
 
             let isValid = false;
             let isCorrect = false;
@@ -497,6 +508,7 @@ function App() {
                 }
             }
         });
+        
         const generatedFieldId = mode === "mask" ? "subnetMask" : "cidr";
         const generatedElement = document.getElementById(generatedFieldId);
         if (generatedElement) {

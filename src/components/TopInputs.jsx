@@ -30,7 +30,7 @@ function TopInputs({
                         .filter(Boolean)
                         .join(" ")}
                 />
-                <p>{mode}</p>
+                {/* <p>{mode}</p> */}
             </label>
             <br className="responsive-break" />
             <label>
@@ -60,7 +60,7 @@ function TopInputs({
                         }
                     }}
                 />
-                <p>{generated.cidr}</p>
+                {/* <p>{generated.cidr}</p> */}
             </label>
             <br className="responsive-break" />
             <label>
@@ -90,7 +90,7 @@ function TopInputs({
                         }
                     }}
                 />
-                <p>{generated.subnetMask}</p>
+                {/* <p>{generated.subnetMask}</p> */}
             </label>
         </div>
     );
