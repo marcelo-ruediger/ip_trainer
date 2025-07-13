@@ -34,19 +34,19 @@ function App() {
         subnetMask: "",
     });
 
-    const [showAnswers, setShowAnswers] = useState(false);
+    const [showAnswers, setShowAnswers] = useState(false); // Controls visibility of the answers
 
     const [mode, setMode] = useState("cidr"); // or 'mask'
 
     const [ipVersion, setIpVersion] = useState("ipv4"); // "ipv4" or "ipv6"
 
-    const [showImage, setShowImage] = useState(false);
+    const [showImage, setShowImage] = useState(false); // Controls visibility of the table
 
-    const [attention, setAttention] = useState(true);
+    const [attention, setAttention] = useState(true); // Attention state for user input
 
-    const [ipValid, setIpValid] = useState(null);
+    const [ipValid, setIpValid] = useState(null); // Tracks if the IP input is valid or not
 
-    const [generated, setGenerated] = useState({ cidr: "", subnetMask: "" });
+    const [generated, setGenerated] = useState({ cidr: "", subnetMask: "" }); // Tracks generated values for CIDR and subnet mask
 
     // --------------- Functions ------------------------------//
     const handleIpInput = (e) => {
@@ -108,7 +108,7 @@ function App() {
             ? commonCidrs[Math.floor(Math.random() * commonCidrs.length)]
             : allCidrs;
     };
-    // -------------------------------------------------------------------------------- HERE -------------------------------//
+
     const cidrToMask = (cidr) => {
         const mask = [];
         for (let i = 0; i < 4; i++) {
@@ -157,7 +157,7 @@ function App() {
         const newMode = Math.random() < 0.5 ? "cidr" : "mask";
         setMode(newMode);
 
-        // Save both generated values to show later as answers
+        // Save both generated values to use later as correct answers
         setGenerated({
             cidr: `/${cidr}`,
             subnetMask,

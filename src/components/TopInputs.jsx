@@ -39,7 +39,7 @@ function TopInputs({
                     value={mode === "cidr" ? generated.cidr : userInput.cidr}
                     onChange={handleInputChange}
                 />
-                <p>{ipData.cidr}</p>
+                <p>{generated.cidr}</p>
             </label>
             <br className="responsive-break" />
             <label>
@@ -56,7 +56,7 @@ function TopInputs({
                     }
                     onChange={handleInputChange}
                 />
-                <p>{ipData.subnetMask}</p>
+                <p>{generated.subnetMask}</p>
             </label>
         </div>
     );
