@@ -48,9 +48,12 @@ function App() {
 
     const [generated, setGenerated] = useState({ cidr: "", subnetMask: "" }); // Tracks generated values for CIDR and subnet mask
 
+    const [userIsInputting, setUserIsInputting] = useState(false); // Tracks if user is manually inputting an IP
+
     // --------------- Functions ------------------------------//
     const handleIpInput = (e) => {
         resetInputBorders();
+        setUserIsInputting(true); // Set flag to indicate user is manually inputting
         setUserInput({
             networkId: "",
             broadcast: "",
@@ -149,6 +152,7 @@ function App() {
         // IPv4 - Generates a random IPv4 address and calculates network data//
         setIpValid(null);
         setAttention(false);
+        setUserIsInputting(false); // Reset flag when generating random IP
         resetInputBorders();
         const ip = getRandomIp();
         const cidr = getRandomCIDR();
@@ -397,6 +401,7 @@ function App() {
                             attention={attention}
                             userInput={userInput}
                             generated={generated}
+                            userIsInputting={userIsInputting}
                         />
                         <MiddleInputs
                             renderValue={renderValue}
