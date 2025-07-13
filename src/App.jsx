@@ -50,6 +50,7 @@ function App() {
 
     // --------------- Functions ------------------------------//
     const handleIpInput = (e) => {
+        resetInputBorders();
         setUserInput({
             networkId: "",
             broadcast: "",
@@ -304,16 +305,6 @@ function App() {
                     inputElement.classList.remove("correct", "wrong");
                     inputElement.classList.add(isCorrect ? "correct" : "wrong");
                 }
-
-                if (mode === "cidr") {
-                    const cidrInput = document.getElementById("cidr");
-                    if (cidrInput) {
-                        cidrInput.classList.remove("correct", "wrong");
-                        cidrInput.classList.add(
-                            isCorrect ? "correct" : "wrong"
-                        );
-                    }
-                }
             } catch (error) {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
@@ -322,6 +313,12 @@ function App() {
                 }
             }
         });
+        const generatedFieldId = mode === "mask" ? "subnetMask" : "cidr";
+        const generatedElement = document.getElementById(generatedFieldId);
+        if (generatedElement) {
+            generatedElement.classList.remove("wrong");
+            generatedElement.classList.add("correct");
+        }
     };
 
     // IPv6 --------------------------------------------------------------------//
