@@ -72,7 +72,7 @@ function App() {
             ipClass: "",
             usableIps: "",
         });
-        setAttention(false);
+        setAttention(true);
 
         const value = e.target.value;
         setIpData((prev) => ({ ...prev, ip: value }));
