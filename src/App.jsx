@@ -46,14 +46,47 @@ function App() {
 
     const [ipValid, setIpValid] = useState(null); // Tracks if the IP input is valid or not
 
+    const [cidrValid, setCidrValid] = useState(null); // Tracks if the CIDR input is valid or not
+
+    const [subnetMaskValid, setSubnetMaskValid] = useState(null); // Tracks if the Subnet Mask input is valid or not
+
     const [generated, setGenerated] = useState({ cidr: "", subnetMask: "" }); // Tracks generated values for CIDR and subnet mask
 
     const [userIsInputting, setUserIsInputting] = useState(false); // Tracks if user is manually inputting an IP
 
     // --------------- Functions ------------------------------//
+    const maskToCidr = (subnetMask) => {
+        try {
+            const octets = subnetMask.split(".").map(Number);
+            if (
+                octets.length !== 4 ||
+                octets.some((octet) => octet < 0 || octet > 255)
+            ) {
+                return null;
+            }
+
+            let binaryStr = "";
+            for (let octet of octets) {
+                binaryStr += octet.toString(2).padStart(8, "0");
+            }
+
+            // Check if it's a valid subnet mask (all 1s followed by all 0s)
+            const match = binaryStr.match(/^(1*)(0*)$/);
+            if (!match) return null;
+
+            return match[1].length;
+        } catch {
+            return null;
+        }
+    };
+
     const handleIpInput = (e) => {
+        // Reset everything when user starts inputting manually
         resetInputBorders();
-        setUserIsInputting(true); // Set flag to indicate user is manually inputting
+        setUserIsInputting(true);
+        setShowAnswers(false); // Hide any shown answers
+        
+        // Clear all user inputs
         setUserInput({
             networkId: "",
             broadcast: "",
@@ -62,12 +95,18 @@ function App() {
             cidr: "",
             subnetMask: "",
         });
+        
+        // Clear generated values
         setGenerated({
             cidr: "",
             subnetMask: "",
         });
+
+        const value = e.target.value;
+
+        // Update ipData with just the IP and clear other fields
         setIpData({
-            ip: "",
+            ip: value,
             cidr: "",
             subnetMask: "",
             networkId: "",
@@ -77,8 +116,9 @@ function App() {
         });
         setAttention(true);
 
-        const value = e.target.value;
-        setIpData((prev) => ({ ...prev, ip: value }));
+        // Reset ALL validation states
+        setCidrValid(null);
+        setSubnetMaskValid(null);
 
         // Validate IP address
         const isValid =
@@ -88,6 +128,131 @@ function App() {
                 .every((octet) => Number(octet) >= 0 && Number(octet) <= 255);
 
         setIpValid(isValid);
+    };
+
+    const handleCidrOrMaskInput = (e, inputType) => {
+        const value = e.target.value;
+        const currentIp = ipData.ip;
+
+        // Only proceed if we have a valid IP address
+        if (!ipValid || !currentIp) {
+            setIpData((prev) => ({
+                ...prev,
+                [inputType]: value,
+            }));
+            // Reset validation states when IP is not valid
+            if (inputType === "cidr") {
+                setCidrValid(null);
+            } else {
+                setSubnetMaskValid(null);
+            }
+            return;
+        }
+
+        let cidr = null;
+        let subnetMask = "";
+        let isInputValid = false;
+
+        if (inputType === "cidr") {
+            // Handle CIDR input
+            const cidrValue = value.replace("/", "");
+
+            // Check if input is empty
+            if (value.trim() === "" || cidrValue === "") {
+                setCidrValid(null);
+            } else {
+                const cidrNumber = parseInt(cidrValue, 10);
+
+                if (
+                    /^\d{1,2}$/.test(cidrValue) &&
+                    cidrNumber >= 0 &&
+                    cidrNumber <= 32
+                ) {
+                    cidr = cidrNumber;
+                    subnetMask = cidrToMask(cidr);
+                    isInputValid = true;
+                    setCidrValid(true);
+                } else {
+                    setCidrValid(false);
+                }
+            }
+        } else if (inputType === "subnetMask") {
+            // Handle Subnet Mask input
+
+            // Check if input is empty
+            if (value.trim() === "") {
+                setSubnetMaskValid(null);
+            } else {
+                const maskPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
+                if (maskPattern.test(value)) {
+                    const octets = value.split(".").map(Number);
+                    if (octets.every((octet) => octet >= 0 && octet <= 255)) {
+                        cidr = maskToCidr(value);
+                        if (cidr !== null) {
+                            subnetMask = value;
+                            isInputValid = true;
+                            setSubnetMaskValid(true);
+                        } else {
+                            setSubnetMaskValid(false);
+                        }
+                    } else {
+                        setSubnetMaskValid(false);
+                    }
+                } else {
+                    setSubnetMaskValid(false);
+                }
+            }
+        }
+
+        // Update the input value regardless of validity
+        setIpData((prev) => ({
+            ...prev,
+            [inputType]:
+                inputType === "cidr"
+                    ? value.startsWith("/")
+                        ? value
+                        : `/${value}`
+                    : value,
+        }));
+
+        // If input is valid, calculate and update network data
+        if (isInputValid && cidr !== null) {
+            const networkData = calculateNetworkData(currentIp, cidr);
+
+            // Store both CIDR and subnet mask in generated state
+            setGenerated({
+                cidr: `/${cidr}`,
+                subnetMask: subnetMask,
+            });
+
+            // Update ipData with calculated network information
+            setIpData((prev) => ({
+                ...prev,
+                cidr:
+                    inputType === "cidr"
+                        ? value.startsWith("/")
+                            ? value
+                            : `/${value}`
+                        : `/${cidr}`,
+                subnetMask: inputType === "subnetMask" ? value : subnetMask,
+                networkId: networkData.networkId,
+                broadcast: networkData.broadcast,
+                ipClass: networkData.ipClass,
+                usableIps: networkData.usableIps,
+            }));
+
+            // Clear user inputs since we now have calculated data
+            setUserInput({
+                networkId: "",
+                broadcast: "",
+                ipClass: "",
+                usableIps: "",
+                cidr: "",
+                subnetMask: "",
+            });
+
+            setAttention(false);
+        }
     };
 
     const handleToggle = () => setShowImage((prev) => !prev);
@@ -150,10 +315,16 @@ function App() {
 
     const handleStart = () => {
         // IPv4 - Generates a random IPv4 address and calculates network data//
-        setIpValid(null);
-        setAttention(false);
-        setUserIsInputting(false); // Reset flag when generating random IP
         resetInputBorders();
+        
+        // Reset ALL states when starting automatic generation
+        setIpValid(null);
+        setCidrValid(null);
+        setSubnetMaskValid(null);
+        setAttention(false);
+        setUserIsInputting(false);
+        setShowAnswers(false);
+        
         const ip = getRandomIp();
         const cidr = getRandomCIDR();
         const subnetMask = cidrToMask(cidr);
@@ -219,7 +390,16 @@ function App() {
     };
 
     const renderValue = (id) => {
-        return showAnswers ? ipData[id] : userInput[id];
+        if (showAnswers) {
+            // Show answers mode - always use ipData
+            return ipData[id];
+        } else if (userIsInputting && ipData[id] && id !== "ip" && id !== "cidr" && id !== "subnetMask") {
+            // User input mode with calculated network data - show calculated values for network fields
+            return ipData[id];
+        } else {
+            // Practice mode or no calculated data - use userInput
+            return userInput[id];
+        }
     };
 
     const handleCheck = () => {
@@ -397,7 +577,10 @@ function App() {
                             handleInputChange={handleInputChange}
                             // showAnswers={showAnswers}
                             onIpInput={handleIpInput}
+                            onCidrOrMaskInput={handleCidrOrMaskInput}
                             ipValid={ipValid}
+                            cidrValid={cidrValid}
+                            subnetMaskValid={subnetMaskValid}
                             attention={attention}
                             userInput={userInput}
                             generated={generated}

@@ -3,7 +3,10 @@ function TopInputs({
     mode,
     handleInputChange,
     onIpInput,
+    onCidrOrMaskInput,
     ipValid,
+    cidrValid,
+    subnetMaskValid,
     attention,
     userInput,
     generated,
@@ -35,14 +38,27 @@ function TopInputs({
                 <br className="responsive-break" />
                 <input
                     id="cidr"
-                    className={ipValid === true && "attention"}
-                    placeholder={ipValid === true && "Eingeben..."}
+                    className={[
+                        ipValid === true && "attention",
+                        cidrValid === true ? "correct" : "",
+                        cidrValid === false ? "wrong" : "",
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    placeholder={ipValid === true ? "Eingeben..." : ""}
                     value={
-                        userIsInputting || mode !== "cidr"
-                            ? userInput.cidr
-                            : generated.cidr
+                        userIsInputting
+                            ? ipData.cidr // Show the actual ipData value when user is inputting
+                            : mode === "cidr"
+                            ? generated.cidr
+                            : userInput.cidr
                     }
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                        handleInputChange(e);
+                        if (onCidrOrMaskInput) {
+                            onCidrOrMaskInput(e, "cidr");
+                        }
+                    }}
                 />
                 <p>{generated.cidr}</p>
             </label>
@@ -52,14 +68,27 @@ function TopInputs({
                 <br className="responsive-break" />
                 <input
                     id="subnetMask"
-                    className={ipValid === true && "attention"}
-                    placeholder={ipValid === true && "Eingeben..."}
+                    className={[
+                        ipValid === true && "attention",
+                        subnetMaskValid === true ? "correct" : "",
+                        subnetMaskValid === false ? "wrong" : "",
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    placeholder={ipValid === true ? "Eingeben..." : ""}
                     value={
-                        userIsInputting || mode !== "mask"
-                            ? userInput.subnetMask
-                            : generated.subnetMask
+                        userIsInputting
+                            ? ipData.subnetMask // Show the actual ipData value when user is inputting
+                            : mode === "mask"
+                            ? generated.subnetMask
+                            : userInput.subnetMask
                     }
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                        handleInputChange(e);
+                        if (onCidrOrMaskInput) {
+                            onCidrOrMaskInput(e, "subnetMask");
+                        }
+                    }}
                 />
                 <p>{generated.subnetMask}</p>
             </label>
