@@ -37,11 +37,11 @@ select {
 }
 
 .ipv6-input {
-    width: 300px;
+    min-width: 300px;
 }
 
 .netzpraefix {
-    width: 30px;
+    width: 90px;
 }
 
 input.correct {

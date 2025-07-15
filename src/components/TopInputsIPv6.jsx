@@ -3,22 +3,31 @@ function TopInputsIPv6({
     renderValue,
     handleInputChange,
     showAnswers,
+    mode,
 }) {
     return (
         <div className="default-container">
             <label>
                 IP-Adresse:
                 <br className="responsive-break" />
-                <input value={ipData.ipv6} disabled className="ipv6-input" />
+                <input
+                    id="vollstaendig"
+                    placeholder={mode !== "vollstaendig" ? "Eingeben..." : ""}
+                    value={renderValue("vollstaendig")}
+                    onChange={handleInputChange}
+                    disabled={showAnswers || mode === "vollstaendig"}
+                    className="ipv6-input"
+                />
             </label>
             <label>
                 Netzpräfix:
                 <br className="responsive-break" />
                 <input
-                    id="netzpraefix"
-                    value={renderValue("netzpraefix")}
+                    id="abkuerzung"
+                    placeholder={mode !== "abkuerzung" ? "Eingeben..." : ""}
+                    value={renderValue("abkuerzung")}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
+                    disabled={showAnswers || mode === "abkuerzung"}
                     className="netzpraefix"
                 />
             </label>
