@@ -16,18 +16,18 @@ function TopInputsIPv6({
                     value={renderValue("vollstaendig")}
                     onChange={handleInputChange}
                     disabled={showAnswers || mode === "vollstaendig"}
-                    className="ipv6-input"
+                    className="ipv6-input long-input"
                 />
             </label>
             <label>
                 Netzpräfix:
                 <br className="responsive-break" />
                 <input
-                    id="abkuerzung"
-                    placeholder={mode !== "abkuerzung" ? "Eingeben..." : ""}
-                    value={renderValue("abkuerzung")}
+                    id="netzpraefix"
+                    placeholder=""
+                    value={renderValue("netzpraefix")}
                     onChange={handleInputChange}
-                    disabled={showAnswers || mode === "abkuerzung"}
+                    disabled={true} // Always disabled since it's provided data
                     className="netzpraefix"
                 />
             </label>

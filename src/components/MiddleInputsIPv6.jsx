@@ -1,4 +1,9 @@
-function MiddleInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
+function MiddleInputsIPv6({
+    renderValue,
+    handleInputChange,
+    showAnswers,
+    mode,
+}) {
     return (
         <div className="default-container">
             <label>
@@ -6,9 +11,11 @@ function MiddleInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                 <br className="responsive-break" />
                 <input
                     id="abkuerzung"
+                    placeholder={mode !== "abkuerzung" ? "Eingeben..." : ""}
                     value={renderValue("abkuerzung")}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
+                    disabled={showAnswers || mode === "abkuerzung"}
+                    className="long-input"
                 />
             </label>
             <label>
@@ -16,6 +23,7 @@ function MiddleInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                 <br className="responsive-break" />
                 <input
                     id="netzwerkadresse"
+                    placeholder="Eingeben..."
                     value={renderValue("netzwerkadresse")}
                     onChange={handleInputChange}
                     disabled={showAnswers}

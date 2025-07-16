@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { getRandomIPv6, abbreviateIPv6, expandIPv6 } from "../utils/ipv6Utils";
+import {
+    generateIPv6WithPrefix,
+    abbreviateIPv6,
+    expandIPv6,
+    calculateIPv6NetworkData,
+} from "../utils/ipv6Utils";
 import { resetInputBorders } from "../utils/commonUtils";
 
 export const useIPv6 = () => {
@@ -34,9 +39,9 @@ export const useIPv6 = () => {
         setAttention(false);
         resetInputBorders();
 
-        const ipv6 = getRandomIPv6();
-        const abbreviated = abbreviateIPv6(ipv6);
-        const netzpraefix = "/64";
+        // Use the enhanced generation function
+        const generationResult = generateIPv6WithPrefix();
+        const { ipv6, prefix, abbreviated, networkData } = generationResult;
 
         // Randomly choose which field to show (vollständig or abkürzung)
         const newMode = Math.random() < 0.5 ? "vollstaendig" : "abkuerzung";
@@ -52,17 +57,17 @@ export const useIPv6 = () => {
             ipv6,
             vollstaendig: newMode === "vollstaendig" ? ipv6 : "",
             abkuerzung: newMode === "abkuerzung" ? abbreviated : "",
-            netzpraefix,
-            netzwerkadresse: "",
-            typ: "",
-            benutzbareIps: "",
+            netzpraefix: prefix,
+            netzwerkadresse: networkData.netzwerkadresse,
+            typ: networkData.typ,
+            benutzbareIps: networkData.benutzbareIps,
         });
 
         setShowAnswers(false);
         setUserInput({
             vollstaendig: newMode === "vollstaendig" ? ipv6 : "",
             abkuerzung: newMode === "abkuerzung" ? abbreviated : "",
-            netzpraefix: "",
+            netzpraefix: prefix, // Show the prefix to the user
             netzwerkadresse: "",
             typ: "",
             benutzbareIps: "",
@@ -112,6 +117,21 @@ export const useIPv6 = () => {
         ];
 
         fieldsToCheck.forEach((fieldId) => {
+            // Skip validation for provided data (pre-filled fields)
+            if (
+                fieldId === "netzpraefix" ||
+                (fieldId === "vollstaendig" && mode === "vollstaendig") ||
+                (fieldId === "abkuerzung" && mode === "abkuerzung")
+            ) {
+                // Mark provided data as correct
+                const inputElement = document.getElementById(fieldId);
+                if (inputElement) {
+                    inputElement.classList.remove("wrong");
+                    inputElement.classList.add("correct");
+                }
+                return; // Skip validation for provided data
+            }
+
             const displayedValue = renderValue(fieldId);
             const value = displayedValue?.toString().trim();
 

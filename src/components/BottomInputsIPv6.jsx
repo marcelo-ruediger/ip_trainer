@@ -21,7 +21,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                 </select>
             </label>
             <label>
-                benutzbare IPs:
+                Erstes Subnetz (Subnetz-ID):
                 <br className="responsive-break" />
                 <input
                     id="benutzbareIps"
@@ -29,6 +29,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                     value={renderValue("benutzbareIps")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
+                    className="long-input"
                 />
             </label>
         </div>

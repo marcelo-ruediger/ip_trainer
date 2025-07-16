@@ -8,9 +8,9 @@ import MiddleInputs from "./components/MiddleInputs";
 import BottomInputs from "./components/BottomInputs";
 import Footer from "./components/Footer";
 import BottomButtons from "./components/BottomButtons";
-import TopInputsIPv6 from "./components/TopInputsIpv6";
-import MiddleInputsIPv6 from "./components/MiddleInputsIpv6";
-import BottomInputsIPv6 from "./components/BottomInputsIpv6";
+import TopInputsIPv6 from "./components/TopInputsIPv6";
+import MiddleInputsIPv6 from "./components/MiddleInputsIPv6";
+import BottomInputsIPv6 from "./components/BottomInputsIPv6";
 import IpVersionButtons from "./components/IpVersionButtons";
 import { useIPv4 } from "./hooks/useIpv4";
 import { useIPv6 } from "./hooks/useIpv6";
@@ -90,11 +90,13 @@ function App() {
                             renderValue={ipv6Logic.renderValue}
                             handleInputChange={ipv6Logic.handleInputChange}
                             showAnswers={ipv6Logic.showAnswers}
+                            mode={ipv6Logic.mode}
                         />
                         <MiddleInputsIPv6
                             renderValue={ipv6Logic.renderValue}
                             handleInputChange={ipv6Logic.handleInputChange}
                             showAnswers={ipv6Logic.showAnswers}
+                            mode={ipv6Logic.mode}
                         />
                         <BottomInputsIPv6
                             renderValue={ipv6Logic.renderValue}
