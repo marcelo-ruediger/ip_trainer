@@ -11,6 +11,7 @@ import BottomButtons from "./components/BottomButtons";
 import TopInputsIPv6 from "./components/TopInputsIPv6";
 import MiddleInputsIPv6 from "./components/MiddleInputsIPv6";
 import BottomInputsIPv6 from "./components/BottomInputsIPv6";
+import InstructionContainer from "./components/InstructionContainer";
 import IpVersionButtons from "./components/IpVersionButtons";
 import { useIPv4 } from "./hooks/useIpv4";
 import { useIPv6 } from "./hooks/useIpv6";
@@ -58,6 +59,13 @@ function App() {
             <main>
                 {ipVersion === "ipv4" ? (
                     <>
+                        <InstructionContainer
+                            generatedField={ipv4Logic.generatedField}
+                            ipData={ipv4Logic.ipData}
+                            isInputMode={ipv4Logic.userIsInputting}
+                            isValidIp={ipv4Logic.ipValid}
+                            hasInputStarted={ipv4Logic.hasInputStarted}
+                        />
                         <TopInputs
                             ipData={ipv4Logic.ipData}
                             mode={ipv4Logic.mode}
@@ -71,16 +79,20 @@ function App() {
                             userInput={ipv4Logic.userInput}
                             generated={ipv4Logic.generated}
                             userIsInputting={ipv4Logic.userIsInputting}
+                            generatedField={ipv4Logic.generatedField}
+                            renderValue={ipv4Logic.renderValue}
                         />
                         <MiddleInputs
                             renderValue={ipv4Logic.renderValue}
                             handleInputChange={ipv4Logic.handleInputChange}
                             showAnswers={ipv4Logic.showAnswers}
+                            generatedField={ipv4Logic.generatedField}
                         />
                         <BottomInputs
                             renderValue={ipv4Logic.renderValue}
                             handleInputChange={ipv4Logic.handleInputChange}
                             showAnswers={ipv4Logic.showAnswers}
+                            generatedField={ipv4Logic.generatedField}
                         />
                     </>
                 ) : (

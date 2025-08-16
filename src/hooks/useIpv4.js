@@ -36,10 +36,13 @@ export const useIPv4 = () => {
     const [subnetMaskValid, setSubnetMaskValid] = useState(null);
     const [generated, setGenerated] = useState({ cidr: "", subnetMask: "" });
     const [userIsInputting, setUserIsInputting] = useState(false);
+    const [generatedField, setGeneratedField] = useState("");
+    const [hasInputStarted, setHasInputStarted] = useState(false);
 
     const handleIpInput = (e) => {
         resetInputBorders();
         setUserIsInputting(true);
+        setHasInputStarted(true);
         setShowAnswers(false);
 
         setUserInput({
@@ -79,6 +82,10 @@ export const useIPv4 = () => {
                 .every((octet) => Number(octet) >= 0 && Number(octet) <= 255);
 
         setIpValid(isValid);
+
+        // Add this line to ensure both CIDR and subnet mask inputs are available
+        // You might want to set mode to a neutral state or create a new mode for your TopInputs component
+        // setMode("both"); // or whatever logic you need for your TopInputs component
     };
 
     const handleCidrOrMaskInput = (e, inputType) => {
@@ -202,6 +209,7 @@ export const useIPv4 = () => {
         setSubnetMaskValid(null);
         setAttention(false);
         setUserIsInputting(false);
+        setHasInputStarted(false);
         setShowAnswers(false);
 
         const ip = getRandomIp();
@@ -209,21 +217,58 @@ export const useIPv4 = () => {
         const subnetMask = cidrToMask(cidr);
         const data = calculateNetworkData(ip, cidr);
 
-        const newMode = Math.random() < 0.5 ? "cidr" : "mask";
-        setMode(newMode);
+        // Randomly select which field to generate
+        const fieldOptions = [
+            "cidr",
+            "subnetMask",
+            "networkId",
+            "broadcast",
+            "usableIps",
+        ];
+        const randomField =
+            fieldOptions[Math.floor(Math.random() * fieldOptions.length)];
+        setGeneratedField(randomField);
+
+        // Create initial data with only IP and the generated field
+        const initialData = {
+            ip,
+            cidr: "",
+            subnetMask: "",
+            networkId: "",
+            broadcast: "",
+            ipClass: "",
+            usableIps: "",
+        };
+
+        // Set the generated field value
+        switch (randomField) {
+            case "cidr":
+                initialData.cidr = `/${cidr}`;
+                break;
+            case "subnetMask":
+                initialData.subnetMask = subnetMask;
+                break;
+            case "networkId":
+                initialData.networkId = data.networkId;
+                break;
+            case "broadcast":
+                initialData.broadcast = data.broadcast;
+                break;
+            case "usableIps":
+                initialData.usableIps = data.usableIps;
+                break;
+        }
 
         setGenerated({
             cidr: `/${cidr}`,
             subnetMask,
+            networkId: data.networkId,
+            broadcast: data.broadcast,
+            usableIps: data.usableIps,
+            ipClass: data.ipClass,
         });
 
-        setIpData({
-            ip,
-            cidr: newMode === "cidr" ? `/${cidr}` : "",
-            subnetMask: newMode === "mask" ? subnetMask : "",
-            ...data,
-        });
-
+        setIpData(initialData);
         setShowAnswers(false);
 
         setUserInput({
@@ -243,7 +288,10 @@ export const useIPv4 = () => {
 
     const handleShowAnswers = () => {
         setUserInput({
-            ...ipData,
+            networkId: generated.networkId,
+            broadcast: generated.broadcast,
+            ipClass: generated.ipClass,
+            usableIps: generated.usableIps,
             cidr: generated.cidr,
             subnetMask: generated.subnetMask,
         });
@@ -268,8 +316,9 @@ export const useIPv4 = () => {
 
     const renderValue = (id) => {
         if (showAnswers) {
-            return ipData[id];
-        } else if (userIsInputting && ipData[id] && id !== "ip") {
+            return generated[id];
+        } else if (ipData[id] && id !== "ip") {
+            // Show the generated field value
             return ipData[id];
         } else {
             return userInput[id];
@@ -346,7 +395,14 @@ export const useIPv4 = () => {
                 if (!isValid) throw new Error("Ungültige Eingabe");
 
                 let correctValue;
-                if (fieldId === "cidr" || fieldId === "subnetMask") {
+                if (
+                    fieldId === "cidr" ||
+                    fieldId === "subnetMask" ||
+                    fieldId === "networkId" ||
+                    fieldId === "broadcast" ||
+                    fieldId === "usableIps" ||
+                    fieldId === "ipClass"
+                ) {
                     correctValue = generated[fieldId];
                 } else {
                     correctValue = ipData[fieldId];
@@ -356,11 +412,13 @@ export const useIPv4 = () => {
                     correctValue = correctValue.replace("/", "");
                 }
                 if (fieldId === "ipClass") {
-                    correctValue = ipData.ipClass.toUpperCase().startsWith("D")
+                    correctValue = generated.ipClass
+                        .toUpperCase()
+                        .startsWith("D")
                         ? "D"
-                        : ipData.ipClass.toUpperCase().startsWith("E")
+                        : generated.ipClass.toUpperCase().startsWith("E")
                         ? "E"
-                        : ipData.ipClass.toUpperCase();
+                        : generated.ipClass.toUpperCase();
                 }
 
                 isCorrect =
@@ -381,8 +439,8 @@ export const useIPv4 = () => {
             }
         });
 
-        const generatedFieldId = mode === "mask" ? "subnetMask" : "cidr";
-        const generatedElement = document.getElementById(generatedFieldId);
+        // Make sure the generated field is always marked as correct
+        const generatedElement = document.getElementById(generatedField);
         if (generatedElement) {
             generatedElement.classList.remove("wrong");
             generatedElement.classList.add("correct");
@@ -401,6 +459,7 @@ export const useIPv4 = () => {
         subnetMaskValid,
         generated,
         userIsInputting,
+        hasInputStarted,
         // Functions
         handleIpInput,
         handleCidrOrMaskInput,
@@ -411,5 +470,6 @@ export const useIPv4 = () => {
         renderValue,
         // Setters (if needed elsewhere)
         setAttention,
+        generatedField,
     };
 };

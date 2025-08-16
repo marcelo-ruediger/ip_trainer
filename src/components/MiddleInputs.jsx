@@ -1,4 +1,9 @@
-function MiddleInputs({ renderValue, handleInputChange, showAnswers }) {
+function MiddleInputs({
+    renderValue,
+    handleInputChange,
+    showAnswers,
+    generatedField,
+}) {
     return (
         <div className="default-container">
             <label>
@@ -8,7 +13,7 @@ function MiddleInputs({ renderValue, handleInputChange, showAnswers }) {
                     id="networkId"
                     value={renderValue("networkId")}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
+                    disabled={showAnswers || generatedField === "networkId"}
                 />
             </label>
             <label>
@@ -18,7 +23,7 @@ function MiddleInputs({ renderValue, handleInputChange, showAnswers }) {
                     id="broadcast"
                     value={renderValue("broadcast")}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
+                    disabled={showAnswers || generatedField === "broadcast"}
                 />
             </label>
         </div>

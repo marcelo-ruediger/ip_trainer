@@ -133,6 +133,59 @@ footer {
     border: solid 1px #646cff;
     transform: scale(1.05);
 }
+
+.instruction-container {
+    background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+    background-size: 400% 400%;
+    animation: gradientAnimation 3s ease infinite;
+    border: 2px solid #646cff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(100, 108, 255, 0.3);
+}
+
+.instruction-container.input-mode {
+    background-color: #e3f2fd; /* Light blue background */
+    border-left: 4px solid #2196f3; /* Blue left border */
+}
+
+.instruction-container.input-mode-complete {
+    background-color: #e8f5e8; /* Light green background */
+    border-left: 4px solid #4caf50; /* Green left border */
+}
+
+.instruction-container.input-mode .instruction-text,
+.instruction-container.input-mode-complete .instruction-text {
+    color: #1565c0; /* Darker blue text for input mode */
+}
+
+.instruction-container.input-mode-complete .instruction-text {
+    color: #2e7d32; /* Darker green text for completed mode */
+}
+
+.instruction-text {
+    color: #cccccc;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.instruction-text strong {
+    color: #646cff;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
 /* Media Rules for Responsivness  */
 
 @media (max-width: 600px) {

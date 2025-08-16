@@ -1,4 +1,9 @@
-function BottomInputs({ renderValue, handleInputChange, showAnswers }) {
+function BottomInputs({
+    renderValue,
+    handleInputChange,
+    showAnswers,
+    generatedField,
+}) {
     return (
         <div className="default-container">
             <label>
@@ -18,7 +23,7 @@ function BottomInputs({ renderValue, handleInputChange, showAnswers }) {
                     id="usableIps"
                     value={renderValue("usableIps")}
                     onChange={handleInputChange}
-                    disabled={showAnswers}
+                    disabled={showAnswers || generatedField === "usableIps"}
                 />
             </label>
         </div>

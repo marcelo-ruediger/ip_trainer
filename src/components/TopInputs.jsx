@@ -11,6 +11,8 @@ function TopInputs({
     userInput,
     generated,
     userIsInputting,
+    generatedField,
+    renderValue,
 }) {
     return (
         <div className="default-container three-inputs-container">
@@ -45,20 +47,15 @@ function TopInputs({
                     ]
                         .filter(Boolean)
                         .join(" ")}
-                    placeholder={ipValid === true ? "Eingeben..." : ""}
-                    value={
-                        userIsInputting
-                            ? ipData.cidr // Show the actual ipData value when user is inputting
-                            : mode === "cidr"
-                            ? generated.cidr
-                            : userInput.cidr
-                    }
+                    placeholder={ipData.ip ? "Eingeben..." : ""}
+                    value={renderValue("cidr")}
                     onChange={(e) => {
                         handleInputChange(e);
                         if (onCidrOrMaskInput) {
                             onCidrOrMaskInput(e, "cidr");
                         }
                     }}
+                    disabled={generatedField === "cidr"}
                 />
                 {/* <p>{generated.cidr}</p> */}
             </label>
@@ -75,20 +72,15 @@ function TopInputs({
                     ]
                         .filter(Boolean)
                         .join(" ")}
-                    placeholder={ipValid === true ? "Eingeben..." : ""}
-                    value={
-                        userIsInputting
-                            ? ipData.subnetMask // Show the actual ipData value when user is inputting
-                            : mode === "mask"
-                            ? generated.subnetMask
-                            : userInput.subnetMask
-                    }
+                    placeholder={ipData.ip ? "Eingeben..." : ""}
+                    value={renderValue("subnetMask")}
                     onChange={(e) => {
                         handleInputChange(e);
                         if (onCidrOrMaskInput) {
                             onCidrOrMaskInput(e, "subnetMask");
                         }
                     }}
+                    disabled={generatedField === "subnetMask"}
                 />
                 {/* <p>{generated.subnetMask}</p> */}
             </label>
