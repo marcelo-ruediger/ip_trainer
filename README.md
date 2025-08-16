@@ -235,4 +235,29 @@ Students learn to instantly recognize:
 -   Difficulty adjustment based on performance
 -   Custom address sets for specific training goals
 
+## User Interface Modes
+
+The trainer operates in two distinct modes to accommodate different learning approaches:
+
+### Practice Mode
+
+-   System generates a random IP address and one calculated field
+-   Student calculates all remaining network parameters
+-   Focus on subnet calculation skills and address analysis
+-   Uses the weighted probability system described above for address generation
+
+### Input Mode
+
+-   Student inputs their own IP address and CIDR/subnet mask
+-   System automatically calculates all network parameters
+-   Useful for verifying manual calculations
+-   Provides immediate feedback and educational context
+-   Visual indicators guide the user through the input process
+
+### Mode Switching
+
+-   Clear visual feedback indicates current mode
+-   Instructions adapt based on input state (IP entry → CIDR/mask entry → calculation complete)
+-   Seamless transition between modes without losing educational focus
+
 This documentation ensures the training logic remains maintainable and can be enhanced with new educational requirements while preserving the carefully balanced probability system.
