@@ -199,6 +199,31 @@ export const useIPv4 = () => {
             });
 
             setAttention(false);
+
+            // Mark generated fields as correct immediately
+            setTimeout(() => {
+                const fieldsToMark = [
+                    "networkId",
+                    "broadcast",
+                    "ipClass",
+                    "usableIps",
+                ];
+
+                // Mark the complementary field (CIDR or subnet mask) that was auto-generated
+                if (inputType === "cidr") {
+                    fieldsToMark.push("subnetMask");
+                } else if (inputType === "subnetMask") {
+                    fieldsToMark.push("cidr");
+                }
+
+                fieldsToMark.forEach((fieldId) => {
+                    const element = document.getElementById(fieldId);
+                    if (element) {
+                        element.classList.remove("wrong");
+                        element.classList.add("correct");
+                    }
+                });
+            }, 50); // Small delay to ensure DOM is updated
         }
     };
 
@@ -342,6 +367,16 @@ export const useIPv4 = () => {
             const displayedValue = renderValue(fieldId);
             const value = displayedValue?.toString().trim();
 
+            // If this field has automatically generated data (from Eingabe mode), mark as correct
+            if (userIsInputting && ipData[fieldId] && fieldId !== "ip") {
+                const inputElement = document.getElementById(fieldId);
+                if (inputElement) {
+                    inputElement.classList.remove("wrong");
+                    inputElement.classList.add("correct");
+                }
+                return;
+            }
+
             if (!value || value === "") {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
@@ -440,11 +475,13 @@ export const useIPv4 = () => {
             }
         });
 
-        // Make sure the generated field is always marked as correct
-        const generatedElement = document.getElementById(generatedField);
-        if (generatedElement) {
-            generatedElement.classList.remove("wrong");
-            generatedElement.classList.add("correct");
+        // Make sure the generated field is always marked as correct (for training mode)
+        if (generatedField) {
+            const generatedElement = document.getElementById(generatedField);
+            if (generatedElement) {
+                generatedElement.classList.remove("wrong");
+                generatedElement.classList.add("correct");
+            }
         }
     };
 
