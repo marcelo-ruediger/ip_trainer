@@ -20,244 +20,136 @@ The trainer uses a weighted probability system to ensure students encounter both
     - Private addresses: 70% of random selections
     - Public addresses: 30% of random selections
 
-### Must-Know IPv4 Addresses (46 addresses total)
+### Must-Know IPv4 Addresses (with subnet calculation validation)
 
-#### Critical Importance (10 addresses)
+#### Critical Importance (9 addresses)
 
--   **127.0.0.1** - IPv4 localhost/loopback
--   **0.0.0.0** - Default route/all networks
--   **255.255.255.255** - Limited broadcast
 -   **192.168.1.1** - Home router gateway
 -   **192.168.0.1** - Home router gateway
+-   **192.168.1.10** - Common host address
+-   **192.168.100.1** - Common subnet gateway
 -   **10.0.0.1** - Enterprise gateway
 -   **8.8.8.8** - Google DNS primary
 -   **8.8.4.4** - Google DNS secondary
 -   **1.1.1.1** - Cloudflare DNS primary
 -   **1.0.0.1** - Cloudflare DNS secondary
 
-#### Important Importance (20 addresses)
+#### Important Importance (13 addresses)
 
--   Private network gateways (172.16.0.1, 192.168.1.254, etc.)
--   Public DNS servers (OpenDNS, Quad9)
--   Link-local addresses (169.254.x.x)
--   Documentation addresses (RFC 5737 TEST-NET ranges)
--   Multicast addresses (All Systems, All Routers, OSPF, RIP, EIGRP)
--   Root DNS servers (A-Root, B-Root, C-Root)
+-   **10.1.1.1** - Enterprise network
+-   **10.10.10.10** - Common test address
+-   **172.16.0.1** - Private network gateway
+-   **172.20.1.1** - Private network host
+-   **172.31.255.1** - AWS VPC range
+-   **208.67.222.222** - OpenDNS primary
+-   **208.67.220.220** - OpenDNS secondary
+-   **9.9.9.9** - Quad9 DNS
+-   **192.168.50.1** - Common subnet gateway
 
-#### Moderate Importance (16 addresses)
+#### Moderate Importance (7 addresses)
 
--   Carrier Grade NAT addresses (100.64.x.x)
--   Additional DNS servers (Level3, Verisign)
--   Benchmarking addresses (RFC 2544)
--   Reserved Class E addresses
+-   **4.2.2.2** - Level3/CenturyLink DNS
+-   **64.6.64.6** - Verisign DNS
+-   **192.168.2.100** - Host in second subnet
+-   **10.0.1.50** - Enterprise host
+-   **172.25.1.1** - Mid-range private network
+
+### Special-Purpose IPv4 Addresses (Separated for Educational Toggle)
+
+#### Critical Special Addresses (4 addresses)
+
+-   **127.0.0.1** - Localhost/Loopback (127.0.0.0/8 range)
+-   **255.255.255.255** - Limited broadcast address
+-   **0.0.0.0** - Default route/Unspecified address
+-   **224.0.0.1** - All Hosts multicast
+
+#### Important Special Addresses (8 addresses)
+
+-   **169.254.1.1** - APIPA/Link-local address (169.254.0.0/16 range)
+-   **192.0.2.1** - TEST-NET-1 documentation (192.0.2.0/24 range)
+-   **198.51.100.1** - TEST-NET-2 documentation (198.51.100.0/24 range)
+-   **203.0.113.1** - TEST-NET-3 documentation (203.0.113.0/24 range)
+-   **224.0.0.2** - All Routers multicast
+-   **127.1.1.1** - Loopback range example
+-   **169.254.100.1** - APIPA address example
+
+#### Moderate Special Addresses (8 addresses)
+
+-   **100.64.0.1** - Carrier Grade NAT (100.64.0.0/10 range)
+-   **100.100.100.1** - CGN address example
+-   **169.254.255.254** - APIPA broadcast-like address
+-   **239.255.255.255** - Administrative multicast
+-   **240.0.0.1** - Reserved for future use (Class E)
+-   **255.255.255.254** - Reserved address
+
+### Address Generation Logic and Validation
+
+#### Standard Subnet Calculation Addresses (Default Mode)
+
+**Enhanced filtering ensures only subnet-calculable addresses:**
+
+-   ✅ **Private ranges (RFC 1918)** - Perfect for subnet training
+-   ✅ **Public DNS servers** - Good for Class A/B training examples
+-   ✅ **Valid public addresses** - Realistic enterprise scenarios
+-   ❌ **Excludes broadcast addresses** (255.255.255.255, x.x.x.255)
+-   ❌ **Excludes network addresses** (0.0.0.0, x.x.x.0)
+-   ❌ **Excludes loopback** (127.0.0.0/8) - Special calculation rules
+-   ❌ **Excludes APIPA** (169.254.0.0/16) - Auto-configuration range
+-   ❌ **Excludes multicast** (224-239.x.x.x) - No traditional subnetting
+-   ❌ **Excludes Class E** (240-255.x.x.x) - Reserved/experimental
+-   ❌ **Excludes CGN range** (100.64.0.0/10) - Special ISP NAT range
+-   ❌ **Excludes documentation ranges** - Reserved for examples
+
+#### Special-Purpose Addresses (Toggle Mode)
+
+**Separated addresses with different calculation rules:**
+
+-   **Loopback (127.0.0.0/8)** - Always refers to local machine
+-   **APIPA (169.254.0.0/16)** - Auto-assigned when DHCP fails
+-   **Multicast (224.0.0.0/4)** - No traditional subnet calculations
+-   **Reserved (240.0.0.0/4)** - Experimental/future use
+-   **Broadcast (255.255.255.255)** - Limited broadcast scope
+-   **Documentation ranges** - Reserved for examples and testing
+-   **CGN (100.64.0.0/10)** - Shared address space for ISP NAT
 
 ### Private Address Ranges (70% of random generation)
 
--   **192.168.x.x** - Home/small office networks
--   **10.x.x.x** - Large enterprise networks
--   **172.16-31.x.x** - Medium enterprise networks
+Enhanced validation prevents network/broadcast addresses:
+
+-   **192.168.1.1 - 192.168.254.254** - Home/small office networks
+-   **10.0.0.1 - 10.255.255.254** - Large enterprise networks
+-   **172.16.0.1 - 172.31.255.254** - Medium enterprise networks
+
+_Note: Automatically excludes x.x.x.0 and x.x.x.255 addresses_
 
 ### Public Address Generation (30% of random generation)
 
-Avoids:
+**Enhanced validation avoids problematic ranges:**
 
--   Private ranges (RFC 1918)
--   Multicast (224-239.x.x.x)
--   Reserved (240-255.x.x.x)
--   Link-local (169.254.x.x)
--   Loopback (127.x.x.x)
--   Zero network (0.x.x.x)
+-   ❌ Private ranges (RFC 1918)
+-   ❌ Multicast (224-239.x.x.x)
+-   ❌ Reserved Class E (240-255.x.x.x)
+-   ❌ Link-local (169.254.x.x)
+-   ❌ Loopback (127.x.x.x)
+-   ❌ Documentation ranges (192.0.2.x, 198.51.100.x, 203.0.113.x)
+-   ❌ Carrier Grade NAT (100.64.0.0/10)
+-   ❌ Network and broadcast addresses (x.x.x.0, x.x.x.255)
 
-## IPv6 Address Generation Logic
+**✅ Generates valid host addresses in range 1.0.0.1 - 223.255.255.254**
 
-### Generation Probabilities
+### Educational Toggle Feature
 
-1. **Must-Know Addresses: 40% probability**
+**Standard Mode (Default):**
 
-    - Critical importance: 60% of must-know selections
-    - Important importance: 30% of must-know selections
-    - Moderate importance: 10% of must-know selections
+-   Only displays addresses suitable for standard subnet calculations
+-   All generated IPs follow normal Class A/B/C rules
+-   Perfect for learning basic subnetting concepts
 
-2. **Realistic Random Addresses: 60% probability**
-    - Global unicast with ISP patterns: 40%
-    - Documentation prefix patterns: 30%
-    - Zero-heavy realistic patterns: 30%
+**Special-Purpose Mode (Toggle Button):**
 
-### Must-Know IPv6 Addresses (95 addresses total)
+-   Displays special addresses with their unique properties
+-   Includes educational information about special ranges
+-   Explains why these addresses have different calculation rules
+-   Categories: Loopback, APIPA, Multicast, Reserved, Documentation, CGN
 
-#### Critical Importance (11 addresses)
-
--   **::1** - IPv6 localhost/loopback
--   **::** - All-zeros/unspecified address
--   **fe80::1** - Router link-local address
--   **ff02::1** - All nodes multicast
--   **ff02::2** - All routers multicast
--   **2001:db8::1** - Documentation prefix
--   **2001:4860:4860::8888** - Google DNS primary
--   **2001:4860:4860::8844** - Google DNS secondary
--   **2606:4700:4700::1111** - Cloudflare DNS primary
--   **2606:4700:4700::1001** - Cloudflare DNS secondary
-
-#### Important Importance (52 addresses)
-
--   Link-local EUI-64 and ISATAP addresses
--   Multicast routing protocol addresses (OSPFv3, RIPng, EIGRP, PIM)
--   Documentation examples (RFC 3849)
--   Unique Local addresses (fc00::/7)
--   Transition mechanism addresses (6to4, Teredo, NAT64)
--   Root DNS servers IPv6 addresses
--   Site-local addresses (deprecated but educational)
--   IPv4-mapped and IPv4-compatible addresses
-
-#### Moderate Importance (32 addresses)
-
--   Additional multicast scopes and types
--   Extended DNS server addresses
--   Solicited-node multicast examples
--   Embedded IPv4 addresses
--   Additional transition examples
-
-### IPv6 Address Types and Prefix Matching
-
-The system intelligently matches prefixes to address types:
-
--   **Link-local (fe80::/10)** - /10, /64 prefixes
--   **Multicast (ff00::/8)** - /8, /16, /128 prefixes
--   **Unique Local (fc00::/7)** - /7, /48, /64 prefixes
--   **Global Unicast (2000::/3)** - /3, /32, /48, /56, /64 prefixes
--   **Documentation (2001:db8::/32)** - /32, /48, /64 prefixes
-
-### Random IPv6 Generation Patterns
-
-#### ISP-style Global Unicast (40% of random)
-
--   Common ISP prefixes: 2001:xxxx, 2600:xxxx, 2a00:xxxx
--   Regional patterns (American, European, Asia-Pacific)
--   Realistic delegation sizes (/32, /48, /56, /64)
-
-#### Documentation-style (30% of random)
-
--   2001:db8:xxxx patterns
--   Educational subnet examples
--   Clean, easy-to-read addresses
-
-#### Zero-heavy Realistic (30% of random)
-
--   Sparse addressing patterns
--   Network-friendly formatting
--   Common real-world addressing schemes
-
-## CIDR/Prefix Generation
-
-### IPv4 CIDR (50% common, 50% all possible)
-
-**Common CIDRs:** /8, /16, /24, /25, /26, /27, /28, /29, /30
-**All possible:** /1 through /31
-
-### IPv6 Prefix (matches address type)
-
--   **/3** - Global unicast root
--   **/7** - Unique local root
--   **/8** - Multicast root
--   **/10** - Link-local root
--   **/32** - ISP allocation, documentation
--   **/48** - Customer allocation
--   **/56** - Residential delegation
--   **/64** - Standard subnet
--   **/128** - Host route
-
-## Educational Benefits
-
-### Address Recognition Training
-
-Students learn to instantly recognize:
-
--   Critical infrastructure addresses (DNS, gateways)
--   Address type classification
--   Private vs. public addressing
--   Special-use addresses and their purposes
-
-### Practical Application
-
--   Real DNS servers they'll encounter professionally
--   Common gateway addresses in enterprise/home networks
--   Multicast addresses used by routing protocols
--   Transition mechanism addresses for IPv6 deployment
-
-### Weighted Learning
-
--   Higher probability for critical addresses ensures repeated exposure
--   Moderate addresses provide broader knowledge
--   Random generation maintains unpredictability
-
-## Implementation Details
-
-### Address Selection Algorithm
-
-```
-1. Generate random number 0-1
-2. If < threshold (0.35 for IPv4, 0.40 for IPv6):
-   a. Select importance level based on weights
-   b. Choose random address from that importance level
-3. Else:
-   a. Generate realistic random address
-   b. Apply appropriate constraints and patterns
-```
-
-### Validation and Classification
-
--   Enhanced IPv4 class detection for special addresses
--   IPv6 type classification based on prefix
--   Automatic network calculations
--   Educational information lookup
-
-### Quality Assurance
-
--   Avoid reserved/invalid ranges in random generation
--   Ensure realistic addressing patterns
--   Match prefixes to address types appropriately
--   Provide educational context for important addresses
-
-## Future Enhancements
-
-### Potential Additions
-
--   Regional ISP address patterns
--   More transition mechanism examples
--   Enterprise-specific addressing schemes
--   IPv6 privacy extension examples
--   Additional multicast applications
-
-### Metrics Tracking
-
--   Student exposure to each address type
--   Learning progress indicators
--   Difficulty adjustment based on performance
--   Custom address sets for specific training goals
-
-## User Interface Modes
-
-The trainer operates in two distinct modes to accommodate different learning approaches:
-
-### Practice Mode
-
--   System generates a random IP address and one calculated field
--   Student calculates all remaining network parameters
--   Focus on subnet calculation skills and address analysis
--   Uses the weighted probability system described above for address generation
-
-### Input Mode
-
--   Student inputs their own IP address and CIDR/subnet mask
--   System automatically calculates all network parameters
--   Useful for verifying manual calculations
--   Provides immediate feedback and educational context
--   Visual indicators guide the user through the input process
-
-### Mode Switching
-
--   Clear visual feedback indicates current mode
--   Instructions adapt based on input state (IP entry → CIDR/mask entry → calculation complete)
--   Seamless transition between modes without losing educational focus
-
-This documentation ensures the training logic remains maintainable and can be enhanced with new educational requirements while preserving the carefully balanced probability system.
+This separation ensures students learn standard subnetting without confusion from special-purpose addresses, while still providing educational value about the complete IPv4 address space.

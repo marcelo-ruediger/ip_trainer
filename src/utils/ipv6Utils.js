@@ -1,5 +1,5 @@
 // Most important IPv6 addresses that every network professional must know
-const MUST_KNOW_IPV6_ADDRESSES = [
+const mustKnowIpv6Addresses = [
     // === LOOPBACK & UNSPECIFIED ===
     {
         address: "::1",
@@ -242,10 +242,10 @@ const MUST_KNOW_IPV6_ADDRESSES = [
 ];
 
 // Educational IPv6 addresses for training (enhanced from previous)
-const SPECIAL_IPV6_ADDRESSES = MUST_KNOW_IPV6_ADDRESSES;
+const specialIpv6Addresses = mustKnowIpv6Addresses;
 
 // Common realistic IPv6 prefixes for generation (enhanced with more zero patterns)
-const REALISTIC_PREFIXES = [
+const realisticPrefixes = [
     // Global Unicast common prefixes
     "2001:db8:", // Documentation
     "2001:db8:0:", // Documentation with zero
@@ -300,13 +300,13 @@ export const getRandomIPv6 = () => {
 
     if (useSpecialAddress) {
         // Weight addresses by importance
-        const criticalAddresses = SPECIAL_IPV6_ADDRESSES.filter(
+        const criticalAddresses = specialIpv6Addresses.filter(
             (addr) => addr.importance === "Critical"
         );
-        const importantAddresses = SPECIAL_IPV6_ADDRESSES.filter(
+        const importantAddresses = specialIpv6Addresses.filter(
             (addr) => addr.importance === "Important"
         );
-        const moderateAddresses = SPECIAL_IPV6_ADDRESSES.filter(
+        const moderateAddresses = specialIpv6Addresses.filter(
             (addr) => addr.importance === "Moderate"
         );
 
@@ -331,8 +331,8 @@ export const getRandomIPv6 = () => {
     if (useRealisticPrefix) {
         // Generate with realistic prefix
         const prefix =
-            REALISTIC_PREFIXES[
-                Math.floor(Math.random() * REALISTIC_PREFIXES.length)
+            realisticPrefixes[
+                Math.floor(Math.random() * realisticPrefixes.length)
             ];
         const groups = prefix.split(":");
 
@@ -664,7 +664,7 @@ export const resetInputBorders = () => {
 export const getIPv6AddressInfo = (ipv6) => {
     if (!ipv6) return null;
 
-    const specialAddress = SPECIAL_IPV6_ADDRESSES.find(
+    const specialAddress = specialIpv6Addresses.find(
         (addr) =>
             expandIPv6(addr.address.toLowerCase()) ===
             expandIPv6(ipv6.toLowerCase())
