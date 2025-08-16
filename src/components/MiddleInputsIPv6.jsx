@@ -10,11 +10,13 @@ function MiddleInputsIPv6({
                 Abkürzung:
                 <br className="responsive-break" />
                 <input
-                    id="abkuerzung"
-                    placeholder={mode !== "abkuerzung" ? "Eingeben..." : ""}
-                    value={renderValue("abkuerzung")}
+                    id="abbreviatedAddress"
+                    placeholder={
+                        mode !== "abbreviatedAddress" ? "Eingeben..." : ""
+                    }
+                    value={renderValue("abbreviatedAddress")}
                     onChange={handleInputChange}
-                    disabled={showAnswers || mode === "abkuerzung"}
+                    disabled={showAnswers || mode === "abbreviatedAddress"}
                     className="long-input"
                 />
             </label>
@@ -22,9 +24,9 @@ function MiddleInputsIPv6({
                 Netzwerkadresse:
                 <br className="responsive-break" />
                 <input
-                    id="netzwerkadresse"
+                    id="networkAddress"
                     placeholder="Eingeben..."
-                    value={renderValue("netzwerkadresse")}
+                    value={renderValue("networkAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
                 />

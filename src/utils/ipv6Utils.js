@@ -637,9 +637,9 @@ export const calculateFirstSubnet = (prefixLength) => {
 export const calculateIPv6NetworkData = (ipv6, prefix) => {
     if (!ipv6 || !prefix) {
         return {
-            netzwerkadresse: "",
-            typ: "",
-            benutzbareIps: "",
+            networkAddress: "",
+            type: "",
+            usableIps: "",
         };
     }
 
@@ -648,9 +648,9 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
     const firstSubnet = calculateFirstSubnet(prefix);
 
     return {
-        netzwerkadresse: networkAddress,
-        typ: addressType,
-        benutzbareIps: firstSubnet,
+        networkAddress: networkAddress,
+        type: addressType,
+        usableIps: firstSubnet,
     };
 };
 

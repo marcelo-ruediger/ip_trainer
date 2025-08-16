@@ -11,24 +11,24 @@ function TopInputsIPv6({
                 IP-Adresse:
                 <br className="responsive-break" />
                 <input
-                    id="vollstaendig"
-                    placeholder={mode !== "vollstaendig" ? "Eingeben..." : ""}
-                    value={renderValue("vollstaendig")}
+                    id="fullAddress"
+                    placeholder={mode !== "fullAddress" ? "Eingeben..." : ""}
+                    value={renderValue("fullAddress")}
                     onChange={handleInputChange}
-                    disabled={showAnswers || mode === "vollstaendig"}
+                    disabled={showAnswers || mode === "fullAddress"}
                     className="ipv6-input long-input"
                 />
             </label>
             <label>
-                Netzpräfix:
+                Netzwerk-Präfix:
                 <br className="responsive-break" />
                 <input
-                    id="netzpraefix"
+                    id="networkPrefix"
                     placeholder=""
-                    value={renderValue("netzpraefix")}
+                    value={renderValue("networkPrefix")}
                     onChange={handleInputChange}
                     disabled={true} // Always disabled since it's provided data
-                    className="netzpraefix"
+                    className="networkPrefix"
                 />
             </label>
         </div>

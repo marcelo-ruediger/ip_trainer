@@ -5,8 +5,8 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                 Typ:
                 <br className="responsive-break" />
                 <select
-                    id="typ"
-                    value={renderValue("typ")}
+                    id="type"
+                    value={renderValue("type")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
                 >
@@ -24,9 +24,9 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                 Erstes Subnetz (Subnetz-ID):
                 <br className="responsive-break" />
                 <input
-                    id="benutzbareIps"
+                    id="usableIps"
                     type="number"
-                    value={renderValue("benutzbareIps")}
+                    value={renderValue("usableIps")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
                     className="long-input"

@@ -10,67 +10,72 @@ import { resetInputBorders } from "../utils/commonUtils";
 export const useIPv6 = () => {
     const [ipData, setIpData] = useState({
         ipv6: "",
-        vollstaendig: "", // Full IPv6 address
-        abkuerzung: "", // Abbreviated IPv6 address
-        netzpraefix: "",
-        netzwerkadresse: "",
-        typ: "",
-        benutzbareIps: "",
+        fullAddress: "",
+        abbreviatedAddress: "",
+        networkPrefix: "",
+        networkAddress: "",
+        type: "",
+        usableIps: "",
     });
 
     const [userInput, setUserInput] = useState({
-        vollstaendig: "",
-        abkuerzung: "",
-        netzpraefix: "",
-        netzwerkadresse: "",
-        typ: "",
-        benutzbareIps: "",
+        fullAddress: "",
+        abbreviatedAddress: "",
+        networkPrefix: "",
+        networkAddress: "",
+        type: "",
+        usableIps: "",
     });
 
     const [showAnswers, setShowAnswers] = useState(false);
     const [attention, setAttention] = useState(true);
-    const [mode, setMode] = useState("vollstaendig"); // "vollstaendig" or "abkuerzung"
+    const [mode, setMode] = useState("fullAddress"); // "fullAddress" or "abbreviatedAddress"
     const [generated, setGenerated] = useState({
-        vollstaendig: "",
-        abkuerzung: "",
+        fullAddress: "",
+        abbreviatedAddress: "",
     });
 
     const handleStart = () => {
         setAttention(false);
         resetInputBorders();
 
-        // Use the enhanced generation function
         const generationResult = generateIPv6WithPrefix();
         const { ipv6, prefix, abbreviated, networkData } = generationResult;
 
-        // Randomly choose which field to show (vollständig or abkürzung)
-        const newMode = Math.random() < 0.5 ? "vollstaendig" : "abkuerzung";
+        console.log("Generation result:", generationResult); // Debug log
+        console.log("Network data:", networkData); // Debug log
+
+        // Randomly choose which field to show (full or abbreviated)
+        const newMode =
+            Math.random() < 0.5 ? "fullAddress" : "abbreviatedAddress";
         setMode(newMode);
 
         // Store both full and abbreviated versions
         setGenerated({
-            vollstaendig: ipv6,
-            abkuerzung: abbreviated,
+            fullAddress: ipv6,
+            abbreviatedAddress: abbreviated,
         });
 
         setIpData({
             ipv6,
-            vollstaendig: newMode === "vollstaendig" ? ipv6 : "",
-            abkuerzung: newMode === "abkuerzung" ? abbreviated : "",
-            netzpraefix: prefix,
-            netzwerkadresse: networkData.netzwerkadresse,
-            typ: networkData.typ,
-            benutzbareIps: networkData.benutzbareIps,
+            fullAddress: newMode === "fullAddress" ? ipv6 : "",
+            abbreviatedAddress:
+                newMode === "abbreviatedAddress" ? abbreviated : "",
+            networkPrefix: prefix,
+            networkAddress: networkData.networkAddress,
+            type: networkData.type,
+            usableIps: networkData.usableIps,
         });
 
         setShowAnswers(false);
         setUserInput({
-            vollstaendig: newMode === "vollstaendig" ? ipv6 : "",
-            abkuerzung: newMode === "abkuerzung" ? abbreviated : "",
-            netzpraefix: prefix, // Show the prefix to the user
-            netzwerkadresse: "",
-            typ: "",
-            benutzbareIps: "",
+            fullAddress: newMode === "fullAddress" ? ipv6 : "",
+            abbreviatedAddress:
+                newMode === "abbreviatedAddress" ? abbreviated : "",
+            networkPrefix: prefix, // Show the prefix to the user
+            networkAddress: "",
+            type: "",
+            usableIps: "",
         });
     };
 
@@ -82,18 +87,18 @@ export const useIPv6 = () => {
     const handleShowAnswers = () => {
         setIpData((prev) => ({
             ...prev,
-            vollstaendig: generated.vollstaendig,
-            abkuerzung: generated.abkuerzung,
+            fullAddress: generated.fullAddress,
+            abbreviatedAddress: generated.abbreviatedAddress,
         }));
         setShowAnswers(true);
 
         const ids = [
-            "vollstaendig",
-            "abkuerzung",
-            "netzpraefix",
-            "netzwerkadresse",
-            "typ",
-            "benutzbareIps",
+            "fullAddress",
+            "abbreviatedAddress",
+            "networkPrefix",
+            "networkAddress",
+            "type",
+            "usableIps",
         ];
         ids.forEach((id) => {
             const input = document.getElementById(id);
@@ -108,20 +113,21 @@ export const useIPv6 = () => {
         resetInputBorders();
 
         const fieldsToCheck = [
-            "vollstaendig",
-            "abkuerzung",
-            "netzpraefix",
-            "netzwerkadresse",
-            "typ",
-            "benutzbareIps",
+            "fullAddress",
+            "abbreviatedAddress",
+            "networkPrefix",
+            "networkAddress",
+            "type",
+            "usableIps",
         ];
 
         fieldsToCheck.forEach((fieldId) => {
             // Skip validation for provided data (pre-filled fields)
             if (
-                fieldId === "netzpraefix" ||
-                (fieldId === "vollstaendig" && mode === "vollstaendig") ||
-                (fieldId === "abkuerzung" && mode === "abkuerzung")
+                fieldId === "networkPrefix" ||
+                (fieldId === "fullAddress" && mode === "fullAddress") ||
+                (fieldId === "abbreviatedAddress" &&
+                    mode === "abbreviatedAddress")
             ) {
                 // Mark provided data as correct
                 const inputElement = document.getElementById(fieldId);
@@ -149,8 +155,8 @@ export const useIPv6 = () => {
 
             try {
                 switch (fieldId) {
-                    case "vollstaendig":
-                    case "abkuerzung": {
+                    case "fullAddress":
+                    case "abbreviatedAddress": {
                         // Basic IPv6 format validation
                         const ipv6Pattern =
                             /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$|^::$|^([0-9a-fA-F]{0,4}:){1,7}:$|^:([0-9a-fA-F]{0,4}:){1,7}$/;
@@ -159,7 +165,7 @@ export const useIPv6 = () => {
                             /^([0-9a-fA-F]{4}:){7}[0-9a-fA-F]{4}$/.test(value);
                         break;
                     }
-                    case "netzpraefix": {
+                    case "networkPrefix": {
                         const prefixPattern = /^\/\d{1,3}$/;
                         isValid = prefixPattern.test(value);
                         break;
@@ -168,24 +174,27 @@ export const useIPv6 = () => {
                         isValid = true; // For other fields, accept any input for now
                 }
 
-                if (!isValid) throw new Error("Ungültige Eingabe");
+                if (!isValid) throw new Error("Invalid input");
 
                 let correctValue;
-                if (fieldId === "vollstaendig" || fieldId === "abkuerzung") {
+                if (
+                    fieldId === "fullAddress" ||
+                    fieldId === "abbreviatedAddress"
+                ) {
                     correctValue = generated[fieldId];
                 } else {
                     correctValue = ipData[fieldId];
                 }
 
                 // Special comparison for IPv6 addresses
-                if (fieldId === "vollstaendig") {
+                if (fieldId === "fullAddress") {
                     // Compare expanded versions
                     const userExpanded = expandIPv6(value);
                     const correctExpanded = expandIPv6(correctValue);
                     isCorrect =
                         userExpanded.toLowerCase() ===
                         correctExpanded.toLowerCase();
-                } else if (fieldId === "abkuerzung") {
+                } else if (fieldId === "abbreviatedAddress") {
                     // Compare both as expanded versions (since there can be multiple valid abbreviations)
                     const userExpanded = expandIPv6(value);
                     const correctExpanded = expandIPv6(correctValue);
@@ -213,7 +222,7 @@ export const useIPv6 = () => {
 
         // Mark the generated field as correct
         const generatedFieldId =
-            mode === "vollstaendig" ? "vollstaendig" : "abkuerzung";
+            mode === "fullAddress" ? "fullAddress" : "abbreviatedAddress";
         const generatedElement = document.getElementById(generatedFieldId);
         if (generatedElement) {
             generatedElement.classList.remove("wrong");
