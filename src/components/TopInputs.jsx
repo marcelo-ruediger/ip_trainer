@@ -32,7 +32,6 @@ function TopInputs({
                         .filter(Boolean)
                         .join(" ")}
                 />
-                {/* <p>{mode}</p> */}
             </label>
             <br className="responsive-break" />
             <label>
@@ -55,9 +54,8 @@ function TopInputs({
                             onCidrOrMaskInput(e, "cidr");
                         }
                     }}
-                    disabled={generatedField === "cidr"}
+                    disabled={!userIsInputting && generatedField === "cidr"} // ← Updated logic
                 />
-                {/* <p>{generated.cidr}</p> */}
             </label>
             <br className="responsive-break" />
             <label>
@@ -80,9 +78,10 @@ function TopInputs({
                             onCidrOrMaskInput(e, "subnetMask");
                         }
                     }}
-                    disabled={generatedField === "subnetMask"}
+                    disabled={
+                        !userIsInputting && generatedField === "subnetMask"
+                    } // ← Updated logic
                 />
-                {/* <p>{generated.subnetMask}</p> */}
             </label>
         </div>
     );

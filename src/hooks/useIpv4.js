@@ -44,6 +44,7 @@ export const useIPv4 = () => {
         setUserIsInputting(true);
         setHasInputStarted(true);
         setShowAnswers(false);
+        setGeneratedField(null); // ← Make sure this is being set to null!
 
         setUserInput({
             networkId: "",
