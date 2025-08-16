@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import tableImg from "./images/table.png";
 import Header from "./components/Header";
-import ImageToggle from "./components/ImageToggle";
+import ToggleElements from "./components/ToggleElements"; // Updated import name
 import TopInputs from "./components/TopInputs";
 import MiddleInputs from "./components/MiddleInputs";
 import BottomInputs from "./components/BottomInputs";
@@ -28,7 +28,7 @@ function App() {
     return (
         <>
             <Header />
-            <ImageToggle
+            <ToggleElements
                 showImage={showImage}
                 onToggle={handleToggle}
                 tableImg={tableImg}
@@ -122,10 +122,12 @@ function App() {
                 handleShowAnswers={
                     ipVersion === "ipv4"
                         ? ipv4Logic.handleShowAnswers
-                        : () => {}
+                        : ipv6Logic.handleShowAnswers // Updated to include IPv6 functionality
                 }
                 handleCheck={
-                    ipVersion === "ipv4" ? ipv4Logic.handleCheck : () => {}
+                    ipVersion === "ipv4"
+                        ? ipv4Logic.handleCheck
+                        : ipv6Logic.handleCheck // Updated to include IPv6 functionality
                 }
             />
             <Footer />
