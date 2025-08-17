@@ -498,10 +498,19 @@ export const calculateNetworkData = (ipStr, cidr) => {
     const mask = cidrToMask(cidr).split(".").map(Number);
 
     const network = ip.map((octet, i) => octet & mask[i]);
-    const broadcast = ip.map((octet, i) => octet | (~mask[i] & 255));
 
-    let usable = Math.pow(2, 32 - cidr);
-    usable = cidr >= 31 ? 0 : usable - 2;
+    // Special handling for /31 networks (Point-to-Point links)
+    let broadcast, usable;
+
+    if (cidr === 31) {
+        broadcast = "keiner"; // No broadcast in /31 networks
+        usable = 2; // Both addresses are usable in /31
+    } else {
+        const broadcastArray = ip.map((octet, i) => octet | (~mask[i] & 255));
+        broadcast = broadcastArray.join(".");
+        usable = Math.pow(2, 32 - cidr);
+        usable = cidr >= 31 ? 0 : usable - 2;
+    }
 
     let ipClass = "";
     // Enhanced class detection with special addresses
@@ -517,8 +526,9 @@ export const calculateNetworkData = (ipStr, cidr) => {
 
     return {
         networkId: network.join("."),
-        broadcast: broadcast.join("."),
+        broadcast: broadcast, // This will be either "keiner" or an IP address
         ipClass,
         usableIps: usable.toString(),
+        isPointToPoint: cidr === 31, // Flag to identify /31 networks
     };
 };

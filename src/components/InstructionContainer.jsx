@@ -88,9 +88,8 @@ function InstructionContainer({
         return (
             <div className="instruction-container">
                 <div className="instruction-text">
-                    Klicken Sie auf "IPv4 erzeugen", um eine zufällige IP und
-                    ein Feld zu generieren oder geben Sie eine IP ein mit
-                    entsprechender CIDR oder Subnetzmaske.
+                    Erzeugen Sie eine IP + Feld zum Üben oder geben Sie IP +
+                    CIDR/Subnetzmaske für Berechnungen ein.
                 </div>
             </div>
         );
