@@ -452,14 +452,21 @@ export const getIPv4AddressInfo = (ipAddress) => {
 
 // Keep existing utility functions
 export const getRandomCIDR = () => {
-    const commonCidrs = [8, 16, 24, 25, 26, 27, 28, 29, 30];
-    const allCidrs = Math.ceil(Math.random() * 31);
+    // Exclude /0 as it's only used for default route (0.0.0.0/0)
+    const commonCidrs = [8, 16, 24, 25, 26, 27, 28, 29, 30, 31, 32]; // Added 32
+    const allCidrs = Math.floor(Math.random() * 32) + 1; // 1-32 instead of 1-31
+
     return Math.random() < 0.5
         ? commonCidrs[Math.floor(Math.random() * commonCidrs.length)]
         : allCidrs;
 };
 
 export const cidrToMask = (cidr) => {
+    // Validate CIDR range - exclude /0 as it's only for default route
+    if (cidr < 1 || cidr > 32) {
+        return null; // Invalid CIDR
+    }
+
     const mask = [];
     for (let i = 0; i < 4; i++) {
         const bits = Math.min(8, cidr);
@@ -471,6 +478,11 @@ export const cidrToMask = (cidr) => {
 
 export const maskToCidr = (subnetMask) => {
     try {
+        // Check for 0.0.0.0 subnet mask (invalid for practical subnetting)
+        if (subnetMask === "0.0.0.0") {
+            return null; // This is only valid for default route 0.0.0.0/0
+        }
+
         const octets = subnetMask.split(".").map(Number);
         if (
             octets.length !== 4 ||
@@ -487,29 +499,71 @@ export const maskToCidr = (subnetMask) => {
         const match = binaryStr.match(/^(1*)(0*)$/);
         if (!match) return null;
 
-        return match[1].length;
+        const cidr = match[1].length;
+
+        // Exclude /0 as it's only for default route
+        if (cidr === 0) return null;
+
+        return cidr;
     } catch {
         return null;
     }
 };
 
 export const calculateNetworkData = (ipStr, cidr) => {
-    const ip = ipStr.split(".").map(Number);
-    const mask = cidrToMask(cidr).split(".").map(Number);
+    // More comprehensive validation
+    if (!ipStr || cidr === null || cidr === undefined) {
+        return null; // Missing required parameters
+    }
+
+    // Convert cidr to number and validate range - exclude /0 and invalid values
+    const cidrNum =
+        typeof cidr === "string"
+            ? parseInt(cidr.toString().replace("/", ""))
+            : cidr;
+    if (isNaN(cidrNum) || cidrNum < 1 || cidrNum > 32) {
+        return null; // Invalid CIDR for practical subnetting
+    }
+
+    // Validate IP format
+    if (typeof ipStr !== "string" || !ipStr.includes(".")) {
+        return null; // Invalid IP format
+    }
+
+    const ipParts = ipStr.split(".");
+    if (ipParts.length !== 4) {
+        return null; // Invalid IP format
+    }
+
+    const ip = ipParts.map(Number);
+    if (ip.some((octet) => isNaN(octet) || octet < 0 || octet > 255)) {
+        return null; // Invalid IP octets
+    }
+
+    // Get subnet mask - this could also return null for invalid CIDR
+    const maskStr = cidrToMask(cidrNum);
+    if (!maskStr) {
+        return null; // Invalid CIDR conversion
+    }
+
+    const mask = maskStr.split(".").map(Number);
 
     const network = ip.map((octet, i) => octet & mask[i]);
 
-    // Special handling for /31 networks (Point-to-Point links)
+    // Special handling for /31 and /32 networks
     let broadcast, usable;
 
-    if (cidr === 31) {
+    if (cidrNum === 31) {
         broadcast = "keiner"; // No broadcast in /31 networks
         usable = 2; // Both addresses are usable in /31
+    } else if (cidrNum === 32) {
+        broadcast = "keiner"; // Host route - no broadcast
+        usable = 1; // Only the single host
     } else {
         const broadcastArray = ip.map((octet, i) => octet | (~mask[i] & 255));
         broadcast = broadcastArray.join(".");
-        usable = Math.pow(2, 32 - cidr);
-        usable = cidr >= 31 ? 0 : usable - 2;
+        usable = Math.pow(2, 32 - cidrNum);
+        usable = usable - 2; // Subtract network and broadcast addresses
     }
 
     let ipClass = "";
@@ -529,6 +583,48 @@ export const calculateNetworkData = (ipStr, cidr) => {
         broadcast: broadcast, // This will be either "keiner" or an IP address
         ipClass,
         usableIps: usable.toString(),
-        isPointToPoint: cidr === 31, // Flag to identify /31 networks
+        isPointToPoint: cidrNum === 31 || cidrNum === 32, // Flag for /31 and /32 networks
     };
+};
+
+export const validateCIDRInput = (cidrInput) => {
+    if (!cidrInput && cidrInput !== 0)
+        return { isValid: false, error: "CIDR ist erforderlich" };
+
+    // Handle string input like "/24" or "24"
+    const cleanCidr = cidrInput.toString().replace("/", "");
+    const cidrNum = parseInt(cleanCidr);
+
+    if (isNaN(cidrNum)) {
+        return { isValid: false, error: "CIDR muss eine Zahl sein" };
+    }
+
+    if (cidrNum < 1 || cidrNum > 32) {
+        return {
+            isValid: false,
+            error: "CIDR muss zwischen 1 und 32 liegen (nicht 0)",
+        };
+    }
+
+    return { isValid: true, cidr: cidrNum };
+};
+
+export const validateSubnetMaskInput = (maskInput) => {
+    if (!maskInput)
+        return { isValid: false, error: "Subnetzmaske ist erforderlich" };
+
+    // Check for 0.0.0.0 specifically
+    if (maskInput === "0.0.0.0") {
+        return {
+            isValid: false,
+            error: "Subnetzmaske 0.0.0.0 ist nur für Default Route gültig",
+        };
+    }
+
+    const cidr = maskToCidr(maskInput);
+    if (cidr === null) {
+        return { isValid: false, error: "Ungültige Subnetzmaske" };
+    }
+
+    return { isValid: true, cidr: cidr };
 };
