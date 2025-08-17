@@ -95,8 +95,8 @@
     background: #1a1a1a;
     border: 1px solid #333333;
     border-radius: 6px;
-    padding: 10px; /* Reduced from 12px */
-    margin-bottom: 6px; /* Reduced from 8px */
+    padding: 10px;
+    margin-bottom: 6px;
     transition: all 0.3s ease;
 }
 
@@ -107,9 +107,9 @@
 
 .address-main {
     display: flex;
-    justify-content: space-between; /* Changed from align-items: center */
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 6px; /* Reduced from 8px */
+    margin-bottom: 6px;
 }
 
 .ip-address {
@@ -129,23 +129,25 @@
 
 .common-use {
     font-weight: 500;
-    margin-bottom: 4px; /* Reduced from 6px */
+    margin-bottom: 4px;
     color: #cccccc;
-    font-size: 0.85rem; /* Reduced from 0.9rem */
+    font-size: 0.85rem;
 }
 
 .range {
-    font-size: 0.8rem; /* Reduced from 0.85rem */
+    font-size: 0.8rem;
     color: #aaaaaa;
-    margin-bottom: 3px; /* Reduced from 4px */
+    margin-bottom: 3px;
 }
 
-/* Hide special-rules since we're replacing with special-info */
-.special-rules {
-    display: none;
+.special-info {
+    font-size: 0.8rem;
+    color: #aaaaaa;
+    font-style: italic;
+    margin-top: 3px;
 }
 
-/* ADD these NEW styles for badges and special info */
+/* Info badge styles */
 .info-badge {
     padding: 3px 8px;
     border-radius: 12px;
@@ -196,19 +198,12 @@
     color: white;
 }
 
-/* New routing badge style */
 .info-badge.routing {
     background: linear-gradient(135deg, #9c27b0, #673ab7);
     color: white;
 }
 
-.special-info {
-    font-size: 0.8rem;
-    color: #aaaaaa;
-    font-style: italic;
-    margin-top: 3px;
-}
-
+/* Image toggle container styles */
 .image-toggle-container {
     display: flex;
     justify-content: space-between;

@@ -30,7 +30,7 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         return acc;
     }, {});
 
-    // Define the desired order for categories (removed Multicast)
+    // Define the desired order for categories
     const categoryOrder = [
         "Loopback",
         "APIPA",
@@ -42,7 +42,7 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         "Other",
     ];
 
-    // Translation map for categories (removed Multicast)
+    // Translation map for categories
     const categoryTranslations = {
         Loopback: "Loopback",
         APIPA: "APIPA",
@@ -54,50 +54,27 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         Other: "Sonstige",
     };
 
-    // Translation map for common use descriptions (removed multicast entries)
-    const commonUseTranslations = {
-        "Localhost/ Loopback": "Localhost/ Loopback",
-        "APIPA/ Link-local address": "APIPA/ Link-lokale Adresse",
-        "Limited broadcast": "Eingeschränkter Broadcast",
-        "Default route/ Unspecified": "Standard-Route/ Unspezifiziert",
-        "Class D start (Multicast)": "Klasse D Beginn (Multicast)",
-        "Class E start (Reserved)": "Klasse E Beginn (Reserviert)",
-        "Private Class A - Large enterprises":
-            "Private Klasse A - Große Unternehmen",
-        "Private Class B - Medium businesses":
-            "Private Klasse B - Mittlere Unternehmen",
-        "Private Class C - Home networks": "Private Klasse C - Heimnetzwerke",
-        "Public Class A start": "Öffentliche Klasse A Beginn",
-        "Public Class B start": "Öffentliche Klasse B Beginn",
-        "Public Class C start": "Öffentliche Klasse C Beginn",
-    };
+    // Simplified common use translations (with spaces after /)
+    const getSimplifiedDescription = (addr) => {
+        const address = addr.address;
 
-    // Translation map for special rules (updated multicast rule)
-    const specialRulesTranslations = {
-        "Always refers to local machine, cannot be subnetted":
-            "Verweist immer auf lokale Maschine, kann nicht in Subnetze unterteilt werden",
-        "Auto-assigned when DHCP fails":
-            "Automatisch zugewiesen wenn DHCP fehlschlägt",
-        "Broadcast to all hosts on local network":
-            "Broadcast an alle Hosts im lokalen Netzwerk",
-        "Default route or unspecified address":
-            "Standard-Route oder unspezifizierte Adresse",
-        "Start of Class D address space - multicast":
-            "Beginn des Klasse D Adressraums - Multicast",
-        "Start of Class E - reserved for future use":
-            "Beginn der Klasse E - für zukünftige Nutzung reserviert",
-        "Largest private address space - enterprise networks":
-            "Größter privater Adressraum - Unternehmensnetzwerke",
-        "Medium-sized private networks - business environments":
-            "Mittelgroße private Netzwerke - Geschäftsumgebungen",
-        "Small private networks - home routers and small offices":
-            "Kleine private Netzwerke - Heimrouter und kleine Büros",
-        "Public Class A addresses - globally routable":
-            "Öffentliche Klasse A Adressen - global routbar",
-        "Public Class B addresses - globally routable":
-            "Öffentliche Klasse B Adressen - global routbar",
-        "Public Class C addresses - globally routable":
-            "Öffentliche Klasse C Adressen - global routbar",
+        if (address === "127.0.0.1") return "Localhost / Loopback";
+        if (address === "169.254.1.1") return "APIPA / Link-lokale Adresse";
+        if (address === "255.255.255.255") return "Eingeschränkter Broadcast";
+        if (address === "0.0.0.0") return "Default Route / Unspezifiziert";
+        if (address === "10.0.0.0")
+            return "Private Klasse A - Große Unternehmen";
+        if (address === "172.16.0.0")
+            return "Private Klasse B - Mittlere Unternehmen";
+        if (address === "192.168.0.0")
+            return "Private Klasse C - Heimnetzwerke";
+        if (address === "1.0.0.0") return "Öffentliche Klasse A Beginn";
+        if (address === "128.0.0.0") return "Öffentliche Klasse B Beginn";
+        if (address === "192.0.0.0") return "Öffentliche Klasse C Beginn";
+        if (address === "224.0.0.0") return "Klasse D Beginn (Multicast)";
+        if (address === "240.0.0.0") return "Klasse E Beginn (Reserviert)";
+
+        return addr.commonUse;
     };
 
     // Function to get info badge for each address
@@ -125,12 +102,12 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         if (address === "169.254.1.1")
             return { text: "Link-Local", class: "network" };
         if (address === "255.255.255.255")
-            return { text: "Broadcast", class: "special" }; // Blue/Purple gradient
-        if (address === "0.0.0.0") return { text: "Default", class: "routing" }; // Different purple gradient
+            return { text: "Broadcast", class: "special" };
+        if (address === "0.0.0.0") return { text: "Default", class: "routing" };
         if (address === "224.0.0.0")
-            return { text: "Klasse D", class: "class-d" }; // Purple
+            return { text: "Klasse D", class: "class-d" };
         if (address === "240.0.0.0")
-            return { text: "Klasse E", class: "class-e" }; // Pink
+            return { text: "Klasse E", class: "class-e" };
 
         return null;
     };
@@ -142,7 +119,7 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         if (address === "169.254.1.1")
             return "APIPA = Automatic Private IP Addressing (wenn DHCP fehlschlägt)";
         if (address === "127.0.0.1") return "Immer lokaler Computer";
-        if (address === "0.0.0.0") return "Default Route";
+        if (address === "0.0.0.0") return "Standard-Route";
         if (address === "255.255.255.255")
             return "An alle Geräte im lokalen Netzwerk";
         if (address === "224.0.0.0") return "Multicast - Gruppenkommunkation";
@@ -207,7 +184,6 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                                 Subnetting-Regeln:
                             </p>
 
-                            {/* Use ordered categories instead of Object.entries */}
                             {categoryOrder.map((category) => {
                                 const addresses = groupedAddresses[category];
                                 if (!addresses || addresses.length === 0)
@@ -223,67 +199,50 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                                                 category}
                                         </h3>
 
-                                        {addresses.map((addr, index) => (
-                                            <div
-                                                key={index}
-                                                className="address-item"
-                                            >
-                                                <div className="address-main">
-                                                    <span className="ip-address">
-                                                        {addr.address}
-                                                    </span>
-                                                    {/* Display info badge if available */}
-                                                    {getInfoBadge(addr) && (
-                                                        <span
-                                                            className={`info-badge ${
-                                                                getInfoBadge(
-                                                                    addr
-                                                                ).class
-                                                            }`}
-                                                        >
-                                                            {
-                                                                getInfoBadge(
-                                                                    addr
-                                                                ).text
-                                                            }
+                                        {addresses.map((addr, index) => {
+                                            const infoBadge =
+                                                getInfoBadge(addr);
+                                            const specialInfo =
+                                                getSpecialInfo(addr);
+
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="address-item"
+                                                >
+                                                    <div className="address-main">
+                                                        <span className="ip-address">
+                                                            {addr.address}
                                                         </span>
-                                                    )}
-                                                </div>
-                                                <div className="address-details">
-                                                    <p className="common-use">
-                                                        {commonUseTranslations[
-                                                            addr.commonUse
-                                                        ] || addr.commonUse}
-                                                    </p>
-                                                    {addr.range && (
-                                                        <p className="range">
-                                                            Bereich:{" "}
-                                                            {addr.range}
-                                                        </p>
-                                                    )}
-                                                    {addr.specialRules && (
-                                                        <p className="special-rules">
-                                                            <strong>
-                                                                Besonderheit:
-                                                            </strong>{" "}
-                                                            {specialRulesTranslations[
-                                                                addr
-                                                                    .specialRules
-                                                            ] ||
-                                                                addr.specialRules}
-                                                        </p>
-                                                    )}
-                                                    {/* Display special info text if available */}
-                                                    {getSpecialInfo(addr) && (
-                                                        <p className="special-info">
-                                                            {getSpecialInfo(
+                                                        {infoBadge && (
+                                                            <span
+                                                                className={`info-badge ${infoBadge.class}`}
+                                                            >
+                                                                {infoBadge.text}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="address-details">
+                                                        <p className="common-use">
+                                                            {getSimplifiedDescription(
                                                                 addr
                                                             )}
                                                         </p>
-                                                    )}
+                                                        {addr.range && (
+                                                            <p className="range">
+                                                                Bereich:{" "}
+                                                                {addr.range}
+                                                            </p>
+                                                        )}
+                                                        {specialInfo && (
+                                                            <p className="special-info">
+                                                                {specialInfo}
+                                                            </p>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 );
                             })}
