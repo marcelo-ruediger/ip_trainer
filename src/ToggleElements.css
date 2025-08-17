@@ -95,8 +95,8 @@
     background: #1a1a1a;
     border: 1px solid #333333;
     border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 8px;
+    padding: 10px; /* Reduced from 12px */
+    margin-bottom: 6px; /* Reduced from 8px */
     transition: all 0.3s ease;
 }
 
@@ -107,8 +107,9 @@
 
 .address-main {
     display: flex;
+    justify-content: space-between; /* Changed from align-items: center */
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px; /* Reduced from 8px */
 }
 
 .ip-address {
@@ -128,30 +129,84 @@
 
 .common-use {
     font-weight: 500;
-    margin-bottom: 6px;
+    margin-bottom: 4px; /* Reduced from 6px */
     color: #cccccc;
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Reduced from 0.9rem */
 }
 
 .range {
-    font-size: 0.85rem;
+    font-size: 0.8rem; /* Reduced from 0.85rem */
     color: #aaaaaa;
-    margin-bottom: 4px;
+    margin-bottom: 3px; /* Reduced from 4px */
 }
 
+/* Hide special-rules since we're replacing with special-info */
 .special-rules {
-    font-size: 0.85rem;
-    background: #2a2a2a;
-    color: #cccccc;
-    padding: 6px;
-    border-radius: 4px;
-    border-left: 3px solid #646cff;
-    margin-top: 6px;
-    border: 1px solid #444444;
+    display: none;
 }
 
-.special-rules strong {
-    color: #ffffff;
+/* ADD these NEW styles for badges and special info */
+.info-badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.info-badge.class-a {
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: white;
+}
+
+.info-badge.class-b {
+    background: linear-gradient(135deg, #4ecdc4, #26a69a);
+    color: white;
+}
+
+.info-badge.class-c {
+    background: linear-gradient(135deg, #45b7d1, #2196f3);
+    color: white;
+}
+
+.info-badge.class-d {
+    background: linear-gradient(135deg, #ab47bc, #8e24aa);
+    color: white;
+}
+
+.info-badge.class-e {
+    background: linear-gradient(135deg, #ec407a, #e91e63);
+    color: white;
+}
+
+.info-badge.special {
+    background: linear-gradient(135deg, #646cff, #4338ca);
+    color: white;
+}
+
+.info-badge.system {
+    background: linear-gradient(135deg, #ffa726, #ff9800);
+    color: white;
+}
+
+.info-badge.network {
+    background: linear-gradient(135deg, #66bb6a, #4caf50);
+    color: white;
+}
+
+/* New routing badge style */
+.info-badge.routing {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    color: white;
+}
+
+.special-info {
+    font-size: 0.8rem;
+    color: #aaaaaa;
+    font-style: italic;
+    margin-top: 3px;
 }
 
 .image-toggle-container {

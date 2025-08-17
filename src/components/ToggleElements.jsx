@@ -56,10 +56,10 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
 
     // Translation map for common use descriptions (removed multicast entries)
     const commonUseTranslations = {
-        "Localhost/Loopback": "Localhost/Loopback",
-        "APIPA/Link-local address": "APIPA/Link-lokale Adresse",
+        "Localhost/ Loopback": "Localhost/ Loopback",
+        "APIPA/ Link-local address": "APIPA/ Link-lokale Adresse",
         "Limited broadcast": "Eingeschränkter Broadcast",
-        "Default route/Unspecified": "Standard-Route/Unspezifiziert",
+        "Default route/ Unspecified": "Standard-Route/ Unspezifiziert",
         "Class D start (Multicast)": "Klasse D Beginn (Multicast)",
         "Class E start (Reserved)": "Klasse E Beginn (Reserviert)",
         "Private Class A - Large enterprises":
@@ -98,6 +98,67 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
             "Öffentliche Klasse B Adressen - global routbar",
         "Public Class C addresses - globally routable":
             "Öffentliche Klasse C Adressen - global routbar",
+    };
+
+    // Function to get info badge for each address
+    const getInfoBadge = (addr) => {
+        const address = addr.address;
+
+        // Private Networks
+        if (address === "10.0.0.0")
+            return { text: "Klasse A", class: "class-a" };
+        if (address === "172.16.0.0")
+            return { text: "Klasse B", class: "class-b" };
+        if (address === "192.168.0.0")
+            return { text: "Klasse C", class: "class-c" };
+
+        // Public Networks
+        if (address === "1.0.0.0")
+            return { text: "Klasse A", class: "class-a" };
+        if (address === "128.0.0.0")
+            return { text: "Klasse B", class: "class-b" };
+        if (address === "192.0.0.0")
+            return { text: "Klasse C", class: "class-c" };
+
+        // Special addresses
+        if (address === "127.0.0.1") return { text: "System", class: "system" };
+        if (address === "169.254.1.1")
+            return { text: "Link-Local", class: "network" };
+        if (address === "255.255.255.255")
+            return { text: "Broadcast", class: "special" }; // Blue/Purple gradient
+        if (address === "0.0.0.0") return { text: "Default", class: "routing" }; // Different purple gradient
+        if (address === "224.0.0.0")
+            return { text: "Klasse D", class: "class-d" }; // Purple
+        if (address === "240.0.0.0")
+            return { text: "Klasse E", class: "class-e" }; // Pink
+
+        return null;
+    };
+
+    // Function to get special info text
+    const getSpecialInfo = (addr) => {
+        const address = addr.address;
+
+        if (address === "169.254.1.1")
+            return "APIPA = Automatic Private IP Addressing (wenn DHCP fehlschlägt)";
+        if (address === "127.0.0.1") return "Immer lokaler Computer";
+        if (address === "0.0.0.0") return "Default Route";
+        if (address === "255.255.255.255")
+            return "An alle Geräte im lokalen Netzwerk";
+        if (address === "224.0.0.0") return "Multicast - Gruppenkommunkation";
+        if (address === "240.0.0.0")
+            return "Experimentell / Zukünftige Nutzung";
+        if (address === "10.0.0.0")
+            return "16,7 Millionen Adressen - Große Unternehmen";
+        if (address === "172.16.0.0")
+            return "1 Million Adressen - Mittlere Unternehmen";
+        if (address === "192.168.0.0")
+            return "65.536 Adressen - Heimnetz oder Kleinbüros";
+        if (address === "1.0.0.0") return "Internet-routbar";
+        if (address === "128.0.0.0") return "Internet-routbar";
+        if (address === "192.0.0.0") return "Internet-routbar";
+
+        return null;
     };
 
     return (
@@ -171,6 +232,22 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                                                     <span className="ip-address">
                                                         {addr.address}
                                                     </span>
+                                                    {/* Display info badge if available */}
+                                                    {getInfoBadge(addr) && (
+                                                        <span
+                                                            className={`info-badge ${
+                                                                getInfoBadge(
+                                                                    addr
+                                                                ).class
+                                                            }`}
+                                                        >
+                                                            {
+                                                                getInfoBadge(
+                                                                    addr
+                                                                ).text
+                                                            }
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <div className="address-details">
                                                     <p className="common-use">
@@ -194,6 +271,14 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                                                                     .specialRules
                                                             ] ||
                                                                 addr.specialRules}
+                                                        </p>
+                                                    )}
+                                                    {/* Display special info text if available */}
+                                                    {getSpecialInfo(addr) && (
+                                                        <p className="special-info">
+                                                            {getSpecialInfo(
+                                                                addr
+                                                            )}
                                                         </p>
                                                     )}
                                                 </div>
