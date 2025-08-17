@@ -99,7 +99,7 @@ function InstructionContainer({
     return (
         <div className="instruction-container">
             <div className="instruction-text">
-                <strong>Generiert:</strong> IP-Adresse {ipData.ip} und{" "}
+                <strong>Generiert:</strong> IP-Adresse ({ipData.ip}) +{" "}
                 {getFieldDisplayName(generatedField)} (
                 {getFieldValue(generatedField)})
                 <br />
