@@ -98,37 +98,6 @@ footer {
     font-size: 12px;
 }
 
-.hidden.invisible {
-    display: none;
-}
-
-.hidden.visible {
-    display: block;
-}
-
-.hidden > img {
-    width: 100%;
-    border-radius: 6px;
-    background-color: #ffffff;
-    padding: 0.1rem;
-    margin-top: 1rem;
-}
-
-.image-toggle-container {
-    max-width: 600px;
-    margin: auto;
-    text-align: center;
-    padding: 1rem;
-}
-
-.image-toggle-container > label > input {
-    width: 25px;
-}
-
-.image-toggle-container > label {
-    text-align: right;
-}
-
 .attention {
     border: solid 1px #646cff;
     transform: scale(1.05);
