@@ -54,33 +54,89 @@ The trainer uses a weighted probability system to ensure students encounter both
 -   **10.0.1.50** - Enterprise host
 -   **172.25.1.1** - Mid-range private network
 
-### Special-Purpose IPv4 Addresses (Separated for Educational Toggle)
+### Special-Purpose IPv4 Addresses Reference (Educational Popup)
 
-#### Critical Special Addresses (4 addresses)
+The application includes an interactive popup window accessible via the "Speziellen IPs anzeigen" (Show Special IPs) toggle button. This educational feature displays special-purpose IPv4 addresses that are critical for IHK Fachinformatiker exam preparation.
 
--   **127.0.0.1** - Localhost/Loopback (127.0.0.0/8 range)
--   **255.255.255.255** - Limited broadcast address
--   **0.0.0.0** - Default route/Unspecified address
--   **224.0.0.1** - All Hosts multicast
+#### Organized by Categories:
 
-#### Important Special Addresses (8 addresses)
+**🔗 Loopback**
 
--   **169.254.1.1** - APIPA/Link-local address (169.254.0.0/16 range)
--   **192.0.2.1** - TEST-NET-1 documentation (192.0.2.0/24 range)
--   **198.51.100.1** - TEST-NET-2 documentation (198.51.100.0/24 range)
--   **203.0.113.1** - TEST-NET-3 documentation (203.0.113.0/24 range)
--   **224.0.0.2** - All Routers multicast
--   **127.1.1.1** - Loopback range example
--   **169.254.100.1** - APIPA address example
+-   **127.0.0.1** - Localhost / Loopback (127.0.0.0/8 range)
+    -   Always refers to local machine, cannot be subnetted
+    -   System badge (orange gradient)
 
-#### Moderate Special Addresses (8 addresses)
+**🔗 APIPA (Automatic Private IP Addressing)**
 
--   **100.64.0.1** - Carrier Grade NAT (100.64.0.0/10 range)
--   **100.100.100.1** - CGN address example
--   **169.254.255.254** - APIPA broadcast-like address
--   **239.255.255.255** - Administrative multicast
--   **240.0.0.1** - Reserved for future use (Class E)
--   **255.255.255.254** - Reserved address
+-   **169.254.1.1** - APIPA / Link-lokale Adresse (169.254.0.0/16 range)
+    -   APIPA = Automatic Private IP Addressing (wenn DHCP fehlschlägt)
+    -   Link-Local badge (green gradient)
+
+**📡 Broadcast**
+
+-   **255.255.255.255** - Eingeschränkter Broadcast
+    -   An alle Geräte im lokalen Netzwerk
+    -   Broadcast badge (blue-purple gradient)
+
+**🌐 Routing**
+
+-   **0.0.0.0** - Default Route / Unspezifiziert
+    -   Default Route (Standard-Route)
+    -   Default badge (purple gradient)
+
+**🏠 Private Networks (RFC 1918)**
+
+-   **10.0.0.0** - Private Class A (10.0.0.0/8)
+    -   16,7 Millionen Adressen - Große Unternehmen
+    -   Class A badge (red gradient)
+-   **172.16.0.0** - Private Class B (172.16.0.0/12)
+    -   1 Million Adressen - Mittlere Unternehmen
+    -   Class B badge (teal gradient)
+-   **192.168.0.0** - Private Class C (192.168.0.0/16)
+    -   65.536 Adressen - Heimnetz oder Kleinbüros
+    -   Class C badge (blue gradient)
+
+**🌍 Public Networks**
+
+-   **1.0.0.0** - Öffentliche Klasse A Beginn (1.0.0.0 - 126.255.255.255)
+    -   Internet-routbar
+    -   Class A badge (red gradient)
+-   **128.0.0.0** - Öffentliche Klasse B Beginn (128.0.0.0 - 191.255.255.255)
+    -   Internet-routbar
+    -   Class B badge (teal gradient)
+-   **192.0.0.0** - Öffentliche Klasse C Beginn (192.0.0.0 - 223.255.255.255)
+    -   Internet-routbar
+    -   Class C badge (blue gradient)
+
+**📊 Klassen D und E**
+
+-   **224.0.0.0** - Klasse D Beginn (Multicast) (224.0.0.0/4)
+    -   Multicast - Gruppenkommunkation
+    -   Class D badge (purple gradient)
+-   **240.0.0.0** - Klasse E Beginn (Reserviert) (240.0.0.0/4)
+    -   Experimentell / Zukünftige Nutzung
+    -   Class E badge (pink gradient)
+
+#### Educational Features:
+
+**Color-Coded Badges:**
+
+-   Each address includes a colored badge indicating its class or type
+-   Visual learning aid for quick classification
+-   Consistent color scheme across private and public networks
+
+**Concise Descriptions:**
+
+-   German translations optimized for IHK exam terminology
+-   Practical usage contexts (home networks, enterprises, etc.)
+-   Address count information for private ranges
+
+**IHK Exam Focus:**
+
+-   Only includes addresses relevant to IHK Fachinformatiker certification
+-   Emphasizes public vs. private distinction
+-   Covers class boundaries and special-purpose addresses
+-   Excludes overly technical details not tested in basic certification
 
 ### Address Generation Logic and Validation
 
@@ -99,18 +155,6 @@ The trainer uses a weighted probability system to ensure students encounter both
 -   ❌ **Excludes Class E** (240-255.x.x.x) - Reserved/experimental
 -   ❌ **Excludes CGN range** (100.64.0.0/10) - Special ISP NAT range
 -   ❌ **Excludes documentation ranges** - Reserved for examples
-
-#### Special-Purpose Addresses (Toggle Mode)
-
-**Separated addresses with different calculation rules:**
-
--   **Loopback (127.0.0.0/8)** - Always refers to local machine
--   **APIPA (169.254.0.0/16)** - Auto-assigned when DHCP fails
--   **Multicast (224.0.0.0/4)** - No traditional subnet calculations
--   **Reserved (240.0.0.0/4)** - Experimental/future use
--   **Broadcast (255.255.255.255)** - Limited broadcast scope
--   **Documentation ranges** - Reserved for examples and testing
--   **CGN (100.64.0.0/10)** - Shared address space for ISP NAT
 
 ### Private Address Ranges (70% of random generation)
 
@@ -145,11 +189,12 @@ _Note: Automatically excludes x.x.x.0 and x.x.x.255 addresses_
 -   All generated IPs follow normal Class A/B/C rules
 -   Perfect for learning basic subnetting concepts
 
-**Special-Purpose Mode (Toggle Button):**
+**Special-Purpose Mode (Educational Popup):**
 
--   Displays special addresses with their unique properties
--   Includes educational information about special ranges
+-   Interactive popup window with organized special addresses
+-   Color-coded badges for visual learning
+-   German terminology optimized for IHK exam preparation
 -   Explains why these addresses have different calculation rules
--   Categories: Loopback, APIPA, Multicast, Reserved, Documentation, CGN
+-   Categories: Loopback, APIPA, Broadcast, Routing, Private Networks, Public Networks, Classes D and E
 
-This separation ensures students learn standard subnetting without confusion from special-purpose addresses, while still providing educational value about the complete IPv4 address space.
+This separation ensures students learn standard subnetting without confusion from special-purpose addresses, while providing comprehensive educational value about the complete IPv4 address space through the dedicated reference popup.
