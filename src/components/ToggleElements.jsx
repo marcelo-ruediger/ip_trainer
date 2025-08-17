@@ -110,14 +110,10 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                     />
                     Speziellen IPs anzeigen
                 </label>
-
-                <div
-                    className={`hidden ${showImage ? "visible" : "invisible"}`}
-                >
-                    <img src={tableImg} alt="Toggleable" />
-                </div>
             </div>
-
+            <div className={`hidden ${showImage ? "visible" : "invisible"}`}>
+                <img src={tableImg} alt="Toggleable" />
+            </div>
             {/* Special Addresses Popup */}
             {showSpecialAddresses && (
                 <div className="popup-overlay" onClick={handleOverlayClick}>
