@@ -286,42 +286,7 @@ const specialPurposeAddresses = [
         specialRules: "Default route or unspecified address",
     },
 
-    // MULTICAST - Important for networking fundamentals
-    {
-        address: "224.0.0.1",
-        commonUse: "All Hosts multicast",
-        importance: "Important",
-        category: "Multicast",
-        range: "224.0.0.0/4",
-        specialRules: "Multicast - no traditional subnetting",
-    },
-    {
-        address: "224.0.0.2",
-        commonUse: "All Routers multicast",
-        importance: "Important",
-        category: "Multicast",
-        range: "224.0.0.0/4",
-    },
-
-    // CLASS BOUNDARIES - Important for exam
-    {
-        address: "224.0.0.0",
-        commonUse: "Class D start (Multicast)",
-        importance: "Important",
-        category: "Classes D and E", // Changed from "Class Boundaries"
-        range: "224.0.0.0/4",
-        specialRules: "Start of Class D address space",
-    },
-    {
-        address: "240.0.0.0",
-        commonUse: "Class E start (Reserved)",
-        importance: "Important",
-        category: "Classes D and E", // Changed from "Class Boundaries"
-        range: "240.0.0.0/4",
-        specialRules: "Start of Class E - reserved for future use",
-    },
-
-    // PRIVATE NETWORKS - Critical for exam
+    // PRIVATE NETWORKS - Critical for exam (ordered A → B → C)
     {
         address: "10.0.0.0",
         commonUse: "Private Class A - Large enterprises",
@@ -347,7 +312,7 @@ const specialPurposeAddresses = [
         specialRules: "Small private networks - home routers and small offices",
     },
 
-    // PUBLIC NETWORKS - Critical for understanding public vs private
+    // PUBLIC NETWORKS - Critical for understanding public vs private (ordered A → B → C)
     {
         address: "1.0.0.0",
         commonUse: "Public Class A start",
@@ -371,6 +336,24 @@ const specialPurposeAddresses = [
         category: "Public Networks",
         range: "192.0.0.0 - 223.255.255.255",
         specialRules: "Public Class C addresses - globally routable",
+    },
+
+    // CLASS D and E boundaries - Important for exam
+    {
+        address: "224.0.0.0",
+        commonUse: "Class D start (Multicast)",
+        importance: "Important",
+        category: "Classes D and E",
+        range: "224.0.0.0/4",
+        specialRules: "Start of Class D address space - multicast",
+    },
+    {
+        address: "240.0.0.0",
+        commonUse: "Class E start (Reserved)",
+        importance: "Important",
+        category: "Classes D and E",
+        range: "240.0.0.0/4",
+        specialRules: "Start of Class E - reserved for future use",
     },
 ];
 

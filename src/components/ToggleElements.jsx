@@ -30,20 +30,7 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         return acc;
     }, {});
 
-    // Translation map for categories
-    const categoryTranslations = {
-        Loopback: "Loopback",
-        APIPA: "APIPA",
-        Broadcast: "Broadcast",
-        Routing: "Routing",
-        "Private Networks": "Private Netzwerke",
-        "Public Networks": "Öffentliche Netzwerke",
-        Multicast: "Multicast",
-        "Classes D and E": "Klassen D und E", // Updated name
-        Other: "Sonstige",
-    };
-
-    // Define the desired order for categories
+    // Define the desired order for categories (removed Multicast)
     const categoryOrder = [
         "Loopback",
         "APIPA",
@@ -51,19 +38,28 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         "Routing",
         "Private Networks",
         "Public Networks",
-        "Multicast",
         "Classes D and E",
         "Other",
     ];
 
-    // Translation map for common use descriptions
+    // Translation map for categories (removed Multicast)
+    const categoryTranslations = {
+        Loopback: "Loopback",
+        APIPA: "APIPA",
+        Broadcast: "Broadcast",
+        Routing: "Routing",
+        "Private Networks": "Private Netzwerke",
+        "Public Networks": "Öffentliche Netzwerke",
+        "Classes D and E": "Klassen D und E",
+        Other: "Sonstige",
+    };
+
+    // Translation map for common use descriptions (removed multicast entries)
     const commonUseTranslations = {
         "Localhost/Loopback": "Localhost/Loopback",
         "APIPA/Link-local address": "APIPA/Link-lokale Adresse",
         "Limited broadcast": "Eingeschränkter Broadcast",
         "Default route/Unspecified": "Standard-Route/Unspezifiziert",
-        "All Hosts multicast": "Alle Hosts Multicast",
-        "All Routers multicast": "Alle Router Multicast",
         "Class D start (Multicast)": "Klasse D Beginn (Multicast)",
         "Class E start (Reserved)": "Klasse E Beginn (Reserviert)",
         "Private Class A - Large enterprises":
@@ -76,7 +72,7 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         "Public Class C start": "Öffentliche Klasse C Beginn",
     };
 
-    // Translation map for special rules
+    // Translation map for special rules (updated multicast rule)
     const specialRulesTranslations = {
         "Always refers to local machine, cannot be subnetted":
             "Verweist immer auf lokale Maschine, kann nicht in Subnetze unterteilt werden",
@@ -86,9 +82,8 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
             "Broadcast an alle Hosts im lokalen Netzwerk",
         "Default route or unspecified address":
             "Standard-Route oder unspezifizierte Adresse",
-        "Multicast - no traditional subnetting":
-            "Multicast - kein traditionelles Subnetting",
-        "Start of Class D address space": "Beginn des Klasse D Adressraums",
+        "Start of Class D address space - multicast":
+            "Beginn des Klasse D Adressraums - Multicast",
         "Start of Class E - reserved for future use":
             "Beginn der Klasse E - für zukünftige Nutzung reserviert",
         "Largest private address space - enterprise networks":
