@@ -244,9 +244,9 @@ const subnetCalculationAddresses = [
     },
 ];
 
-// Special purpose addresses that don't follow standard subnet calculation rules
+// Most important IPv4 addresses for IHK Fachinformatiker exam
 const specialPurposeAddresses = [
-    // === LOOPBACK ===
+    // LOOPBACK - Critical for exam
     {
         address: "127.0.0.1",
         commonUse: "Localhost/Loopback",
@@ -255,15 +255,8 @@ const specialPurposeAddresses = [
         range: "127.0.0.0/8",
         specialRules: "Always refers to local machine, cannot be subnetted",
     },
-    {
-        address: "127.1.1.1",
-        commonUse: "Loopback range example",
-        importance: "Moderate",
-        category: "Loopback",
-        range: "127.0.0.0/8",
-    },
 
-    // === APIPA/LINK-LOCAL ===
+    // APIPA - Important for DHCP troubleshooting
     {
         address: "169.254.1.1",
         commonUse: "APIPA/Link-local address",
@@ -272,63 +265,8 @@ const specialPurposeAddresses = [
         range: "169.254.0.0/16",
         specialRules: "Auto-assigned when DHCP fails",
     },
-    {
-        address: "169.254.100.1",
-        commonUse: "APIPA address",
-        importance: "Moderate",
-        category: "APIPA",
-        range: "169.254.0.0/16",
-    },
-    {
-        address: "169.254.255.254",
-        commonUse: "APIPA broadcast-like",
-        importance: "Moderate",
-        category: "APIPA",
-        range: "169.254.0.0/16",
-    },
 
-    // === DOCUMENTATION/TEST (RFC 5737) ===
-    {
-        address: "192.0.2.1",
-        commonUse: "TEST-NET-1 documentation",
-        importance: "Important",
-        category: "Documentation",
-        range: "192.0.2.0/24",
-        specialRules: "Reserved for documentation and examples",
-    },
-    {
-        address: "198.51.100.1",
-        commonUse: "TEST-NET-2 documentation",
-        importance: "Important",
-        category: "Documentation",
-        range: "198.51.100.0/24",
-    },
-    {
-        address: "203.0.113.1",
-        commonUse: "TEST-NET-3 documentation",
-        importance: "Important",
-        category: "Documentation",
-        range: "203.0.113.0/24",
-    },
-
-    // === CARRIER GRADE NAT (RFC 6598) ===
-    {
-        address: "100.64.0.1",
-        commonUse: "Carrier Grade NAT",
-        importance: "Moderate",
-        category: "CGN",
-        range: "100.64.0.0/10",
-        specialRules: "Shared address space for ISP NAT",
-    },
-    {
-        address: "100.100.100.1",
-        commonUse: "CGN address",
-        importance: "Moderate",
-        category: "CGN",
-        range: "100.64.0.0/10",
-    },
-
-    // === BROADCAST/SPECIAL ===
+    // BROADCAST - Critical concept
     {
         address: "255.255.255.255",
         commonUse: "Limited broadcast",
@@ -337,16 +275,18 @@ const specialPurposeAddresses = [
         range: "Single address",
         specialRules: "Broadcast to all hosts on local network",
     },
+
+    // DEFAULT ROUTE - Critical for routing
     {
         address: "0.0.0.0",
         commonUse: "Default route/Unspecified",
         importance: "Critical",
-        category: "Special",
+        category: "Routing",
         range: "Single address",
         specialRules: "Default route or unspecified address",
     },
 
-    // === MULTICAST (Class D) ===
+    // MULTICAST - Important for networking fundamentals
     {
         address: "224.0.0.1",
         commonUse: "All Hosts multicast",
@@ -362,29 +302,49 @@ const specialPurposeAddresses = [
         category: "Multicast",
         range: "224.0.0.0/4",
     },
+
+    // CLASS D and E boundaries - Important for exam
     {
-        address: "239.255.255.255",
-        commonUse: "Administrative multicast",
-        importance: "Moderate",
-        category: "Multicast",
+        address: "224.0.0.0",
+        commonUse: "Class D start (Multicast)",
+        importance: "Important",
+        category: "Class Boundaries",
         range: "224.0.0.0/4",
+        specialRules: "Start of Class D address space",
+    },
+    {
+        address: "240.0.0.0",
+        commonUse: "Class E start (Reserved)",
+        importance: "Important",
+        category: "Class Boundaries",
+        range: "240.0.0.0/4",
+        specialRules: "Start of Class E - reserved for future use",
     },
 
-    // === RESERVED (Class E) ===
+    // RFC 1918 boundaries - Critical for private networks with usage contexts
     {
-        address: "240.0.0.1",
-        commonUse: "Reserved for future use",
-        importance: "Moderate",
-        category: "Reserved",
-        range: "240.0.0.0/4",
-        specialRules: "Reserved for experimental use",
+        address: "10.0.0.0",
+        commonUse: "Private Class A - Large enterprises",
+        importance: "Critical",
+        category: "Private Networks",
+        range: "10.0.0.0/8",
+        specialRules: "Largest private address space - enterprise networks",
     },
     {
-        address: "255.255.255.254",
-        commonUse: "Reserved address",
-        importance: "Moderate",
-        category: "Reserved",
-        range: "240.0.0.0/4",
+        address: "172.16.0.0",
+        commonUse: "Private Class B - Medium businesses",
+        importance: "Critical",
+        category: "Private Networks",
+        range: "172.16.0.0/12",
+        specialRules: "Medium-sized private networks - business environments",
+    },
+    {
+        address: "192.168.0.0",
+        commonUse: "Private Class C - Home networks",
+        importance: "Critical",
+        category: "Private Networks",
+        range: "192.168.0.0/16",
+        specialRules: "Small private networks - home routers and small offices",
     },
 ];
 

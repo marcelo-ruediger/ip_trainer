@@ -34,41 +34,30 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
     const categoryTranslations = {
         Loopback: "Loopback",
         APIPA: "APIPA",
-        Documentation: "Dokumentation",
-        Multicast: "Multicast",
         Broadcast: "Broadcast",
-        Special: "Spezial",
-        CGN: "CGN",
-        Reserved: "Reserviert",
+        Routing: "Routing",
+        Multicast: "Multicast",
+        "Class Boundaries": "Klassen-Grenzen",
+        "Private Networks": "Private Netzwerke",
+        "Subnetting Examples": "Subnetting Beispiele",
         Other: "Sonstige",
-    };
-
-    // Translation map for importance levels
-    const importanceTranslations = {
-        Critical: "Kritisch",
-        Important: "Wichtig",
-        Moderate: "Mäßig",
     };
 
     // Translation map for common use descriptions
     const commonUseTranslations = {
         "Localhost/Loopback": "Localhost/Loopback",
-        "Loopback range example": "Loopback-Bereich Beispiel",
         "APIPA/Link-local address": "APIPA/Link-lokale Adresse",
-        "APIPA address": "APIPA-Adresse",
-        "APIPA broadcast-like": "APIPA broadcast-ähnlich",
-        "TEST-NET-1 documentation": "TEST-NET-1 Dokumentation",
-        "TEST-NET-2 documentation": "TEST-NET-2 Dokumentation",
-        "TEST-NET-3 documentation": "TEST-NET-3 Dokumentation",
-        "Carrier Grade NAT": "Carrier Grade NAT",
-        "CGN address": "CGN-Adresse",
         "Limited broadcast": "Eingeschränkter Broadcast",
         "Default route/Unspecified": "Standard-Route/Unspezifiziert",
         "All Hosts multicast": "Alle Hosts Multicast",
         "All Routers multicast": "Alle Router Multicast",
-        "Administrative multicast": "Administrativer Multicast",
-        "Reserved for future use": "Für zukünftige Nutzung reserviert",
-        "Reserved address": "Reservierte Adresse",
+        "Class D start (Multicast)": "Klasse D Beginn (Multicast)",
+        "Class E start (Reserved)": "Klasse E Beginn (Reserviert)",
+        "Private Class A - Large enterprises":
+            "Private Klasse A - Große Unternehmen",
+        "Private Class B - Medium businesses":
+            "Private Klasse B - Mittlere Unternehmen",
+        "Private Class C - Home networks": "Private Klasse C - Heimnetzwerke",
     };
 
     // Translation map for special rules
@@ -77,17 +66,21 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
             "Verweist immer auf lokale Maschine, kann nicht in Subnetze unterteilt werden",
         "Auto-assigned when DHCP fails":
             "Automatisch zugewiesen wenn DHCP fehlschlägt",
-        "Reserved for documentation and examples":
-            "Reserviert für Dokumentation und Beispiele",
-        "Shared address space for ISP NAT": "Geteilter Adressraum für ISP NAT",
         "Broadcast to all hosts on local network":
             "Broadcast an alle Hosts im lokalen Netzwerk",
         "Default route or unspecified address":
             "Standard-Route oder unspezifizierte Adresse",
         "Multicast - no traditional subnetting":
             "Multicast - kein traditionelles Subnetting",
-        "Reserved for experimental use":
-            "Für experimentelle Nutzung reserviert",
+        "Start of Class D address space": "Beginn des Klasse D Adressraums",
+        "Start of Class E - reserved for future use":
+            "Beginn der Klasse E - für zukünftige Nutzung reserviert",
+        "Largest private address space - enterprise networks":
+            "Größter privater Adressraum - Unternehmensnetzwerke",
+        "Medium-sized private networks - business environments":
+            "Mittelgroße private Netzwerke - Geschäftsumgebungen",
+        "Small private networks - home routers and small offices":
+            "Kleine private Netzwerke - Heimrouter und kleine Büros",
     };
 
     return (
@@ -114,6 +107,7 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
             <div className={`hidden ${showImage ? "visible" : "invisible"}`}>
                 <img src={tableImg} alt="Toggleable" />
             </div>
+
             {/* Special Addresses Popup */}
             {showSpecialAddresses && (
                 <div className="popup-overlay" onClick={handleOverlayClick}>
@@ -154,13 +148,6 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                                                 <div className="address-main">
                                                     <span className="ip-address">
                                                         {addr.address}
-                                                    </span>
-                                                    <span
-                                                        className={`importance ${addr.importance?.toLowerCase()}`}
-                                                    >
-                                                        {importanceTranslations[
-                                                            addr.importance
-                                                        ] || addr.importance}
                                                     </span>
                                                 </div>
                                                 <div className="address-details">
