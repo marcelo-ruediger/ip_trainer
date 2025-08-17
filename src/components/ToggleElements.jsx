@@ -36,12 +36,25 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         APIPA: "APIPA",
         Broadcast: "Broadcast",
         Routing: "Routing",
-        Multicast: "Multicast",
-        "Class Boundaries": "Klassen-Grenzen",
         "Private Networks": "Private Netzwerke",
-        "Subnetting Examples": "Subnetting Beispiele",
+        "Public Networks": "Öffentliche Netzwerke",
+        Multicast: "Multicast",
+        "Classes D and E": "Klassen D und E", // Updated name
         Other: "Sonstige",
     };
+
+    // Define the desired order for categories
+    const categoryOrder = [
+        "Loopback",
+        "APIPA",
+        "Broadcast",
+        "Routing",
+        "Private Networks",
+        "Public Networks",
+        "Multicast",
+        "Classes D and E",
+        "Other",
+    ];
 
     // Translation map for common use descriptions
     const commonUseTranslations = {
@@ -58,6 +71,9 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
         "Private Class B - Medium businesses":
             "Private Klasse B - Mittlere Unternehmen",
         "Private Class C - Home networks": "Private Klasse C - Heimnetzwerke",
+        "Public Class A start": "Öffentliche Klasse A Beginn",
+        "Public Class B start": "Öffentliche Klasse B Beginn",
+        "Public Class C start": "Öffentliche Klasse C Beginn",
     };
 
     // Translation map for special rules
@@ -81,6 +97,12 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
             "Mittelgroße private Netzwerke - Geschäftsumgebungen",
         "Small private networks - home routers and small offices":
             "Kleine private Netzwerke - Heimrouter und kleine Büros",
+        "Public Class A addresses - globally routable":
+            "Öffentliche Klasse A Adressen - global routbar",
+        "Public Class B addresses - globally routable":
+            "Öffentliche Klasse B Adressen - global routbar",
+        "Public Class C addresses - globally routable":
+            "Öffentliche Klasse C Adressen - global routbar",
     };
 
     return (
@@ -129,8 +151,13 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                                 Subnetting-Regeln:
                             </p>
 
-                            {Object.entries(groupedAddresses).map(
-                                ([category, addresses]) => (
+                            {/* Use ordered categories instead of Object.entries */}
+                            {categoryOrder.map((category) => {
+                                const addresses = groupedAddresses[category];
+                                if (!addresses || addresses.length === 0)
+                                    return null;
+
+                                return (
                                     <div
                                         key={category}
                                         className="address-category"
@@ -178,8 +205,8 @@ function ToggleElements({ showImage, onToggle, tableImg }) {
                                             </div>
                                         ))}
                                     </div>
-                                )
-                            )}
+                                );
+                            })}
                         </div>
                     </div>
                 </div>

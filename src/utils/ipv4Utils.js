@@ -303,12 +303,12 @@ const specialPurposeAddresses = [
         range: "224.0.0.0/4",
     },
 
-    // CLASS D and E boundaries - Important for exam
+    // CLASS BOUNDARIES - Important for exam
     {
         address: "224.0.0.0",
         commonUse: "Class D start (Multicast)",
         importance: "Important",
-        category: "Class Boundaries",
+        category: "Classes D and E", // Changed from "Class Boundaries"
         range: "224.0.0.0/4",
         specialRules: "Start of Class D address space",
     },
@@ -316,12 +316,12 @@ const specialPurposeAddresses = [
         address: "240.0.0.0",
         commonUse: "Class E start (Reserved)",
         importance: "Important",
-        category: "Class Boundaries",
+        category: "Classes D and E", // Changed from "Class Boundaries"
         range: "240.0.0.0/4",
         specialRules: "Start of Class E - reserved for future use",
     },
 
-    // RFC 1918 boundaries - Critical for private networks with usage contexts
+    // PRIVATE NETWORKS - Critical for exam
     {
         address: "10.0.0.0",
         commonUse: "Private Class A - Large enterprises",
@@ -345,6 +345,32 @@ const specialPurposeAddresses = [
         category: "Private Networks",
         range: "192.168.0.0/16",
         specialRules: "Small private networks - home routers and small offices",
+    },
+
+    // PUBLIC NETWORKS - Critical for understanding public vs private
+    {
+        address: "1.0.0.0",
+        commonUse: "Public Class A start",
+        importance: "Critical",
+        category: "Public Networks",
+        range: "1.0.0.0 - 126.255.255.255",
+        specialRules: "Public Class A addresses - globally routable",
+    },
+    {
+        address: "128.0.0.0",
+        commonUse: "Public Class B start",
+        importance: "Critical",
+        category: "Public Networks",
+        range: "128.0.0.0 - 191.255.255.255",
+        specialRules: "Public Class B addresses - globally routable",
+    },
+    {
+        address: "192.0.0.0",
+        commonUse: "Public Class C start",
+        importance: "Critical",
+        category: "Public Networks",
+        range: "192.0.0.0 - 223.255.255.255",
+        specialRules: "Public Class C addresses - globally routable",
     },
 ];
 
