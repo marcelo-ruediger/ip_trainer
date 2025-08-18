@@ -120,7 +120,7 @@ export const useIPv4 = () => {
 
                 if (
                     /^\d{1,2}$/.test(cidrValue) &&
-                    cidrNumber >= 0 &&
+                    cidrNumber >= 1 &&
                     cidrNumber <= 32
                 ) {
                     cidr = cidrNumber;
@@ -128,7 +128,7 @@ export const useIPv4 = () => {
                     isInputValid = true;
                     setCidrValid(true);
                 } else {
-                    setCidrValid(false);
+                    setCidrValid(false); // <-- Now /0 will be marked as invalid (red)
                 }
             }
         } else if (inputType === "subnetMask") {
@@ -168,6 +168,11 @@ export const useIPv4 = () => {
 
         if (isInputValid && cidr !== null) {
             const networkData = calculateNetworkData(currentIp, cidr);
+
+            if (networkData === null) {
+                // Don't try to access properties if calculation failed
+                return;
+            }
 
             setGenerated({
                 cidr: `/${cidr}`,
