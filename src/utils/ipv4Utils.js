@@ -1,5 +1,3 @@
-import { resetInputBorders } from "./commonUtils";
-
 export const getRandomIp = (includeSpecialAddresses = false) => {
     if (includeSpecialAddresses) {
         // Return special addresses that have different calculation rules
