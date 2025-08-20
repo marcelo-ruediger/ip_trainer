@@ -239,6 +239,20 @@ const mustKnowIpv6Addresses = [
         commonUse: "IPv4-compatible IPv6 (deprecated)",
         importance: "Moderate",
     },
+
+    // === DO NOT USE (reserved) ===
+    {
+        address: "2001:db8:85a3::8a2e:370:7335",
+        type: "Global Unicast",
+        commonUse: "Reserved for documentation",
+        importance: "Critical",
+    },
+    {
+        address: "2001:db8:1234::1",
+        type: "Global Unicast",
+        commonUse: "Reserved for documentation",
+        importance: "Critical",
+    },
 ];
 
 // Educational IPv6 addresses for training (enhanced from previous)
@@ -296,145 +310,98 @@ const realisticPrefixes = [
 
 // Enhanced IPv6 generation with more must-know addresses
 export const getRandomIPv6 = () => {
-    const useSpecialAddress = Math.random() < 0.4; // 40% chance for must-know addresses
+    // 40% must-know, 60% realistic random
+    const useMustKnow = Math.random() < 0.4;
 
-    if (useSpecialAddress) {
-        // Weight addresses by importance
-        const criticalAddresses = specialIpv6Addresses.filter(
-            (addr) => addr.importance === "Critical"
+    if (useMustKnow) {
+        // Weighted selection among must-know addresses
+        const critical = mustKnowIpv6Addresses.filter(
+            (a) => a.importance === "Critical"
         );
-        const importantAddresses = specialIpv6Addresses.filter(
-            (addr) => addr.importance === "Important"
+        const important = mustKnowIpv6Addresses.filter(
+            (a) => a.importance === "Important"
         );
-        const moderateAddresses = specialIpv6Addresses.filter(
-            (addr) => addr.importance === "Moderate"
+        const moderate = mustKnowIpv6Addresses.filter(
+            (a) => a.importance === "Moderate"
         );
 
-        const random = Math.random();
-        let selectedArray;
+        const rand = Math.random();
+        let pool;
+        if (rand < 0.6) pool = critical;
+        else if (rand < 0.9) pool = important;
+        else pool = moderate;
 
-        if (random < 0.6) {
-            selectedArray = criticalAddresses;
-        } else if (random < 0.85) {
-            selectedArray = importantAddresses;
-        } else {
-            selectedArray = moderateAddresses;
-        }
-
-        const randomAddress =
-            selectedArray[Math.floor(Math.random() * selectedArray.length)];
-        return randomAddress.address;
+        const chosen = pool[Math.floor(Math.random() * pool.length)];
+        return chosen.address;
     }
 
-    const useRealisticPrefix = Math.random() < 0.8; // 80% chance for realistic prefixes
-
-    if (useRealisticPrefix) {
-        // Generate with realistic prefix
-        const prefix =
-            realisticPrefixes[
-                Math.floor(Math.random() * realisticPrefixes.length)
-            ];
-        const groups = prefix.split(":");
-
-        // Fill remaining groups with realistic values that include more zeros
-        while (groups.length < 8) {
-            let group;
-
-            // High chance of zeros in various positions (very common in IPv6)
-            if (Math.random() < 0.4) {
-                group = "0000";
-            }
-            // Interface ID often ends with ::1 for gateways
-            else if (groups.length === 7 && Math.random() < 0.3) {
-                group = "1";
-            }
-            // EUI-64 patterns (common in SLAAC)
-            else if (groups.length === 4 && Math.random() < 0.2) {
-                // Common EUI-64 middle parts
-                group = Math.random() < 0.5 ? "fffe" : "ff";
-            }
-            // More zeros in the middle (subnet part)
-            else if (
-                groups.length >= 4 &&
-                groups.length <= 6 &&
-                Math.random() < 0.5
-            ) {
-                group = "0000";
-            }
-            // Generate realistic hex values
-            else {
-                if (Math.random() < 0.3) {
-                    // Very small values (0-255, 0x00ff)
-                    group = Math.floor(Math.random() * 0x100).toString(16);
-                } else if (Math.random() < 0.6) {
-                    // Lower values (0-4095, 0x0fff)
-                    group = Math.floor(Math.random() * 0x1000).toString(16);
-                } else {
-                    // Full range but weighted towards lower values
-                    group = Math.floor(Math.random() * 0x10000).toString(16);
-                }
-                group = group.padStart(4, "0");
-            }
-            groups.push(group);
-        }
-
-        return groups.join(":");
+    // Realistic random selection
+    const rand = Math.random();
+    if (rand < 0.2) {
+        // Documentation
+        return (
+            "2001:db8:" +
+            Array(6)
+                .fill()
+                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
+                .join(":")
+        );
+    } else if (rand < 0.4) {
+        // ULA
+        return (
+            "fd" +
+            Math.floor(Math.random() * 0x100)
+                .toString(16)
+                .padStart(2, "0") +
+            ":" +
+            Array(7)
+                .fill()
+                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
+                .join(":")
+        );
+    } else if (rand < 0.55) {
+        // Link-local
+        return (
+            "fe80:" +
+            Array(7)
+                .fill()
+                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
+                .join(":")
+        );
+    } else if (rand < 0.65) {
+        // Multicast
+        return "ff02::" + Math.floor(Math.random() * 0xff).toString(16);
+    } else if (rand < 0.9) {
+        // Common ISP/Cloud prefixes
+        const prefixes = [
+            "2001:4860:", // Google
+            "2606:4700:", // Cloudflare
+            "2001:470:", // Hurricane Electric
+            "2400:cb00:", // Cloudflare Asia
+            "2a00:1450:", // Google Europe
+        ];
+        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        return (
+            prefix +
+            Array(6)
+                .fill()
+                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
+                .join(":")
+        );
+    } else {
+        // Other global unicast
+        return (
+            "2" +
+            Math.floor(Math.random() * 0x1000)
+                .toString(16)
+                .padStart(3, "0") +
+            ":" +
+            Array(7)
+                .fill()
+                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
+                .join(":")
+        );
     }
-
-    // Enhanced fallback: generate with more zeros and realistic patterns
-    const groups = [];
-    for (let i = 0; i < 8; i++) {
-        let group;
-
-        // First group: often starts with 2 for Global Unicast
-        if (i === 0 && Math.random() < 0.6) {
-            group =
-                "2" +
-                Math.floor(Math.random() * 0x1000)
-                    .toString(16)
-                    .padStart(3, "0");
-        }
-        // VERY high probability of zeros (extremely realistic for IPv6)
-        else if (Math.random() < 0.55) {
-            group = "0000";
-        }
-        // Network part (groups 0-3) - often has some structure
-        else if (i < 4) {
-            if (Math.random() < 0.4) {
-                // Small network identifiers
-                group = Math.floor(Math.random() * 0x100).toString(16);
-            } else {
-                group = Math.floor(Math.random() * 0x1000).toString(16);
-            }
-            group = group.padStart(4, "0");
-        }
-        // Subnet part (groups 4-5) - often zeros
-        else if (i < 6 && Math.random() < 0.6) {
-            group = "0000";
-        }
-        // Interface ID part (groups 6-7) - can be various patterns
-        else {
-            // Common interface ID patterns
-            if (i === 7 && Math.random() < 0.2) {
-                // Often ends with 1 for gateways
-                group = "0001";
-            } else if (i === 6 && Math.random() < 0.15) {
-                // EUI-64 pattern
-                group = "fffe";
-            } else {
-                if (Math.random() < 0.4) {
-                    // Lower values for more realistic addresses
-                    group = Math.floor(Math.random() * 0x1000).toString(16);
-                } else {
-                    group = Math.floor(Math.random() * 0x10000).toString(16);
-                }
-                group = group.padStart(4, "0");
-            }
-        }
-        groups.push(group);
-    }
-
-    return groups.join(":");
 };
 
 export const abbreviateIPv6 = (ipv6) => {
