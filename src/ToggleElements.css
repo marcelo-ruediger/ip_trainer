@@ -203,6 +203,47 @@
     color: white;
 }
 
+/* IPv6-specific badge styles */
+.info-badge.unspecified {
+    background: linear-gradient(135deg, #757575, #616161);
+    color: white;
+}
+
+.info-badge.documentation {
+    background: linear-gradient(135deg, #26c6da, #00bcd4);
+    color: white;
+}
+
+.info-badge.link-local {
+    background: linear-gradient(135deg, #66bb6a, #4caf50);
+    color: white;
+}
+
+.info-badge.private {
+    background: linear-gradient(135deg, #ffa726, #ff9800);
+    color: white;
+}
+
+.info-badge.multicast {
+    background: linear-gradient(135deg, #ab47bc, #8e24aa);
+    color: white;
+}
+
+.info-badge.global {
+    background: linear-gradient(135deg, #42a5f5, #2196f3);
+    color: white;
+}
+
+.info-badge.dns {
+    background: linear-gradient(135deg, #66bb6a, #4caf50);
+    color: white;
+}
+
+.info-badge.transition {
+    background: linear-gradient(135deg, #ef5350, #f44336);
+    color: white;
+}
+
 /* Image toggle container styles */
 .image-toggle-container {
     display: flex;

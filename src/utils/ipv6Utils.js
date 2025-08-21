@@ -7,6 +7,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "IPv6 Loopback (localhost)",
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
+        calculationSuitable: false, // Special address, not for network calculations
     },
     {
         address: "::",
@@ -14,6 +15,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Unspezifizierte Adresse (alle Nullen)",
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
+        calculationSuitable: false, // Special address, not for network calculations
     },
 
     // === DOKUMENTATION - Critical for learning ===
@@ -23,6 +25,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Dokumentations-/Beispieladresse",
         importance: "Critical",
         ihkTopic: "IPv6 Adressierung",
+        calculationSuitable: true, // Good for network calculations
     },
     {
         address: "2001:db8::",
@@ -30,6 +33,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Dokumentationsnetz (RFC 3849)",
         importance: "Critical",
         ihkTopic: "IPv6 Adressierung",
+        calculationSuitable: false, // Network address, not suitable for host calculations
     },
     {
         address: "2001:db8:1::",
@@ -37,6 +41,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Dokumentations-Subnetz",
         importance: "Important",
         ihkTopic: "IPv6 Subnetze",
+        calculationSuitable: false, // Network address, not suitable for host calculations
     },
 
     // === LINK-LOCAL - Essential for IPv6 operation ===
@@ -46,6 +51,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Link-lokale Adresse (Router)",
         importance: "Critical",
         ihkTopic: "IPv6 Autokonfiguration",
+        calculationSuitable: true, // Good for network calculations
     },
     {
         address: "fe80::",
@@ -53,6 +59,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Link-Local Netzwerk",
         importance: "Important",
         ihkTopic: "IPv6 Autokonfiguration",
+        calculationSuitable: false, // Network address, not suitable for host calculations
     },
 
     // === MULTICAST - Basic knowledge ===
@@ -62,6 +69,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Alle Knoten (All Nodes)",
         importance: "Critical",
         ihkTopic: "IPv6 Multicast",
+        calculationSuitable: false, // Multicast address, not for network calculations
     },
     {
         address: "ff02::2",
@@ -69,6 +77,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Alle Router (All Routers)",
         importance: "Critical",
         ihkTopic: "IPv6 Multicast",
+        calculationSuitable: false, // Multicast address, not for network calculations
     },
 
     // === UNIQUE LOCAL - Private addressing ===
@@ -78,6 +87,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Private IPv6 Adresse (ULA)",
         importance: "Important",
         ihkTopic: "IPv6 Private Adressen",
+        calculationSuitable: true, // Good for network calculations
     },
     {
         address: "fc00::1",
@@ -85,6 +95,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "ULA Zentral zugewiesen",
         importance: "Moderate",
         ihkTopic: "IPv6 Private Adressen",
+        calculationSuitable: true, // Good for network calculations
     },
 
     // === PRAKTISCHE DNS SERVER - Real world examples ===
@@ -94,6 +105,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Google DNS primär",
         importance: "Important",
         ihkTopic: "IPv6 Praxis",
+        calculationSuitable: true, // Good for network calculations
     },
     {
         address: "2606:4700:4700::1111",
@@ -101,6 +113,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Cloudflare DNS primär",
         importance: "Important",
         ihkTopic: "IPv6 Praxis",
+        calculationSuitable: true, // Good for network calculations
     },
 
     // === IPv4-MAPPED - Transition knowledge ===
@@ -110,8 +123,49 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "IPv4-mapped IPv6 Adresse",
         importance: "Moderate",
         ihkTopic: "IPv4/IPv6 Übergang",
+        calculationSuitable: false, // Special transition address, not for normal calculations
     },
 ];
+
+// Check if an IPv6 address is a special-purpose address unsuitable for calculations
+const isSpecialPurposeAddress = (address) => {
+    if (!address || typeof address !== "string") return true;
+
+    const addr = address.toLowerCase();
+
+    // All zeros (unspecified address)
+    if (addr === "0000:0000:0000:0000:0000:0000:0000:0000" || addr === "::") {
+        return true;
+    }
+
+    // Loopback
+    if (addr === "0000:0000:0000:0000:0000:0000:0000:0001" || addr === "::1") {
+        return true;
+    }
+
+    // Multicast addresses (ff00::/8)
+    if (addr.startsWith("ff")) {
+        return true;
+    }
+
+    // IPv4-mapped addresses
+    if (addr.includes("::ffff:")) {
+        return true;
+    }
+
+    // Check if it's effectively all zeros after expansion
+    const groups = addr.split(":");
+    if (groups.length === 8 && groups.every((group) => group === "0000")) {
+        return true;
+    }
+
+    return false;
+};
+
+// IPv6 addresses suitable for network calculations (filtered from essential list)
+const calculationSuitableIPv6Addresses = ihkEssentialIPv6Addresses.filter(
+    (addr) => addr.calculationSuitable === true
+);
 
 // Simplified realistic prefixes for IHK exam focus
 const ihkRelevantPrefixes = [
@@ -142,28 +196,37 @@ const ihkRelevantPrefixes = [
 // Educational IPv6 addresses for training (IHK focused)
 const specialIpv6Addresses = ihkEssentialIPv6Addresses;
 
-// Optimized IPv6 generation for IHK Fachinformatiker exam
+// Optimized IPv6 generation for IHK Fachinformatiker exam - calculation suitable only
 export const getRandomIPv6 = () => {
     // 50% must-know addresses for IHK, 50% educational realistic addresses
     const useMustKnow = Math.random() < 0.5;
 
     if (useMustKnow) {
-        // Weighted selection focusing on IHK exam relevance
-        const critical = ihkEssentialIPv6Addresses.filter(
+        // Only use addresses suitable for network calculations
+        const critical = calculationSuitableIPv6Addresses.filter(
             (a) => a.importance === "Critical"
         );
-        const important = ihkEssentialIPv6Addresses.filter(
+        const important = calculationSuitableIPv6Addresses.filter(
             (a) => a.importance === "Important"
         );
-        const moderate = ihkEssentialIPv6Addresses.filter(
+        const moderate = calculationSuitableIPv6Addresses.filter(
             (a) => a.importance === "Moderate"
         );
 
+        // Ensure we have addresses available
+        const allSuitable = [...critical, ...important, ...moderate];
+        if (allSuitable.length === 0) {
+            // Fallback to generated address if no suitable addresses
+            return generateDocumentationIPv6();
+        }
+
         const rand = Math.random();
         let pool;
-        if (rand < 0.7) pool = critical; // 70% critical for IHK
-        else if (rand < 0.95) pool = important; // 25% important
-        else pool = moderate; // 5% moderate
+        if (rand < 0.5 && critical.length > 0) pool = critical; // 50% critical
+        else if (rand < 0.9 && important.length > 0)
+            pool = important; // 40% important
+        else if (moderate.length > 0) pool = moderate; // 10% moderate
+        else pool = allSuitable; // Fallback to any suitable address
 
         const chosen = pool[Math.floor(Math.random() * pool.length)];
         // Always expand the address to ensure full form
@@ -172,17 +235,14 @@ export const getRandomIPv6 = () => {
 
     // Simplified realistic generation for educational purposes
     const rand = Math.random();
-    if (rand < 0.6) {
-        // 60% - Documentation addresses (most educational)
+    if (rand < 0.7) {
+        // 70% - Documentation addresses (most educational and always calculation-suitable)
         return generateDocumentationIPv6();
-    } else if (rand < 0.8) {
-        // 20% - ULA addresses (private networking)
-        return generateSimpleULA();
     } else if (rand < 0.9) {
-        // 10% - Link-local addresses
-        return generateSimpleLinkLocal();
+        // 20% - ULA addresses (private networking, calculation-suitable)
+        return generateSimpleULA();
     } else {
-        // 10% - Simple Global Unicast
+        // 10% - Simple Global Unicast (calculation-suitable)
         return generateSimpleGlobalUnicast();
     }
 };
@@ -207,11 +267,27 @@ const generateDocumentationIPv6 = () => {
         return expandIPv6("2001:db8::1");
     }
 
-    // Generate simple, educational patterns
+    // Generate simple, educational patterns - ensure at least one non-zero part
     const parts = [];
+    let hasNonZero = false;
+
     for (let i = 0; i < remainingParts; i++) {
-        if (Math.random() < 0.4) {
-            parts.push("0000"); // Many zeros for compression practice
+        if (i === remainingParts - 1 && !hasNonZero) {
+            // Ensure the last part is non-zero if all others are zero
+            const nonZeroValues = [
+                "0001",
+                "0010",
+                "0100",
+                "000a",
+                "00ab",
+                "0abc",
+            ];
+            parts.push(
+                nonZeroValues[Math.floor(Math.random() * nonZeroValues.length)]
+            );
+            hasNonZero = true;
+        } else if (Math.random() < 0.3) {
+            parts.push("0000"); // Some zeros for compression practice, but not all
         } else if (Math.random() < 0.7) {
             // Simple values for learning - pad to 4 digits
             const simpleValues = [
@@ -221,33 +297,42 @@ const generateDocumentationIPv6 = () => {
                 "000a",
                 "00ab",
                 "0abc",
+                "1000",
+                "0200",
             ];
             parts.push(
                 simpleValues[Math.floor(Math.random() * simpleValues.length)]
             );
+            hasNonZero = true;
         } else {
-            // Slightly more complex but still educational - ensure 4 digits
-            const hex = Math.floor(Math.random() * 0x1000)
+            // Slightly more complex but still educational - ensure 4 digits and non-zero
+            const hex = (Math.floor(Math.random() * 0x1000) + 1) // +1 ensures non-zero
                 .toString(16)
                 .padStart(4, "0");
             parts.push(hex);
+            hasNonZero = true;
         }
     }
 
     const fullAddress = prefix + parts.join(":");
     const expanded = expandIPv6(fullAddress);
 
-    // Validate the result - ensure it has exactly 8 groups
+    // Validate the result - ensure it has exactly 8 groups and is not all zeros
     const groups = expanded.split(":");
     if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
         // Fallback to a known good address if generation failed
         return expandIPv6("2001:db8::1");
     }
 
+    // Ensure it's not all zeros (:: address)
+    if (groups.every((group) => group === "0000")) {
+        return expandIPv6("2001:db8::1");
+    }
+
     return expanded;
 };
 
-// Generate simple ULA addresses for private networking education
+// Generate simple ULA addresses for private networking education - calculation suitable
 const generateSimpleULA = () => {
     const prefixes = ["fd00:", "fd01:", "fd10:", "fc00:"];
     const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
@@ -256,26 +341,40 @@ const generateSimpleULA = () => {
     const remainingParts = 7; // 8 total - 1 prefix part = 7 remaining
 
     const parts = [];
+    let hasNonZero = false;
+
     for (let i = 0; i < remainingParts; i++) {
-        if (Math.random() < 0.5) {
+        if (i === remainingParts - 1 && !hasNonZero) {
+            // Ensure the last part is non-zero if all others are zero
+            parts.push("0001");
+            hasNonZero = true;
+        } else if (Math.random() < 0.4) {
             parts.push("0000");
         } else if (i === 6 && Math.random() < 0.3) {
             parts.push("0001"); // Often ends with 1 - pad to 4 digits
+            hasNonZero = true;
         } else {
-            const hex = Math.floor(Math.random() * 0x100)
+            const hex = (Math.floor(Math.random() * 0x100) + 1) // +1 ensures non-zero
                 .toString(16)
                 .padStart(4, "0");
             parts.push(hex);
+            hasNonZero = true;
         }
     }
 
     const fullAddress = prefix + parts.join(":");
     const expanded = expandIPv6(fullAddress);
 
-    // Validate the result - ensure it has exactly 8 groups
+    // Validate the result - ensure it has exactly 8 groups and is not all zeros
     const groups = expanded.split(":");
     if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
         // Fallback to a known good ULA address if generation failed
+        return expandIPv6("fd00::1");
+    }
+
+    // Ensure it's not effectively all zeros (except prefix)
+    const nonPrefixGroups = groups.slice(1); // Skip the first group (prefix)
+    if (nonPrefixGroups.every((group) => group === "0000")) {
         return expandIPv6("fd00::1");
     }
 
@@ -314,7 +413,7 @@ const generateSimpleLinkLocal = () => {
     return expanded;
 };
 
-// Generate simple Global Unicast addresses for education
+// Generate simple Global Unicast addresses for education - calculation suitable
 const generateSimpleGlobalUnicast = () => {
     // Start with 2xxx for Global Unicast
     const firstPart =
@@ -324,25 +423,40 @@ const generateSimpleGlobalUnicast = () => {
             .padStart(3, "0");
     const parts = [firstPart];
 
-    // Generate 7 more parts for a complete IPv6 address
+    // Generate 7 more parts for a complete IPv6 address - ensure at least one non-zero
+    let hasNonZero = false;
     for (let i = 0; i < 7; i++) {
-        if (Math.random() < 0.5) {
-            parts.push("0000"); // Lots of zeros for compression
-        } else {
-            const hex = Math.floor(Math.random() * 0x1000)
+        if (i === 6 && !hasNonZero) {
+            // Ensure the last part is non-zero if all others are zero
+            const hex = (Math.floor(Math.random() * 0x1000) + 1)
                 .toString(16)
                 .padStart(4, "0");
             parts.push(hex);
+            hasNonZero = true;
+        } else if (Math.random() < 0.4) {
+            parts.push("0000"); // Some zeros for compression
+        } else {
+            const hex = (Math.floor(Math.random() * 0x1000) + 1) // +1 ensures non-zero
+                .toString(16)
+                .padStart(4, "0");
+            parts.push(hex);
+            hasNonZero = true;
         }
     }
 
     const fullAddress = parts.join(":");
     const expanded = expandIPv6(fullAddress);
 
-    // Validate the result - ensure it has exactly 8 groups
+    // Validate the result - ensure it has exactly 8 groups and is not all zeros
     const groups = expanded.split(":");
     if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
         // Fallback to a known good global unicast address if generation failed
+        return expandIPv6("2001:db8::1");
+    }
+
+    // Ensure it's not effectively all zeros (except first part)
+    const nonFirstGroups = groups.slice(1);
+    if (nonFirstGroups.every((group) => group === "0000")) {
         return expandIPv6("2001:db8::1");
     }
 
@@ -777,30 +891,27 @@ const weightedRandomChoice = (options, weights) => {
     return options[options.length - 1]; // Fallback
 };
 
-// Simplified generation for IHK Fachinformatiker exam focus
+// Simplified generation for IHK Fachinformatiker exam focus - calculation suitable only
 export const generateIPv6WithPrefix = () => {
-    // Simplified probabilities for educational focus
+    // Focus only on addresses suitable for network calculations
     const addressTypeRandom = Math.random();
 
     let targetType, targetPrefix, ipv6;
 
-    if (addressTypeRandom < 0.1) {
-        // 10% - Link-Local addresses (essential IPv6 knowledge)
-        targetType = "Link-Local";
-        targetPrefix = Math.random() < 0.7 ? "/64" : "/10";
-        ipv6 = generateSimpleLinkLocal();
-    } else if (addressTypeRandom < 0.15) {
-        // 5% - Multicast addresses (basic IPv6 knowledge)
-        targetType = "Multicast";
-        targetPrefix = Math.random() < 0.6 ? "/128" : "/8";
-        ipv6 = generateEducationalMulticast();
-    } else if (addressTypeRandom < 0.25) {
-        // 10% - ULA addresses (private IPv6)
+    if (addressTypeRandom < 0.2) {
+        // 20% - ULA addresses (private IPv6, good for calculations)
         targetType = "Unique Local";
         targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
         ipv6 = generateSimpleULA();
+    } else if (addressTypeRandom < 0.4) {
+        // 20% - Simple Global Unicast (good for calculations)
+        targetType = "Global Unicast";
+        targetPrefix = ["/32", "/48", "/56", "/64"][
+            Math.floor(Math.random() * 4)
+        ];
+        ipv6 = generateSimpleGlobalUnicast();
     } else {
-        // 75% - Focus on educational addresses with realistic prefixes
+        // 60% - Focus on calculation-suitable addresses from known list and documentation
         ipv6 = getRandomIPv6();
         targetPrefix = generateIPv6Prefix(ipv6);
         targetType = getIPv6AddressType(ipv6);
@@ -810,18 +921,19 @@ export const generateIPv6WithPrefix = () => {
     const fullAddress = expandIPv6(ipv6); // Always expand to full form
     const abbreviatedAddress = abbreviateIPv6(fullAddress); // Create proper abbreviation
 
-    // Final validation - ensure we have valid addresses
+    // Final validation - ensure we have valid calculation-suitable addresses
     if (
         !isValidIPv6Address(fullAddress) ||
         !abbreviatedAddress ||
-        abbreviatedAddress === ":"
+        abbreviatedAddress === ":" ||
+        isSpecialPurposeAddress(fullAddress)
     ) {
         console.warn(
-            "Generated invalid IPv6 address, using fallback:",
+            "Generated invalid or special-purpose IPv6 address, using fallback:",
             fullAddress,
             abbreviatedAddress
         );
-        // Use a known good fallback
+        // Use a known good fallback suitable for calculations
         const fallbackFull = "2001:0db8:0000:0000:0000:0000:0000:0001";
         const fallbackAbbrev = "2001:db8::1";
         return {
@@ -1023,4 +1135,129 @@ export const getIPv6PrefixInfo = (prefix) => {
                 };
             }
     }
+};
+
+// IPv6 Special Purpose Addresses for IHK Fachinformatiker exam
+const specialPurposeAddresses = [
+    // LOOPBACK - Critical for exam
+    {
+        address: "::1",
+        commonUse: "IPv6 Localhost/Loopback",
+        importance: "Critical",
+        category: "Loopback",
+        range: "::1/128",
+        specialRules:
+            "Verweist immer auf den lokalen Rechner, entspricht 127.0.0.1 in IPv4",
+    },
+
+    // UNSPECIFIED - Critical concept (equivalent to 0.0.0.0)
+    {
+        address: "::",
+        commonUse: "Unspezifizierte Adresse",
+        importance: "Critical",
+        category: "Unspecified",
+        range: "::/128",
+        specialRules: "Unspezifizierte Adresse, entspricht 0.0.0.0 in IPv4",
+    },
+
+    // DOCUMENTATION - Critical for learning (equivalent to test networks)
+    {
+        address: "2001:db8::",
+        commonUse: "Dokumentationsbereich",
+        importance: "Critical",
+        category: "Documentation",
+        range: "2001:db8::/32",
+        specialRules:
+            "RFC 3849 - Ausschließlich für Dokumentation und Beispiele",
+    },
+
+    // LINK-LOCAL - Critical for IPv6 operation (equivalent to APIPA)
+    {
+        address: "fe80::",
+        commonUse: "Link-lokale Adressen",
+        importance: "Critical",
+        category: "Link-Local",
+        range: "fe80::/10",
+        specialRules: "Automatisch konfiguriert, entspricht APIPA in IPv4",
+    },
+
+    // UNIQUE LOCAL - Critical for private networks (equivalent to RFC 1918)
+    {
+        address: "fc00::",
+        commonUse: "Unique Local Unicast - Private IPv6",
+        importance: "Critical",
+        category: "Private Networks",
+        range: "fc00::/7",
+        specialRules:
+            "Private IPv6-Adressen, entspricht 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16",
+    },
+    {
+        address: "fd00::",
+        commonUse: "ULA (lokal generiert) - Häufigste private IPv6",
+        importance: "Critical",
+        category: "Private Networks",
+        range: "fc00::/7",
+        specialRules: "Meist verwendete private IPv6-Adressen in Unternehmen",
+    },
+
+    // GLOBAL UNICAST - Critical for understanding (equivalent to public IPv4)
+    {
+        address: "2000::",
+        commonUse: "Global Unicast - Internet-routbar",
+        importance: "Critical",
+        category: "Global Unicast",
+        range: "2000::/3",
+        specialRules:
+            "Internet-routbare IPv6-Adressen, entspricht öffentlichen IPv4-Adressen",
+    },
+    {
+        address: "2001::",
+        commonUse: "Typischer Global Unicast Bereich",
+        importance: "Important",
+        category: "Global Unicast",
+        range: "2000::/3",
+        specialRules: "Häufig von ISPs zugewiesener Global Unicast Bereich",
+    },
+
+    // MULTICAST - Important concept (equivalent to Class D)
+    {
+        address: "ff00::",
+        commonUse: "Multicast-Adressen",
+        importance: "Critical",
+        category: "Multicast",
+        range: "ff00::/8",
+        specialRules:
+            "Gruppenkommunkation, ersetzt IPv4-Broadcast (224.0.0.0/4)",
+    },
+    {
+        address: "ff02::1",
+        commonUse: "Alle IPv6-Knoten (All Nodes)",
+        importance: "Important",
+        category: "Multicast",
+        range: "ff00::/8",
+        specialRules: "Ersetzt IPv4-Broadcast 255.255.255.255",
+    },
+    {
+        address: "ff02::2",
+        commonUse: "Alle IPv6-Router (All Routers)",
+        importance: "Important",
+        category: "Multicast",
+        range: "ff00::/8",
+        specialRules: "Spezielle Multicast-Adresse für alle Router",
+    },
+
+    // IPv4-COMPATIBLE (Basic transition concept)
+    {
+        address: "::ffff:0:0",
+        commonUse: "IPv4-mapped IPv6 (Grundlagen)",
+        importance: "Important",
+        category: "Transition",
+        range: "::ffff:0:0/96",
+        specialRules: "Ermöglicht IPv4-Kompatibilität in IPv6-Umgebungen",
+    },
+];
+
+// Function to get all IPv6 special addresses
+export const getAllSpecialAddresses = () => {
+    return specialPurposeAddresses;
 };

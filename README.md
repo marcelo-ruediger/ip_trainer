@@ -4,7 +4,21 @@ This document provides a comprehensive overview of the IP address generation log
 
 ## Overview
 
-The trainer uses a weighted probability system to ensure students encounter both "must-know" addresses (localhost, DNS servers, etc.) and realistic random addresses. This approach maximizes learning efficiency by prioritizing practical network knowledge.
+The trainer uses a weighted probability system to ensure students encounter both "must-know" addresses (localhost, DNS servers, etc.) and rea**🛡️ Enhanced Validation & Error Prevention:**
+
+-   **Invalid Address Prevention**: Added comprehensive validation to prevent generation of invalid addresses like ":"
+-   **Robust Generation Logic**: Fixed prefix calculation errors in generation functions that could lead to malformed addresses
+-   **Fallback System**: Implemented fallback addresses when generation fails (e.g., returns known-good `2001:db8::1`)
+-   **Input Validation**: Enhanced expandIPv6() and abbreviateIPv6() functions with error checking and warnings
+-   **Format Verification**: All generated addresses are validated before being presented to students
+
+**📊 Calculation-Suitable Address Filtering:**
+
+-   **Special Address Exclusion**: Removed addresses unsuitable for network calculations (`::`/unspecified, `::1`/loopback, multicast, etc.)
+-   **Network Calculation Focus**: Only generates addresses appropriate for Netzwerkadresse, Type, and subnet calculations
+-   **Educational Relevance**: Filters essential address list to only include `calculationSuitable: true` addresses
+-   **Real-World Scenarios**: Focuses on Documentation (2001:db8::), ULA (fd00::), and Global Unicast addresses suitable for business calculations
+-   **Zero Address Prevention**: Prevents generation of all-zero addresses (`0:0:0:0:0:0:0:0`) that are not practical for trainingrandom addresses. This approach maximizes learning efficiency by prioritizing practical network knowledge.
 
 ## IPv4 Address Generation Logic
 
@@ -56,7 +70,7 @@ The trainer uses a weighted probability system to ensure students encounter both
 
 ### Special-Purpose IPv4 Addresses Reference (Educational Popup)
 
-The application includes an interactive popup window accessible via the "Speziellen IPs anzeigen" (Show Special IPs) toggle button. This educational feature displays special-purpose IPv4 addresses that are critical for IHK Fachinformatiker exam preparation.
+The application includes an interactive popup window accessible via the "**Spezielle IPv4-Adressen anzeigen**" (Show Special IPv4 Addresses) toggle button. This educational feature displays special-purpose IPv4 addresses that are critical for IHK Fachinformatiker exam preparation.
 
 #### Organized by Categories:
 
@@ -203,61 +217,160 @@ This separation ensures students learn standard subnetting without confusion fro
 
 The IPv6 trainer has been specifically optimized for German IHK Fachinformatiker exam preparation, focusing on essential IPv6 concepts and practical networking scenarios that are tested in the certification. The system eliminates overly complex addresses while emphasizing core IPv6 knowledge.
 
-### Generation Probabilities (IHK-Optimized)
+### Generation Probabilities (IHK-Optimized) - Calculation-Focused
 
-1. **IHK Essential IPv6 Addresses: 50% probability**
+1. **Calculation-Suitable IHK Essential IPv6 Addresses: 60% probability**
 
-    - Critical importance: 70% of must-know selections (IHK exam focus)
-    - Important importance: 25% of must-know selections
-    - Moderate importance: 5% of must-know selections
+    - Critical importance: 50% of must-know selections (IHK exam focus)
+    - Important importance: 40% of must-know selections
+    - Moderate importance: 10% of must-know selections
+    - **Only addresses suitable for network calculations** (excludes special-purpose addresses)
 
-2. **Educational Random IPv6 Addresses: 50% probability**
-    - Documentation addresses (2001:db8::): 60% (Primary learning tool)
-    - Unique Local Addresses (fc00::/7): 20% (Private networking)
-    - Link-Local addresses (fe80::/10): 10% (Auto-configuration)
-    - Simple Global Unicast addresses: 10% (Practical examples)
+2. **Educational IPv6 Addresses for Calculations: 40% probability**
+    - Documentation addresses (2001:db8::): 70% (Primary learning tool)
+    - Unique Local Addresses (fc00::/7): 20% (Private networking calculations)
+    - Simple Global Unicast addresses: 10% (Practical business examples)
+    - **Excludes**: Link-Local, Multicast, and special-purpose addresses
 
-### IHK Essential IPv6 Addresses (13 Total)
+**🚫 Excluded from Generation (Special-Purpose Addresses):**
 
-#### Critical Importance - IPv6 Grundlagen (8 addresses)
+-   Unspecified address (::) - Not suitable for network calculations
+-   Loopback address (::1) - Special local addressing
+-   Multicast addresses (ff00::/8) - Different calculation rules
+-   IPv4-mapped addresses (::ffff:x.x.x.x) - Transition technology
+
+### IHK Essential IPv6 Addresses (13 Total - Optimized for Exam Focus)
+
+The IPv6 special addresses have been carefully curated to match the conceptual level and educational scope of the IPv4 addresses, ensuring balanced learning for IHK Fachinformatiker exam preparation.
+
+#### Critical Importance - IPv6 Grundlagen (7 addresses)
 
 **🔄 Grundlegende Adressen**
 
--   **::1** - IPv6 Loopback (localhost)
--   **::** - Unspezifizierte Adresse (alle Nullen)
+-   **::1** - IPv6 Loopback (localhost) - entspricht 127.0.0.1 in IPv4
+-   **::** - Unspezifizierte Adresse - entspricht 0.0.0.0 in IPv4
 
 **📚 Dokumentationsadressen (RFC 3849)**
 
--   **2001:db8::1** - Dokumentations-/Beispieladresse
--   **2001:db8::** - Dokumentationsnetz
--   **2001:db8:1::** - Dokumentations-Subnetz
+-   **2001:db8::** - Dokumentationsbereich für Lernmaterialien
 
-**🔗 Link-Local Grundlagen**
+**🔗 Link-Local (Auto-Configuration)**
 
--   **fe80::1** - Link-lokale Adresse (Router)
+-   **fe80::** - Link-lokale Adressen - entspricht APIPA in IPv4
 
-**📡 Multicast Grundlagen**
+**🏠 Private Adressierung (ULA - Unique Local Addresses)**
 
--   **ff02::1** - Alle Knoten (All Nodes)
--   **ff02::2** - Alle Router (All Routers)
+-   **fc00::** - Unique Local Unicast - entspricht RFC 1918 in IPv4
+-   **fd00::** - ULA (lokal generiert) - häufigste private IPv6-Adressen
 
-#### Important Importance - Praxisrelevant (4 addresses)
+#### Important Importance - Praktische Anwendung (4 addresses)
 
-**🌐 DNS Server (Praxisbeispiele)**
+**🌐 Global Unicast (Internet-routbar)**
 
--   **2001:4860:4860::8888** - Google DNS primär
--   **2606:4700:4700::1111** - Cloudflare DNS primär
+-   **2000::** - Global Unicast Beginn - entspricht öffentlichen IPv4-Adressen
+-   **2001::** - Typischer ISP-Bereich - häufiger IPv6-Adressraum
 
-**🏠 Private Adressierung**
+**📡 Multicast (Gruppenkommunkation)**
 
--   **fd00::1** - ULA private Adresse
--   **fe80::** - Link-Local Netzwerk
+-   **ff00::** - Multicast-Adressen - entspricht IPv4 Klasse D (224.0.0.0/4)
+-   **ff02::1** - Alle IPv6-Knoten - ersetzt IPv4-Broadcast 255.255.255.255
 
-#### Moderate Importance - Übergangstechnologie (1 address)
+#### Moderate Importance - Erweiterte Konzepte (2 addresses)
 
-**🔄 IPv4/IPv6 Übergang**
+**📡 Router-Kommunikation**
 
--   **::ffff:192.0.2.1** - IPv4-mapped IPv6 Adresse
+-   **ff02::2** - Alle IPv6-Router - spezielle Router-Multicast
+
+**🔄 IPv4/IPv6 Übergang (Grundlagen)**
+
+-   **::ffff:0:0** - IPv4-mapped IPv6 - grundlegende Übergangs-Technologie
+
+### Special-Purpose IPv6 Addresses Reference (Educational Popup)
+
+The application includes an interactive popup window accessible via the "**Spezielle IPv6-Adressen anzeigen**" (Show Special IPv6 Addresses) toggle button when in IPv6 mode. This educational feature displays special-purpose IPv6 addresses that are critical for IHK Fachinformatiker exam preparation, carefully balanced to match the conceptual level of the IPv4 special addresses.
+
+#### Organized by Categories (IPv6):
+
+**🔗 Loopback**
+
+-   **::1** - IPv6 Localhost/Loopback (::1/128)
+    -   Entspricht 127.0.0.1 in IPv4 - immer lokaler Computer
+    -   System badge (orange gradient)
+
+**⚪ Unspezifiziert**
+
+-   **::** - Unspezifizierte Adresse (::/128)
+    -   Entspricht 0.0.0.0 in IPv4 - während Konfiguration verwendet
+    -   Unspezifiziert badge (gray gradient)
+
+**📚 Dokumentation**
+
+-   **2001:db8::** - Dokumentationsbereich (2001:db8::/32)
+    -   RFC 3849 - Nur für Dokumentation und Beispiele
+    -   Dokumentation badge (cyan gradient)
+
+**🔗 Link-Local**
+
+-   **fe80::** - Link-lokale Adressen (fe80::/10)
+    -   Automatisch konfiguriert - entspricht APIPA in IPv4
+    -   Link-Local badge (green gradient)
+
+**🏠 Private Networks (ULA)**
+
+-   **fc00::** - Unique Local Unicast (fc00::/7)
+    -   Private IPv6-Adressen - entspricht RFC 1918 in IPv4
+    -   ULA badge (orange gradient)
+-   **fd00::** - ULA (lokal generiert) (fc00::/7)
+    -   Häufigste private IPv6-Adressen in Unternehmen
+    -   ULA (häufig) badge (orange gradient)
+
+**🌐 Global Unicast**
+
+-   **2000::** - Global Unicast - Internet-routbar (2000::/3)
+    -   Start des global routbaren IPv6-Adressraums
+    -   Global badge (blue gradient)
+-   **2001::** - Typischer Global Unicast Bereich (2000::/3)
+    -   Typischer ISP-zugewiesener IPv6-Bereich
+    -   ISP-Bereich badge (blue gradient)
+
+**📡 Multicast**
+
+-   **ff00::** - Multicast-Adressen (ff00::/8)
+    -   Ersetzt IPv4-Broadcast - entspricht 224.0.0.0/4
+    -   Multicast badge (purple gradient)
+-   **ff02::1** - Alle IPv6-Knoten (All Nodes) (ff00::/8)
+    -   Ersetzt IPv4-Broadcast 255.255.255.255
+    -   Alle Knoten badge (purple gradient)
+-   **ff02::2** - Alle IPv6-Router (All Routers) (ff00::/8)
+    -   Erreicht alle IPv6-Router im lokalen Segment
+    -   Alle Router badge (purple gradient)
+
+**🔄 Übergang**
+
+-   **::ffff:0:0** - IPv4-mapped IPv6 (Grundlagen) (::ffff:0:0/96)
+    -   Ermöglicht IPv4-Kompatibilität in IPv6-Umgebungen
+    -   IPv4-mapped badge (red gradient)
+
+#### Educational Features (IPv6):
+
+**Conceptual Mapping:**
+
+-   Each IPv6 address has a clear IPv4 equivalent for easier learning
+-   Balanced complexity matching IPv4 special addresses (13 addresses each)
+-   Focuses on fundamental concepts rather than advanced protocols
+
+**Color-Coded Badges:**
+
+-   Distinct color scheme for IPv6 address types
+-   Visual learning aid for quick IPv6 classification
+-   Consistent with IPv4 methodology but adapted for IPv6 concepts
+
+**IHK Exam Focus:**
+
+-   Emphasizes private vs. global distinction (equivalent to IPv4 private vs. public)
+-   Covers address type boundaries and auto-configuration
+-   Includes multicast concepts that replace IPv4 broadcast
+-   Excludes overly complex transition mechanisms not tested in basic certification
 
 ### IPv6 Address Types and Generation (IHK-Focused)
 
@@ -492,16 +605,24 @@ The system randomly presents either:
 -   Enhanced field labels to match IHK exam language
 -   Improved instructional clarity for dual format training
 
-#### Eliminated Overly Complex Content
+#### Eliminated Overly Complex Content (Latest Optimization)
 
-**❌ Removed from original system:**
+**❌ Removed from IPv6 special addresses for IHK focus:**
 
--   Advanced tunneling mechanisms (ISATAP, Teredo, 6to4)
--   Complex routing protocol multicast (OSPFv3, EIGRP, PIM, RIPng)
--   DNS root servers and infrastructure addresses
--   Overly specific ISP prefixes (Hurricane Electric, etc.)
--   Abstract prefix lengths (/3, /7, /29, /36, /40, /44, /52, /60)
--   Complex real-world ISP addressing schemes
+-   Specific DNS server addresses (Google, Cloudflare) - Too specific for foundational knowledge
+-   Advanced tunneling mechanisms (ISATAP, Teredo, 6to4) - Beyond basic IHK scope
+-   Complex multicast addresses (OSPF, Solicited-node) - Advanced protocol knowledge
+-   Multiple documentation examples (2001:db8::1, 2001:db8:1::) - Simplified to core concept
+-   Duplicate address representations - Streamlined for clarity
+-   Advanced transition protocols (64:ff9b::) - Focused on basic IPv4-mapped only
+
+**✅ Optimized IPv6 special addresses now provide:**
+
+-   **Balanced complexity** - Same number of addresses as IPv4 (13 total)
+-   **Clear IPv4 equivalents** - Each IPv6 concept maps to familiar IPv4 knowledge
+-   **Fundamental concepts only** - Core addressing, private/global, multicast basics
+-   **IHK exam alignment** - Focuses on concepts tested in Fachinformatiker certification
+-   **Progressive learning** - Students build IPv6 knowledge on IPv4 foundation
 
 #### Enhanced Educational Focus
 
@@ -514,5 +635,6 @@ The system randomly presents either:
 -   **Essential concepts only** - Core IPv6 knowledge
 -   **Simplified patterns** - Educational hex values
 -   **IHK relevance indicators** - Shows exam importance
+-   **Dynamic interface** - Button text automatically changes between "Spezielle IPv4-Adressen anzeigen" and "Spezielle IPv6-Adressen anzeigen" based on current mode
 
 This optimized IPv6 training system ensures German IT students master the specific IPv6 concepts and skills tested in the IHK Fachinformatiker certification, while avoiding unnecessary complexity that could distract from core learning objectives.

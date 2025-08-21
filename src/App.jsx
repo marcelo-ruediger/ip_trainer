@@ -32,6 +32,7 @@ function App() {
                 showImage={showImage}
                 onToggle={handleToggle}
                 tableImg={tableImg}
+                ipVersion={ipVersion}
             />
 
             <IpVersionButtons
