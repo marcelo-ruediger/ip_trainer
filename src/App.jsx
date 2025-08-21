@@ -97,6 +97,11 @@ function App() {
                     </>
                 ) : (
                     <>
+                        <InstructionContainer
+                            ipVersion="ipv6"
+                            ipData={ipv6Logic.ipData}
+                            mode={ipv6Logic.mode}
+                        />
                         <TopInputsIPv6
                             ipData={ipv6Logic.ipData}
                             renderValue={ipv6Logic.renderValue}

@@ -198,3 +198,277 @@ _Note: Automatically excludes x.x.x.0 and x.x.x.255 addresses_
 -   Categories: Loopback, APIPA, Broadcast, Routing, Private Networks, Public Networks, Classes D and E
 
 This separation ensures students learn standard subnetting without confusion from special-purpose addresses, while providing comprehensive educational value about the complete IPv4 address space through the dedicated reference popup.
+
+## IPv6 Address Generation Logic - Optimized for IHK Fachinformatiker
+
+The IPv6 trainer has been specifically optimized for German IHK Fachinformatiker exam preparation, focusing on essential IPv6 concepts and practical networking scenarios that are tested in the certification. The system eliminates overly complex addresses while emphasizing core IPv6 knowledge.
+
+### Generation Probabilities (IHK-Optimized)
+
+1. **IHK Essential IPv6 Addresses: 50% probability**
+
+    - Critical importance: 70% of must-know selections (IHK exam focus)
+    - Important importance: 25% of must-know selections
+    - Moderate importance: 5% of must-know selections
+
+2. **Educational Random IPv6 Addresses: 50% probability**
+    - Documentation addresses (2001:db8::): 60% (Primary learning tool)
+    - Unique Local Addresses (fc00::/7): 20% (Private networking)
+    - Link-Local addresses (fe80::/10): 10% (Auto-configuration)
+    - Simple Global Unicast addresses: 10% (Practical examples)
+
+### IHK Essential IPv6 Addresses (13 Total)
+
+#### Critical Importance - IPv6 Grundlagen (8 addresses)
+
+**🔄 Grundlegende Adressen**
+
+-   **::1** - IPv6 Loopback (localhost)
+-   **::** - Unspezifizierte Adresse (alle Nullen)
+
+**📚 Dokumentationsadressen (RFC 3849)**
+
+-   **2001:db8::1** - Dokumentations-/Beispieladresse
+-   **2001:db8::** - Dokumentationsnetz
+-   **2001:db8:1::** - Dokumentations-Subnetz
+
+**🔗 Link-Local Grundlagen**
+
+-   **fe80::1** - Link-lokale Adresse (Router)
+
+**📡 Multicast Grundlagen**
+
+-   **ff02::1** - Alle Knoten (All Nodes)
+-   **ff02::2** - Alle Router (All Routers)
+
+#### Important Importance - Praxisrelevant (4 addresses)
+
+**🌐 DNS Server (Praxisbeispiele)**
+
+-   **2001:4860:4860::8888** - Google DNS primär
+-   **2606:4700:4700::1111** - Cloudflare DNS primär
+
+**🏠 Private Adressierung**
+
+-   **fd00::1** - ULA private Adresse
+-   **fe80::** - Link-Local Netzwerk
+
+#### Moderate Importance - Übergangstechnologie (1 address)
+
+**🔄 IPv4/IPv6 Übergang**
+
+-   **::ffff:192.0.2.1** - IPv4-mapped IPv6 Adresse
+
+### IPv6 Address Types and Generation (IHK-Focused)
+
+#### Documentation Addresses (2001:db8::/32) - 60% of educational generation
+
+**Enhanced IHK Exam Focus:**
+
+-   **Simplified patterns** - More zeros for compression practice
+-   **Educational hex values** - Simple patterns (1, 10, 100, a, ab, abc)
+-   **Perfect for learning** - Safe examples that won't affect real networks
+-   **German exam terminology** - Aligned with IHK vocabulary
+
+**Common Educational Patterns:**
+
+-   **2001:db8::** - Basic documentation prefix
+-   **2001:db8:1::** - First subnet example
+-   **2001:db8:a::** - Hexadecimal learning
+-   **2001:db8:10::** - Simple numbering
+
+#### Unique Local Addresses (fc00::/7) - 20% of educational generation
+
+**Private IPv6 Space for Business Training:**
+
+-   **fd00::/8** - Locally assigned ULA (most common in practice)
+-   **fc00::/8** - Centrally assigned ULA (theoretical)
+-   **Simplified patterns** - Focus on practical business scenarios
+-   **IHK relevance** - Private networking concepts tested in exam
+
+#### Link-Local Addresses (fe80::/10) - 10% of educational generation
+
+**Auto-Configuration Concepts:**
+
+-   **fe80::** prefix - Automatically configured on every interface
+-   **Not routed** - Local segment only, essential for IPv6 operation
+-   **IHK critical** - Required knowledge for IPv6 fundamentals
+-   **Simple patterns** - Educational interface identifiers
+
+#### Simple Global Unicast (2000::/3) - 10% of educational generation
+
+**Basic Routing Concepts:**
+
+-   **2xxx:** addresses - Globally routable examples
+-   **Educational patterns** - Simplified for learning purposes
+-   **Real-world context** - DNS servers and practical examples
+
+### IPv6 Prefix Generation Logic (IHK-Optimized)
+
+The system generates educationally appropriate prefixes specifically for IHK Fachinformatiker exam preparation, focusing on practical business scenarios and eliminating overly complex or theoretical prefix lengths.
+
+#### IHK-Relevant Prefix Lengths Only
+
+**Host Addresses:**
+
+-   **/128** - Einzelne Host-Adresse (wie /32 bei IPv4)
+-   Used for loopback (::1/128) and specific host routes
+-   **IHK Relevance: Hoch** - Grundlagen IPv6
+
+**Standard Subnets:**
+
+-   **/64** - Standard-Subnetzgröße (most important for IHK)
+-   Required for SLAAC, used for LAN segments
+-   **IHK Relevance: Sehr hoch** - Standard für IPv6-Subnetze
+
+**Business Allocations:**
+
+-   **/56** - Kleine Unternehmen/Privathaushalte (allows 256 /64 subnets)
+-   **IHK Relevance: Mittel** - Praxisrelevant für KMU
+-   **/48** - Site-Zuteilung für Organisationen (allows 65,536 /64 subnets)
+-   **IHK Relevance: Hoch** - Typische Unternehmensgröße
+
+**Provider Level:**
+
+-   **/32** - ISP/Große Organisationen (regional allocations)
+-   **IHK Relevance: Mittel** - ISP-Ebene
+
+**Address Space Ranges:**
+
+-   **/10** - Link-Local Adressbereich (fe80::/10)
+-   **IHK Relevance: Hoch** - Automatische IPv6-Konfiguration
+-   **/8** - Multicast-Adressbereich (ff00::/8)
+-   **IHK Relevance: Mittel** - IPv6-Multicast-Grundlagen
+
+#### Simplified Prefix Assignment (IHK-Focused)
+
+**Global Unicast Addresses:**
+
+-   /64: 35% (most common subnet - highest weight for IHK)
+-   /48: 25% (organization/site allocation)
+-   /56: 25% (small business scenarios)
+-   /32: 10% (ISP level understanding)
+-   /128: 5% (host routes)
+
+**Link-Local Addresses:**
+
+-   /64: 70% (subnet within range)
+-   /10: 30% (address range explanation)
+
+**Multicast Addresses:**
+
+-   /128: 60% (specific group)
+-   /8: 40% (address range)
+
+**Eliminated Complex Prefixes:**
+❌ Removed /3, /7, /29, /36, /40, /44, /52, /60 - Too abstract for IHK exam
+✅ Focus on practical business networking scenarios
+
+### IPv6 Training Features (IHK-Aligned)
+
+#### Dual Address Format Training
+
+The system randomly presents either:
+
+1. **Vollständige IPv6-Adresse** - Complete uncompressed format
+2. **Verkürzte IPv6-Adresse** - Compressed format with :: notation
+
+**Students must provide (IHK exam skills):**
+
+-   The missing address format (vollständig ↔ verkürzt)
+-   Network prefix (provided during generation)
+-   Netzwerkadresse calculation
+-   Adresstyp identification
+-   First subnet calculation
+
+#### Address Type Classification (German IHK Terminology)
+
+**Educational Categories:**
+
+-   **Global Unicast** - Global routbare Adressen
+-   **Link-Local** - Lokales Segment, automatisch konfiguriert
+-   **Unique Local** - Private Adressierung (wie RFC 1918)
+-   **Multicast** - Eins-zu-viele Kommunikation
+-   **Loopback** - Lokale Maschine (localhost)
+-   **Unspecified** - Unspezifizierte Adresse (alle Nullen)
+
+#### Practical Network Calculation Training
+
+**Students practice IHK-relevant skills:**
+
+-   **Netzwerkadresse-Berechnung** - Applying prefix masks (essential for exam)
+-   **Adress-Expansion/Kompression** - Converting between formats
+-   **Typklassifizierung** - Recognizing address categories
+-   **Subnetz-Planung** - Understanding business prefix hierarchies
+
+#### Compression Practice Focus
+
+**Enhanced :: notation training:**
+
+-   Multiple zero patterns for maximum compression learning
+-   Educational hex values that create obvious compression opportunities
+-   Step-by-step compression logic understanding
+-   IHK exam scenario simulation
+
+### Educational Validation System (IHK-Focused)
+
+#### Input Validation
+
+**IPv6 Address Formats:**
+
+-   Accepts both vollständig and verkürzt formats
+-   Validates proper hexadecimal characters (0-9, a-f)
+-   Handles :: compression correctly
+-   Ensures proper colon placement
+-   **IHK-aligned error messages** in German
+
+**Prefix Validation:**
+
+-   Accepts /0 through /128 notation
+-   Validates numeric range for IHK-relevant prefixes
+-   Ensures proper CIDR format
+-   **Focus on practical business sizes** (/32, /48, /56, /64, /128)
+
+#### Smart Answer Checking
+
+**Address Comparison:**
+
+-   Expands both user input and correct answer for normalized comparison
+-   Compares canonicalized forms for accuracy
+-   **Accepts any valid abbreviation** of the same address
+-   Case-insensitive comparison (important for hex values)
+-   **Educational feedback** - explains why answers are correct/incorrect
+
+**Network Calculation Validation:**
+
+-   Verifies Netzwerkadresse calculations using binary masking
+-   Checks Adresstyp classification accuracy
+-   Validates subnet planning logic for business scenarios
+-   **German terminology** matching IHK exam language
+
+### Key Improvements for IHK Fachinformatiker
+
+#### Eliminated Overly Complex Content
+
+**❌ Removed from original system:**
+
+-   Advanced tunneling mechanisms (ISATAP, Teredo, 6to4)
+-   Complex routing protocol multicast (OSPFv3, EIGRP, PIM, RIPng)
+-   DNS root servers and infrastructure addresses
+-   Overly specific ISP prefixes (Hurricane Electric, etc.)
+-   Abstract prefix lengths (/3, /7, /29, /36, /40, /44, /52, /60)
+-   Complex real-world ISP addressing schemes
+
+#### Enhanced Educational Focus
+
+**✅ Strengthened for IHK preparation:**
+
+-   **Documentation addresses** (2001:db8::) - 60% of educational generation
+-   **Compression practice** - Multiple zero patterns
+-   **German terminology** - IHK-aligned language
+-   **Business scenarios** - Practical prefix planning
+-   **Essential concepts only** - Core IPv6 knowledge
+-   **Simplified patterns** - Educational hex values
+-   **IHK relevance indicators** - Shows exam importance
+
+This optimized IPv6 training system ensures German IT students master the specific IPv6 concepts and skills tested in the IHK Fachinformatiker certification, while avoiding unnecessary complexity that could distract from core learning objectives.

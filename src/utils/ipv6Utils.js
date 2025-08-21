@@ -1,407 +1,283 @@
-// Most important IPv6 addresses that every network professional must know
-const mustKnowIpv6Addresses = [
-    // === LOOPBACK & UNSPECIFIED ===
+// IPv6 addresses essential for German IHK Fachinformatiker exam
+const ihkEssentialIPv6Addresses = [
+    // === GRUNDLAGEN (Basics) - Critical for IHK ===
     {
         address: "::1",
         type: "Loopback",
-        commonUse: "IPv6 localhost/loopback",
+        commonUse: "IPv6 Loopback (localhost)",
         importance: "Critical",
+        ihkTopic: "IPv6 Grundlagen",
     },
     {
         address: "::",
         type: "Unspecified",
-        commonUse: "All-zeros/unspecified address",
+        commonUse: "Unspezifizierte Adresse (alle Nullen)",
         importance: "Critical",
+        ihkTopic: "IPv6 Grundlagen",
     },
 
-    // === LINK-LOCAL (fe80::/10) ===
-    {
-        address: "fe80::1",
-        type: "Link-Local",
-        commonUse: "Router link-local address",
-        importance: "Critical",
-    },
-    {
-        address: "fe80::200:5efe:192.168.1.1",
-        type: "Link-Local",
-        commonUse: "ISATAP tunnel address",
-        importance: "Important",
-    },
-    {
-        address: "fe80::a00:27ff:fe4e:66a1",
-        type: "Link-Local",
-        commonUse: "EUI-64 SLAAC address",
-        importance: "Important",
-    },
-
-    // === MULTICAST WELL-KNOWN (ff00::/8) ===
-    {
-        address: "ff02::1",
-        type: "Multicast",
-        commonUse: "All nodes multicast",
-        importance: "Critical",
-    },
-    {
-        address: "ff02::2",
-        type: "Multicast",
-        commonUse: "All routers multicast",
-        importance: "Critical",
-    },
-    {
-        address: "ff02::5",
-        type: "Multicast",
-        commonUse: "OSPFv3 routers",
-        importance: "Important",
-    },
-    {
-        address: "ff02::6",
-        type: "Multicast",
-        commonUse: "OSPFv3 designated routers",
-        importance: "Important",
-    },
-    {
-        address: "ff02::9",
-        type: "Multicast",
-        commonUse: "RIPng routers",
-        importance: "Important",
-    },
-    {
-        address: "ff02::a",
-        type: "Multicast",
-        commonUse: "EIGRP routers",
-        importance: "Important",
-    },
-    {
-        address: "ff02::d",
-        type: "Multicast",
-        commonUse: "PIM routers",
-        importance: "Important",
-    },
-    {
-        address: "ff02::16",
-        type: "Multicast",
-        commonUse: "MLDv2 reports",
-        importance: "Moderate",
-    },
-    {
-        address: "ff05::2",
-        type: "Multicast",
-        commonUse: "Site-local all routers",
-        importance: "Moderate",
-    },
-    {
-        address: "ff01::1",
-        type: "Multicast",
-        commonUse: "Interface-local all nodes",
-        importance: "Moderate",
-    },
-    {
-        address: "ff01::2",
-        type: "Multicast",
-        commonUse: "Interface-local all routers",
-        importance: "Moderate",
-    },
-
-    // === DOCUMENTATION (2001:db8::/32) ===
+    // === DOKUMENTATION - Critical for learning ===
     {
         address: "2001:db8::1",
         type: "Global Unicast",
-        commonUse: "Documentation/example prefix",
+        commonUse: "Dokumentations-/Beispieladresse",
         importance: "Critical",
-    },
-    {
-        address: "2001:db8:85a3::8a2e:370:7334",
-        type: "Global Unicast",
-        commonUse: "RFC 3849 example address",
-        importance: "Important",
-    },
-    {
-        address: "2001:db8:1234::",
-        type: "Global Unicast",
-        commonUse: "Documentation network",
-        importance: "Important",
-    },
-
-    // === UNIQUE LOCAL (fc00::/7) ===
-    {
-        address: "fd00::1",
-        type: "Unique Local",
-        commonUse: "ULA private address",
-        importance: "Important",
-    },
-    {
-        address: "fc00::1",
-        type: "Unique Local",
-        commonUse: "ULA prefix example",
-        importance: "Important",
-    },
-    {
-        address: "fd12:3456:789a:1::1",
-        type: "Unique Local",
-        commonUse: "ULA network gateway",
-        importance: "Moderate",
-    },
-
-    // === REAL-WORLD DNS SERVERS ===
-    {
-        address: "2001:4860:4860::8888",
-        type: "Global Unicast",
-        commonUse: "Google DNS primary",
-        importance: "Critical",
-    },
-    {
-        address: "2001:4860:4860::8844",
-        type: "Global Unicast",
-        commonUse: "Google DNS secondary",
-        importance: "Critical",
-    },
-    {
-        address: "2606:4700:4700::1111",
-        type: "Global Unicast",
-        commonUse: "Cloudflare DNS primary",
-        importance: "Critical",
-    },
-    {
-        address: "2606:4700:4700::1001",
-        type: "Global Unicast",
-        commonUse: "Cloudflare DNS secondary",
-        importance: "Critical",
-    },
-    {
-        address: "2001:4860:4860::64",
-        type: "Global Unicast",
-        commonUse: "Google DNS64",
-        importance: "Moderate",
-    },
-    {
-        address: "2001:4860:4860::6464",
-        type: "Global Unicast",
-        commonUse: "Google DNS64 secondary",
-        importance: "Moderate",
-    },
-
-    // === TRANSITION MECHANISMS ===
-    {
-        address: "2002:c000:0204::1",
-        type: "Global Unicast",
-        commonUse: "6to4 tunnel (192.0.2.4)",
-        importance: "Important",
-    },
-    {
-        address: "2001:0000:4136:e378:8000:63bf:3fff:fdd2",
-        type: "Global Unicast",
-        commonUse: "Teredo tunnel",
-        importance: "Important",
-    },
-    {
-        address: "64:ff9b::192.0.2.1",
-        type: "Global Unicast",
-        commonUse: "Well-known prefix NAT64",
-        importance: "Important",
-    },
-
-    // === ROOT SERVERS & INFRASTRUCTURE ===
-    {
-        address: "2001:500:200f::b",
-        type: "Global Unicast",
-        commonUse: "B-Root DNS server",
-        importance: "Important",
-    },
-    {
-        address: "2001:500:2::c",
-        type: "Global Unicast",
-        commonUse: "C-Root DNS server",
-        importance: "Important",
-    },
-    {
-        address: "2001:7fd::1",
-        type: "Global Unicast",
-        commonUse: "K-Root DNS server",
-        importance: "Important",
-    },
-
-    // === SPECIAL USE ADDRESSES ===
-    {
-        address: "::ffff:192.0.2.1",
-        type: "Global Unicast",
-        commonUse: "IPv4-mapped IPv6 address",
-        importance: "Important",
+        ihkTopic: "IPv6 Adressierung",
     },
     {
         address: "2001:db8::",
         type: "Global Unicast",
-        commonUse: "Documentation prefix base",
+        commonUse: "Dokumentationsnetz (RFC 3849)",
         importance: "Critical",
+        ihkTopic: "IPv6 Adressierung",
     },
     {
-        address: "::192.0.2.1",
+        address: "2001:db8:1::",
         type: "Global Unicast",
-        commonUse: "IPv4-compatible IPv6 (deprecated)",
+        commonUse: "Dokumentations-Subnetz",
+        importance: "Important",
+        ihkTopic: "IPv6 Subnetze",
+    },
+
+    // === LINK-LOCAL - Essential for IPv6 operation ===
+    {
+        address: "fe80::1",
+        type: "Link-Local",
+        commonUse: "Link-lokale Adresse (Router)",
+        importance: "Critical",
+        ihkTopic: "IPv6 Autokonfiguration",
+    },
+    {
+        address: "fe80::",
+        type: "Link-Local",
+        commonUse: "Link-Local Netzwerk",
+        importance: "Important",
+        ihkTopic: "IPv6 Autokonfiguration",
+    },
+
+    // === MULTICAST - Basic knowledge ===
+    {
+        address: "ff02::1",
+        type: "Multicast",
+        commonUse: "Alle Knoten (All Nodes)",
+        importance: "Critical",
+        ihkTopic: "IPv6 Multicast",
+    },
+    {
+        address: "ff02::2",
+        type: "Multicast",
+        commonUse: "Alle Router (All Routers)",
+        importance: "Critical",
+        ihkTopic: "IPv6 Multicast",
+    },
+
+    // === UNIQUE LOCAL - Private addressing ===
+    {
+        address: "fd00::1",
+        type: "Unique Local",
+        commonUse: "Private IPv6 Adresse (ULA)",
+        importance: "Important",
+        ihkTopic: "IPv6 Private Adressen",
+    },
+    {
+        address: "fc00::1",
+        type: "Unique Local",
+        commonUse: "ULA Zentral zugewiesen",
         importance: "Moderate",
+        ihkTopic: "IPv6 Private Adressen",
     },
 
-    // === DO NOT USE (reserved) ===
+    // === PRAKTISCHE DNS SERVER - Real world examples ===
     {
-        address: "2001:db8:85a3::8a2e:370:7335",
+        address: "2001:4860:4860::8888",
         type: "Global Unicast",
-        commonUse: "Reserved for documentation",
-        importance: "Critical",
+        commonUse: "Google DNS primär",
+        importance: "Important",
+        ihkTopic: "IPv6 Praxis",
     },
     {
-        address: "2001:db8:1234::1",
+        address: "2606:4700:4700::1111",
         type: "Global Unicast",
-        commonUse: "Reserved for documentation",
-        importance: "Critical",
+        commonUse: "Cloudflare DNS primär",
+        importance: "Important",
+        ihkTopic: "IPv6 Praxis",
+    },
+
+    // === IPv4-MAPPED - Transition knowledge ===
+    {
+        address: "::ffff:192.0.2.1",
+        type: "Global Unicast",
+        commonUse: "IPv4-mapped IPv6 Adresse",
+        importance: "Moderate",
+        ihkTopic: "IPv4/IPv6 Übergang",
     },
 ];
 
-// Educational IPv6 addresses for training (enhanced from previous)
-const specialIpv6Addresses = mustKnowIpv6Addresses;
+// Simplified realistic prefixes for IHK exam focus
+const ihkRelevantPrefixes = [
+    // Documentation addresses - most common in training
+    "2001:db8:",
+    "2001:db8:1:",
+    "2001:db8:2:",
+    "2001:db8:a:",
+    "2001:db8:b:",
+    "2001:db8:10:",
+    "2001:db8:100:",
 
-// Common realistic IPv6 prefixes for generation (enhanced with more zero patterns)
-const realisticPrefixes = [
-    // Global Unicast common prefixes
-    "2001:db8:", // Documentation
-    "2001:db8:0:", // Documentation with zero
-    "2001:db8:0:0:", // Documentation with more zeros
-    "2001:470:", // Hurricane Electric
-    "2001:470:0:", // Hurricane Electric with zero
-    "2001:4860:", // Google
-    "2001:4860:4860:", // Google DNS
-    "2606:4700:", // Cloudflare
-    "2606:4700:0:", // Cloudflare with zero
-    "2400:cb00:", // Cloudflare Asia
-    "2a00:1450:", // Google Europe
-    "2620:fe::", // Facebook
-    "2001:500:", // Root servers
+    // Simple ULA patterns
+    "fd00:",
+    "fd01:",
+    "fd10:",
+    "fc00:",
 
-    // ISP common prefixes (enhanced with more zero patterns)
-    "2001:558:", // Comcast
-    "2001:558:0:", // Comcast with zero
-    "2602::", // Various US ISPs
-    "2602:0:", // US ISPs with zero
-    "2602:0:0:", // US ISPs with more zeros
-    "2607:f8b0:", // Google Fiber
-    "2607:f8b0:0:", // Google Fiber with zero
-    "240e::", // China Telecom
-    "240e:0:", // China Telecom with zero
-    "2400::", // APNIC region
-    "2400:0:", // APNIC with zero
-    "2a01::", // RIPE region
-    "2a01:0:", // RIPE with zero
-    "2800::", // LACNIC region
-    "2800:0:", // LACNIC with zero
+    // Basic Link-local
+    "fe80:",
 
-    // Common patterns with multiple zeros (very realistic)
-    "2001::", // Common global unicast start
-    "2002::", // 6to4 addresses
-    "2003::", // Common allocation
-    "2602:0:0:", // Common US ISP pattern
-    "2001:db8:0:0:", // Documentation with zeros
-    "fd00::", // ULA start
-    "fc00::", // ULA start
-    "fe80::", // Link-local start
-
-    // More realistic zero-heavy patterns
-    "2001:0:0:", // Global unicast with zeros
-    "2606:4700:0:", // Cloudflare with zeros
-    "2a00:1450:0:", // Google Europe with zeros
+    // Simple Global Unicast for learning
+    "2001::",
+    "2002:",
+    "2003:",
 ];
 
-// Enhanced IPv6 generation with more must-know addresses
+// Educational IPv6 addresses for training (IHK focused)
+const specialIpv6Addresses = ihkEssentialIPv6Addresses;
+
+// Optimized IPv6 generation for IHK Fachinformatiker exam
 export const getRandomIPv6 = () => {
-    // 40% must-know, 60% realistic random
-    const useMustKnow = Math.random() < 0.4;
+    // 50% must-know addresses for IHK, 50% educational realistic addresses
+    const useMustKnow = Math.random() < 0.5;
 
     if (useMustKnow) {
-        // Weighted selection among must-know addresses
-        const critical = mustKnowIpv6Addresses.filter(
+        // Weighted selection focusing on IHK exam relevance
+        const critical = ihkEssentialIPv6Addresses.filter(
             (a) => a.importance === "Critical"
         );
-        const important = mustKnowIpv6Addresses.filter(
+        const important = ihkEssentialIPv6Addresses.filter(
             (a) => a.importance === "Important"
         );
-        const moderate = mustKnowIpv6Addresses.filter(
+        const moderate = ihkEssentialIPv6Addresses.filter(
             (a) => a.importance === "Moderate"
         );
 
         const rand = Math.random();
         let pool;
-        if (rand < 0.6) pool = critical;
-        else if (rand < 0.9) pool = important;
-        else pool = moderate;
+        if (rand < 0.7) pool = critical; // 70% critical for IHK
+        else if (rand < 0.95) pool = important; // 25% important
+        else pool = moderate; // 5% moderate
 
         const chosen = pool[Math.floor(Math.random() * pool.length)];
         return chosen.address;
     }
 
-    // Realistic random selection
+    // Simplified realistic generation for educational purposes
     const rand = Math.random();
-    if (rand < 0.2) {
-        // Documentation
-        return (
-            "2001:db8:" +
-            Array(6)
-                .fill()
-                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
-                .join(":")
-        );
-    } else if (rand < 0.4) {
-        // ULA
-        return (
-            "fd" +
-            Math.floor(Math.random() * 0x100)
-                .toString(16)
-                .padStart(2, "0") +
-            ":" +
-            Array(7)
-                .fill()
-                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
-                .join(":")
-        );
-    } else if (rand < 0.55) {
-        // Link-local
-        return (
-            "fe80:" +
-            Array(7)
-                .fill()
-                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
-                .join(":")
-        );
-    } else if (rand < 0.65) {
-        // Multicast
-        return "ff02::" + Math.floor(Math.random() * 0xff).toString(16);
+    if (rand < 0.6) {
+        // 60% - Documentation addresses (most educational)
+        return generateDocumentationIPv6();
+    } else if (rand < 0.8) {
+        // 20% - ULA addresses (private networking)
+        return generateSimpleULA();
     } else if (rand < 0.9) {
-        // Common ISP/Cloud prefixes
-        const prefixes = [
-            "2001:4860:", // Google
-            "2606:4700:", // Cloudflare
-            "2001:470:", // Hurricane Electric
-            "2400:cb00:", // Cloudflare Asia
-            "2a00:1450:", // Google Europe
-        ];
-        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-        return (
-            prefix +
-            Array(6)
-                .fill()
-                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
-                .join(":")
-        );
+        // 10% - Link-local addresses
+        return generateSimpleLinkLocal();
     } else {
-        // Other global unicast
-        return (
-            "2" +
-            Math.floor(Math.random() * 0x1000)
-                .toString(16)
-                .padStart(3, "0") +
-            ":" +
-            Array(7)
-                .fill()
-                .map(() => Math.floor(Math.random() * 0x10000).toString(16))
-                .join(":")
-        );
+        // 10% - Simple Global Unicast
+        return generateSimpleGlobalUnicast();
     }
+};
+
+// Generate educational documentation IPv6 addresses
+const generateDocumentationIPv6 = () => {
+    const prefixes = [
+        "2001:db8:",
+        "2001:db8:1:",
+        "2001:db8:a:",
+        "2001:db8:10:",
+    ];
+    const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+
+    // Generate simple, educational patterns
+    const parts = [];
+    const remainingParts = 8 - prefix.split(":").length + 1;
+
+    for (let i = 0; i < remainingParts; i++) {
+        if (Math.random() < 0.4) {
+            parts.push("0000"); // Many zeros for compression practice
+        } else if (Math.random() < 0.7) {
+            // Simple values for learning
+            const simpleValues = ["1", "10", "100", "a", "ab", "abc"];
+            parts.push(
+                simpleValues[Math.floor(Math.random() * simpleValues.length)]
+            );
+        } else {
+            // Slightly more complex but still educational
+            const hex = Math.floor(Math.random() * 0x1000).toString(16);
+            parts.push(hex);
+        }
+    }
+
+    return prefix + parts.join(":");
+};
+
+// Generate simple ULA addresses for private networking education
+const generateSimpleULA = () => {
+    const prefixes = ["fd00:", "fd01:", "fd10:", "fc00:"];
+    const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+
+    const parts = [];
+    for (let i = 0; i < 7; i++) {
+        if (Math.random() < 0.5) {
+            parts.push("0000");
+        } else if (i === 6 && Math.random() < 0.3) {
+            parts.push("1"); // Often ends with 1
+        } else {
+            const hex = Math.floor(Math.random() * 0x100).toString(16);
+            parts.push(hex);
+        }
+    }
+
+    return prefix + parts.join(":");
+};
+
+// Generate simple Link-Local addresses
+const generateSimpleLinkLocal = () => {
+    const parts = ["fe80", "0000", "0000", "0000"];
+
+    // Add 4 more parts with simple patterns
+    for (let i = 0; i < 4; i++) {
+        if (Math.random() < 0.4) {
+            parts.push("0000");
+        } else if (i === 3 && Math.random() < 0.3) {
+            parts.push("1"); // Often ends with 1
+        } else {
+            const hex = Math.floor(Math.random() * 0x1000).toString(16);
+            parts.push(hex);
+        }
+    }
+
+    return parts.join(":");
+};
+
+// Generate simple Global Unicast addresses for education
+const generateSimpleGlobalUnicast = () => {
+    // Start with 2xxx for Global Unicast
+    const firstPart =
+        "2" +
+        Math.floor(Math.random() * 0x100)
+            .toString(16)
+            .padStart(3, "0");
+    const parts = [firstPart];
+
+    for (let i = 0; i < 7; i++) {
+        if (Math.random() < 0.5) {
+            parts.push("0000"); // Lots of zeros for compression
+        } else {
+            const hex = Math.floor(Math.random() * 0x1000).toString(16);
+            parts.push(hex);
+        }
+    }
+
+    return parts.join(":");
 };
 
 export const abbreviateIPv6 = (ipv6) => {
@@ -695,7 +571,7 @@ export const getIPv6AddressInfo = (ipv6) => {
     };
 };
 
-// Generate appropriate prefix for IPv6 address based on its type and common usage
+// IHK-focused prefix generation for educational purposes
 export const generateIPv6Prefix = (ipv6) => {
     if (!ipv6) return "/64";
 
@@ -709,48 +585,34 @@ export const generateIPv6Prefix = (ipv6) => {
 
     switch (addressType) {
         case "Link-Local":
-            // Link-local addresses can be /10 (for the range) or /64 (for subnet)
+            // For IHK: Focus on /64 (subnet) and /10 (range)
             const linkLocalOptions = ["/10", "/64"];
-            const linkLocalWeights = [0.3, 0.7]; // Sometimes show the /10 range
+            const linkLocalWeights = [0.3, 0.7];
             return weightedRandomChoice(linkLocalOptions, linkLocalWeights);
 
         case "Unique Local":
-            // ULA can be /7 (for the range), /48 for sites, /64 for subnets
-            const ulaOptions = ["/7", "/48", "/56", "/64"];
-            const ulaWeights = [0.2, 0.3, 0.2, 0.3];
+            // For IHK: Focus on practical business scenarios
+            const ulaOptions = ["/48", "/56", "/64"]; // Removed /7 (too abstract for IHK)
+            const ulaWeights = [0.4, 0.3, 0.3];
             return weightedRandomChoice(ulaOptions, ulaWeights);
 
         case "Multicast":
-            // Multicast addresses can be /8 (for the range) or /128 (specific group)
+            // For IHK: Keep it simple
             const multicastOptions = ["/8", "/128"];
             const multicastWeights = [0.4, 0.6];
             return weightedRandomChoice(multicastOptions, multicastWeights);
 
         case "Global Unicast":
-            // Documentation addresses (2001:db8::/32)
+            // Documentation addresses - focus on common educational prefixes
             if (address.startsWith("2001:db8:")) {
                 const docOptions = ["/32", "/48", "/56", "/64"];
-                const docWeights = [0.05, 0.25, 0.3, 0.4];
+                const docWeights = [0.1, 0.3, 0.3, 0.3]; // More focus on practical sizes
                 return weightedRandomChoice(docOptions, docWeights);
             }
 
-            // Common ISP and enterprise allocations
-            const globalOptions = [
-                "/3", // Sometimes show the Global Unicast range
-                "/32",
-                "/36",
-                "/40",
-                "/44",
-                "/48",
-                "/52",
-                "/56",
-                "/60",
-                "/64",
-                "/128",
-            ];
-            const globalWeights = [
-                0.1, 0.03, 0.02, 0.03, 0.05, 0.2, 0.05, 0.2, 0.05, 0.25, 0.02,
-            ];
+            // For other Global Unicast - IHK relevant sizes only
+            const globalOptions = ["/32", "/48", "/56", "/64", "/128"];
+            const globalWeights = [0.1, 0.25, 0.25, 0.35, 0.05]; // Heavy focus on /64
             return weightedRandomChoice(globalOptions, globalWeights);
 
         case "Loopback":
@@ -758,7 +620,7 @@ export const generateIPv6Prefix = (ipv6) => {
             return "/128";
 
         default:
-            // Default to /64 (most common subnet size)
+            // Default to /64 (most important for IHK)
             return "/64";
     }
 };
@@ -778,35 +640,30 @@ const weightedRandomChoice = (options, weights) => {
     return options[options.length - 1]; // Fallback
 };
 
-// Enhanced generation function that returns both IPv6 address and appropriate prefix
+// Simplified generation for IHK Fachinformatiker exam focus
 export const generateIPv6WithPrefix = () => {
-    // Decide what type of address to generate with proper probabilities
+    // Simplified probabilities for educational focus
     const addressTypeRandom = Math.random();
 
     let targetType, targetPrefix, ipv6;
 
-    if (addressTypeRandom < 0.05) {
-        // 5% - Generate Link-Local address with /10 prefix
+    if (addressTypeRandom < 0.1) {
+        // 10% - Link-Local addresses (essential IPv6 knowledge)
         targetType = "Link-Local";
-        targetPrefix = "/10";
-        ipv6 = generateLinkLocalAddress();
-    } else if (addressTypeRandom < 0.08) {
-        // 3% - Generate Multicast address with /8 prefix
-        targetType = "Multicast";
-        targetPrefix = "/8";
-        ipv6 = generateMulticastAddress();
-    } else if (addressTypeRandom < 0.12) {
-        // 4% - Generate ULA address with /7 prefix
-        targetType = "Unique Local";
-        targetPrefix = "/7";
-        ipv6 = generateULAAddress();
+        targetPrefix = Math.random() < 0.7 ? "/64" : "/10";
+        ipv6 = generateSimpleLinkLocal();
     } else if (addressTypeRandom < 0.15) {
-        // 3% - Generate Global Unicast with /3 prefix (to show the range)
-        targetType = "Global Unicast";
-        targetPrefix = "/3";
-        ipv6 = generateGlobalUnicastAddress();
+        // 5% - Multicast addresses (basic IPv6 knowledge)
+        targetType = "Multicast";
+        targetPrefix = Math.random() < 0.6 ? "/128" : "/8";
+        ipv6 = generateEducationalMulticast();
+    } else if (addressTypeRandom < 0.25) {
+        // 10% - ULA addresses (private IPv6)
+        targetType = "Unique Local";
+        targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
+        ipv6 = generateSimpleULA();
     } else {
-        // 85% - Generate normal addresses with realistic prefixes
+        // 75% - Focus on educational addresses with realistic prefixes
         ipv6 = getRandomIPv6();
         targetPrefix = generateIPv6Prefix(ipv6);
         targetType = getIPv6AddressType(ipv6);
@@ -821,142 +678,50 @@ export const generateIPv6WithPrefix = () => {
     };
 };
 
-// Generate specific Link-Local address (fe80::/10)
-const generateLinkLocalAddress = () => {
-    // Link-local addresses start with fe80::/10
-    // fe80: to febf: (1111 1110 10xx xxxx)
-    const firstGroup = "fe80"; // Most common
-    const groups = [firstGroup];
-
-    // Add remaining 7 groups
-    for (let i = 1; i < 8; i++) {
-        if (i < 4 && Math.random() < 0.7) {
-            // Usually zeros in positions 1-3
-            groups.push("0000");
-        } else if (i === 7 && Math.random() < 0.3) {
-            // Often ends with 1
-            groups.push("0001");
-        } else {
-            // Generate realistic interface ID
-            let group = Math.floor(Math.random() * 0x10000).toString(16);
-            group = group.padStart(4, "0");
-            groups.push(group);
-        }
-    }
-
-    return groups.join(":");
-};
-
-// Generate specific Multicast address (ff00::/8)
-const generateMulticastAddress = () => {
-    // Multicast addresses start with ff
+// Generate educational multicast addresses for IHK
+const generateEducationalMulticast = () => {
     const commonMulticast = [
-        "ff02::1", // All nodes
-        "ff02::2", // All routers
-        "ff02::5", // OSPF routers
-        "ff02::6", // OSPF designated routers
-        "ff02::9", // RIP routers
-        "ff02::a", // EIGRP routers
-        "ff02::d", // PIM routers
+        "ff02::1", // All nodes - critical for IHK
+        "ff02::2", // All routers - critical for IHK
+        "ff01::1", // Interface-local all nodes
         "ff05::2", // Site-local all routers
     ];
 
-    if (Math.random() < 0.6) {
-        // 60% chance of well-known multicast
+    if (Math.random() < 0.8) {
+        // 80% chance of well-known multicast (educational)
         return commonMulticast[
             Math.floor(Math.random() * commonMulticast.length)
         ];
     } else {
-        // 40% chance of custom multicast
-        const flags = Math.floor(Math.random() * 16).toString(16); // 0-f
-        const scope = Math.floor(Math.random() * 16).toString(16); // 0-f
-        const firstGroup = `ff${flags}${scope}`;
-
-        const groups = [firstGroup];
-        for (let i = 1; i < 8; i++) {
-            if (Math.random() < 0.5) {
-                groups.push("0000");
-            } else {
-                let group = Math.floor(Math.random() * 0x1000).toString(16);
-                group = group.padStart(4, "0");
-                groups.push(group);
-            }
-        }
-
-        return groups.join(":");
+        // 20% chance of simple custom multicast
+        const scopes = ["1", "2", "5", "8"]; // Interface, Link, Site, Organization
+        const scope = scopes[Math.floor(Math.random() * scopes.length)];
+        return `ff0${scope}::${Math.floor(Math.random() * 0x100).toString(16)}`;
     }
 };
 
-// Generate specific ULA address (fc00::/7)
+// Generate specific Link-Local address optimized for IHK learning
+const generateLinkLocalAddress = () => {
+    // Use the new simplified function
+    return generateSimpleLinkLocal();
+};
+
+// Generate specific Multicast address optimized for IHK learning
+const generateMulticastAddress = () => {
+    // Use the new educational function
+    return generateEducationalMulticast();
+};
+
+// Generate specific ULA address optimized for IHK learning
 const generateULAAddress = () => {
-    // ULA addresses start with fc or fd
-    const prefix = Math.random() < 0.5 ? "fc" : "fd";
-    const firstGroup =
-        prefix +
-        Math.floor(Math.random() * 0x100)
-            .toString(16)
-            .padStart(2, "0");
-
-    const groups = [firstGroup];
-
-    // Generate global ID (next 40 bits = next 2.5 groups)
-    for (let i = 1; i < 8; i++) {
-        if (i < 4 && Math.random() < 0.4) {
-            // Some structure in global ID
-            let group = Math.floor(Math.random() * 0x1000).toString(16);
-            group = group.padStart(4, "0");
-            groups.push(group);
-        } else if (i >= 4 && i < 6 && Math.random() < 0.6) {
-            // Subnet ID often zero
-            groups.push("0000");
-        } else if (i === 7 && Math.random() < 0.3) {
-            // Interface ID often 1
-            groups.push("0001");
-        } else {
-            let group = Math.floor(Math.random() * 0x10000).toString(16);
-            group = group.padStart(4, "0");
-            groups.push(group);
-        }
-    }
-
-    return groups.join(":");
+    // Use the new simplified function
+    return generateSimpleULA();
 };
 
-// Generate specific Global Unicast address (2000::/3)
+// Generate specific Global Unicast address optimized for IHK learning
 const generateGlobalUnicastAddress = () => {
-    // Global Unicast addresses start with 2 or 3 (001x xxxx)
-    const firstBit = Math.random() < 0.9 ? "2" : "3"; // 2xxx much more common
-    const firstGroup =
-        firstBit +
-        Math.floor(Math.random() * 0x1000)
-            .toString(16)
-            .padStart(3, "0");
-
-    const groups = [firstGroup];
-
-    // Generate rest with realistic patterns
-    for (let i = 1; i < 8; i++) {
-        if (Math.random() < 0.4) {
-            // High chance of zeros
-            groups.push("0000");
-        } else if (i === 7 && Math.random() < 0.2) {
-            // Sometimes end with 1
-            groups.push("0001");
-        } else {
-            if (Math.random() < 0.6) {
-                // Lower values more common
-                let group = Math.floor(Math.random() * 0x1000).toString(16);
-                group = group.padStart(4, "0");
-                groups.push(group);
-            } else {
-                let group = Math.floor(Math.random() * 0x10000).toString(16);
-                group = group.padStart(4, "0");
-                groups.push(group);
-            }
-        }
-    }
-
-    return groups.join(":");
+    // Focus on documentation addresses for education
+    return generateDocumentationIPv6();
 };
 
 // Validate if a string is a complete IPv6 address
@@ -1006,89 +771,88 @@ export const isNetworkPrefix = (address) => {
     return false;
 };
 
-// Educational IPv6 prefix information
+// IHK-focused IPv6 prefix information for German students
 export const getIPv6PrefixInfo = (prefix) => {
     const prefixNum = parseInt(prefix.replace("/", ""));
 
     switch (prefixNum) {
         case 128:
             return {
-                description: "Single host address (like /32 in IPv4)",
-                usage: "Loopback, specific host routes",
-                example: "::1/128 (loopback address)",
+                description: "Einzelne Host-Adresse (wie /32 bei IPv4)",
+                usage: "Loopback, spezifische Host-Routen",
+                example: "::1/128 (Loopback-Adresse)",
+                ihkRelevance: "Hoch - Grundlagen IPv6",
             };
         case 64:
             return {
-                description: "Standard subnet size - most common",
-                usage: "LAN segments, SLAAC required, end networks",
+                description: "Standard-Subnetzgröße - am häufigsten verwendet",
+                usage: "LAN-Segmente, SLAAC erforderlich, Endnetze",
                 example: "2001:db8:1234:5678::/64",
+                ihkRelevance: "Sehr hoch - Standard für IPv6-Subnetze",
             };
         case 56:
             return {
-                description: "Small business/residential allocation",
-                usage: "Allows 256 /64 subnets, home networks",
+                description: "Kleine Unternehmen/Privathaushalte",
+                usage: "Ermöglicht 256 /64-Subnetze, Heimnetzwerke",
                 example: "2001:db8:1234:ab00::/56",
+                ihkRelevance: "Mittel - Praxisrelevant für KMU",
             };
         case 48:
             return {
-                description: "Site allocation for organizations",
-                usage: "Allows 65,536 /64 subnets, typical business",
+                description: "Site-Zuteilung für Organisationen",
+                usage: "Ermöglicht 65.536 /64-Subnetze, typische Unternehmen",
                 example: "2001:db8:1234::/48",
+                ihkRelevance: "Hoch - Typische Unternehmensgröße",
             };
         case 32:
             return {
-                description: "ISP/Large organization allocation",
-                usage: "Regional allocations, service providers",
+                description: "ISP/Große Organisationen",
+                usage: "Regionale Zuweisungen, Service Provider",
                 example: "2001:db8::/32",
+                ihkRelevance: "Mittel - ISP-Ebene",
             };
         case 10:
             return {
-                description: "Link-local address range",
-                usage: "Auto-configured addresses, not routed",
+                description: "Link-Local Adressbereich",
+                usage: "Automatisch konfiguriert, nicht geroutet",
                 example: "fe80::/10",
+                ihkRelevance: "Hoch - Automatische IPv6-Konfiguration",
             };
         case 8:
             return {
-                description: "Multicast address range",
-                usage: "One-to-many communication",
+                description: "Multicast-Adressbereich",
+                usage: "Eins-zu-viele Kommunikation",
                 example: "ff00::/8",
-            };
-        case 7:
-            return {
-                description: "Unique Local Address range",
-                usage: "Private addressing (like RFC 1918)",
-                example: "fc00::/7",
-            };
-        case 3:
-            return {
-                description: "Global Unicast address range",
-                usage: "Globally routable addresses",
-                example: "2000::/3",
+                ihkRelevance: "Mittel - IPv6-Multicast-Grundlagen",
             };
         default:
             if (prefixNum < 32) {
                 return {
-                    description: "Very large network allocation",
-                    usage: "RIR or very large ISP allocation",
-                    example: `Large network block`,
+                    description: "Sehr große Netzwerkzuteilung",
+                    usage: "RIR oder sehr große ISP-Zuteilung",
+                    example: "Große Netzwerkblöcke",
+                    ihkRelevance: "Niedrig - Zu abstrakt für IHK-Prüfung",
                 };
             } else if (prefixNum < 48) {
                 return {
-                    description: "Large organization allocation",
-                    usage: "Enterprise or ISP customer allocation",
-                    example: `Medium-large network`,
+                    description: "Große Organisationszuteilung",
+                    usage: "Unternehmen oder ISP-Kundenzuteilung",
+                    example: "Mittelgroße bis große Netzwerke",
+                    ihkRelevance: "Mittel - Größere Unternehmen",
                 };
             } else if (prefixNum < 64) {
                 return {
-                    description: "Medium organization allocation",
-                    usage: "Multiple subnets possible",
-                    example: `Multiple /64 subnets available`,
+                    description: "Mittlere Organisationszuteilung",
+                    usage: "Mehrere Subnetze möglich",
+                    example: "Mehrere /64-Subnetze verfügbar",
+                    ihkRelevance: "Hoch - Praktische Subnetzplanung",
                 };
             } else {
                 return {
-                    description: "Small subnet or host range",
-                    usage: "Very specific addressing",
-                    example: `Small address range`,
+                    description: "Kleines Subnetz oder Host-Bereich",
+                    usage: "Sehr spezifische Adressierung",
+                    example: "Kleiner Adressbereich",
+                    ihkRelevance: "Niedrig - Selten in der Praxis",
                 };
             }
     }

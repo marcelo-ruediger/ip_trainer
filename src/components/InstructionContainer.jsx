@@ -4,9 +4,12 @@ function InstructionContainer({
     isInputMode,
     isValidIp,
     hasInputStarted,
+    ipVersion = "ipv4", // Add ipVersion prop with default
+    mode, // Add mode prop for IPv6
 }) {
     const getFieldDisplayName = (field) => {
         switch (field) {
+            // IPv4 fields
             case "cidr":
                 return "CIDR";
             case "subnetMask":
@@ -17,6 +20,17 @@ function InstructionContainer({
                 return "Broadcast-Adresse";
             case "usableIps":
                 return "Benutzbare IPs";
+            // IPv6 fields
+            case "fullAddress":
+                return "Vollständige Adresse";
+            case "abbreviatedAddress":
+                return "Verkürzte Adresse";
+            case "networkPrefix":
+                return "Netzwerk-Präfix";
+            case "networkAddress":
+                return "Netzwerkadresse";
+            case "type":
+                return "Adresstyp";
             default:
                 return field;
         }
@@ -24,6 +38,7 @@ function InstructionContainer({
 
     const getFieldValue = (field) => {
         switch (field) {
+            // IPv4 fields
             case "cidr":
                 return ipData.cidr;
             case "subnetMask":
@@ -34,12 +49,58 @@ function InstructionContainer({
                 return ipData.broadcast;
             case "usableIps":
                 return ipData.usableIps;
+            // IPv6 fields
+            case "fullAddress":
+                return ipData.fullAddress;
+            case "abbreviatedAddress":
+                return ipData.abbreviatedAddress;
+            case "networkPrefix":
+                return ipData.networkPrefix;
+            case "networkAddress":
+                return ipData.networkAddress;
+            case "type":
+                return ipData.type;
             default:
                 return "";
         }
     };
 
-    // Input mode: User is entering IP address
+    // IPv6 mode: Practice mode instructions
+    if (ipVersion === "ipv6") {
+        // No generated field yet
+        if (!ipData.ipv6) {
+            return (
+                <div className="instruction-container">
+                    <div className="instruction-text">
+                        Erzeugen Sie eine IPv6-Adresse zum Üben.
+                    </div>
+                </div>
+            );
+        }
+
+        // Generated field for calculation practice
+        const shownField =
+            mode === "fullAddress" ? "fullAddress" : "abbreviatedAddress";
+        const shownValue =
+            mode === "fullAddress"
+                ? ipData.fullAddress
+                : ipData.abbreviatedAddress;
+        const networkPrefix = ipData.networkPrefix;
+
+        return (
+            <div className="instruction-container">
+                <div className="instruction-text">
+                    <strong>Generiert:</strong>{" "}
+                    {getFieldDisplayName(shownField)} ({shownValue}) +
+                    Netzwerk-Präfix ({networkPrefix})
+                    <br />
+                    <strong>Aufgabe:</strong> Berechnen Sie alle anderen Felder
+                </div>
+            </div>
+        );
+    }
+
+    // IPv4 mode: Input mode: User is entering IP address
     if (isInputMode && hasInputStarted && !isValidIp) {
         return (
             <div className="instruction-container input-mode">
@@ -52,7 +113,7 @@ function InstructionContainer({
         );
     }
 
-    // Input mode: Valid IP entered, waiting for CIDR or Subnet Mask
+    // IPv4 mode: Input mode: Valid IP entered, waiting for CIDR or Subnet Mask
     if (isInputMode && isValidIp && !ipData.cidr && !ipData.subnetMask) {
         return (
             <div className="instruction-container input-mode">
@@ -65,7 +126,7 @@ function InstructionContainer({
         );
     }
 
-    // Input mode: All fields calculated
+    // IPv4 mode: Input mode: All fields calculated
     if (
         isInputMode &&
         isValidIp &&
@@ -83,7 +144,7 @@ function InstructionContainer({
         );
     }
 
-    // Practice mode: No generated field yet
+    // IPv4 mode: Practice mode: No generated field yet
     if (!generatedField || !ipData.ip) {
         return (
             <div className="instruction-container">
@@ -95,7 +156,7 @@ function InstructionContainer({
         );
     }
 
-    // Practice mode: Generated field for calculation practice
+    // IPv4 mode: Practice mode: Generated field for calculation practice
     return (
         <div className="instruction-container">
             <div className="instruction-text">
