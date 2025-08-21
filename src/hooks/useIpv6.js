@@ -50,17 +50,20 @@ export const useIPv6 = () => {
             Math.random() < 0.5 ? "fullAddress" : "abbreviatedAddress";
         setMode(newMode);
 
-        // Store both full and abbreviated versions
+        // Store both full and abbreviated versions - ensure they are correct
+        const fullAddress = ipv6; // ipv6 is already expanded from utils
+        const abbreviatedAddress = abbreviated; // abbreviated is properly created from full address
+
         setGenerated({
-            fullAddress: ipv6,
-            abbreviatedAddress: abbreviated,
+            fullAddress: fullAddress,
+            abbreviatedAddress: abbreviatedAddress,
         });
 
         setIpData({
-            ipv6,
-            fullAddress: newMode === "fullAddress" ? ipv6 : "",
+            ipv6: fullAddress,
+            fullAddress: newMode === "fullAddress" ? fullAddress : "",
             abbreviatedAddress:
-                newMode === "abbreviatedAddress" ? abbreviated : "",
+                newMode === "abbreviatedAddress" ? abbreviatedAddress : "",
             networkPrefix: prefix,
             networkAddress: networkData.networkAddress,
             type: networkData.type,
@@ -69,9 +72,9 @@ export const useIPv6 = () => {
 
         setShowAnswers(false);
         setUserInput({
-            fullAddress: newMode === "fullAddress" ? ipv6 : "",
+            fullAddress: newMode === "fullAddress" ? fullAddress : "",
             abbreviatedAddress:
-                newMode === "abbreviatedAddress" ? abbreviated : "",
+                newMode === "abbreviatedAddress" ? abbreviatedAddress : "",
             networkPrefix: prefix, // Show the prefix to the user
             networkAddress: "",
             type: "",

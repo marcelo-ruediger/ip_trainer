@@ -166,7 +166,8 @@ export const getRandomIPv6 = () => {
         else pool = moderate; // 5% moderate
 
         const chosen = pool[Math.floor(Math.random() * pool.length)];
-        return chosen.address;
+        // Always expand the address to ensure full form
+        return expandIPv6(chosen.address);
     }
 
     // Simplified realistic generation for educational purposes
@@ -196,27 +197,54 @@ const generateDocumentationIPv6 = () => {
     ];
     const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
 
+    // Calculate remaining parts correctly
+    const prefixParts = prefix.split(":").filter((part) => part !== "");
+    const remainingParts = 8 - prefixParts.length;
+
+    // Ensure we have valid remaining parts
+    if (remainingParts <= 0) {
+        // Fallback to a simple known good address
+        return expandIPv6("2001:db8::1");
+    }
+
     // Generate simple, educational patterns
     const parts = [];
-    const remainingParts = 8 - prefix.split(":").length + 1;
-
     for (let i = 0; i < remainingParts; i++) {
         if (Math.random() < 0.4) {
             parts.push("0000"); // Many zeros for compression practice
         } else if (Math.random() < 0.7) {
-            // Simple values for learning
-            const simpleValues = ["1", "10", "100", "a", "ab", "abc"];
+            // Simple values for learning - pad to 4 digits
+            const simpleValues = [
+                "0001",
+                "0010",
+                "0100",
+                "000a",
+                "00ab",
+                "0abc",
+            ];
             parts.push(
                 simpleValues[Math.floor(Math.random() * simpleValues.length)]
             );
         } else {
-            // Slightly more complex but still educational
-            const hex = Math.floor(Math.random() * 0x1000).toString(16);
+            // Slightly more complex but still educational - ensure 4 digits
+            const hex = Math.floor(Math.random() * 0x1000)
+                .toString(16)
+                .padStart(4, "0");
             parts.push(hex);
         }
     }
 
-    return prefix + parts.join(":");
+    const fullAddress = prefix + parts.join(":");
+    const expanded = expandIPv6(fullAddress);
+
+    // Validate the result - ensure it has exactly 8 groups
+    const groups = expanded.split(":");
+    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
+        // Fallback to a known good address if generation failed
+        return expandIPv6("2001:db8::1");
+    }
+
+    return expanded;
 };
 
 // Generate simple ULA addresses for private networking education
@@ -224,38 +252,66 @@ const generateSimpleULA = () => {
     const prefixes = ["fd00:", "fd01:", "fd10:", "fc00:"];
     const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
 
+    // Calculate remaining parts correctly - ULA prefixes have 1 part
+    const remainingParts = 7; // 8 total - 1 prefix part = 7 remaining
+
     const parts = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < remainingParts; i++) {
         if (Math.random() < 0.5) {
             parts.push("0000");
         } else if (i === 6 && Math.random() < 0.3) {
-            parts.push("1"); // Often ends with 1
+            parts.push("0001"); // Often ends with 1 - pad to 4 digits
         } else {
-            const hex = Math.floor(Math.random() * 0x100).toString(16);
+            const hex = Math.floor(Math.random() * 0x100)
+                .toString(16)
+                .padStart(4, "0");
             parts.push(hex);
         }
     }
 
-    return prefix + parts.join(":");
+    const fullAddress = prefix + parts.join(":");
+    const expanded = expandIPv6(fullAddress);
+
+    // Validate the result - ensure it has exactly 8 groups
+    const groups = expanded.split(":");
+    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
+        // Fallback to a known good ULA address if generation failed
+        return expandIPv6("fd00::1");
+    }
+
+    return expanded;
 };
 
 // Generate simple Link-Local addresses
 const generateSimpleLinkLocal = () => {
+    // Link-local addresses start with fe80:0000:0000:0000
     const parts = ["fe80", "0000", "0000", "0000"];
 
-    // Add 4 more parts with simple patterns
+    // Add 4 more parts with simple patterns for the interface identifier
     for (let i = 0; i < 4; i++) {
         if (Math.random() < 0.4) {
             parts.push("0000");
         } else if (i === 3 && Math.random() < 0.3) {
-            parts.push("1"); // Often ends with 1
+            parts.push("0001"); // Often ends with 1 - pad to 4 digits
         } else {
-            const hex = Math.floor(Math.random() * 0x1000).toString(16);
+            const hex = Math.floor(Math.random() * 0x1000)
+                .toString(16)
+                .padStart(4, "0");
             parts.push(hex);
         }
     }
 
-    return parts.join(":");
+    const fullAddress = parts.join(":");
+    const expanded = expandIPv6(fullAddress);
+
+    // Validate the result - ensure it has exactly 8 groups
+    const groups = expanded.split(":");
+    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
+        // Fallback to a known good link-local address if generation failed
+        return expandIPv6("fe80::1");
+    }
+
+    return expanded;
 };
 
 // Generate simple Global Unicast addresses for education
@@ -268,20 +324,43 @@ const generateSimpleGlobalUnicast = () => {
             .padStart(3, "0");
     const parts = [firstPart];
 
+    // Generate 7 more parts for a complete IPv6 address
     for (let i = 0; i < 7; i++) {
         if (Math.random() < 0.5) {
             parts.push("0000"); // Lots of zeros for compression
         } else {
-            const hex = Math.floor(Math.random() * 0x1000).toString(16);
+            const hex = Math.floor(Math.random() * 0x1000)
+                .toString(16)
+                .padStart(4, "0");
             parts.push(hex);
         }
     }
 
-    return parts.join(":");
+    const fullAddress = parts.join(":");
+    const expanded = expandIPv6(fullAddress);
+
+    // Validate the result - ensure it has exactly 8 groups
+    const groups = expanded.split(":");
+    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
+        // Fallback to a known good global unicast address if generation failed
+        return expandIPv6("2001:db8::1");
+    }
+
+    return expanded;
 };
 
 export const abbreviateIPv6 = (ipv6) => {
     if (!ipv6 || typeof ipv6 !== "string") return ipv6;
+
+    // Validate input first
+    const inputGroups = ipv6.split(":");
+    if (
+        inputGroups.length !== 8 ||
+        inputGroups.some((group) => !/^[0-9a-fA-F]{4}$/.test(group))
+    ) {
+        console.warn("Invalid IPv6 address for abbreviation:", ipv6);
+        return ipv6; // Return as-is if invalid
+    }
 
     // Split into groups
     let groups = ipv6.split(":");
@@ -344,6 +423,21 @@ export const abbreviateIPv6 = (ipv6) => {
         let abbreviated = result.join(":");
         abbreviated = abbreviated.replace(/:{3,}/g, "::");
 
+        // Validate the result - ensure it's not just ":"
+        if (
+            abbreviated === ":" ||
+            abbreviated === "" ||
+            abbreviated.startsWith(":::")
+        ) {
+            console.warn(
+                "Invalid abbreviation result:",
+                abbreviated,
+                "from",
+                ipv6
+            );
+            return groups.join(":"); // Return uncompressed if abbreviation failed
+        }
+
         return abbreviated;
     }
 
@@ -355,6 +449,16 @@ export const expandIPv6 = (abbreviatedIPv6) => {
     if (!abbreviatedIPv6 || typeof abbreviatedIPv6 !== "string")
         return abbreviatedIPv6;
 
+    // Handle edge cases
+    if (
+        abbreviatedIPv6 === ":" ||
+        abbreviatedIPv6 === "" ||
+        abbreviatedIPv6.startsWith(":::")
+    ) {
+        console.warn("Invalid IPv6 input for expansion:", abbreviatedIPv6);
+        return "0000:0000:0000:0000:0000:0000:0000:0001"; // Return a fallback valid address
+    }
+
     let ipv6 = abbreviatedIPv6;
 
     // Handle double colon expansion
@@ -363,16 +467,49 @@ export const expandIPv6 = (abbreviatedIPv6) => {
         const leftPart = parts[0] ? parts[0].split(":") : [];
         const rightPart = parts[1] ? parts[1].split(":") : [];
 
-        const missingGroups = 8 - leftPart.length - rightPart.length;
+        // Remove empty strings from parts
+        const leftFiltered = leftPart.filter((part) => part !== "");
+        const rightFiltered = rightPart.filter((part) => part !== "");
+
+        const missingGroups = 8 - leftFiltered.length - rightFiltered.length;
+
+        // Ensure we have a valid number of missing groups
+        if (missingGroups < 0) {
+            console.warn(
+                "Invalid IPv6 format - too many groups:",
+                abbreviatedIPv6
+            );
+            return "0000:0000:0000:0000:0000:0000:0000:0001"; // Return fallback
+        }
+
         const zeroGroups = Array(missingGroups).fill("0000");
 
-        const fullGroups = [...leftPart, ...zeroGroups, ...rightPart];
+        const fullGroups = [...leftFiltered, ...zeroGroups, ...rightFiltered];
         ipv6 = fullGroups.join(":");
     }
 
     // Pad each group to 4 digits
     const groups = ipv6.split(":");
-    const paddedGroups = groups.map((group) => group.padStart(4, "0"));
+
+    // Validate we have exactly 8 groups
+    if (groups.length !== 8) {
+        console.warn(
+            "Invalid IPv6 format - wrong number of groups:",
+            abbreviatedIPv6,
+            "groups:",
+            groups.length
+        );
+        return "0000:0000:0000:0000:0000:0000:0000:0001"; // Return fallback
+    }
+
+    const paddedGroups = groups.map((group) => {
+        // Validate each group contains only hex characters
+        if (!/^[0-9a-fA-F]*$/.test(group)) {
+            console.warn("Invalid hex characters in group:", group);
+            return "0000"; // Replace invalid group with zeros
+        }
+        return group.padStart(4, "0");
+    });
 
     return paddedGroups.join(":");
 };
@@ -669,12 +806,39 @@ export const generateIPv6WithPrefix = () => {
         targetType = getIPv6AddressType(ipv6);
     }
 
+    // Ensure we always have both full and abbreviated forms
+    const fullAddress = expandIPv6(ipv6); // Always expand to full form
+    const abbreviatedAddress = abbreviateIPv6(fullAddress); // Create proper abbreviation
+
+    // Final validation - ensure we have valid addresses
+    if (
+        !isValidIPv6Address(fullAddress) ||
+        !abbreviatedAddress ||
+        abbreviatedAddress === ":"
+    ) {
+        console.warn(
+            "Generated invalid IPv6 address, using fallback:",
+            fullAddress,
+            abbreviatedAddress
+        );
+        // Use a known good fallback
+        const fallbackFull = "2001:0db8:0000:0000:0000:0000:0000:0001";
+        const fallbackAbbrev = "2001:db8::1";
+        return {
+            ipv6: fallbackFull,
+            prefix: "/64",
+            abbreviated: fallbackAbbrev,
+            networkData: calculateIPv6NetworkData(fallbackFull, "/64"),
+            addressInfo: getIPv6AddressInfo(fallbackFull),
+        };
+    }
+
     return {
-        ipv6: ipv6,
+        ipv6: fullAddress, // Always return full address as base
         prefix: targetPrefix,
-        abbreviated: abbreviateIPv6(ipv6),
-        networkData: calculateIPv6NetworkData(ipv6, targetPrefix),
-        addressInfo: getIPv6AddressInfo(ipv6),
+        abbreviated: abbreviatedAddress,
+        networkData: calculateIPv6NetworkData(fullAddress, targetPrefix),
+        addressInfo: getIPv6AddressInfo(fullAddress),
     };
 };
 
@@ -689,14 +853,17 @@ const generateEducationalMulticast = () => {
 
     if (Math.random() < 0.8) {
         // 80% chance of well-known multicast (educational)
-        return commonMulticast[
-            Math.floor(Math.random() * commonMulticast.length)
-        ];
+        const chosen =
+            commonMulticast[Math.floor(Math.random() * commonMulticast.length)];
+        return expandIPv6(chosen); // Ensure full format
     } else {
         // 20% chance of simple custom multicast
         const scopes = ["1", "2", "5", "8"]; // Interface, Link, Site, Organization
         const scope = scopes[Math.floor(Math.random() * scopes.length)];
-        return `ff0${scope}::${Math.floor(Math.random() * 0x100).toString(16)}`;
+        const customAddress = `ff0${scope}::${Math.floor(Math.random() * 0x100)
+            .toString(16)
+            .padStart(4, "0")}`;
+        return expandIPv6(customAddress); // Ensure full format
     }
 };
 

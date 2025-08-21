@@ -261,6 +261,15 @@ The IPv6 trainer has been specifically optimized for German IHK Fachinformatiker
 
 ### IPv6 Address Types and Generation (IHK-Focused)
 
+#### Enhanced Address Format Consistency
+
+**Technical Implementation Improvements:**
+
+-   **Full Address Generation**: All generated IPv6 addresses are first expanded to complete 8-group format
+-   **Proper Abbreviation Logic**: Abbreviated forms are created using standardized compression algorithms
+-   **Format Separation**: Ensures "Vollständige Adresse" mode never shows pre-abbreviated addresses
+-   **Educational Integrity**: Students always practice correct full ↔ abbreviated conversions
+
 #### Documentation Addresses (2001:db8::/32) - 60% of educational generation
 
 **Enhanced IHK Exam Focus:**
@@ -370,12 +379,19 @@ The system generates educationally appropriate prefixes specifically for IHK Fac
 
 The system randomly presents either:
 
-1. **Vollständige IPv6-Adresse** - Complete uncompressed format
-2. **Verkürzte IPv6-Adresse** - Compressed format with :: notation
+1. **Vollständige IPv6-Adresse** - Complete uncompressed format (always shows full 8-group format)
+2. **Abkürzung** - Compressed format with :: notation
+
+**Enhanced Address Format Logic:**
+
+-   All generated IPv6 addresses are first expanded to full format (e.g., `2001:0db8:0000:0000:0000:0000:0000:0000`)
+-   Abbreviated versions are created through proper compression (e.g., `2001:db8::`)
+-   Ensures no abbreviated addresses appear under "Vollständige Adresse"
+-   Guarantees consistent full/abbreviated address pairing
 
 **Students must provide (IHK exam skills):**
 
--   The missing address format (vollständig ↔ verkürzt)
+-   The missing address format (vollständig ↔ abkürzung)
 -   Network prefix (provided during generation)
 -   Netzwerkadresse calculation
 -   Adresstyp identification
@@ -416,10 +432,11 @@ The system randomly presents either:
 
 **IPv6 Address Formats:**
 
--   Accepts both vollständig and verkürzt formats
+-   Accepts both vollständig and abkürzung formats
 -   Validates proper hexadecimal characters (0-9, a-f)
 -   Handles :: compression correctly
 -   Ensures proper colon placement
+-   **Enhanced format consistency** - Full addresses always appear as vollständig, abbreviated always as abkürzung
 -   **IHK-aligned error messages** in German
 
 **Prefix Validation:**
@@ -447,6 +464,33 @@ The system randomly presents either:
 -   **German terminology** matching IHK exam language
 
 ### Key Improvements for IHK Fachinformatiker
+
+#### Enhanced Address Format Integrity (Latest Update)
+
+**🔧 Technical Fix - Address Format Consistency:**
+
+-   **Problem Resolved**: Previously, some addresses from the essential IHK list (stored in abbreviated form like `2001:db8::`) could appear under "Vollständige Adresse"
+-   **Solution Implemented**: All IPv6 addresses are now properly expanded to full format before display
+-   **Generation Process**:
+    1. Generate base IPv6 address (may be abbreviated from essential list)
+    2. Expand to full format using `expandIPv6()` function
+    3. Create proper abbreviation using `abbreviateIPv6()` function
+    4. Ensure mode-appropriate display (full vs. abbreviated)
+-   **Educational Benefit**: Students now practice correct format conversions consistently
+
+**�️ Enhanced Validation & Error Prevention:**
+
+-   **Invalid Address Prevention**: Added comprehensive validation to prevent generation of invalid addresses like ":"
+-   **Robust Generation Logic**: Fixed prefix calculation errors in generation functions that could lead to malformed addresses
+-   **Fallback System**: Implemented fallback addresses when generation fails (e.g., returns known-good `2001:db8::1`)
+-   **Input Validation**: Enhanced expandIPv6() and abbreviateIPv6() functions with error checking and warnings
+-   **Format Verification**: All generated addresses are validated before being presented to students
+
+**�📝 Terminology Updates:**
+
+-   Changed "Verkürzte Adresse" to "Abkürzung" for clearer German terminology
+-   Enhanced field labels to match IHK exam language
+-   Improved instructional clarity for dual format training
 
 #### Eliminated Overly Complex Content
 

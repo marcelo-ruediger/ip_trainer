@@ -24,7 +24,7 @@ function InstructionContainer({
             case "fullAddress":
                 return "Vollständige Adresse";
             case "abbreviatedAddress":
-                return "Verkürzte Adresse";
+                return "Abkürzung";
             case "networkPrefix":
                 return "Netzwerk-Präfix";
             case "networkAddress":
