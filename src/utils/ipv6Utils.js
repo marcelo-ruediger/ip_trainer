@@ -1184,39 +1184,40 @@ const specialPurposeAddresses = [
     // UNIQUE LOCAL - Critical for private networks (equivalent to RFC 1918)
     {
         address: "fc00::",
-        commonUse: "Unique Local Unicast - Private IPv6",
+        commonUse: "ULA zentral zugewiesen",
+        importance: "Important",
+        category: "Private Networks",
+        range: "fc00::/7",
+        specialRules:
+            "Zentral zugewiesene private IPv6-Adressen (seltener verwendet)",
+    },
+    {
+        address: "fd00::",
+        commonUse: "ULA lokal generiert - Häufigste private IPv6",
         importance: "Critical",
         category: "Private Networks",
         range: "fc00::/7",
         specialRules:
-            "Private IPv6-Adressen, entspricht 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16",
-    },
-    {
-        address: "fd00::",
-        commonUse: "ULA (lokal generiert) - Häufigste private IPv6",
-        importance: "Critical",
-        category: "Private Networks",
-        range: "fc00::/7",
-        specialRules: "Meist verwendete private IPv6-Adressen in Unternehmen",
+            "Meist verwendete private IPv6-Adressen in Unternehmen, entspricht RFC 1918",
     },
 
     // GLOBAL UNICAST - Critical for understanding (equivalent to public IPv4)
     {
-        address: "2000::",
-        commonUse: "Global Unicast - Internet-routbar",
+        address: "2001::",
+        commonUse: "Global Unicast 2xxx - Häufigster ISP-Bereich",
         importance: "Critical",
         category: "Global Unicast",
         range: "2000::/3",
         specialRules:
-            "Internet-routbare IPv6-Adressen, entspricht öffentlichen IPv4-Adressen",
+            "Internet-routbare IPv6-Adressen, häufig von ISPs zugewiesen",
     },
     {
-        address: "2001::",
-        commonUse: "Typischer Global Unicast Bereich",
+        address: "3000::",
+        commonUse: "Global Unicast 3xxx - Weiterer Global Bereich",
         importance: "Important",
         category: "Global Unicast",
         range: "2000::/3",
-        specialRules: "Häufig von ISPs zugewiesener Global Unicast Bereich",
+        specialRules: "Weiterer Global Unicast Adressbereich, Internet-routbar",
     },
 
     // MULTICAST - Important concept (equivalent to Class D)

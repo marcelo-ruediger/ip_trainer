@@ -132,15 +132,16 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 return { text: "Link-Local", class: "link-local" };
 
             // Private Networks (ULA)
-            if (address === "fc00::") return { text: "ULA", class: "private" };
+            if (address === "fc00::")
+                return { text: "ULA zentral", class: "private" };
             if (address === "fd00::")
-                return { text: "ULA (häufig)", class: "private" };
+                return { text: "ULA lokal", class: "private" };
 
             // Global Unicast
-            if (address === "2000::")
-                return { text: "Global", class: "global" };
             if (address === "2001::")
-                return { text: "ISP-Bereich", class: "global" };
+                return { text: "Global 2xxx", class: "global" };
+            if (address === "3000::")
+                return { text: "Global 3xxx", class: "global" };
 
             // Multicast
             if (address === "ff00::")
@@ -223,15 +224,15 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             // Private Networks (ULA)
             if (address === "fc00::")
-                return "Private IPv6-Adressen - entspricht RFC 1918 in IPv4";
+                return "Zentral zugewiesene private IPv6-Adressen (seltener verwendet)";
             if (address === "fd00::")
                 return "Häufigste private IPv6-Adressen in Unternehmen";
 
             // Global Unicast
-            if (address === "2000::")
-                return "Start des global routbaren IPv6-Adressraums";
             if (address === "2001::")
-                return "Typischer ISP-zugewiesener IPv6-Bereich";
+                return "Häufigster Global Unicast Bereich von ISPs zugewiesen";
+            if (address === "3000::")
+                return "Weiterer Global Unicast Adressbereich - Internet-routbar";
 
             // Multicast
             if (address === "ff00::")

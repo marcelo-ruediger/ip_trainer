@@ -239,11 +239,11 @@ The IPv6 trainer has been specifically optimized for German IHK Fachinformatiker
 -   Multicast addresses (ff00::/8) - Different calculation rules
 -   IPv4-mapped addresses (::ffff:x.x.x.x) - Transition technology
 
-### IHK Essential IPv6 Addresses (13 Total - Optimized for Exam Focus)
+### IHK Essential IPv6 Addresses (11 Total - Optimized for Exam Focus)
 
-The IPv6 special addresses have been carefully curated to match the conceptual level and educational scope of the IPv4 addresses, ensuring balanced learning for IHK Fachinformatiker exam preparation.
+The IPv6 special addresses have been carefully curated and optimized to match the conceptual level and educational scope of the IPv4 addresses, ensuring balanced learning for IHK Fachinformatiker exam preparation. Recent optimization removed redundant addresses while maintaining essential coverage.
 
-#### Critical Importance - IPv6 Grundlagen (7 addresses)
+#### Critical Importance - IPv6 Grundlagen (6 addresses)
 
 **🔄 Grundlegende Adressen**
 
@@ -260,30 +260,26 @@ The IPv6 special addresses have been carefully curated to match the conceptual l
 
 **🏠 Private Adressierung (ULA - Unique Local Addresses)**
 
--   **fc00::** - Unique Local Unicast - entspricht RFC 1918 in IPv4
--   **fd00::** - ULA (lokal generiert) - häufigste private IPv6-Adressen
+-   **fc00::** - ULA zentral zugewiesen - seltener verwendet
+-   **fd00::** - ULA lokal generiert - häufigste private IPv6-Adressen in Unternehmen
 
-#### Important Importance - Praktische Anwendung (4 addresses)
+#### Important Importance - Praktische Anwendung (3 addresses)
 
 **🌐 Global Unicast (Internet-routbar)**
 
--   **2000::** - Global Unicast Beginn - entspricht öffentlichen IPv4-Adressen
--   **2001::** - Typischer ISP-Bereich - häufiger IPv6-Adressraum
+-   **2001::** - Global Unicast 2xxx - häufigster ISP-Bereich
+-   **3000::** - Global Unicast 3xxx - weiterer Global Bereich
 
 **📡 Multicast (Gruppenkommunkation)**
 
 -   **ff00::** - Multicast-Adressen - entspricht IPv4 Klasse D (224.0.0.0/4)
--   **ff02::1** - Alle IPv6-Knoten - ersetzt IPv4-Broadcast 255.255.255.255
 
 #### Moderate Importance - Erweiterte Konzepte (2 addresses)
 
 **📡 Router-Kommunikation**
 
+-   **ff02::1** - Alle IPv6-Knoten - ersetzt IPv4-Broadcast 255.255.255.255
 -   **ff02::2** - Alle IPv6-Router - spezielle Router-Multicast
-
-**🔄 IPv4/IPv6 Übergang (Grundlagen)**
-
--   **::ffff:0:0** - IPv4-mapped IPv6 - grundlegende Übergangs-Technologie
 
 ### Special-Purpose IPv6 Addresses Reference (Educational Popup)
 
@@ -317,21 +313,21 @@ The application includes an interactive popup window accessible via the "**Spezi
 
 **🏠 Private Networks (ULA)**
 
--   **fc00::** - Unique Local Unicast (fc00::/7)
-    -   Private IPv6-Adressen - entspricht RFC 1918 in IPv4
-    -   ULA badge (orange gradient)
--   **fd00::** - ULA (lokal generiert) (fc00::/7)
+-   **fc00::** - ULA zentral zugewiesen (fc00::/7)
+    -   Zentral zugewiesene private IPv6-Adressen (seltener verwendet)
+    -   ULA zentral badge (orange gradient)
+-   **fd00::** - ULA lokal generiert (fc00::/7)
     -   Häufigste private IPv6-Adressen in Unternehmen
-    -   ULA (häufig) badge (orange gradient)
+    -   ULA lokal badge (orange gradient)
 
 **🌐 Global Unicast**
 
--   **2000::** - Global Unicast - Internet-routbar (2000::/3)
-    -   Start des global routbaren IPv6-Adressraums
-    -   Global badge (blue gradient)
--   **2001::** - Typischer Global Unicast Bereich (2000::/3)
-    -   Typischer ISP-zugewiesener IPv6-Bereich
-    -   ISP-Bereich badge (blue gradient)
+-   **2001::** - Global Unicast 2xxx - Häufigster ISP-Bereich (2000::/3)
+    -   Häufigster Global Unicast Bereich von ISPs zugewiesen
+    -   Global 2xxx badge (blue gradient)
+-   **3000::** - Global Unicast 3xxx - Weiterer Global Bereich (2000::/3)
+    -   Weiterer Global Unicast Adressbereich - Internet-routbar
+    -   Global 3xxx badge (blue gradient)
 
 **📡 Multicast**
 
@@ -353,11 +349,20 @@ The application includes an interactive popup window accessible via the "**Spezi
 
 #### Educational Features (IPv6):
 
+**Optimized Address Selection:**
+
+-   **Removed redundant addresses**: Eliminated duplicate host examples (fc00::1, fd00::1) and repetitive Global Unicast entries
+-   **Essential ULA distinction**: Kept both fc00:: (central) and fd00:: (local) to show the practical difference
+-   **Global Unicast range coverage**: Maintained 2001:: (most common ISP range) and added 3000:: (demonstrates full 2000::/3 scope)
+-   **Streamlined for IHK focus**: Reduced from 13 to 11 addresses while maintaining comprehensive coverage
+
 **Conceptual Mapping:**
 
 -   Each IPv6 address has a clear IPv4 equivalent for easier learning
--   Balanced complexity matching IPv4 special addresses (13 addresses each)
+-   **Optimized complexity**: Reduced from 13 to 11 addresses, removing redundant examples while maintaining comprehensive coverage
 -   Focuses on fundamental concepts rather than advanced protocols
+-   **Enhanced ULA education**: Clear distinction between fc00:: (central assignment) and fd00:: (local generation)
+-   **Complete Global Unicast understanding**: Shows both 2xxx and 3xxx ranges within 2000::/3
 
 **Color-Coded Badges:**
 
@@ -607,22 +612,21 @@ The system randomly presents either:
 
 #### Eliminated Overly Complex Content (Latest Optimization)
 
-**❌ Removed from IPv6 special addresses for IHK focus:**
+**❌ Removed from IPv6 special addresses for IHK focus (Latest Optimization):**
 
--   Specific DNS server addresses (Google, Cloudflare) - Too specific for foundational knowledge
--   Advanced tunneling mechanisms (ISATAP, Teredo, 6to4) - Beyond basic IHK scope
--   Complex multicast addresses (OSPF, Solicited-node) - Advanced protocol knowledge
--   Multiple documentation examples (2001:db8::1, 2001:db8:1::) - Simplified to core concept
--   Duplicate address representations - Streamlined for clarity
--   Advanced transition protocols (64:ff9b::) - Focused on basic IPv4-mapped only
+-   **Redundant host examples**: Removed fc00::1 and fd00::1 - focused on network prefixes instead of specific hosts
+-   **Duplicate Global Unicast**: Removed 2000:: to avoid confusion - kept practical ISP range (2001::) and added 3xxx range (3000::)
+-   **Over-specific examples**: Simplified ULA descriptions to focus on core concepts
+-   **IPv4-mapped addresses**: Simplified to basic concept only (::ffff:0:0)
+-   **Reduced total count**: Optimized from 13 to 11 addresses for more focused learning
 
 **✅ Optimized IPv6 special addresses now provide:**
 
--   **Balanced complexity** - Same number of addresses as IPv4 (13 total)
--   **Clear IPv4 equivalents** - Each IPv6 concept maps to familiar IPv4 knowledge
--   **Fundamental concepts only** - Core addressing, private/global, multicast basics
--   **IHK exam alignment** - Focuses on concepts tested in Fachinformatiker certification
--   **Progressive learning** - Students build IPv6 knowledge on IPv4 foundation
+-   **Streamlined complexity** - 11 carefully selected addresses covering all essential concepts
+-   **Clear ULA distinction** - fc00:: (central) vs fd00:: (local) with practical context
+-   **Complete Global Unicast scope** - 2001:: (common ISP) and 3000:: (demonstrates full 2000::/3 range)
+-   **Focused learning** - Removed redundant examples that could confuse students
+-   **Enhanced badges** - Updated colorful indicators: "ULA zentral", "ULA lokal", "Global 2xxx", "Global 3xxx"
 
 #### Enhanced Educational Focus
 
