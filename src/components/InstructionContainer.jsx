@@ -31,6 +31,8 @@ function InstructionContainer({
                 return "Netzwerkadresse";
             case "type":
                 return "Adresstyp";
+            case "interfaceId":
+                return "Interface-ID";
             default:
                 return field;
         }
@@ -60,6 +62,8 @@ function InstructionContainer({
                 return ipData.networkAddress;
             case "type":
                 return ipData.type;
+            case "interfaceId":
+                return ipData.interfaceId;
             default:
                 return "";
         }

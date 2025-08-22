@@ -513,7 +513,7 @@ The system randomly presents either:
 -   Network prefix (provided during generation)
 -   Netzwerkadresse calculation
 -   Adresstyp identification
--   First subnet calculation
+-   Interface-ID extraction (last 64 bits of the address)
 
 #### Address Type Classification (German IHK Terminology)
 
@@ -533,6 +533,7 @@ The system randomly presents either:
 -   **Netzwerkadresse-Berechnung** - Applying prefix masks (essential for exam)
 -   **Adress-Expansion/Kompression** - Converting between formats
 -   **Typklassifizierung** - Recognizing address categories
+-   **Interface-ID-Extraktion** - Understanding the host portion (last 64 bits) of IPv6 addresses
 -   **Subnetz-Planung** - Understanding business prefix hierarchies
 
 #### Compression Practice Focus
@@ -578,12 +579,37 @@ The system randomly presents either:
 
 -   Verifies Netzwerkadresse calculations using binary masking
 -   Checks Adresstyp classification accuracy
--   Validates subnet planning logic for business scenarios
+-   Validates Interface-ID extraction from IPv6 addresses
+-   Ensures proper understanding of the 64/64 network/host split in IPv6
 -   **German terminology** matching IHK exam language
 
 ### Key Improvements for IHK Fachinformatiker
 
-#### Enhanced Address Format Integrity (Latest Update)
+#### Enhanced IPv6 Field Selection (Latest Update)
+
+**🔄 Replaced "Erstes Subnetz" with "Interface-ID":**
+
+-   **Problem with Original Field**: "Erstes Subnetz" (First Subnet) was not suitable for IPv6 as it returned "0" for most cases and doesn't align with IPv6 subnetting concepts
+-   **New Educational Field**: "Interface-ID" - Extracts the last 64 bits of an IPv6 address (host portion)
+-   **Educational Value**:
+    -   Teaches the fundamental 64/64 network/host split in IPv6 addressing
+    -   Shows how Interface IDs can be abbreviated (e.g., `0000:0000:0000:0001` → `::1`)
+    -   More relevant for IHK exam concepts than traditional subnetting calculations
+-   **Practical Application**: Students learn to identify the host portion of IPv6 addresses, which is essential for understanding IPv6 address structure
+
+**🎯 Enhanced Field Validation:**
+
+-   **Interface-ID Format Validation**: Accepts various valid formats (::, ::1, 1234:5678:9abc:def0, etc.)
+-   **Smart Comparison Logic**: Normalizes both user input and correct answers for accurate validation
+-   **Educational Feedback**: Clear validation with proper German terminology
+
+**🎨 Streamlined User Interface:**
+
+-   **Clean Design Focus**: Removed additional educational hint containers to maintain focus on core learning
+-   **Essential Fields Only**: Interface displays only the fundamental IPv6 fields needed for IHK exam preparation
+-   **Distraction-Free Learning**: Students concentrate on practical IPv6 calculations without overwhelming supplementary information
+
+#### Enhanced Address Format Integrity
 
 **🔧 Technical Fix - Address Format Consistency:**
 
@@ -641,4 +667,23 @@ The system randomly presents either:
 -   **IHK relevance indicators** - Shows exam importance
 -   **Dynamic interface** - Button text automatically changes between "Spezielle IPv4-Adressen anzeigen" and "Spezielle IPv6-Adressen anzeigen" based on current mode
 
-This optimized IPv6 training system ensures German IT students master the specific IPv6 concepts and skills tested in the IHK Fachinformatiker certification, while avoiding unnecessary complexity that could distract from core learning objectives.
+This optimized IPv6 training system ensures German IT students master the specific IPv6 concepts and skills tested in the IHK Fachinformatiker certification. The current implementation focuses on:
+
+**Core IPv6 Training Fields:**
+
+-   **IP-Adresse** (Vollständige Adresse) - Complete IPv6 format training
+-   **Netzwerk-Präfix** - Understanding business prefix allocation
+-   **Abkürzung** - IPv6 compression and abbreviation practice
+-   **Netzwerkadresse** - Network calculation skills
+-   **Typ** - Address type classification (Global Unicast, Link-Local, etc.)
+-   **Interface-ID** - Host portion extraction (64/64 split understanding)
+
+**Key Educational Benefits:**
+
+-   **Clean, focused interface** without distracting supplementary content
+-   **Practical field selection** aligned with IHK exam requirements
+-   **Enhanced validation system** with German terminology
+-   **Realistic address generation** using IHK-relevant scenarios
+-   **Mobile-responsive design** for flexible learning environments
+
+The replacement of "Erstes Subnetz" with "Interface-ID" provides significantly more educational value for IPv6 concepts, while the streamlined interface ensures students focus on mastering essential skills for their IHK Fachinformatiker certification.

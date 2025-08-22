@@ -699,33 +699,43 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
     }
 };
 
-// Helper function to calculate first subnet (more educational)
-export const calculateFirstSubnet = (prefixLength) => {
-    if (!prefixLength) return "";
+// Helper function to calculate Interface ID (last 64 bits of IPv6 address)
+export const calculateInterfaceId = (ipv6) => {
+    if (!ipv6) return "";
 
-    const prefix = parseInt(prefixLength.replace("/", ""));
+    try {
+        // Expand the IPv6 address first
+        const expanded = expandIPv6(ipv6);
+        const groups = expanded.split(":");
 
-    // Educational subnet calculations based on common scenarios
-    if (prefix === 128) return "N/A"; // Host address, no subnetting
-    if (prefix === 64) return "0"; // Standard /64 subnet
-    if (prefix === 56) {
-        // /56 to /64 allows for 256 subnets (8 bits)
-        // First subnet would be /64
-        return "0";
-    }
-    if (prefix === 48) {
-        // /48 to /64 allows for 65,536 subnets (16 bits)
-        // First subnet would be /64
-        return "0";
-    }
-    if (prefix === 32) {
-        // /32 to /64 allows for 4,294,967,296 subnets (32 bits)
-        // First subnet would be /64
-        return "0";
-    }
+        // Get the last 4 groups (64 bits)
+        const interfaceGroups = groups.slice(4);
 
-    // For other prefixes, return the first subnet ID
-    return "0";
+        // Check if it's all zeros and can be abbreviated to ::
+        if (interfaceGroups.every((group) => group === "0000")) {
+            return "::";
+        }
+
+        // Check if it ends with zeros and can be abbreviated (e.g., 0000:0000:0000:0001 -> ::1)
+        const nonZeroIndex = interfaceGroups.findIndex(
+            (group) => group !== "0000"
+        );
+        if (nonZeroIndex > 0) {
+            // Can be abbreviated with ::
+            const significantParts = interfaceGroups.slice(nonZeroIndex);
+            const abbreviatedSuffix = significantParts
+                .map((part) => part.replace(/^0+/, "") || "0")
+                .join(":");
+            return "::" + abbreviatedSuffix;
+        }
+
+        // Otherwise return the full interface ID, removing leading zeros from each group
+        return interfaceGroups
+            .map((group) => group.replace(/^0+/, "") || "0")
+            .join(":");
+    } catch (error) {
+        return "";
+    }
 };
 
 export const calculateIPv6NetworkData = (ipv6, prefix) => {
@@ -733,18 +743,18 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
         return {
             networkAddress: "",
             type: "",
-            usableIps: "",
+            interfaceId: "",
         };
     }
 
     const addressType = getIPv6AddressType(ipv6);
     const networkAddress = calculateIPv6NetworkAddress(ipv6, prefix);
-    const firstSubnet = calculateFirstSubnet(prefix);
+    const interfaceId = calculateInterfaceId(ipv6);
 
     return {
         networkAddress: networkAddress,
         type: addressType,
-        usableIps: firstSubnet,
+        interfaceId: interfaceId,
     };
 };
 
@@ -752,6 +762,94 @@ export const resetInputBorders = () => {
     document.querySelectorAll("input").forEach((input) => {
         input.classList.remove("correct", "wrong");
     });
+};
+
+// Get educational hints for IPv6 address types (helpful for IHK students)
+export const getIPv6EducationalHints = (ipv6, prefix) => {
+    if (!ipv6) return null;
+
+    const addressType = getIPv6AddressType(ipv6);
+    const prefixNum = prefix ? parseInt(prefix.replace("/", "")) : null;
+
+    const hints = {
+        type: addressType,
+        hints: [],
+        educational: true,
+    };
+
+    switch (addressType) {
+        case "Global Unicast":
+            hints.hints.push("🌍 Internet-routbare Adresse");
+            if (ipv6.toLowerCase().startsWith("2001:db8:")) {
+                hints.hints.push(
+                    "📚 RFC 3849 Dokumentationsadresse - nur für Beispiele!"
+                );
+            }
+            if (prefixNum === 64) {
+                hints.hints.push("🏠 Typische Endnetz-Größe für SLAAC");
+            }
+            break;
+
+        case "Link-Local":
+            hints.hints.push("🔗 Nur im lokalen Netzwerksegment gültig");
+            hints.hints.push(
+                "⚙️ Automatisch auf jeder IPv6-Schnittstelle konfiguriert"
+            );
+            hints.hints.push("🚫 Wird nicht geroutet");
+            break;
+
+        case "Unique Local":
+            hints.hints.push("🏢 Private IPv6-Adressen (wie RFC 1918 in IPv4)");
+            hints.hints.push("🔒 Nicht im Internet routbar");
+            if (ipv6.toLowerCase().startsWith("fd")) {
+                hints.hints.push("🎲 Lokal generiert (häufigste Form)");
+            }
+            break;
+
+        case "Multicast":
+            hints.hints.push("📢 Ein-zu-viele Kommunikation");
+            hints.hints.push("🔄 Ersetzt IPv4-Broadcast");
+            if (ipv6.toLowerCase() === "ff02::1") {
+                hints.hints.push("👥 Alle IPv6-Knoten (All Nodes)");
+            }
+            if (ipv6.toLowerCase() === "ff02::2") {
+                hints.hints.push("🗂️ Alle IPv6-Router (All Routers)");
+            }
+            break;
+
+        case "Loopback":
+            hints.hints.push("🔄 IPv6 Localhost (wie 127.0.0.1 in IPv4)");
+            hints.hints.push("🏠 Verweist immer auf den lokalen Rechner");
+            break;
+
+        case "Unspecified":
+            hints.hints.push(
+                "❓ Unspezifizierte Adresse (wie 0.0.0.0 in IPv4)"
+            );
+            hints.hints.push(
+                "🚀 Wird bei der automatischen Konfiguration verwendet"
+            );
+            break;
+    }
+
+    // Add prefix-specific hints
+    if (prefixNum) {
+        if (prefixNum === 128) {
+            hints.hints.push("🎯 Host-Adresse (keine Subnetze möglich)");
+        } else if (prefixNum === 64) {
+            hints.hints.push("📱 Standard-Subnetzgröße für IPv6-Endnetze");
+        } else if (prefixNum === 48) {
+            hints.hints.push(
+                "🏢 Typische Unternehmenszuteilung (65.536 /64-Subnetze)"
+            );
+        } else if (prefixNum === 56) {
+            hints.hints.push(
+                "🏠 Kleine Unternehmen/Privathaushalte (256 /64-Subnetze)"
+            );
+        }
+    }
+
+    return hints;
 };
 
 // Get educational information about the IPv6 address

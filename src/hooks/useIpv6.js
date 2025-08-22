@@ -15,7 +15,7 @@ export const useIPv6 = () => {
         networkPrefix: "",
         networkAddress: "",
         type: "",
-        usableIps: "",
+        interfaceId: "",
     });
 
     const [userInput, setUserInput] = useState({
@@ -24,7 +24,7 @@ export const useIPv6 = () => {
         networkPrefix: "",
         networkAddress: "",
         type: "",
-        usableIps: "",
+        interfaceId: "",
     });
 
     const [showAnswers, setShowAnswers] = useState(false);
@@ -67,7 +67,7 @@ export const useIPv6 = () => {
             networkPrefix: prefix,
             networkAddress: networkData.networkAddress,
             type: networkData.type,
-            usableIps: networkData.usableIps,
+            interfaceId: networkData.interfaceId,
         });
 
         setShowAnswers(false);
@@ -78,7 +78,7 @@ export const useIPv6 = () => {
             networkPrefix: prefix, // Show the prefix to the user
             networkAddress: "",
             type: "",
-            usableIps: "",
+            interfaceId: "",
         });
     };
 
@@ -101,7 +101,7 @@ export const useIPv6 = () => {
             "networkPrefix",
             "networkAddress",
             "type",
-            "usableIps",
+            "interfaceId",
         ];
         ids.forEach((id) => {
             const input = document.getElementById(id);
@@ -121,7 +121,7 @@ export const useIPv6 = () => {
             "networkPrefix",
             "networkAddress",
             "type",
-            "usableIps",
+            "interfaceId",
         ];
 
         fieldsToCheck.forEach((fieldId) => {
@@ -173,6 +173,13 @@ export const useIPv6 = () => {
                         isValid = prefixPattern.test(value);
                         break;
                     }
+                    case "interfaceId": {
+                        // Basic validation for Interface ID format
+                        const interfacePattern =
+                            /^::$|^::[0-9a-fA-F]{1,4}$|^([0-9a-fA-F]{1,4}:){0,3}[0-9a-fA-F]{1,4}$|^([0-9a-fA-F]{4}:){3}[0-9a-fA-F]{4}$/;
+                        isValid = interfacePattern.test(value) || value === "";
+                        break;
+                    }
                     default:
                         isValid = true; // For other fields, accept any input for now
                 }
@@ -204,6 +211,28 @@ export const useIPv6 = () => {
                     isCorrect =
                         userExpanded.toLowerCase() ===
                         correctExpanded.toLowerCase();
+                } else if (fieldId === "interfaceId") {
+                    // Special comparison for Interface ID - normalize both values
+                    const normalizeInterfaceId = (id) => {
+                        if (id === "::") return "0000:0000:0000:0000";
+                        if (id.startsWith("::")) {
+                            // Expand abbreviated interface ID
+                            const suffix = id.substring(2);
+                            const paddedSuffix = suffix.padStart(4, "0");
+                            return `0000:0000:0000:${paddedSuffix}`;
+                        }
+                        // For full format, ensure proper padding
+                        const parts = id.split(":");
+                        while (parts.length < 4) parts.unshift("0000");
+                        return parts
+                            .map((part) => part.padStart(4, "0"))
+                            .join(":");
+                    };
+
+                    const normalizedUser = normalizeInterfaceId(value);
+                    const normalizedCorrect =
+                        normalizeInterfaceId(correctValue);
+                    isCorrect = normalizedUser === normalizedCorrect;
                 } else {
                     isCorrect =
                         value.toLowerCase() === correctValue.toLowerCase();
