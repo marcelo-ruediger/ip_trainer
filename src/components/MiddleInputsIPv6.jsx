@@ -11,13 +11,12 @@ function MiddleInputsIPv6({
                 <br className="responsive-break" />
                 <input
                     id="abbreviatedAddress"
-                    placeholder={
-                        mode !== "abbreviatedAddress" ? "Eingeben..." : ""
-                    }
                     value={renderValue("abbreviatedAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers || mode === "abbreviatedAddress"}
-                    className="long-input"
+                    className={`long-input ${
+                        mode === "abbreviatedAddress" ? "attention" : ""
+                    }`}
                 />
             </label>
             <label>
@@ -25,7 +24,6 @@ function MiddleInputsIPv6({
                 <br className="responsive-break" />
                 <input
                     id="networkAddress"
-                    placeholder="Eingeben..."
                     value={renderValue("networkAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers}

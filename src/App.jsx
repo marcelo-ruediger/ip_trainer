@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import tableImg from "./images/table.png";
+import ipv6StructureImg from "./images/ipv6_struktur.jpg";
 import Header from "./components/Header";
 import ToggleElements from "./components/ToggleElements"; // Updated import name
 import TopInputs from "./components/TopInputs";
@@ -31,7 +32,7 @@ function App() {
             <ToggleElements
                 showImage={showImage}
                 onToggle={handleToggle}
-                tableImg={tableImg}
+                tableImg={ipVersion === "ipv6" ? ipv6StructureImg : tableImg}
                 ipVersion={ipVersion}
             />
 

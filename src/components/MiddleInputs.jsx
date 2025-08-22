@@ -14,6 +14,9 @@ function MiddleInputs({
                     value={renderValue("networkId")}
                     onChange={handleInputChange}
                     disabled={showAnswers || generatedField === "networkId"}
+                    className={
+                        generatedField === "networkId" ? "attention" : ""
+                    }
                 />
             </label>
             <label>
@@ -24,6 +27,9 @@ function MiddleInputs({
                     value={renderValue("broadcast")}
                     onChange={handleInputChange}
                     disabled={showAnswers || generatedField === "broadcast"}
+                    className={
+                        generatedField === "broadcast" ? "attention" : ""
+                    }
                 />
             </label>
         </div>

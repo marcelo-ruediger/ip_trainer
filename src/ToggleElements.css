@@ -250,7 +250,7 @@
     justify-content: space-between;
     margin: auto;
     text-align: center;
-    padding: 1rem;
+    padding: 0 1rem 1rem 1rem;
 }
 
 .image-toggle-container > label > input {
@@ -268,7 +268,7 @@
 .hidden.visible {
     display: block;
     max-width: 600px;
-    padding: 1rem;
+    padding: 0 1rem 1rem 1rem;
 }
 
 .hidden > img {
@@ -276,7 +276,6 @@
     border-radius: 6px;
     background-color: #ffffff;
     padding: 0.1rem;
-    margin-top: 1rem;
 }
 
 @media (max-width: 768px) {

@@ -8,15 +8,16 @@ function TopInputsIPv6({
     return (
         <div className="default-container">
             <label>
-                IP-Adresse:
+                Vollständige IPv6-Adresse:
                 <br className="responsive-break" />
                 <input
                     id="fullAddress"
-                    placeholder={mode !== "fullAddress" ? "Eingeben..." : ""}
                     value={renderValue("fullAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers || mode === "fullAddress"}
-                    className="ipv6-input long-input"
+                    className={`ipv6-input long-input ${
+                        mode === "fullAddress" ? "attention" : ""
+                    }`}
                 />
             </label>
             <label>
@@ -28,7 +29,7 @@ function TopInputsIPv6({
                     value={renderValue("networkPrefix")}
                     onChange={handleInputChange}
                     disabled={true} // Always disabled since it's provided data
-                    className="networkPrefix"
+                    className="networkPrefix attention"
                 />
             </label>
         </div>

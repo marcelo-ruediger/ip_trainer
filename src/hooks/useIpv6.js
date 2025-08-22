@@ -15,7 +15,8 @@ export const useIPv6 = () => {
         networkPrefix: "",
         networkAddress: "",
         type: "",
-        interfaceId: "",
+        possibleSubnets: "",
+        targetPrefix: "",
     });
 
     const [userInput, setUserInput] = useState({
@@ -24,7 +25,8 @@ export const useIPv6 = () => {
         networkPrefix: "",
         networkAddress: "",
         type: "",
-        interfaceId: "",
+        possibleSubnets: "",
+        targetPrefix: "",
     });
 
     const [showAnswers, setShowAnswers] = useState(false);
@@ -67,7 +69,8 @@ export const useIPv6 = () => {
             networkPrefix: prefix,
             networkAddress: networkData.networkAddress,
             type: networkData.type,
-            interfaceId: networkData.interfaceId,
+            possibleSubnets: networkData.possibleSubnets,
+            targetPrefix: networkData.targetPrefix,
         });
 
         setShowAnswers(false);
@@ -78,7 +81,8 @@ export const useIPv6 = () => {
             networkPrefix: prefix, // Show the prefix to the user
             networkAddress: "",
             type: "",
-            interfaceId: "",
+            possibleSubnets: "",
+            targetPrefix: networkData.targetPrefix, // Show target prefix to user for calculation
         });
     };
 
@@ -101,7 +105,7 @@ export const useIPv6 = () => {
             "networkPrefix",
             "networkAddress",
             "type",
-            "interfaceId",
+            "possibleSubnets",
         ];
         ids.forEach((id) => {
             const input = document.getElementById(id);
@@ -121,13 +125,14 @@ export const useIPv6 = () => {
             "networkPrefix",
             "networkAddress",
             "type",
-            "interfaceId",
+            "possibleSubnets",
         ];
 
         fieldsToCheck.forEach((fieldId) => {
             // Skip validation for provided data (pre-filled fields)
             if (
                 fieldId === "networkPrefix" ||
+                fieldId === "targetPrefix" ||
                 (fieldId === "fullAddress" && mode === "fullAddress") ||
                 (fieldId === "abbreviatedAddress" &&
                     mode === "abbreviatedAddress")
@@ -173,11 +178,13 @@ export const useIPv6 = () => {
                         isValid = prefixPattern.test(value);
                         break;
                     }
-                    case "interfaceId": {
-                        // Basic validation for Interface ID format
-                        const interfacePattern =
-                            /^::$|^::[0-9a-fA-F]{1,4}$|^([0-9a-fA-F]{1,4}:){0,3}[0-9a-fA-F]{1,4}$|^([0-9a-fA-F]{4}:){3}[0-9a-fA-F]{4}$/;
-                        isValid = interfacePattern.test(value) || value === "";
+                    case "possibleSubnets": {
+                        // Accept numbers with German thousand separators, or words like "Millionen", "Milliarden"
+                        const subnetPattern =
+                            /^(\d{1,3}(\.\d{3})*|\d+(\s+(Millionen|Milliarden|Billionen))?)$/i;
+                        isValid =
+                            subnetPattern.test(value) ||
+                            /^\d+$/.test(value.replace(/\./g, ""));
                         break;
                     }
                     default:
@@ -211,27 +218,45 @@ export const useIPv6 = () => {
                     isCorrect =
                         userExpanded.toLowerCase() ===
                         correctExpanded.toLowerCase();
-                } else if (fieldId === "interfaceId") {
-                    // Special comparison for Interface ID - normalize both values
-                    const normalizeInterfaceId = (id) => {
-                        if (id === "::") return "0000:0000:0000:0000";
-                        if (id.startsWith("::")) {
-                            // Expand abbreviated interface ID
-                            const suffix = id.substring(2);
-                            const paddedSuffix = suffix.padStart(4, "0");
-                            return `0000:0000:0000:${paddedSuffix}`;
+                } else if (fieldId === "possibleSubnets") {
+                    // Special comparison for possible subnets - normalize format
+                    const normalizeSubnetValue = (val) => {
+                        if (!val) return "";
+                        let normalized = val.toString().toLowerCase();
+
+                        // Convert German thousand separators to standard format
+                        normalized = normalized.replace(/\./g, "");
+
+                        // Handle German text formats
+                        if (normalized.includes("millionen")) {
+                            const num = parseFloat(
+                                normalized
+                                    .replace(/[^\d,]/g, "")
+                                    .replace(",", ".")
+                            );
+                            return (num * 1000000).toString();
+                        } else if (normalized.includes("milliarden")) {
+                            const num = parseFloat(
+                                normalized
+                                    .replace(/[^\d,]/g, "")
+                                    .replace(",", ".")
+                            );
+                            return (num * 1000000000).toString();
+                        } else if (normalized.includes("billionen")) {
+                            const num = parseFloat(
+                                normalized
+                                    .replace(/[^\d,]/g, "")
+                                    .replace(",", ".")
+                            );
+                            return (num * 1000000000000).toString();
                         }
-                        // For full format, ensure proper padding
-                        const parts = id.split(":");
-                        while (parts.length < 4) parts.unshift("0000");
-                        return parts
-                            .map((part) => part.padStart(4, "0"))
-                            .join(":");
+
+                        return normalized;
                     };
 
-                    const normalizedUser = normalizeInterfaceId(value);
+                    const normalizedUser = normalizeSubnetValue(value);
                     const normalizedCorrect =
-                        normalizeInterfaceId(correctValue);
+                        normalizeSubnetValue(correctValue);
                     isCorrect = normalizedUser === normalizedCorrect;
                 } else {
                     isCorrect =

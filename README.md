@@ -513,7 +513,7 @@ The system randomly presents either:
 -   Network prefix (provided during generation)
 -   Netzwerkadresse calculation
 -   Adresstyp identification
--   Interface-ID extraction (last 64 bits of the address)
+-   Subnet calculation (possible subnets based on prefix expansion)
 
 #### Address Type Classification (German IHK Terminology)
 
@@ -579,35 +579,59 @@ The system randomly presents either:
 
 -   Verifies Netzwerkadresse calculations using binary masking
 -   Checks Adresstyp classification accuracy
--   Validates Interface-ID extraction from IPv6 addresses
--   Ensures proper understanding of the 64/64 network/host split in IPv6
+-   Validates subnet calculations for IPv6 prefix expansion
+-   Ensures proper understanding of IPv6 subnetting mathematics
 -   **German terminology** matching IHK exam language
 
 ### Key Improvements for IHK Fachinformatiker
 
 #### Enhanced IPv6 Field Selection (Latest Update)
 
-**🔄 Replaced "Erstes Subnetz" with "Interface-ID":**
+**🔄 Replaced "Interface-ID" with "Anzahl von Subnetze" (Number of Subnets):**
 
--   **Problem with Original Field**: "Erstes Subnetz" (First Subnet) was not suitable for IPv6 as it returned "0" for most cases and doesn't align with IPv6 subnetting concepts
--   **New Educational Field**: "Interface-ID" - Extracts the last 64 bits of an IPv6 address (host portion)
+-   **Enhanced Educational Challenge**: "Anzahl von Subnetze" provides clear numerical calculation expectation
+-   **New Mathematical Field**: "Anzahl von Subnetze" - Calculates the number of possible subnets when expanding from current prefix to target prefix
+-   **Clear Field Naming**: Explicitly indicates a number is expected, not an IPv6 address format
 -   **Educational Value**:
-    -   Teaches the fundamental 64/64 network/host split in IPv6 addressing
-    -   Shows how Interface IDs can be abbreviated (e.g., `0000:0000:0000:0001` → `::1`)
-    -   More relevant for IHK exam concepts than traditional subnetting calculations
--   **Practical Application**: Students learn to identify the host portion of IPv6 addresses, which is essential for understanding IPv6 address structure
+    -   Teaches IPv6 subnetting mathematics (2^additional_bits calculation)
+    -   Shows practical network planning scenarios (e.g., /48 → /64 creates 65.536 subnets)
+    -   More challenging than pattern recognition, requires actual calculation
+-   **Practical Application**: Students learn subnet planning for IPv6 networks, essential for network design
 
-**🎯 Enhanced Field Validation:**
+**🎯 Advanced Calculation Features:**
 
--   **Interface-ID Format Validation**: Accepts various valid formats (::, ::1, 1234:5678:9abc:def0, etc.)
--   **Smart Comparison Logic**: Normalizes both user input and correct answers for accurate validation
--   **Educational Feedback**: Clear validation with proper German terminology
+-   **Dynamic Target Prefixes**: System generates appropriate target prefixes based on source prefix (e.g., /48→/64, /56→/64, /64→/72)
+-   **German Number Formatting**: Supports large numbers with German formatting (65.536, 4 Millionen, 16 Milliarden)
+-   **Variable Complexity**: Different prefix combinations provide varying difficulty levels
+-   **Real-World Scenarios**: Reflects actual IPv6 network planning requirements
 
-**🎨 Streamlined User Interface:**
+**📋 Improved Instructions and User Experience:**
 
--   **Clean Design Focus**: Removed additional educational hint containers to maintain focus on core learning
--   **Essential Fields Only**: Interface displays only the fundamental IPv6 fields needed for IHK exam preparation
--   **Distraction-Free Learning**: Students concentrate on practical IPv6 calculations without overwhelming supplementary information
+-   **Streamlined Instructions**: Removed "Generiert:" information clutter from instruction container
+-   **Clear Task Direction**: "Fülle die anderen Felder anhand der generierten Daten aus" provides specific guidance
+-   **Visual Data Recognition**: Blue-highlighted fields (`.attention` class) clearly indicate generated/provided data
+-   **Intuitive Workflow**: Students see highlighted data → understand it's provided → fill in remaining fields
+-   **Consistent Application**: Same instruction approach for both IPv4 and IPv6 modes
+
+**🏷️ Enhanced Field Labels for Clarity:**
+
+-   **IPv4 Mode**: "IPv4-Adresse" (instead of "IP-Adresse") with permanent "Eingeben..." placeholder for user guidance
+-   **IPv6 Mode**: "Vollständige IPv6-Adresse" clearly indicates the complete format expectation
+-   **Subnet Calculation**: "Subnetz Ziel-Präfix" provides specific context for the target prefix field
+-   **Number Field**: "Anzahl von Subnetze" explicitly indicates numerical input expected
+
+**🎨 Enhanced User Interface and Visual Design:**
+
+-   **Optimized 3-Column Layout**: Moved "Subnetz Ziel-Präfix" to bottom container between "Typ" and "Anzahl von Subnetze"
+-   **Responsive Design**: Uses flexbox with space-between for even distribution within 600px width
+-   **Clear Visual Hierarchy**: Target prefix is visually grouped with calculation field for better user understanding
+-   **Generated Field Highlighting**: All auto-generated fields now use `.attention` CSS class (blue border + 1.05x scaling)
+-   **Improved Field Labels**:
+    -   "Vollständige IPv6-Adresse" (instead of "IP-Adresse") for version clarity
+    -   "Subnetz Ziel-Präfix" (instead of "Ziel-Präfix") for specific calculation context
+    -   "Anzahl von Subnetze" for clear numerical expectation
+-   **Simplified Instructions**: "Fülle die anderen Felder anhand der generierten Daten aus" - direct, actionable guidance
+-   **Visual Learning Aid**: Students immediately identify provided data vs. fields requiring calculation
 
 #### Enhanced Address Format Integrity
 
@@ -676,7 +700,7 @@ This optimized IPv6 training system ensures German IT students master the specif
 -   **Abkürzung** - IPv6 compression and abbreviation practice
 -   **Netzwerkadresse** - Network calculation skills
 -   **Typ** - Address type classification (Global Unicast, Link-Local, etc.)
--   **Interface-ID** - Host portion extraction (64/64 split understanding)
+-   **Anzahl von Subnetze** - IPv6 subnetting calculations (mathematical challenge)
 
 **Key Educational Benefits:**
 
@@ -686,4 +710,4 @@ This optimized IPv6 training system ensures German IT students master the specif
 -   **Realistic address generation** using IHK-relevant scenarios
 -   **Mobile-responsive design** for flexible learning environments
 
-The replacement of "Erstes Subnetz" with "Interface-ID" provides significantly more educational value for IPv6 concepts, while the streamlined interface ensures students focus on mastering essential skills for their IHK Fachinformatiker certification.
+The replacement of "Interface-ID" with "Anzahl von Subnetze" provides significantly more educational challenge for IPv6 subnetting concepts, while the enhanced layout and visual design gives students practical experience with network planning calculations essential for their IHK Fachinformatiker certification.

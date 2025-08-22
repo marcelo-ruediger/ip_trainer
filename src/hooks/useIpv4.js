@@ -399,6 +399,28 @@ export const useIPv4 = () => {
                     case "networkId":
                     case "broadcast":
                     case "subnetMask": {
+                        // Special validation for broadcast field
+                        if (fieldId === "broadcast") {
+                            // Check if it should be "keiner" (for /31 and /32 networks)
+                            const correctValue = generated[fieldId];
+                            if (correctValue === "keiner") {
+                                // Accept multiple valid German and English responses for "no broadcast"
+                                const validNoBroadcastAnswers = [
+                                    "keiner",
+                                    "kein",
+                                    "keine",
+                                    "0",
+                                    "none",
+                                    "no",
+                                ];
+                                isValid = validNoBroadcastAnswers.includes(
+                                    value.toLowerCase()
+                                );
+                                break;
+                            }
+                        }
+
+                        // Standard IP address validation for networkId, broadcast (when not "keiner"), and subnetMask
                         const ipParts = value.split(".");
                         if (ipParts.length !== 4)
                             throw new Error("Falsches Format");
@@ -426,7 +448,25 @@ export const useIPv4 = () => {
                         break;
 
                     case "usableIps":
-                        isValid = /^\d+$/.test(value);
+                        // Check if the correct answer is 0 (for /32 networks)
+                        const correctUsableIps = generated[fieldId];
+                        if (correctUsableIps === "0") {
+                            // Accept multiple valid responses for "no host addresses"
+                            const validZeroAnswers = [
+                                "0",
+                                "keiner",
+                                "kein",
+                                "keine",
+                                "none",
+                                "no",
+                            ];
+                            isValid = validZeroAnswers.includes(
+                                value.toLowerCase()
+                            );
+                        } else {
+                            // Standard numeric validation for non-zero values
+                            isValid = /^\d+$/.test(value);
+                        }
                         break;
 
                     default:
@@ -462,9 +502,35 @@ export const useIPv4 = () => {
                         : generated.ipClass.toUpperCase();
                 }
 
-                isCorrect =
-                    value.replace("/", "").toUpperCase() ===
-                    correctValue.replace("/", "").toUpperCase();
+                // Special comparison logic for broadcast field
+                if (fieldId === "broadcast" && correctValue === "keiner") {
+                    const validNoBroadcastAnswers = [
+                        "keiner",
+                        "kein",
+                        "keine",
+                        "0",
+                        "none",
+                        "no",
+                    ];
+                    isCorrect = validNoBroadcastAnswers.includes(
+                        value.toLowerCase()
+                    );
+                } else if (fieldId === "usableIps" && correctValue === "0") {
+                    // Special comparison logic for usableIps when answer is 0
+                    const validZeroAnswers = [
+                        "0",
+                        "keiner",
+                        "kein",
+                        "keine",
+                        "none",
+                        "no",
+                    ];
+                    isCorrect = validZeroAnswers.includes(value.toLowerCase());
+                } else {
+                    isCorrect =
+                        value.replace("/", "").toUpperCase() ===
+                        correctValue.replace("/", "").toUpperCase();
+                }
 
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {

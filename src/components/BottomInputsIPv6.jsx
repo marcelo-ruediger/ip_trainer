@@ -1,7 +1,21 @@
 function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
     return (
-        <div className="default-container">
-            <label>
+        <div
+            className="default-container"
+            style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                maxWidth: "600px",
+            }}
+        >
+            <label
+                style={{
+                    flex: "1 1 180px",
+                    minWidth: "150px",
+                    marginRight: "10px",
+                }}
+            >
                 Typ:
                 <br className="responsive-break" />
                 <select
@@ -9,6 +23,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                     value={renderValue("type")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
+                    style={{ width: "100%" }}
                 >
                     <option value="">Bitte wählen</option>
                     <option value="Global Unicast">Global Unicast</option>
@@ -20,16 +35,35 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                     <option value="Unspecified">Unspecified</option>
                 </select>
             </label>
-            <label>
-                Interface-ID:
+            <label
+                style={{
+                    flex: "1 1 120px",
+                    minWidth: "100px",
+                    marginRight: "10px",
+                }}
+            >
+                Subnetz Ziel-Präfix:
                 <br className="responsive-break" />
                 <input
-                    id="interfaceId"
-                    placeholder="z.B. ::1 oder 0000:0000:0000:0001"
-                    value={renderValue("interfaceId")}
+                    id="targetPrefix"
+                    value={renderValue("targetPrefix")}
+                    onChange={handleInputChange}
+                    disabled={true}
+                    className="provided-info attention"
+                    title="Präfix für die Subnetz-Berechnung"
+                    style={{ width: "100%" }}
+                />
+            </label>
+            <label style={{ flex: "1 1 140px", minWidth: "120px" }}>
+                Anzahl von Subnetze:
+                <br className="responsive-break" />
+                <input
+                    id="possibleSubnets"
+                    value={renderValue("possibleSubnets")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
-                    className="long-input"
+                    placeholder="z.B. 256 oder 4.096"
+                    style={{ width: "100%" }}
                 />
             </label>
         </div>

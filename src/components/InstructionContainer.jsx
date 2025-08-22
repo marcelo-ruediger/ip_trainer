@@ -19,7 +19,7 @@ function InstructionContainer({
             case "broadcast":
                 return "Broadcast-Adresse";
             case "usableIps":
-                return "Benutzbare IPs";
+                return "Host-Adressen Anzahl";
             // IPv6 fields
             case "fullAddress":
                 return "Vollständige Adresse";
@@ -33,6 +33,10 @@ function InstructionContainer({
                 return "Adresstyp";
             case "interfaceId":
                 return "Interface-ID";
+            case "possibleSubnets":
+                return "Anzahl von Subnetze";
+            case "targetPrefix":
+                return "Subnetz Ziel-Präfix";
             default:
                 return field;
         }
@@ -64,6 +68,10 @@ function InstructionContainer({
                 return ipData.type;
             case "interfaceId":
                 return ipData.interfaceId;
+            case "possibleSubnets":
+                return ipData.possibleSubnets;
+            case "targetPrefix":
+                return ipData.targetPrefix;
             default:
                 return "";
         }
@@ -94,11 +102,8 @@ function InstructionContainer({
         return (
             <div className="instruction-container">
                 <div className="instruction-text">
-                    <strong>Generiert:</strong>{" "}
-                    {getFieldDisplayName(shownField)} ({shownValue}) +
-                    Netzwerk-Präfix ({networkPrefix})
-                    <br />
-                    <strong>Aufgabe:</strong> Berechnen Sie alle anderen Felder
+                    <strong>Aufgabe:</strong> Fülle die anderen Felder anhand
+                    der generierten Daten aus
                 </div>
             </div>
         );
@@ -164,11 +169,8 @@ function InstructionContainer({
     return (
         <div className="instruction-container">
             <div className="instruction-text">
-                <strong>Generiert:</strong> IP-Adresse ({ipData.ip}) +{" "}
-                {getFieldDisplayName(generatedField)} (
-                {getFieldValue(generatedField)})
-                <br />
-                <strong>Aufgabe:</strong> Berechnen Sie alle anderen Felder
+                <strong>Aufgabe:</strong> Fülle die anderen Felder anhand der
+                generierten Daten aus
             </div>
         </div>
     );

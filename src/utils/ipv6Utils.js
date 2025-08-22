@@ -738,12 +738,46 @@ export const calculateInterfaceId = (ipv6) => {
     }
 };
 
+// Helper function to calculate possible subnets based on prefix length
+export const calculatePossibleSubnets = (currentPrefix, targetPrefix) => {
+    if (!currentPrefix || !targetPrefix) return "";
+
+    const currentLength = parseInt(currentPrefix.replace("/", ""));
+    const targetLength = parseInt(targetPrefix.replace("/", ""));
+
+    // Current prefix must be shorter than target prefix for subnetting
+    if (currentLength >= targetLength) {
+        return "0"; // No subnetting possible
+    }
+
+    // Calculate number of additional bits for subnetting
+    const additionalBits = targetLength - currentLength;
+
+    // Calculate number of possible subnets (2^additional_bits)
+    const possibleSubnets = Math.pow(2, additionalBits);
+
+    // Format large numbers appropriately for display
+    if (possibleSubnets >= 1000000000000) {
+        return (possibleSubnets / 1000000000000).toFixed(0) + " Billionen";
+    } else if (possibleSubnets >= 1000000000) {
+        return (possibleSubnets / 1000000000).toFixed(0) + " Milliarden";
+    } else if (possibleSubnets >= 1000000) {
+        return (possibleSubnets / 1000000).toFixed(0) + " Millionen";
+    } else if (possibleSubnets >= 1000) {
+        return possibleSubnets.toLocaleString("de-DE");
+    } else {
+        return possibleSubnets.toString();
+    }
+};
+
 export const calculateIPv6NetworkData = (ipv6, prefix) => {
     if (!ipv6 || !prefix) {
         return {
             networkAddress: "",
             type: "",
             interfaceId: "",
+            possibleSubnets: "",
+            targetPrefix: "",
         };
     }
 
@@ -751,10 +785,41 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
     const networkAddress = calculateIPv6NetworkAddress(ipv6, prefix);
     const interfaceId = calculateInterfaceId(ipv6);
 
+    // Generate target prefix for subnet calculation
+    const currentPrefixLength = parseInt(prefix.replace("/", ""));
+    let targetPrefix = "";
+    let possibleSubnets = "";
+
+    // Generate meaningful target prefix based on current prefix
+    if (currentPrefixLength < 64) {
+        // Most common scenario: subnet to /64 (standard end network)
+        if (currentPrefixLength <= 56) {
+            const targetOptions = ["/60", "/64"];
+            targetPrefix =
+                targetOptions[Math.floor(Math.random() * targetOptions.length)];
+        } else {
+            targetPrefix = "/64";
+        }
+    } else if (currentPrefixLength === 64) {
+        // From /64, can subnet to smaller networks (less common but educational)
+        const targetOptions = ["/68", "/72", "/76", "/80"];
+        targetPrefix =
+            targetOptions[Math.floor(Math.random() * targetOptions.length)];
+    } else {
+        // Already very specific, limited subnetting options
+        const targetOptions = ["/124", "/126", "/128"];
+        targetPrefix =
+            targetOptions[Math.floor(Math.random() * targetOptions.length)];
+    }
+
+    possibleSubnets = calculatePossibleSubnets(prefix, targetPrefix);
+
     return {
         networkAddress: networkAddress,
         type: addressType,
         interfaceId: interfaceId,
+        possibleSubnets: possibleSubnets,
+        targetPrefix: targetPrefix,
     };
 };
 

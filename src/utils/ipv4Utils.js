@@ -556,7 +556,7 @@ export const calculateNetworkData = (ipStr, cidr) => {
         usable = 2; // Both addresses are usable in /31
     } else if (cidrNum === 32) {
         broadcast = "keiner"; // Host route - no broadcast
-        usable = 1; // Only the single host
+        usable = 0; // No host addresses - the single address is used as network address
     } else {
         const broadcastArray = ip.map((octet, i) => octet | (~mask[i] & 255));
         broadcast = broadcastArray.join(".");

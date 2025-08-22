@@ -283,7 +283,9 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         checked={showImage}
                         onChange={onToggle}
                     />
-                    Hilfstabelle
+                    {ipVersion === "ipv6"
+                        ? "Hilfstabelle IPv6"
+                        : "Hilfstabelle IPv4"}
                 </label>
 
                 <label className="toggle-label">

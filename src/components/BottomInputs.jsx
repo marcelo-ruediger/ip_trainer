@@ -17,13 +17,16 @@ function BottomInputs({
                 />
             </label>
             <label>
-                benutzbare IPs:
+                Host-Adressen Anzahl:
                 <br className="responsive-break" />
                 <input
                     id="usableIps"
                     value={renderValue("usableIps")}
                     onChange={handleInputChange}
                     disabled={showAnswers || generatedField === "usableIps"}
+                    className={
+                        generatedField === "usableIps" ? "attention" : ""
+                    }
                 />
             </label>
         </div>
