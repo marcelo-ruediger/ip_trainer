@@ -106,12 +106,27 @@ export const useIPv6 = () => {
             "networkAddress",
             "type",
             "possibleSubnets",
+            "targetPrefix",
         ];
+
         ids.forEach((id) => {
             const input = document.getElementById(id);
             if (input) {
-                input.classList.remove("wrong");
-                input.classList.add("correct");
+                // Identify generated/provided fields that should keep attention class
+                const isGeneratedField =
+                    id === "networkPrefix" ||
+                    id === "targetPrefix" ||
+                    (id === "fullAddress" && mode === "fullAddress") ||
+                    (id === "abbreviatedAddress" &&
+                        mode === "abbreviatedAddress");
+
+                if (isGeneratedField) {
+                    input.classList.remove("correct", "wrong");
+                    input.classList.add("attention");
+                } else {
+                    input.classList.remove("wrong");
+                    input.classList.add("correct");
+                }
             }
         });
     };
@@ -126,24 +141,25 @@ export const useIPv6 = () => {
             "networkAddress",
             "type",
             "possibleSubnets",
+            "targetPrefix",
         ];
 
         fieldsToCheck.forEach((fieldId) => {
-            // Skip validation for provided data (pre-filled fields)
-            if (
+            // Identify generated/provided fields that should keep attention class
+            const isGeneratedField =
                 fieldId === "networkPrefix" ||
                 fieldId === "targetPrefix" ||
                 (fieldId === "fullAddress" && mode === "fullAddress") ||
                 (fieldId === "abbreviatedAddress" &&
-                    mode === "abbreviatedAddress")
-            ) {
-                // Mark provided data as correct
+                    mode === "abbreviatedAddress");
+
+            if (isGeneratedField) {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
-                    inputElement.classList.remove("wrong");
-                    inputElement.classList.add("correct");
+                    inputElement.classList.remove("correct", "wrong");
+                    inputElement.classList.add("attention");
                 }
-                return; // Skip validation for provided data
+                return;
             }
 
             const displayedValue = renderValue(fieldId);
@@ -188,7 +204,7 @@ export const useIPv6 = () => {
                         break;
                     }
                     default:
-                        isValid = true; // For other fields, accept any input for now
+                        isValid = true; // For other fields like type, accept any input for now
                 }
 
                 if (!isValid) throw new Error("Invalid input");
@@ -276,15 +292,6 @@ export const useIPv6 = () => {
                 }
             }
         });
-
-        // Mark the generated field as correct
-        const generatedFieldId =
-            mode === "fullAddress" ? "fullAddress" : "abbreviatedAddress";
-        const generatedElement = document.getElementById(generatedFieldId);
-        if (generatedElement) {
-            generatedElement.classList.remove("wrong");
-            generatedElement.classList.add("correct");
-        }
     };
 
     const renderValue = (id) => {

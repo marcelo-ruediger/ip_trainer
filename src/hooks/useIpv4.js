@@ -84,6 +84,21 @@ export const useIPv4 = () => {
 
         setIpValid(isValid);
 
+        // Apply visual feedback for invalid IP addresses
+        const ipInput = e.target;
+        if (value.trim() === "") {
+            // Empty input - remove all validation classes
+            ipInput.classList.remove("correct", "wrong");
+        } else if (!isValid) {
+            // Invalid IP - mark as wrong
+            ipInput.classList.remove("correct");
+            ipInput.classList.add("wrong");
+        } else {
+            // Valid IP - mark as correct
+            ipInput.classList.remove("wrong");
+            ipInput.classList.add("correct");
+        }
+
         // Add this line to ensure both CIDR and subnet mask inputs are available
         // You might want to set mode to a neutral state or create a new mode for your TopInputs component
         // setMode("both"); // or whatever logic you need for your TopInputs component
@@ -336,11 +351,22 @@ export const useIPv4 = () => {
             "cidr",
             "subnetMask",
         ];
+
         ids.forEach((id) => {
             const input = document.getElementById(id);
             if (input) {
-                input.classList.remove("wrong");
-                input.classList.add("correct");
+                // If this field was generated (either in training mode or eingabe mode), keep it with attention class
+                const isGeneratedField =
+                    generatedField === id ||
+                    (userIsInputting && ipData[id] && id !== "ip");
+
+                if (isGeneratedField) {
+                    input.classList.remove("correct", "wrong");
+                    input.classList.add("attention");
+                } else {
+                    input.classList.remove("wrong");
+                    input.classList.add("correct");
+                }
             }
         });
     };
@@ -372,12 +398,16 @@ export const useIPv4 = () => {
             const displayedValue = renderValue(fieldId);
             const value = displayedValue?.toString().trim();
 
-            // If this field has automatically generated data (from Eingabe mode), mark as correct
-            if (userIsInputting && ipData[fieldId] && fieldId !== "ip") {
+            // If this field was generated (either in training mode or eingabe mode), keep it with attention class
+            const isGeneratedField =
+                generatedField === fieldId ||
+                (userIsInputting && ipData[fieldId] && fieldId !== "ip");
+
+            if (isGeneratedField) {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
-                    inputElement.classList.remove("wrong");
-                    inputElement.classList.add("correct");
+                    inputElement.classList.remove("correct", "wrong");
+                    inputElement.classList.add("attention");
                 }
                 return;
             }
@@ -545,15 +575,6 @@ export const useIPv4 = () => {
                 }
             }
         });
-
-        // Make sure the generated field is always marked as correct (for training mode)
-        if (generatedField) {
-            const generatedElement = document.getElementById(generatedField);
-            if (generatedElement) {
-                generatedElement.classList.remove("wrong");
-                generatedElement.classList.add("correct");
-            }
-        }
     };
 
     return {

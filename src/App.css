@@ -54,6 +54,17 @@ input.wrong {
     box-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044;
 }
 
+select.correct {
+    border-color: #00ff88;
+    box-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88;
+    outline: 2px solid #00ff88;
+}
+
+select.wrong {
+    border-color: #ff0044;
+    box-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044;
+}
+
 button:hover {
     transform: scale(1.05);
 }
@@ -99,7 +110,7 @@ footer {
 }
 
 .attention {
-    border: solid 1px #646cff;
+    border: solid 2px #646cff;
     transform: scale(1.05);
 }
 
