@@ -205,9 +205,19 @@ export const useIPv6 = () => {
                         break;
                     }
                     case "subnetId": {
-                        // Accept hexadecimal values (with or without leading zeros)
+                        // Accept hexadecimal values OR text answers for "no subnet"
                         const subnetPattern = /^[0-9a-fA-F]{1,4}$/;
-                        isValid = subnetPattern.test(value);
+                        const textAnswers = [
+                            "kein",
+                            "keine",
+                            "keiner",
+                            "none",
+                            "no",
+                            "0",
+                        ];
+                        isValid =
+                            subnetPattern.test(value) ||
+                            textAnswers.includes(value.toLowerCase().trim());
                         break;
                     }
                     case "interfaceId": {
@@ -254,22 +264,47 @@ export const useIPv6 = () => {
                     fieldId === "subnetId" ||
                     fieldId === "interfaceId"
                 ) {
-                    // Check if it should be "Kein" (for /64 and longer prefixes when fieldId is subnetId)
-                    if (fieldId === "subnetId" && correctValue === "Kein") {
-                        // Accept multiple valid German and English responses for "no subnet"
-                        const validNoSubnetAnswers = [
-                            "kein",
-                            "keine",
-                            "keiner",
-                            "none",
-                            "no",
-                            "0", // Also accept "0" as alternative
-                        ];
-                        isCorrect = validNoSubnetAnswers.includes(
-                            value.toLowerCase().trim()
-                        );
+                    if (fieldId === "subnetId") {
+                        // Debug logging to help troubleshoot
+                        console.log("Debug Subnetzanteil validation:", {
+                            fieldId,
+                            userInput: value,
+                            correctValue,
+                            userInputLower: value.toLowerCase().trim(),
+                        });
+
+                        // Check if the correct answer is "kein" (no subnet for /64 or longer)
+                        if (correctValue === "kein") {
+                            // Accept multiple valid German and English responses for "no subnet"
+                            const validNoSubnetAnswers = [
+                                "kein",
+                                "keine",
+                                "keiner",
+                                "none",
+                                "no",
+                                "0",
+                            ];
+                            isCorrect = validNoSubnetAnswers.includes(
+                                value.toLowerCase().trim()
+                            );
+                        } else {
+                            // For actual hex subnet values, normalize and compare
+                            const normalizeHex = (val) => {
+                                if (!val) return "";
+                                return val
+                                    .toString()
+                                    .toLowerCase()
+                                    .replace(/^0x/, "")
+                                    .trim();
+                            };
+
+                            const normalizedUser = normalizeHex(value);
+                            const normalizedCorrect =
+                                normalizeHex(correctValue);
+                            isCorrect = normalizedUser === normalizedCorrect;
+                        }
                     } else {
-                        // Simple hex comparison for subnet and interface parts
+                        // For interfaceId, use hex comparison
                         const normalizeHex = (val) => {
                             if (!val) return "";
                             return val

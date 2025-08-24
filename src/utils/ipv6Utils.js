@@ -768,7 +768,7 @@ export const calculateSubnetId = (ipv6, prefixLength = 64) => {
 
         if (prefixLength >= 64) {
             // For /64 or longer prefixes, there's no subnet portion - it's all network
-            return "Kein";
+            return "kein";
         } else if (prefixLength <= 48) {
             // For /48 or shorter prefixes, the 4th group (index 3) is typically the subnet
             const subnetGroup = groups[3] || "0000";
