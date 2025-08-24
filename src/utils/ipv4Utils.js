@@ -552,10 +552,10 @@ export const calculateNetworkData = (ipStr, cidr) => {
     let broadcast, usable;
 
     if (cidrNum === 31) {
-        broadcast = "keiner"; // No broadcast in /31 networks
+        broadcast = "kein"; // No broadcast in /31 networks
         usable = 2; // Both addresses are usable in /31
     } else if (cidrNum === 32) {
-        broadcast = "keiner"; // Host route - no broadcast
+        broadcast = "kein"; // Host route - no broadcast
         usable = 0; // No host addresses - the single address is used as network address
     } else {
         const broadcastArray = ip.map((octet, i) => octet | (~mask[i] & 255));
@@ -578,7 +578,7 @@ export const calculateNetworkData = (ipStr, cidr) => {
 
     return {
         networkId: network.join("."),
-        broadcast: broadcast, // This will be either "keiner" or an IP address
+        broadcast: broadcast, // This will be either "kein" or an IP address
         ipClass,
         usableIps: usable.toString(),
         isPointToPoint: cidrNum === 31 || cidrNum === 32, // Flag for /31 and /32 networks

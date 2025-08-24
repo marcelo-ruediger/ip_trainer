@@ -40,7 +40,21 @@ select {
     min-width: 300px;
 }
 
-.netzpraefix {
+.long-input-abbreviation {
+    min-width: 250px;
+}
+
+.network-address-input,
+.interface-id-input {
+    width: 200px;
+    min-width: 120px;
+}
+
+.network-prefix {
+    width: 90px;
+}
+
+.subnet-id-input {
     width: 90px;
 }
 
@@ -86,13 +100,14 @@ label {
 
 .default-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     gap: 2rem;
     margin-bottom: 2rem;
     border: 2px solid #444444;
     border-radius: 6px;
     padding: 2rem;
-    /* overflow-x: hidden; */
+    max-width: 600px;
 }
 
 .three-inputs-container {

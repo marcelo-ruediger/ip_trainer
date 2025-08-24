@@ -21,7 +21,7 @@ function TopInputsIPv6({
                 />
             </label>
             <label>
-                Netzwerk-Präfix:
+                Netzwerkpräfix:
                 <br className="responsive-break" />
                 <input
                     id="networkPrefix"
@@ -29,7 +29,7 @@ function TopInputsIPv6({
                     value={renderValue("networkPrefix")}
                     onChange={handleInputChange}
                     disabled={true} // Always disabled since it's provided data
-                    className="networkPrefix attention"
+                    className="network-prefix attention"
                 />
             </label>
         </div>

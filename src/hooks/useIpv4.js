@@ -247,6 +247,22 @@ export const useIPv4 = () => {
         }
     };
 
+    // Helper function to detect ambiguous cases and suggest better field combinations
+    const isAmbiguousCase = (ip, cidr, generatedField) => {
+        // For /31 and /32 networks, certain single fields create ambiguity
+        if (cidr === 31 || cidr === 32) {
+            // These fields alone don't provide enough info to distinguish /31 from /32
+            const ambiguousFields = ["broadcast"]; // Both have "kein"
+
+            return ambiguousFields.includes(generatedField);
+        }
+
+        // NetworkId generation has been completely removed to avoid ambiguity issues
+        // where multiple CIDR values could produce the same network address
+
+        return false;
+    };
+
     const handleStart = () => {
         resetInputBorders();
 
@@ -258,21 +274,41 @@ export const useIPv4 = () => {
         setHasInputStarted(false);
         setShowAnswers(false);
 
-        const ip = getRandomIp();
-        const cidr = getRandomCIDR();
-        const subnetMask = cidrToMask(cidr);
-        const data = calculateNetworkData(ip, cidr);
+        let ip, cidr, subnetMask, data, randomField;
+        let attempts = 0;
+        const maxAttempts = 10;
 
-        // Randomly select which field to generate
-        const fieldOptions = [
-            "cidr",
-            "subnetMask",
-            "networkId",
-            "broadcast",
-            "usableIps",
-        ];
-        const randomField =
-            fieldOptions[Math.floor(Math.random() * fieldOptions.length)];
+        // Keep generating until we get a non-ambiguous case
+        do {
+            ip = getRandomIp();
+            cidr = getRandomCIDR();
+            subnetMask = cidrToMask(cidr);
+            data = calculateNetworkData(ip, cidr);
+
+            // Randomly select which field to generate
+            // Note: networkId removed due to inherent ambiguity issues
+            const fieldOptions = [
+                "cidr",
+                "subnetMask",
+                "broadcast",
+                "usableIps",
+            ];
+            randomField =
+                fieldOptions[Math.floor(Math.random() * fieldOptions.length)];
+
+            attempts++;
+
+            // Debug logging for ambiguous cases
+            if (isAmbiguousCase(ip, cidr, randomField)) {
+                console.log(
+                    `Avoiding ambiguous case: IP=${ip}, CIDR=/${cidr}, Field=${randomField}`
+                );
+            }
+        } while (
+            isAmbiguousCase(ip, cidr, randomField) &&
+            attempts < maxAttempts
+        );
+
         setGeneratedField(randomField);
 
         // Create initial data with only IP and the generated field
@@ -293,9 +329,6 @@ export const useIPv4 = () => {
                 break;
             case "subnetMask":
                 initialData.subnetMask = subnetMask;
-                break;
-            case "networkId":
-                initialData.networkId = data.networkId;
                 break;
             case "broadcast":
                 initialData.broadcast = data.broadcast;
@@ -431,9 +464,9 @@ export const useIPv4 = () => {
                     case "subnetMask": {
                         // Special validation for broadcast field
                         if (fieldId === "broadcast") {
-                            // Check if it should be "keiner" (for /31 and /32 networks)
+                            // Check if it should be "kein" (for /31 and /32 networks)
                             const correctValue = generated[fieldId];
-                            if (correctValue === "keiner") {
+                            if (correctValue === "kein") {
                                 // Accept multiple valid German and English responses for "no broadcast"
                                 const validNoBroadcastAnswers = [
                                     "keiner",
@@ -450,7 +483,7 @@ export const useIPv4 = () => {
                             }
                         }
 
-                        // Standard IP address validation for networkId, broadcast (when not "keiner"), and subnetMask
+                        // Standard IP address validation for networkId, broadcast (when not "kein"), and subnetMask
                         const ipParts = value.split(".");
                         if (ipParts.length !== 4)
                             throw new Error("Falsches Format");
@@ -533,7 +566,7 @@ export const useIPv4 = () => {
                 }
 
                 // Special comparison logic for broadcast field
-                if (fieldId === "broadcast" && correctValue === "keiner") {
+                if (fieldId === "broadcast" && correctValue === "kein") {
                     const validNoBroadcastAnswers = [
                         "keiner",
                         "kein",

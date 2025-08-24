@@ -14,7 +14,7 @@ function MiddleInputsIPv6({
                     value={renderValue("abbreviatedAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers || mode === "abbreviatedAddress"}
-                    className={`long-input ${
+                    className={`long-input-abbreviation ${
                         mode === "abbreviatedAddress" ? "attention" : ""
                     }`}
                 />
@@ -27,6 +27,7 @@ function MiddleInputsIPv6({
                     value={renderValue("networkAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
+                    className="network-address-input"
                 />
             </label>
         </div>

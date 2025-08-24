@@ -4,6 +4,8 @@ import {
     abbreviateIPv6,
     expandIPv6,
     calculateIPv6NetworkData,
+    calculateInterfaceId,
+    calculateSubnetId,
 } from "../utils/ipv6Utils";
 import { resetInputBorders } from "../utils/commonUtils";
 
@@ -15,8 +17,8 @@ export const useIPv6 = () => {
         networkPrefix: "",
         networkAddress: "",
         type: "",
-        possibleSubnets: "",
-        targetPrefix: "",
+        subnetId: "",
+        interfaceId: "",
     });
 
     const [userInput, setUserInput] = useState({
@@ -25,8 +27,8 @@ export const useIPv6 = () => {
         networkPrefix: "",
         networkAddress: "",
         type: "",
-        possibleSubnets: "",
-        targetPrefix: "",
+        subnetId: "",
+        interfaceId: "",
     });
 
     const [showAnswers, setShowAnswers] = useState(false);
@@ -59,6 +61,11 @@ export const useIPv6 = () => {
         setGenerated({
             fullAddress: fullAddress,
             abbreviatedAddress: abbreviatedAddress,
+            subnetId: calculateSubnetId(
+                fullAddress,
+                parseInt(prefix.replace("/", ""))
+            ),
+            interfaceId: calculateInterfaceId(fullAddress),
         });
 
         setIpData({
@@ -69,8 +76,11 @@ export const useIPv6 = () => {
             networkPrefix: prefix,
             networkAddress: networkData.networkAddress,
             type: networkData.type,
-            possibleSubnets: networkData.possibleSubnets,
-            targetPrefix: networkData.targetPrefix,
+            subnetId: calculateSubnetId(
+                fullAddress,
+                parseInt(prefix.replace("/", ""))
+            ),
+            interfaceId: calculateInterfaceId(fullAddress),
         });
 
         setShowAnswers(false);
@@ -81,8 +91,8 @@ export const useIPv6 = () => {
             networkPrefix: prefix, // Show the prefix to the user
             networkAddress: "",
             type: "",
-            possibleSubnets: "",
-            targetPrefix: networkData.targetPrefix, // Show target prefix to user for calculation
+            subnetId: "",
+            interfaceId: "",
         });
     };
 
@@ -96,6 +106,8 @@ export const useIPv6 = () => {
             ...prev,
             fullAddress: generated.fullAddress,
             abbreviatedAddress: generated.abbreviatedAddress,
+            subnetId: generated.subnetId,
+            interfaceId: generated.interfaceId,
         }));
         setShowAnswers(true);
 
@@ -105,8 +117,8 @@ export const useIPv6 = () => {
             "networkPrefix",
             "networkAddress",
             "type",
-            "possibleSubnets",
-            "targetPrefix",
+            "subnetId",
+            "interfaceId",
         ];
 
         ids.forEach((id) => {
@@ -115,7 +127,6 @@ export const useIPv6 = () => {
                 // Identify generated/provided fields that should keep attention class
                 const isGeneratedField =
                     id === "networkPrefix" ||
-                    id === "targetPrefix" ||
                     (id === "fullAddress" && mode === "fullAddress") ||
                     (id === "abbreviatedAddress" &&
                         mode === "abbreviatedAddress");
@@ -140,15 +151,14 @@ export const useIPv6 = () => {
             "networkPrefix",
             "networkAddress",
             "type",
-            "possibleSubnets",
-            "targetPrefix",
+            "subnetId",
+            "interfaceId",
         ];
 
         fieldsToCheck.forEach((fieldId) => {
             // Identify generated/provided fields that should keep attention class
             const isGeneratedField =
                 fieldId === "networkPrefix" ||
-                fieldId === "targetPrefix" ||
                 (fieldId === "fullAddress" && mode === "fullAddress") ||
                 (fieldId === "abbreviatedAddress" &&
                     mode === "abbreviatedAddress");
@@ -194,13 +204,19 @@ export const useIPv6 = () => {
                         isValid = prefixPattern.test(value);
                         break;
                     }
-                    case "possibleSubnets": {
-                        // Accept numbers with German thousand separators, or words like "Millionen", "Milliarden"
-                        const subnetPattern =
-                            /^(\d{1,3}(\.\d{3})*|\d+(\s+(Millionen|Milliarden|Billionen))?)$/i;
+                    case "subnetId": {
+                        // Accept hexadecimal values (with or without leading zeros)
+                        const subnetPattern = /^[0-9a-fA-F]{1,4}$/;
+                        isValid = subnetPattern.test(value);
+                        break;
+                    }
+                    case "interfaceId": {
+                        // Accept abbreviated IPv6 interface formats like ::1, ::abcd:1234, etc.
+                        const interfacePattern =
+                            /^(::?[0-9a-fA-F]{0,4}(:[0-9a-fA-F]{0,4})*|([0-9a-fA-F]{1,4}:){0,3}[0-9a-fA-F]{0,4})$/i;
                         isValid =
-                            subnetPattern.test(value) ||
-                            /^\d+$/.test(value.replace(/\./g, ""));
+                            interfacePattern.test(value) ||
+                            /^[0-9a-fA-F:]+$/.test(value);
                         break;
                     }
                     default:
@@ -234,46 +250,39 @@ export const useIPv6 = () => {
                     isCorrect =
                         userExpanded.toLowerCase() ===
                         correctExpanded.toLowerCase();
-                } else if (fieldId === "possibleSubnets") {
-                    // Special comparison for possible subnets - normalize format
-                    const normalizeSubnetValue = (val) => {
-                        if (!val) return "";
-                        let normalized = val.toString().toLowerCase();
+                } else if (
+                    fieldId === "subnetId" ||
+                    fieldId === "interfaceId"
+                ) {
+                    // Check if it should be "Kein" (for /64 and longer prefixes when fieldId is subnetId)
+                    if (fieldId === "subnetId" && correctValue === "Kein") {
+                        // Accept multiple valid German and English responses for "no subnet"
+                        const validNoSubnetAnswers = [
+                            "kein",
+                            "keine",
+                            "keiner",
+                            "none",
+                            "no",
+                            "0", // Also accept "0" as alternative
+                        ];
+                        isCorrect = validNoSubnetAnswers.includes(
+                            value.toLowerCase().trim()
+                        );
+                    } else {
+                        // Simple hex comparison for subnet and interface parts
+                        const normalizeHex = (val) => {
+                            if (!val) return "";
+                            return val
+                                .toString()
+                                .toLowerCase()
+                                .replace(/^0x/, "")
+                                .trim();
+                        };
 
-                        // Convert German thousand separators to standard format
-                        normalized = normalized.replace(/\./g, "");
-
-                        // Handle German text formats
-                        if (normalized.includes("millionen")) {
-                            const num = parseFloat(
-                                normalized
-                                    .replace(/[^\d,]/g, "")
-                                    .replace(",", ".")
-                            );
-                            return (num * 1000000).toString();
-                        } else if (normalized.includes("milliarden")) {
-                            const num = parseFloat(
-                                normalized
-                                    .replace(/[^\d,]/g, "")
-                                    .replace(",", ".")
-                            );
-                            return (num * 1000000000).toString();
-                        } else if (normalized.includes("billionen")) {
-                            const num = parseFloat(
-                                normalized
-                                    .replace(/[^\d,]/g, "")
-                                    .replace(",", ".")
-                            );
-                            return (num * 1000000000000).toString();
-                        }
-
-                        return normalized;
-                    };
-
-                    const normalizedUser = normalizeSubnetValue(value);
-                    const normalizedCorrect =
-                        normalizeSubnetValue(correctValue);
-                    isCorrect = normalizedUser === normalizedCorrect;
+                        const normalizedUser = normalizeHex(value);
+                        const normalizedCorrect = normalizeHex(correctValue);
+                        isCorrect = normalizedUser === normalizedCorrect;
+                    }
                 } else {
                     isCorrect =
                         value.toLowerCase() === correctValue.toLowerCase();

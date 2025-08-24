@@ -693,13 +693,29 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
             networkGroups.push(groupHex);
         }
 
-        return abbreviateIPv6(networkGroups.join(":"));
+        const fullNetworkAddress = networkGroups.join(":");
+
+        // Properly abbreviate - ensure trailing zeros become ::
+        let abbreviated = abbreviateIPv6(fullNetworkAddress);
+
+        // Fix specific case where network ends with zeros but doesn't show ::
+        // For example: "2001:db8:1:4d2:" should be "2001:db8:1:4d2::"
+        if (
+            abbreviated.endsWith(":") &&
+            !abbreviated.endsWith("::") &&
+            abbreviated !== ":"
+        ) {
+            abbreviated += ":";
+        }
+
+        return abbreviated;
     } catch (error) {
         return "";
     }
 };
 
 // Helper function to calculate Interface ID (last 64 bits of IPv6 address)
+// Calculate the Interface-Anteil (interface portion) from an IPv6 address
 export const calculateInterfaceId = (ipv6) => {
     if (!ipv6) return "";
 
@@ -708,7 +724,7 @@ export const calculateInterfaceId = (ipv6) => {
         const expanded = expandIPv6(ipv6);
         const groups = expanded.split(":");
 
-        // Get the last 4 groups (64 bits)
+        // Get the last 4 groups (64 bits) - the interface portion (Interface-Anteil)
         const interfaceGroups = groups.slice(4);
 
         // Check if it's all zeros and can be abbreviated to ::
@@ -738,46 +754,70 @@ export const calculateInterfaceId = (ipv6) => {
     }
 };
 
-// Helper function to calculate possible subnets based on prefix length
-export const calculatePossibleSubnets = (currentPrefix, targetPrefix) => {
-    if (!currentPrefix || !targetPrefix) return "";
+// Calculate the Subnet-Anteil (subnet portion) from an IPv6 address
+export const calculateSubnetId = (ipv6, prefixLength = 64) => {
+    if (!ipv6) return "";
 
-    const currentLength = parseInt(currentPrefix.replace("/", ""));
-    const targetLength = parseInt(targetPrefix.replace("/", ""));
+    try {
+        // Expand the IPv6 address first
+        const expanded = expandIPv6(ipv6);
+        const groups = expanded.split(":");
 
-    // Current prefix must be shorter than target prefix for subnetting
-    if (currentLength >= targetLength) {
-        return "0"; // No subnetting possible
-    }
+        // The subnet portion depends on the prefix length
+        // Standard IPv6 structure: Network(48-64 bits) + Subnet(0-16 bits) + Interface(64 bits)
 
-    // Calculate number of additional bits for subnetting
-    const additionalBits = targetLength - currentLength;
+        if (prefixLength >= 64) {
+            // For /64 or longer prefixes, there's no subnet portion - it's all network
+            return "Kein";
+        } else if (prefixLength <= 48) {
+            // For /48 or shorter prefixes, the 4th group (index 3) is typically the subnet
+            const subnetGroup = groups[3] || "0000";
+            return subnetGroup.replace(/^0+/, "") || "0";
+        } else {
+            // For prefixes between /48 and /64, calculate which bits are for subnet
+            // This is more complex, requires proper bit manipulation
+            const subnetGroup = groups[3] || "0000";
 
-    // Calculate number of possible subnets (2^additional_bits)
-    const possibleSubnets = Math.pow(2, additionalBits);
+            // Calculate how many bits of the 4th group are for network vs subnet
+            const networkBitsInGroup = Math.max(0, prefixLength - 48);
+            const subnetBitsInGroup = Math.min(16, 16 - networkBitsInGroup);
 
-    // Format large numbers appropriately for display
-    if (possibleSubnets >= 1000000000000) {
-        return (possibleSubnets / 1000000000000).toFixed(0) + " Billionen";
-    } else if (possibleSubnets >= 1000000000) {
-        return (possibleSubnets / 1000000000).toFixed(0) + " Milliarden";
-    } else if (possibleSubnets >= 1000000) {
-        return (possibleSubnets / 1000000).toFixed(0) + " Millionen";
-    } else if (possibleSubnets >= 1000) {
-        return possibleSubnets.toLocaleString("de-DE");
-    } else {
-        return possibleSubnets.toString();
+            if (subnetBitsInGroup === 0) {
+                return "0"; // No subnet bits available
+            }
+
+            // Convert 4th group to binary and extract subnet bits
+            const groupValue = parseInt(subnetGroup, 16);
+            const groupBinary = groupValue.toString(2).padStart(16, "0");
+
+            // Extract the subnet bits (after network bits, before interface bits)
+            const subnetBinary = groupBinary.substring(
+                networkBitsInGroup,
+                networkBitsInGroup + subnetBitsInGroup
+            );
+
+            // Convert subnet bits back to hex
+            const subnetValue = parseInt(subnetBinary, 2);
+            const subnetHex = subnetValue
+                .toString(16)
+                .padStart(Math.ceil(subnetBitsInGroup / 4), "0");
+
+            // For subnet portions, preserve leading zeros to show the correct hex representation
+            // Don't strip leading zeros like we do for other fields
+            return subnetHex;
+        }
+    } catch (error) {
+        return "";
     }
 };
 
+// Helper function to calculate possible subnets based on prefix length
 export const calculateIPv6NetworkData = (ipv6, prefix) => {
     if (!ipv6 || !prefix) {
         return {
             networkAddress: "",
             type: "",
             interfaceId: "",
-            possibleSubnets: "",
-            targetPrefix: "",
         };
     }
 
@@ -785,41 +825,10 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
     const networkAddress = calculateIPv6NetworkAddress(ipv6, prefix);
     const interfaceId = calculateInterfaceId(ipv6);
 
-    // Generate target prefix for subnet calculation
-    const currentPrefixLength = parseInt(prefix.replace("/", ""));
-    let targetPrefix = "";
-    let possibleSubnets = "";
-
-    // Generate meaningful target prefix based on current prefix
-    if (currentPrefixLength < 64) {
-        // Most common scenario: subnet to /64 (standard end network)
-        if (currentPrefixLength <= 56) {
-            const targetOptions = ["/60", "/64"];
-            targetPrefix =
-                targetOptions[Math.floor(Math.random() * targetOptions.length)];
-        } else {
-            targetPrefix = "/64";
-        }
-    } else if (currentPrefixLength === 64) {
-        // From /64, can subnet to smaller networks (less common but educational)
-        const targetOptions = ["/68", "/72", "/76", "/80"];
-        targetPrefix =
-            targetOptions[Math.floor(Math.random() * targetOptions.length)];
-    } else {
-        // Already very specific, limited subnetting options
-        const targetOptions = ["/124", "/126", "/128"];
-        targetPrefix =
-            targetOptions[Math.floor(Math.random() * targetOptions.length)];
-    }
-
-    possibleSubnets = calculatePossibleSubnets(prefix, targetPrefix);
-
     return {
         networkAddress: networkAddress,
         type: addressType,
         interfaceId: interfaceId,
-        possibleSubnets: possibleSubnets,
-        targetPrefix: targetPrefix,
     };
 };
 
@@ -992,17 +1001,16 @@ export const generateIPv6Prefix = (ipv6) => {
     const addressType = getIPv6AddressType(ipv6);
     const address = ipv6.toLowerCase();
 
-    // Special addresses have specific prefix lengths
+    // Special addresses have specific prefix lengths per RFC standards
     if (address === "::1" || address === "::") {
-        return "/128"; // Host addresses
+        return "/128"; // Host addresses (Loopback and Unspecified)
     }
 
     switch (addressType) {
         case "Link-Local":
-            // For IHK: Focus on /64 (subnet) and /10 (range)
-            const linkLocalOptions = ["/10", "/64"];
-            const linkLocalWeights = [0.3, 0.7];
-            return weightedRandomChoice(linkLocalOptions, linkLocalWeights);
+            // Link-Local addresses are always /64 (RFC 4291, Section 2.5.6)
+            // fe80::/10 is the overall range, but individual addresses use /64
+            return "/64";
 
         case "Unique Local":
             // For IHK: Focus on practical business scenarios
@@ -1011,10 +1019,15 @@ export const generateIPv6Prefix = (ipv6) => {
             return weightedRandomChoice(ulaOptions, ulaWeights);
 
         case "Multicast":
-            // For IHK: Keep it simple
-            const multicastOptions = ["/8", "/128"];
-            const multicastWeights = [0.4, 0.6];
-            return weightedRandomChoice(multicastOptions, multicastWeights);
+            // Multicast range is ff00::/8, but individual addresses are /128
+            // For education: show both the range concept and specific addresses
+            if (address.startsWith("ff")) {
+                // For specific multicast addresses, use /128
+                return "/128";
+            } else {
+                // For general multicast range
+                return "/8";
+            }
 
         case "Global Unicast":
             // Documentation addresses - focus on common educational prefixes
