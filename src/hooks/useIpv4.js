@@ -287,12 +287,11 @@ export const useIPv4 = () => {
 
             // Randomly select which field to generate
             // Note: networkId removed due to inherent ambiguity issues
-            const fieldOptions = [
-                "cidr",
-                "subnetMask",
-                "broadcast",
-                "usableIps",
-            ];
+            let fieldOptions = ["cidr", "subnetMask", "broadcast", "usableIps"];
+            // If CIDR is 30 or 31, remove 'usableIps' to avoid ambiguity
+            if (cidr === 30 || cidr === 31) {
+                fieldOptions = fieldOptions.filter((f) => f !== "usableIps");
+            }
             randomField =
                 fieldOptions[Math.floor(Math.random() * fieldOptions.length)];
 
