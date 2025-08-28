@@ -251,14 +251,123 @@
     margin: auto;
     text-align: center;
     padding: 0 1rem 1rem 1rem;
-}
-
-.image-toggle-container > label > input {
-    width: 25px;
+    gap: 1rem;
 }
 
 .image-toggle-container > label {
     text-align: right;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #cccccc;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    user-select: none;
+}
+
+.image-toggle-container > label:hover {
+    color: #ffffff;
+}
+
+/* Hide the default checkbox */
+.image-toggle-container > label > input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Custom checkbox container */
+.image-toggle-container > label::before {
+    content: "";
+    width: 50px;
+    height: 26px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border: 2px solid #444444;
+    border-radius: 20px;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+/* Custom checkbox toggle ball */
+.image-toggle-container > label::after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #888888 0%, #aaaaaa 100%);
+    border-radius: 50%;
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Checked state - toggle background */
+.image-toggle-container > label > input[type="checkbox"]:checked + *,
+.image-toggle-container > label > input[type="checkbox"]:checked ~ *,
+.image-toggle-container > label:has(input[type="checkbox"]:checked)::before {
+    background: linear-gradient(135deg, #646cff 0%, #4338ca 100%);
+    border-color: #646cff;
+    box-shadow: inset 0 2px 8px rgba(100, 108, 255, 0.2),
+        0 0 15px rgba(100, 108, 255, 0.4), 0 0 25px rgba(100, 108, 255, 0.2);
+}
+
+/* Checked state - toggle ball */
+.image-toggle-container > label:has(input[type="checkbox"]:checked)::after {
+    transform: translateY(-50%) translateX(24px);
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Hover effects */
+.image-toggle-container > label:hover::before {
+    border-color: #646cff;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(100, 108, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+.image-toggle-container > label:hover::after {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(100, 108, 255, 0.3);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.image-toggle-container
+    > label:has(input[type="checkbox"]:checked):hover::after {
+    transform: translateY(-50%) translateX(24px) scale(1.05);
+}
+
+/* Focus state for accessibility */
+.image-toggle-container > label > input[type="checkbox"]:focus-visible + *,
+.image-toggle-container
+    > label:has(input[type="checkbox"]:focus-visible)::before {
+    outline: 2px solid #646cff;
+    outline-offset: 2px;
+}
+
+/* Active state - pressed effect */
+.image-toggle-container > label:active::before {
+    transform: scale(0.98);
+}
+
+.image-toggle-container > label:active::after {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.image-toggle-container
+    > label:has(input[type="checkbox"]:checked):active::after {
+    transform: translateY(-50%) translateX(24px) scale(0.95);
 }
 
 .hidden.invisible {
@@ -298,4 +407,59 @@
         align-items: flex-start;
         gap: 6px;
     }
+
+    /* Responsive checkbox adjustments */
+    .image-toggle-container {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .image-toggle-container > label {
+        justify-content: center;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .image-toggle-container > label::before {
+        width: 45px;
+        height: 24px;
+    }
+
+    .image-toggle-container > label::after {
+        width: 16px;
+        height: 16px;
+        left: 4px;
+    }
+
+    .image-toggle-container > label:has(input[type="checkbox"]:checked)::after {
+        transform: translateY(-50%) translateX(21px);
+    }
+
+    .image-toggle-container
+        > label:has(input[type="checkbox"]:checked):hover::after {
+        transform: translateY(-50%) translateX(21px) scale(1.05);
+    }
+
+    .image-toggle-container
+        > label:has(input[type="checkbox"]:checked):active::after {
+        transform: translateY(-50%) translateX(21px) scale(0.95);
+    }
+}
+
+/* Additional fancy touches - subtle pulse animation for checked state */
+@keyframes checkboxGlow {
+    0%,
+    100% {
+        box-shadow: inset 0 2px 8px rgba(100, 108, 255, 0.2),
+            0 0 15px rgba(100, 108, 255, 0.4), 0 0 25px rgba(100, 108, 255, 0.2);
+    }
+    50% {
+        box-shadow: inset 0 2px 8px rgba(100, 108, 255, 0.3),
+            0 0 20px rgba(100, 108, 255, 0.5), 0 0 35px rgba(100, 108, 255, 0.3);
+    }
+}
+
+.image-toggle-container > label:has(input[type="checkbox"]:checked)::before {
+    animation: checkboxGlow 3s ease-in-out infinite;
 }
