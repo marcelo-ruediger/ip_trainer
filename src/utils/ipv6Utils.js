@@ -476,83 +476,85 @@ export const abbreviateIPv6 = (ipv6) => {
         return ipv6; // Return as-is if invalid
     }
 
-    // Split into groups
-    let groups = ipv6.split(":");
+    // Split into groups and remove leading zeros from each group
+    let groups = ipv6
+        .split(":")
+        .map((group) => group.replace(/^0+/, "") || "0");
 
-    // Remove leading zeros from each group
-    groups = groups.map((group) => group.replace(/^0+/, "") || "0");
-
-    // Find the longest sequence of consecutive zero groups
-    let maxZeroStart = -1;
-    let maxZeroLength = 0;
-    let currentZeroStart = -1;
-    let currentZeroLength = 0;
+    // Find all sequences of consecutive zero groups
+    let zeroSequences = [];
+    let currentStart = -1;
+    let currentLength = 0;
 
     for (let i = 0; i < groups.length; i++) {
         if (groups[i] === "0") {
-            if (currentZeroStart === -1) {
-                currentZeroStart = i;
-                currentZeroLength = 1;
+            if (currentStart === -1) {
+                currentStart = i;
+                currentLength = 1;
             } else {
-                currentZeroLength++;
+                currentLength++;
             }
         } else {
-            if (currentZeroLength > maxZeroLength) {
-                maxZeroStart = currentZeroStart;
-                maxZeroLength = currentZeroLength;
+            if (currentLength >= 2) {
+                zeroSequences.push({
+                    start: currentStart,
+                    length: currentLength,
+                });
             }
-            currentZeroStart = -1;
-            currentZeroLength = 0;
+            currentStart = -1;
+            currentLength = 0;
         }
     }
 
     // Check the last sequence
-    if (currentZeroLength > maxZeroLength) {
-        maxZeroStart = currentZeroStart;
-        maxZeroLength = currentZeroLength;
+    if (currentLength >= 2) {
+        zeroSequences.push({ start: currentStart, length: currentLength });
     }
 
-    // Only compress if we have at least 2 consecutive zeros
-    if (maxZeroLength >= 2) {
-        let result = [];
+    // If we have zero sequences to compress
+    if (zeroSequences.length > 0) {
+        // Find the longest sequence. If there's a tie, choose the leftmost one.
+        let maxSequence = zeroSequences.reduce((max, current) => {
+            if (current.length > max.length) {
+                return current;
+            } else if (
+                current.length === max.length &&
+                current.start < max.start
+            ) {
+                return current;
+            }
+            return max;
+        });
 
-        // Add groups before the zero sequence
-        for (let i = 0; i < maxZeroStart; i++) {
-            result.push(groups[i]);
-        }
+        // Create the abbreviated address
+        let result;
 
-        // Add the double colon
-        if (maxZeroStart === 0) {
-            result.push("", ""); // For leading zeros
+        if (maxSequence.start === 0) {
+            // Zero sequence starts at the beginning
+            if (maxSequence.length === 8) {
+                // All zeros
+                result = "::";
+            } else {
+                // Leading zeros
+                const afterGroups = groups.slice(
+                    maxSequence.start + maxSequence.length
+                );
+                result = "::" + afterGroups.join(":");
+            }
+        } else if (maxSequence.start + maxSequence.length === 8) {
+            // Zero sequence is at the end
+            const beforeGroups = groups.slice(0, maxSequence.start);
+            result = beforeGroups.join(":") + "::";
         } else {
-            result.push("");
-        }
-
-        // Add groups after the zero sequence
-        for (let i = maxZeroStart + maxZeroLength; i < groups.length; i++) {
-            result.push(groups[i]);
-        }
-
-        // Join and clean up multiple colons
-        let abbreviated = result.join(":");
-        abbreviated = abbreviated.replace(/:{3,}/g, "::");
-
-        // Validate the result - ensure it's not just ":"
-        if (
-            abbreviated === ":" ||
-            abbreviated === "" ||
-            abbreviated.startsWith(":::")
-        ) {
-            console.warn(
-                "Invalid abbreviation result:",
-                abbreviated,
-                "from",
-                ipv6
+            // Zero sequence is in the middle
+            const beforeGroups = groups.slice(0, maxSequence.start);
+            const afterGroups = groups.slice(
+                maxSequence.start + maxSequence.length
             );
-            return groups.join(":"); // Return uncompressed if abbreviation failed
+            result = beforeGroups.join(":") + "::" + afterGroups.join(":");
         }
 
-        return abbreviated;
+        return result;
     }
 
     // If no compression possible, just return without leading zeros
@@ -695,31 +697,94 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
 
         const fullNetworkAddress = networkGroups.join(":");
 
-        // Properly abbreviate - ensure trailing zeros become ::
-        let abbreviated = abbreviateIPv6(fullNetworkAddress);
+        // For network addresses, we need to be careful about abbreviation
+        // to preserve the network boundary indication
+        const abbreviatedNetworkAddress = abbreviateIPv6(fullNetworkAddress);
 
-        // Fix specific case where network ends with zeros but doesn't show ::
-        // For example: "2001:db8:1:4d2:" should be "2001:db8:1:4d2::"
-        if (
-            abbreviated.endsWith(":") &&
-            !abbreviated.endsWith("::") &&
-            abbreviated !== ":"
-        ) {
-            abbreviated += ":";
+        // Special handling: if the prefix length doesn't align with group boundaries,
+        // we need to ensure the network boundary is preserved in the representation
+        const groupBoundary = Math.floor(prefix / 16);
+        const bitsInPartialGroup = prefix % 16;
+
+        if (bitsInPartialGroup > 0) {
+            // The prefix crosses a group boundary
+            // We need to ensure the partial group is visible in the representation
+            const cleanGroups = networkGroups.map(
+                (group) => group.replace(/^0+/, "") || "0"
+            );
+
+            // Find the longest sequence of zeros starting from the partial group + 1
+            let maxZeroStart = -1;
+            let maxZeroLength = 0;
+            let currentZeroStart = -1;
+            let currentZeroLength = 0;
+
+            // Only consider compression from the group after the partial group
+            for (let i = groupBoundary + 1; i < cleanGroups.length; i++) {
+                if (cleanGroups[i] === "0") {
+                    if (currentZeroStart === -1) {
+                        currentZeroStart = i;
+                        currentZeroLength = 1;
+                    } else {
+                        currentZeroLength++;
+                    }
+                } else {
+                    if (currentZeroLength > maxZeroLength) {
+                        maxZeroStart = currentZeroStart;
+                        maxZeroLength = currentZeroLength;
+                    }
+                    currentZeroStart = -1;
+                    currentZeroLength = 0;
+                }
+            }
+
+            // Check if the last sequence was the longest
+            if (currentZeroLength > maxZeroLength) {
+                maxZeroStart = currentZeroStart;
+                maxZeroLength = currentZeroLength;
+            }
+
+            // Only compress if we have 2 or more consecutive zeros after the network boundary
+            if (maxZeroLength >= 2 && maxZeroStart > groupBoundary) {
+                const before = cleanGroups.slice(0, maxZeroStart);
+                const after = cleanGroups.slice(maxZeroStart + maxZeroLength);
+
+                if (after.length === 0) {
+                    return before.join(":") + "::";
+                } else {
+                    return before.join(":") + "::" + after.join(":");
+                }
+            }
+
+            // No valid compression after network boundary, return without compression
+            return (
+                cleanGroups.slice(0, groupBoundary + 1).join(":") +
+                (cleanGroups.slice(groupBoundary + 1).every((g) => g === "0")
+                    ? "::"
+                    : ":" + cleanGroups.slice(groupBoundary + 1).join(":"))
+            );
         }
 
-        return abbreviated;
+        // If prefix aligns with group boundary, use normal abbreviation
+        return abbreviatedNetworkAddress;
     } catch (error) {
+        console.error("Error calculating network address:", error);
         return "";
     }
 };
 
 // Helper function to calculate Interface ID (last 64 bits of IPv6 address)
 // Calculate the Interface-Anteil (interface portion) from an IPv6 address
-export const calculateInterfaceId = (ipv6) => {
+export const calculateInterfaceId = (ipv6, prefixLength = 64) => {
     if (!ipv6) return "";
 
     try {
+        // For prefixes >= 65, there's no interface portion (all bits are network/host)
+        // Standard IPv6 has 64-bit interface portion, so only /65 and higher have no interface
+        if (prefixLength >= 65) {
+            return "kein";
+        }
+
         // Expand the IPv6 address first
         const expanded = expandIPv6(ipv6);
         const groups = expanded.split(":");
@@ -727,29 +792,67 @@ export const calculateInterfaceId = (ipv6) => {
         // Get the last 4 groups (64 bits) - the interface portion (Interface-Anteil)
         const interfaceGroups = groups.slice(4);
 
-        // Check if it's all zeros and can be abbreviated to ::
-        if (interfaceGroups.every((group) => group === "0000")) {
+        // Remove leading zeros from each group
+        const cleanedGroups = interfaceGroups.map(
+            (group) => group.replace(/^0+/, "") || "0"
+        );
+
+        // Check if all groups are zero
+        if (cleanedGroups.every((group) => group === "0")) {
             return "::";
         }
 
-        // Check if it ends with zeros and can be abbreviated (e.g., 0000:0000:0000:0001 -> ::1)
-        const nonZeroIndex = interfaceGroups.findIndex(
-            (group) => group !== "0000"
-        );
-        if (nonZeroIndex > 0) {
-            // Can be abbreviated with ::
-            const significantParts = interfaceGroups.slice(nonZeroIndex);
-            const abbreviatedSuffix = significantParts
-                .map((part) => part.replace(/^0+/, "") || "0")
-                .join(":");
-            return "::" + abbreviatedSuffix;
+        // Find the longest sequence of consecutive zero groups for compression
+        let maxZeroStart = -1;
+        let maxZeroLength = 0;
+        let currentZeroStart = -1;
+        let currentZeroLength = 0;
+
+        for (let i = 0; i < cleanedGroups.length; i++) {
+            if (cleanedGroups[i] === "0") {
+                if (currentZeroStart === -1) {
+                    currentZeroStart = i;
+                    currentZeroLength = 1;
+                } else {
+                    currentZeroLength++;
+                }
+            } else {
+                // End of current zero sequence
+                if (currentZeroLength > maxZeroLength) {
+                    maxZeroStart = currentZeroStart;
+                    maxZeroLength = currentZeroLength;
+                }
+                currentZeroStart = -1;
+                currentZeroLength = 0;
+            }
         }
 
-        // Otherwise return the full interface ID, removing leading zeros from each group
-        return interfaceGroups
-            .map((group) => group.replace(/^0+/, "") || "0")
-            .join(":");
+        // Check if the last sequence was the longest
+        if (currentZeroLength > maxZeroLength) {
+            maxZeroStart = currentZeroStart;
+            maxZeroLength = currentZeroLength;
+        }
+
+        // Only compress if we have 2 or more consecutive zeros
+        if (maxZeroLength >= 2) {
+            const before = cleanedGroups.slice(0, maxZeroStart);
+            const after = cleanedGroups.slice(maxZeroStart + maxZeroLength);
+
+            if (before.length === 0 && after.length === 0) {
+                return "::";
+            } else if (before.length === 0) {
+                return "::" + after.join(":");
+            } else if (after.length === 0) {
+                return before.join(":") + "::";
+            } else {
+                return before.join(":") + "::" + after.join(":");
+            }
+        }
+
+        // No compression needed - return the interface groups without leading zeros
+        return cleanedGroups.join(":");
     } catch (error) {
+        console.error("Error calculating interface ID:", error);
         return "";
     }
 };
@@ -764,54 +867,84 @@ export const calculateSubnetId = (ipv6, prefixLength = 64) => {
         const groups = expanded.split(":");
 
         // The subnet portion depends on the prefix length
-        // Standard IPv6 structure: Network(48-64 bits) + Subnet(0-16 bits) + Interface(64 bits)
+        // IPv6 structure: Network + Subnet + Interface (last 64 bits)
+        // Interface is always the last 64 bits (groups 5-8)
+        // Network + Subnet = first 64 bits (groups 1-4)
 
         if (prefixLength >= 64) {
             // For /64 or longer prefixes, there's no subnet portion - it's all network
             return "kein";
-        } else if (prefixLength <= 48) {
-            // For /48 or shorter prefixes, the 4th group (index 3) is typically the subnet
-            const subnetGroup = groups[3] || "0000";
-            return subnetGroup.replace(/^0+/, "") || "0";
-        } else {
-            // For prefixes between /48 and /64, calculate which bits are for subnet
-            // This is more complex, requires proper bit manipulation
-            const subnetGroup = groups[3] || "0000";
+        }
 
-            // Calculate how many bits of the 4th group are for network vs subnet
-            const networkBitsInGroup = Math.max(0, prefixLength - 48);
-            const subnetBitsInGroup = Math.min(16, 16 - networkBitsInGroup);
+        // Calculate how many bits are available for subnet (between network and interface)
+        const interfaceStartBit = 64; // Interface always starts at bit 64
+        const subnetStartBit = prefixLength;
+        const subnetBits = interfaceStartBit - subnetStartBit;
 
-            if (subnetBitsInGroup === 0) {
-                return "0"; // No subnet bits available
+        if (subnetBits <= 0) {
+            return "kein"; // No subnet space available
+        }
+
+        // Determine which groups contain the subnet portion
+        const subnetStartGroup = Math.floor(subnetStartBit / 16);
+        const subnetEndGroup = Math.floor((interfaceStartBit - 1) / 16);
+
+        // Extract subnet groups
+        const subnetGroups = [];
+        for (let i = subnetStartGroup; i <= subnetEndGroup; i++) {
+            if (i < groups.length) {
+                subnetGroups.push(groups[i] || "0000");
+            } else {
+                subnetGroups.push("0000");
             }
+        }
 
-            // Convert 4th group to binary and extract subnet bits
-            const groupValue = parseInt(subnetGroup, 16);
-            const groupBinary = groupValue.toString(2).padStart(16, "0");
+        // For educational purposes, show the complete subnet representation
+        if (subnetGroups.length === 1) {
+            // Single group subnet (e.g., /48 to /64)
+            const group = subnetGroups[0];
 
-            // Extract the subnet bits (after network bits, before interface bits)
-            const subnetBinary = groupBinary.substring(
-                networkBitsInGroup,
-                networkBitsInGroup + subnetBitsInGroup
+            // Check if we need partial group handling
+            const bitsInFirstGroup = subnetStartBit % 16;
+            const bitsInLastGroup = interfaceStartBit % 16;
+
+            if (bitsInFirstGroup === 0 && bitsInLastGroup === 0) {
+                // Complete group
+                return group.toLowerCase();
+            } else {
+                // Partial group - extract only subnet bits
+                const groupValue = parseInt(group, 16);
+                const groupBinary = groupValue.toString(2).padStart(16, "0");
+
+                const startBit = bitsInFirstGroup;
+                const endBit = bitsInLastGroup === 0 ? 16 : bitsInLastGroup;
+
+                const subnetBinary = groupBinary.substring(startBit, endBit);
+                const subnetValue = parseInt(subnetBinary, 2);
+
+                // For subnet portions, show the actual hex value without unnecessary padding
+                // The number of hex digits should reflect the actual number of bits
+                const subnetBits = endBit - startBit;
+                const hexDigits = Math.ceil(subnetBits / 4);
+
+                return subnetValue
+                    .toString(16)
+                    .padStart(hexDigits, "0")
+                    .toLowerCase();
+            }
+        } else {
+            // Multiple group subnet (e.g., /32 has 32-bit subnet = 2 groups)
+            // Return all subnet groups joined with colons
+            const cleanedGroups = subnetGroups.map((group) =>
+                group.toLowerCase()
             );
-
-            // Convert subnet bits back to hex
-            const subnetValue = parseInt(subnetBinary, 2);
-            const subnetHex = subnetValue
-                .toString(16)
-                .padStart(Math.ceil(subnetBitsInGroup / 4), "0");
-
-            // For subnet portions, preserve leading zeros to show the correct hex representation
-            // Don't strip leading zeros like we do for other fields
-            return subnetHex;
+            return cleanedGroups.join(":");
         }
     } catch (error) {
+        console.error("Error calculating subnet ID:", error);
         return "";
     }
-};
-
-// Helper function to calculate possible subnets based on prefix length
+}; // Helper function to calculate possible subnets based on prefix length
 export const calculateIPv6NetworkData = (ipv6, prefix) => {
     if (!ipv6 || !prefix) {
         return {
@@ -823,7 +956,8 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
 
     const addressType = getIPv6AddressType(ipv6);
     const networkAddress = calculateIPv6NetworkAddress(ipv6, prefix);
-    const interfaceId = calculateInterfaceId(ipv6);
+    const prefixLength = parseInt(prefix.replace("/", ""));
+    const interfaceId = calculateInterfaceId(ipv6, prefixLength);
 
     return {
         networkAddress: networkAddress,

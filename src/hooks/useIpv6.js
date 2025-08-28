@@ -65,7 +65,10 @@ export const useIPv6 = () => {
                 fullAddress,
                 parseInt(prefix.replace("/", ""))
             ),
-            interfaceId: calculateInterfaceId(fullAddress),
+            interfaceId: calculateInterfaceId(
+                fullAddress,
+                parseInt(prefix.replace("/", ""))
+            ),
         });
 
         setIpData({
@@ -80,7 +83,10 @@ export const useIPv6 = () => {
                 fullAddress,
                 parseInt(prefix.replace("/", ""))
             ),
-            interfaceId: calculateInterfaceId(fullAddress),
+            interfaceId: calculateInterfaceId(
+                fullAddress,
+                parseInt(prefix.replace("/", ""))
+            ),
         });
 
         setShowAnswers(false);
@@ -206,7 +212,9 @@ export const useIPv6 = () => {
                     }
                     case "subnetId": {
                         // Accept hexadecimal values OR text answers for "no subnet"
-                        const subnetPattern = /^[0-9a-fA-F]{1,4}$/;
+                        // Support both single groups (e.g., "1234") and multi-groups (e.g., "0000:1234")
+                        const subnetPattern =
+                            /^([0-9a-fA-F]{1,4})(:[0-9a-fA-F]{1,4})*$/;
                         const textAnswers = [
                             "kein",
                             "keine",
@@ -222,11 +230,21 @@ export const useIPv6 = () => {
                     }
                     case "interfaceId": {
                         // Accept abbreviated IPv6 interface formats like ::1, ::abcd:1234, etc.
+                        // OR text answers for "no interface" (for /64 or longer prefixes)
                         const interfacePattern =
                             /^(::?[0-9a-fA-F]{0,4}(:[0-9a-fA-F]{0,4})*|([0-9a-fA-F]{1,4}:){0,3}[0-9a-fA-F]{0,4})$/i;
+                        const textAnswers = [
+                            "kein",
+                            "keine",
+                            "keiner",
+                            "none",
+                            "no",
+                            "0",
+                        ];
                         isValid =
                             interfacePattern.test(value) ||
-                            /^[0-9a-fA-F:]+$/.test(value);
+                            /^[0-9a-fA-F:]+$/.test(value) ||
+                            textAnswers.includes(value.toLowerCase().trim());
                         break;
                     }
                     default:
@@ -304,19 +322,36 @@ export const useIPv6 = () => {
                             isCorrect = normalizedUser === normalizedCorrect;
                         }
                     } else {
-                        // For interfaceId, use hex comparison
-                        const normalizeHex = (val) => {
-                            if (!val) return "";
-                            return val
-                                .toString()
-                                .toLowerCase()
-                                .replace(/^0x/, "")
-                                .trim();
-                        };
+                        // For interfaceId, check for "kein" answers first
+                        if (correctValue === "kein") {
+                            // Accept multiple valid German and English responses for "no interface"
+                            const validNoInterfaceAnswers = [
+                                "kein",
+                                "keine",
+                                "keiner",
+                                "none",
+                                "no",
+                                "0",
+                            ];
+                            isCorrect = validNoInterfaceAnswers.includes(
+                                value.toLowerCase().trim()
+                            );
+                        } else {
+                            // For actual interface values, use hex comparison
+                            const normalizeHex = (val) => {
+                                if (!val) return "";
+                                return val
+                                    .toString()
+                                    .toLowerCase()
+                                    .replace(/^0x/, "")
+                                    .trim();
+                            };
 
-                        const normalizedUser = normalizeHex(value);
-                        const normalizedCorrect = normalizeHex(correctValue);
-                        isCorrect = normalizedUser === normalizedCorrect;
+                            const normalizedUser = normalizeHex(value);
+                            const normalizedCorrect =
+                                normalizeHex(correctValue);
+                            isCorrect = normalizedUser === normalizedCorrect;
+                        }
                     }
                 } else {
                     isCorrect =

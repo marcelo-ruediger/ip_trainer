@@ -29,6 +29,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                     value={renderValue("subnetId")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
+                    placeholder="Alle Bits..."
                     title="Der Subnetz-Anteil der Adresse (normalerweise 4. Hextet-Gruppe)"
                     className="subnet-id-input"
                 />
@@ -41,6 +42,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                     value={renderValue("interfaceId")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
+                    placeholder="Abgekürzt..."
                     title="Der Interface-Anteil der Adresse (letzten 64 Bits)"
                     className="interface-id-input"
                 />

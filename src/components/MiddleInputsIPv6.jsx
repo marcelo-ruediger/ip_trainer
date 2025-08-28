@@ -27,6 +27,7 @@ function MiddleInputsIPv6({
                     value={renderValue("networkAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
+                    placeholder="Abgekürzt..."
                     className="network-address-input"
                 />
             </label>
