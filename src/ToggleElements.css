@@ -40,6 +40,8 @@
     font-size: 1.3rem;
     font-weight: 600;
     color: #ffffff;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    letter-spacing: 0.5px;
 }
 
 .close-button {
@@ -76,10 +78,9 @@
     color: #aaaaaa;
     border-left: 3px solid #646cff;
     font-size: 0.9rem;
-}
-
-.address-category {
-    margin-bottom: 20px;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
 }
 
 .category-title {
@@ -89,6 +90,12 @@
     padding-bottom: 6px;
     border-bottom: 1px solid #444444;
     font-weight: 600;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.address-category {
+    margin-bottom: 20px;
 }
 
 .address-item {
@@ -132,12 +139,18 @@
     margin-bottom: 4px;
     color: #cccccc;
     font-size: 0.85rem;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
 }
 
 .range {
     font-size: 0.8rem;
     color: #aaaaaa;
     margin-bottom: 3px;
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", "Monaco", monospace;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
 }
 
 .special-info {
@@ -145,6 +158,9 @@
     color: #aaaaaa;
     font-style: italic;
     margin-top: 3px;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
 }
 
 /* Info badge styles */

@@ -294,9 +294,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         checked={false}
                         onChange={handleSpecialAddressesToggle}
                     />
-                    {ipVersion === "ipv6"
-                        ? "Spezielle IPv6-Adressen anzeigen"
-                        : "Spezielle IPv4-Adressen anzeigen"}
+                    {ipVersion === "ipv6" ? "IPv6 Hinweise" : "IPv4 Hinweise"}
                 </label>
             </div>
             <div className={`hidden ${showImage ? "visible" : "invisible"}`}>
@@ -310,8 +308,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         <div className="popup-header">
                             <h2>
                                 {ipVersion === "ipv6"
-                                    ? "Spezielle IPv6-Adressen"
-                                    : "Spezielle IPv4-Adressen"}
+                                    ? "IPv6 Hinweise"
+                                    : "IPv4 Hinweise"}
                             </h2>
                             <button
                                 className="close-button"
@@ -322,11 +320,119 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         </div>
 
                         <div className="popup-body">
-                            <p className="popup-description">
-                                Diese Adressen haben besondere Eigenschaften und
-                                folgen nicht den standardmäßigen
-                                Subnetting-Regeln:
-                            </p>
+                            {ipVersion === "ipv6" ? (
+                                <>
+                                    {/* IPv6 Introduction Section */}
+                                    <div className="address-category">
+                                        <h3 className="category-title">
+                                            Was ist IPv6?
+                                        </h3>
+                                        <div className="popup-description">
+                                            IPv6 (Internet Protocol Version 6)
+                                            ist der Nachfolger von IPv4. Es
+                                            verwendet <strong>128 Bit</strong>{" "}
+                                            lange Adressen, aufgeteilt in{" "}
+                                            <strong>8 Blöcke</strong>à 16 Bit
+                                            (hexadezimal). IPv6 bietet praktisch
+                                            unendlich viele Adressen und wird
+                                            voraussichtlich IPv4 in den
+                                            kommenden Jahren weitgehend
+                                            ersetzen.
+                                        </div>
+                                    </div>
+
+                                    {/* IPv6 Abbreviation Rules Section */}
+                                    <div className="address-category">
+                                        <h3 className="category-title">
+                                            IPv6 Abkürzungsregeln
+                                        </h3>
+                                        <div className="address-item">
+                                            <div className="address-details">
+                                                <p className="common-use">
+                                                    <strong>
+                                                        1. Führende Nullen
+                                                        weglassen:
+                                                    </strong>
+                                                </p>
+                                                <p className="range">
+                                                    2001:0db8:0000:0042 →
+                                                    2001:db8:0:42
+                                                </p>
+
+                                                <p className="common-use">
+                                                    <strong>
+                                                        2. Längste Null-Sequenz
+                                                        mit "::" ersetzen:
+                                                    </strong>
+                                                </p>
+                                                <p className="range">
+                                                    2001:db8:0:0:0:0:0:1 →
+                                                    2001:db8::1
+                                                </p>
+
+                                                <p className="range">
+                                                    <strong>
+                                                        Bei gleich langen
+                                                        Null-Sequenzen:
+                                                    </strong>{" "}
+                                                    Linkeste ersetzen
+                                                </p>
+
+                                                <p className="special-info">
+                                                    "::" darf nur einmal pro
+                                                    Adresse verwendet werden!
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Special Addresses Introduction */}
+                                    <div className="address-category">
+                                        <h3 className="category-title">
+                                            Spezielle IPv6-Adressen
+                                        </h3>
+                                        <p className="popup-description">
+                                            Diese Adressen haben besondere
+                                            Eigenschaften und folgen nicht den
+                                            standardmäßigen Subnetting-Regeln:
+                                        </p>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    {/* IPv4 Introduction Section */}
+                                    <div className="address-category">
+                                        <h3 className="category-title">
+                                            Was ist IPv4?
+                                        </h3>
+                                        <div className="popup-description">
+                                            IPv4 (Internet Protocol Version 4)
+                                            ist das derzeit am weitesten
+                                            verbreitete Internet-Protokoll. Es
+                                            verwendet <strong>32 Bit</strong>{" "}
+                                            lange Adressen, aufgeteilt in{" "}
+                                            <strong>4 Blöcke</strong> à 8 Bit
+                                            (0-255). Aufgrund der begrenzten
+                                            Anzahl von etwa 4,3 Milliarden
+                                            Adressen wird IPv4 wahrscheinlich
+                                            schrittweise durch IPv6 ersetzt
+                                            werden.
+                                        </div>
+                                    </div>
+
+                                    {/* Special Addresses Introduction */}
+                                    <div className="address-category">
+                                        <h3 className="category-title">
+                                            Spezielle IPv4-Adressen
+                                        </h3>
+                                        <p className="popup-description">
+                                            Diese Adressen haben besondere
+                                            Eigenschaften und folgen nicht den
+                                            standardmäßigen Subnetting-Regeln:
+                                        </p>
+                                    </div>
+                                </>
+                            )}
 
                             {categoryOrder.map((category) => {
                                 const addresses = groupedAddresses[category];
