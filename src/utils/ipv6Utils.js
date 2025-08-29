@@ -1497,7 +1497,7 @@ const specialPurposeAddresses = [
         commonUse: "ULA zentral zugewiesen",
         importance: "Important",
         category: "Private Networks",
-        range: "fc00::/7",
+        range: "fc00::/7 (zentral zugewiesen)",
         specialRules:
             "Zentral zugewiesene private IPv6-Adressen (seltener verwendet)",
     },
@@ -1506,7 +1506,7 @@ const specialPurposeAddresses = [
         commonUse: "ULA lokal generiert - Häufigste private IPv6",
         importance: "Critical",
         category: "Private Networks",
-        range: "fc00::/7",
+        range: "fc00::/7 (lokal generiert)",
         specialRules:
             "Meist verwendete private IPv6-Adressen in Unternehmen, entspricht RFC 1918",
     },

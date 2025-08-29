@@ -90,23 +90,53 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
     const getSimplifiedDescription = (addr) => {
         const address = addr.address;
 
-        if (address === "127.0.0.1") return "Localhost / Loopback";
-        if (address === "169.254.1.1") return "APIPA / Link-lokale Adresse";
-        if (address === "255.255.255.255") return "Eingeschränkter Broadcast";
-        if (address === "0.0.0.0") return "Default Route / Unspezifiziert";
-        if (address === "10.0.0.0")
-            return "Private Klasse A - Große Unternehmen";
-        if (address === "172.16.0.0")
-            return "Private Klasse B - Mittlere Unternehmen";
-        if (address === "192.168.0.0")
-            return "Private Klasse C - Heimnetzwerke";
-        if (address === "1.0.0.0") return "Öffentliche Klasse A Beginn";
-        if (address === "128.0.0.0") return "Öffentliche Klasse B Beginn";
-        if (address === "192.0.0.0") return "Öffentliche Klasse C Beginn";
-        if (address === "224.0.0.0") return "Klasse D Beginn (Multicast)";
-        if (address === "240.0.0.0") return "Klasse E Beginn (Reserviert)";
+        if (ipVersion === "ipv6") {
+            // IPv6 simplified descriptions
+            if (address === "::1") return "IPv6 Localhost / Loopback";
+            if (address === "::")
+                return "Unspezifizierte Adresse / Null-Adresse";
+            if (address === "2001:db8::")
+                return "Dokumentation / Beispieladressen";
+            if (address === "fe80::")
+                return "Link-Local / Automatisch konfiguriert";
+            if (address === "fc00::")
+                return "ULA zentral / Private IPv6 (selten)";
+            if (address === "fd00::")
+                return "ULA lokal / Private IPv6 (häufig)";
+            if (address === "2001::")
+                return "Global Unicast 2xxx / Internet-routbar";
+            if (address === "3000::")
+                return "Global Unicast 3xxx / Internet-routbar";
+            if (address === "ff00::") return "Multicast / Gruppenkommunikation";
+            if (address === "ff02::1")
+                return "Alle IPv6-Knoten / Ersetzt Broadcast";
+            if (address === "ff02::2")
+                return "Alle IPv6-Router / Router-Kommunikation";
+            if (address === "::ffff:0:0")
+                return "IPv4-mapped / Übergangs-Adresse";
 
-        return addr.commonUse;
+            return addr.commonUse;
+        } else {
+            // IPv4 simplified descriptions
+            if (address === "127.0.0.1") return "Localhost / Loopback";
+            if (address === "169.254.1.1") return "APIPA / Link-lokale Adresse";
+            if (address === "255.255.255.255")
+                return "Eingeschränkter Broadcast";
+            if (address === "0.0.0.0") return "Default Route / Unspezifiziert";
+            if (address === "10.0.0.0")
+                return "Private Klasse A - Große Unternehmen";
+            if (address === "172.16.0.0")
+                return "Private Klasse B - Mittlere Unternehmen";
+            if (address === "192.168.0.0")
+                return "Private Klasse C - Heimnetzwerke";
+            if (address === "1.0.0.0") return "Öffentliche Klasse A Beginn";
+            if (address === "128.0.0.0") return "Öffentliche Klasse B Beginn";
+            if (address === "192.0.0.0") return "Öffentliche Klasse C Beginn";
+            if (address === "224.0.0.0") return "Klasse D Beginn (Multicast)";
+            if (address === "240.0.0.0") return "Klasse E Beginn (Reserviert)";
+
+            return addr.commonUse;
+        }
     };
 
     // Function to get info badge for each address
@@ -212,39 +242,39 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             // Unspecified
             if (address === "::")
-                return "Wird während der Adresskonfiguration verwendet";
+                return "Entspricht 0.0.0.0 in IPv4 - wird während der Adresskonfiguration verwendet";
 
             // Documentation
             if (address === "2001:db8::")
-                return "RFC 3849 - Nur für Dokumentation und Beispiele";
+                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele";
 
             // Link-Local
             if (address === "fe80::")
-                return "Automatisch konfiguriert - entspricht APIPA in IPv4";
+                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert - entspricht APIPA in IPv4";
 
             // Private Networks (ULA)
             if (address === "fc00::")
                 return "Zentral zugewiesene private IPv6-Adressen (seltener verwendet)";
             if (address === "fd00::")
-                return "Häufigste private IPv6-Adressen in Unternehmen";
+                return "Lokal generierte private IPv6-Adressen - häufigste Form in Unternehmen";
 
             // Global Unicast
             if (address === "2001::")
-                return "Häufigster Global Unicast Bereich von ISPs zugewiesen";
+                return "Häufigster Global Unicast Bereich - von ISPs zugewiesen";
             if (address === "3000::")
                 return "Weiterer Global Unicast Adressbereich - Internet-routbar";
 
             // Multicast
             if (address === "ff00::")
-                return "Ersetzt IPv4-Broadcast - entspricht 224.0.0.0/4";
+                return "Ersetzt IPv4-Broadcast komplett - entspricht 224.0.0.0/4 in IPv4";
             if (address === "ff02::1")
-                return "Ersetzt IPv4-Broadcast 255.255.255.255";
+                return "Ersetzt IPv4-Broadcast 255.255.255.255 - erreicht alle IPv6-Knoten";
             if (address === "ff02::2")
                 return "Erreicht alle IPv6-Router im lokalen Segment";
 
             // Transition
             if (address === "::ffff:0:0")
-                return "Ermöglicht IPv4-Kompatibilität in IPv6-Umgebungen";
+                return "Ermöglicht IPv4-Kompatibilität in reinen IPv6-Umgebungen";
 
             return null;
         } else {
@@ -332,7 +362,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                             ist der Nachfolger von IPv4. Es
                                             verwendet <strong>128 Bit</strong>{" "}
                                             lange Adressen, aufgeteilt in{" "}
-                                            <strong>8 Blöcke</strong>à 16 Bit
+                                            <strong>8 Blöcke</strong> à 16 Bit
                                             (hexadezimal). IPv6 bietet praktisch
                                             unendlich viele Adressen und wird
                                             voraussichtlich IPv4 in den
@@ -375,7 +405,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                                         Bei gleich langen
                                                         Null-Sequenzen:
                                                     </strong>{" "}
-                                                    Linkeste ersetzen
+                                                    Erste (linkeste) ersetzen
                                                 </p>
 
                                                 <p className="special-info">
@@ -442,7 +472,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                 return (
                                     <div
                                         key={category}
-                                        className="address-category"
+                                        className="address-category subcategory"
                                     >
                                         <h3 className="category-title">
                                             {categoryTranslations[category] ||

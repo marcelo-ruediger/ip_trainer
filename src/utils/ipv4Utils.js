@@ -342,7 +342,7 @@ const specialPurposeAddresses = [
         commonUse: "Class D start (Multicast)",
         importance: "Important",
         category: "Classes D and E",
-        range: "224.0.0.0/4",
+        range: "224.0.0.0 - 239.255.255.255",
         specialRules: "Start of Class D address space - multicast",
     },
     {
@@ -350,7 +350,7 @@ const specialPurposeAddresses = [
         commonUse: "Class E start (Reserved)",
         importance: "Important",
         category: "Classes D and E",
-        range: "240.0.0.0/4",
+        range: "240.0.0.0 - 255.255.255.255",
         specialRules: "Start of Class E - reserved for future use",
     },
 ];
