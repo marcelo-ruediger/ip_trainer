@@ -36,6 +36,11 @@ select {
     margin-top: 0.5rem;
 }
 
+input:focus,
+select:focus {
+    border-color: #646cff;
+}
+
 .long-input {
     min-width: 300px;
 }

@@ -365,6 +365,17 @@ export const useIPv4 = () => {
     };
 
     const handleShowAnswers = () => {
+        // In input mode, once all calculations are complete, don't change field states
+        if (
+            userIsInputting &&
+            ipValid &&
+            (ipData.cidr || ipData.subnetMask) &&
+            ipData.networkId
+        ) {
+            setShowAnswers(true);
+            return; // Keep existing field states
+        }
+
         setUserInput({
             networkId: generated.networkId,
             broadcast: generated.broadcast,
@@ -415,6 +426,16 @@ export const useIPv4 = () => {
     };
 
     const handleCheck = () => {
+        // In input mode, once all calculations are complete, don't perform any validation
+        if (
+            userIsInputting &&
+            ipValid &&
+            (ipData.cidr || ipData.subnetMask) &&
+            ipData.networkId
+        ) {
+            return; // Do nothing - keep existing field states
+        }
+
         resetInputBorders();
 
         const fieldsToCheck = [

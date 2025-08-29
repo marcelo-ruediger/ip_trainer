@@ -313,6 +313,15 @@
     color: #ffffff;
 }
 
+/* Scale only the text content, not the checkbox */
+.image-toggle-container > label .label-text {
+    transition: transform 0.3s ease;
+}
+
+.image-toggle-container > label:hover .label-text {
+    transform: scale(1.05);
+}
+
 /* Hide the default checkbox */
 .image-toggle-container > label > input[type="checkbox"] {
     position: absolute;

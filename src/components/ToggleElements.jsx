@@ -313,9 +313,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         checked={showImage}
                         onChange={onToggle}
                     />
-                    {ipVersion === "ipv6"
-                        ? "Hilfstabelle IPv6"
-                        : "Hilfstabelle IPv4"}
+                    <span className="label-text">
+                        {ipVersion === "ipv6"
+                            ? "Hilfstabelle IPv6"
+                            : "Hilfstabelle IPv4"}
+                    </span>
                 </label>
 
                 <label className="toggle-label">
@@ -324,7 +326,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         checked={false}
                         onChange={handleSpecialAddressesToggle}
                     />
-                    {ipVersion === "ipv6" ? "IPv6 Hinweise" : "IPv4 Hinweise"}
+                    <span className="label-text">
+                        {ipVersion === "ipv6"
+                            ? "IPv6 Hinweise"
+                            : "IPv4 Hinweise"}
+                    </span>
                 </label>
             </div>
             <div className={`hidden ${showImage ? "visible" : "invisible"}`}>
