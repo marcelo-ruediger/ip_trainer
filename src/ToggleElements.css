@@ -668,8 +668,8 @@
     width: 28px;
     height: 28px;
     background: url("./src/images/info.svg") no-repeat center center;
-    background-size: contain;
-    border: 2px solid #888888;
+    background-size: 28px 28px;
+    border: 2px solid transparent;
     border-radius: 50%;
     position: relative;
     transition: all 0.3s ease;
@@ -684,9 +684,11 @@
 /* Info icon hover effects */
 .image-toggle-container > .info-label:hover::before {
     border-color: #646cff;
-    border-width: 3px;
-    background-size: 20px 20px;
-    box-shadow: 0 0 12px rgba(100, 108, 255, 0.4);
+    border-width: 2px;
+    background-size: 24px 24px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(100, 108, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
 }
 
 /* Scale only the text content for info label */
