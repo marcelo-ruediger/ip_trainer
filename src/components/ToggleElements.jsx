@@ -333,8 +333,36 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     </span>
                 </label>
             </div>
-            <div className={`hidden ${showImage ? "visible" : "invisible"}`}>
-                <img src={tableImg} alt="Toggleable" />
+
+            <div
+                className={`ipv6-container ${
+                    showImage ? "visible" : "invisible"
+                }`}
+            >
+                {/* IPv6 Information Header - only show for IPv6 mode and when image is visible */}
+                {ipVersion === "ipv6" && (
+                    <div className="ipv6-info-header">
+                        <div className="ipv6-structure-title">
+                            IPv6-Struktur (128 bits):
+                        </div>
+                        <div className="ipv6-structure-text">
+                            <span className="ipv6-structure-part network-part">
+                                64 Bits Netzwerkanteil (Präfix + Subnetz)
+                            </span>
+                            <span className="ipv6-structure-separator">
+                                {" "}
+                                +{" "}
+                            </span>
+                            <span className="ipv6-structure-part interface-part">
+                                64 Bits Interfaceanteil (Hosts)
+                            </span>
+                        </div>
+                    </div>
+                )}
+
+                <div className="table-image-container">
+                    <img src={tableImg} alt="Toggleable" />
+                </div>
             </div>
 
             {/* Special Addresses Popup */}
