@@ -337,19 +337,98 @@ export const useIPv6 = () => {
                                 value.toLowerCase().trim()
                             );
                         } else {
-                            // For actual interface values, use hex comparison
-                            const normalizeHex = (val) => {
+                            // For actual interface values, compare as IPv6 segments
+                            // Both values should be treated as IPv6 interface parts (last 64 bits)
+                            const normalizeInterfaceId = (val) => {
                                 if (!val) return "";
-                                return val
+                                let normalized = val
                                     .toString()
                                     .toLowerCase()
-                                    .replace(/^0x/, "")
                                     .trim();
+
+                                // If it starts with ::, it's already in abbreviated form
+                                if (normalized.startsWith("::")) {
+                                    return normalized;
+                                }
+
+                                // Split by colons and pad to 4 groups for interface portion
+                                let groups = normalized.split(":");
+
+                                // Pad with zeros to make it 4 groups (64 bits / 16 bits per group)
+                                while (groups.length < 4) {
+                                    groups.unshift("0");
+                                }
+
+                                // Remove leading zeros from each group
+                                groups = groups.map(
+                                    (group) => group.replace(/^0+/, "") || "0"
+                                );
+
+                                // Check if we can abbreviate with ::
+                                // Find longest sequence of consecutive zeros
+                                let maxZeroStart = -1;
+                                let maxZeroLength = 0;
+                                let currentZeroStart = -1;
+                                let currentZeroLength = 0;
+
+                                for (let i = 0; i < groups.length; i++) {
+                                    if (groups[i] === "0") {
+                                        if (currentZeroStart === -1) {
+                                            currentZeroStart = i;
+                                            currentZeroLength = 1;
+                                        } else {
+                                            currentZeroLength++;
+                                        }
+                                    } else {
+                                        if (currentZeroLength > maxZeroLength) {
+                                            maxZeroStart = currentZeroStart;
+                                            maxZeroLength = currentZeroLength;
+                                        }
+                                        currentZeroStart = -1;
+                                        currentZeroLength = 0;
+                                    }
+                                }
+
+                                // Check if the last sequence was the longest
+                                if (currentZeroLength > maxZeroLength) {
+                                    maxZeroStart = currentZeroStart;
+                                    maxZeroLength = currentZeroLength;
+                                }
+
+                                // Compress with :: if we have 2+ consecutive zeros
+                                if (maxZeroLength >= 2) {
+                                    const before = groups.slice(
+                                        0,
+                                        maxZeroStart
+                                    );
+                                    const after = groups.slice(
+                                        maxZeroStart + maxZeroLength
+                                    );
+
+                                    if (
+                                        before.length === 0 &&
+                                        after.length === 0
+                                    ) {
+                                        return "::";
+                                    } else if (before.length === 0) {
+                                        return "::" + after.join(":");
+                                    } else if (after.length === 0) {
+                                        return before.join(":") + "::";
+                                    } else {
+                                        return (
+                                            before.join(":") +
+                                            "::" +
+                                            after.join(":")
+                                        );
+                                    }
+                                }
+
+                                return groups.join(":");
                             };
 
-                            const normalizedUser = normalizeHex(value);
+                            const normalizedUser = normalizeInterfaceId(value);
                             const normalizedCorrect =
-                                normalizeHex(correctValue);
+                                normalizeInterfaceId(correctValue);
                             isCorrect = normalizedUser === normalizedCorrect;
                         }
                     }
