@@ -320,7 +320,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     </span>
                 </label>
 
-                <label className="toggle-label">
+                <label className="toggle-label info-label">
                     <input
                         type="checkbox"
                         checked={false}

@@ -662,6 +662,56 @@
     transform: translateY(-50%) translateX(24px) scale(0.95);
 }
 
+/* Info Icon Checkbox Styles (for Hinweise) */
+.image-toggle-container > .info-label::before {
+    content: "";
+    width: 28px;
+    height: 28px;
+    background: url("./src/images/info.svg") no-repeat center center;
+    background-size: contain;
+    border: 2px solid #888888;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.image-toggle-container > .info-label::after {
+    display: none; /* Remove the toggle ball for info icon */
+}
+
+/* Info icon hover effects */
+.image-toggle-container > .info-label:hover::before {
+    border-color: #646cff;
+    border-width: 3px;
+    background-size: 20px 20px;
+    box-shadow: 0 0 12px rgba(100, 108, 255, 0.4);
+}
+
+/* Scale only the text content for info label */
+.image-toggle-container > .info-label .label-text {
+    transition: transform 0.3s ease;
+}
+
+.image-toggle-container > .info-label:hover .label-text {
+    transform: scale(1.05);
+}
+
+/* Info icon active/clicked effect */
+.image-toggle-container > .info-label:active::before {
+    transform: scale(0.95);
+}
+
+/* Remove toggle-specific styles for info label */
+.image-toggle-container > .info-label > input[type="checkbox"]:checked + *,
+.image-toggle-container > .info-label > input[type="checkbox"]:checked ~ *,
+.image-toggle-container
+    > .info-label:has(input[type="checkbox"]:checked)::before {
+    background: url("./src/images/info.svg") no-repeat center center;
+    background-size: contain;
+}
+
 @media (max-width: 768px) {
     .popup-content {
         width: 95%;
