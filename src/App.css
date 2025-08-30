@@ -42,11 +42,13 @@ select:focus {
 }
 
 .long-input {
-    min-width: 300px;
+    min-width: 280px;
+    max-width: 100%;
 }
 
 .long-input-abbreviation {
-    min-width: 250px;
+    min-width: 230px;
+    max-width: 100%;
 }
 
 .network-address-input,
@@ -95,6 +97,7 @@ button:hover {
 }
 
 main {
+    width: 600px;
     max-width: 600px;
     margin: auto;
 }
@@ -112,7 +115,9 @@ label {
     border: 2px solid #444444;
     border-radius: 6px;
     padding: 2rem;
+    width: 100%;
     max-width: 600px;
+    box-sizing: border-box;
 }
 
 .three-inputs-container {
@@ -200,8 +205,24 @@ footer {
     input {
         margin-left: 1rem;
     }
+    .long-input {
+        min-width: 200px;
+        max-width: calc(100% - 2rem);
+    }
+    .long-input-abbreviation {
+        min-width: 180px;
+        max-width: calc(100% - 2rem);
+    }
+    .network-address-input,
+    .interface-id-input {
+        width: 150px;
+        max-width: calc(100% - 2rem);
+    }
     main {
+        width: 100%;
+        max-width: 600px;
         padding: 1rem;
+        box-sizing: border-box;
     }
     h1 {
         font-size: 2.5rem;
