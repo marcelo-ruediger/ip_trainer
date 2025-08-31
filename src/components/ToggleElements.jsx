@@ -445,6 +445,10 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                                 <p className="special-info">
                                                     "::" darf nur einmal pro
                                                     Adresse verwendet werden!
+                                                    <br />
+                                                    "::" ersetzt mindestens zwei
+                                                    aufeinanderfolgende
+                                                    0000-Blöcke!
                                                 </p>
                                             </div>
                                         </div>
