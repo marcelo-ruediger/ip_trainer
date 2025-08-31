@@ -95,9 +95,11 @@ Access the application at `http://localhost:5173`
 
 ### 🌐 IPv6 System
 
--   **60% IHK Essential**: Core IPv6 addresses every Fachinformatiker must know
--   **40% Educational**: Documentation addresses (2001:db8::), ULA addresses, practical examples
--   **🏢 Prefix Focus**: Business-relevant prefixes (/48, /56, /64) for real-world scenarios
+-   **37% Global Unicast**: Real-world internet addresses (most common in practice)
+-   **21% Documentation**: Documentation addresses (2001:db8::) for learning examples
+-   **21% ULA**: Private IPv6 addresses for enterprise networking scenarios
+-   **21% Link-Local**: Auto-configuration addresses for networking basics
+-   **🎯 Smart Filtering**: Only generates addresses suitable for standard network calculations
 
 ## 🎓 Educational Benefits
 

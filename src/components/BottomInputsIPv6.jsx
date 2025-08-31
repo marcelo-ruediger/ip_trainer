@@ -13,6 +13,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                 >
                     <option value="">Bitte wählen</option>
                     <option value="Global Unicast">Global Unicast</option>
+                    <option value="Documentation">Documentation</option>
                     <option value="ULA">ULA</option>
                     <option value="Link-Local">Link-Local</option>
                 </select>

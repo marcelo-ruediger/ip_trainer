@@ -21,7 +21,7 @@ const ihkEssentialIPv6Addresses = [
     // === DOKUMENTATION - Critical for learning ===
     {
         address: "2001:db8::1",
-        type: "Global Unicast",
+        type: "Documentation",
         commonUse: "Dokumentations-/Beispieladresse",
         importance: "Critical",
         ihkTopic: "IPv6 Adressierung",
@@ -29,7 +29,7 @@ const ihkEssentialIPv6Addresses = [
     },
     {
         address: "2001:db8::",
-        type: "Global Unicast",
+        type: "Documentation",
         commonUse: "Dokumentationsnetz (RFC 3849)",
         importance: "Critical",
         ihkTopic: "IPv6 Adressierung",
@@ -37,7 +37,7 @@ const ihkEssentialIPv6Addresses = [
     },
     {
         address: "2001:db8:1::",
-        type: "Global Unicast",
+        type: "Documentation",
         commonUse: "Dokumentations-Subnetz",
         importance: "Important",
         ihkTopic: "IPv6 Subnetze",
@@ -642,6 +642,11 @@ export const getIPv6AddressType = (ipv6) => {
     // Unspecified
     if (address === "::") return "Unspecified";
 
+    // Documentation addresses (2001:db8::/32)
+    if (address.startsWith("2001:db8:") || address.startsWith("2001:0db8:")) {
+        return "Documentation";
+    }
+
     // Multicast (ff00::/8)
     if (address.startsWith("ff")) return "Multicast";
 
@@ -988,11 +993,17 @@ export const getIPv6EducationalHints = (ipv6, prefix) => {
     switch (addressType) {
         case "Global Unicast":
             hints.hints.push("🌍 Internet-routbare Adresse");
-            if (ipv6.toLowerCase().startsWith("2001:db8:")) {
-                hints.hints.push(
-                    "📚 RFC 3849 Dokumentationsadresse - nur für Beispiele!"
-                );
+            if (prefixNum === 64) {
+                hints.hints.push("🏠 Typische Endnetz-Größe für SLAAC");
             }
+            break;
+
+        case "Documentation":
+            hints.hints.push(
+                "📚 RFC 3849 Dokumentationsadresse - nur für Beispiele!"
+            );
+            hints.hints.push("🎓 Perfekt zum Lernen von IPv6-Konzepten");
+            hints.hints.push("🚫 Niemals im produktiven Internet verwenden");
             if (prefixNum === 64) {
                 hints.hints.push("🏠 Typische Endnetz-Größe für SLAAC");
             }
@@ -1087,11 +1098,7 @@ export const getIPv6AddressInfo = (ipv6) => {
 
     switch (type) {
         case "Global Unicast":
-            if (address.startsWith("2001:db8:")) {
-                description =
-                    "Documentation prefix (RFC 3849) - used in examples";
-                educational = true;
-            } else if (address.startsWith("2001:4860:")) {
+            if (address.startsWith("2001:4860:")) {
                 description = "Google's address space";
                 educational = true;
             } else if (address.startsWith("2606:4700:")) {
@@ -1103,6 +1110,10 @@ export const getIPv6AddressInfo = (ipv6) => {
             } else {
                 description = "Globally routable unicast address";
             }
+            break;
+        case "Documentation":
+            description = "Documentation prefix (RFC 3849) - used in examples";
+            educational = true;
             break;
         case "Link-Local":
             description = "Auto-configured on every interface, not routed";
@@ -1148,9 +1159,15 @@ export const generateIPv6Prefix = (ipv6) => {
 
         case "ULA":
             // For IHK: Focus on practical business scenarios
-            const ulaOptions = ["/48", "/56", "/64"]; // Removed /7 (too abstract for IHK)
-            const ulaWeights = [0.4, 0.3, 0.3];
+            const ulaOptions = ["/48", "/56", "/64"];
+            const ulaWeights = [0.5, 0.25, 0.25]; // Favor /48 for enterprise scenarios
             return weightedRandomChoice(ulaOptions, ulaWeights);
+
+        case "Documentation":
+            // Documentation addresses - focus on most educational prefixes
+            const docOptions = ["/48", "/56", "/64"];
+            const docWeights = [0.2, 0.3, 0.5]; // Heavy focus on /64 for learning
+            return weightedRandomChoice(docOptions, docWeights);
 
         case "Multicast":
             // Multicast range is ff00::/8, but individual addresses are /128
@@ -1164,16 +1181,9 @@ export const generateIPv6Prefix = (ipv6) => {
             }
 
         case "Global Unicast":
-            // Documentation addresses - focus on common educational prefixes
-            if (address.startsWith("2001:db8:")) {
-                const docOptions = ["/32", "/48", "/56", "/64"];
-                const docWeights = [0.1, 0.3, 0.3, 0.3]; // More focus on practical sizes
-                return weightedRandomChoice(docOptions, docWeights);
-            }
-
             // For other Global Unicast - IHK relevant sizes only
-            const globalOptions = ["/32", "/48", "/56", "/64", "/128"];
-            const globalWeights = [0.1, 0.25, 0.25, 0.35, 0.05]; // Heavy focus on /64
+            const globalOptions = ["/32", "/48", "/56", "/64"];
+            const globalWeights = [0.1, 0.3, 0.25, 0.35]; // Practical distribution
             return weightedRandomChoice(globalOptions, globalWeights);
 
         case "Loopback":
@@ -1204,32 +1214,27 @@ const weightedRandomChoice = (options, weights) => {
 // Simplified generation for IHK Fachinformatiker exam focus - calculation suitable only
 export const generateIPv6WithPrefix = () => {
     // Focus only on addresses suitable for network calculations
-    // Distribution based on real-world importance and educational value
+    // Balanced distribution based on real-world importance and educational value
     const addressTypeRandom = Math.random();
 
-    let targetType, targetPrefix, ipv6;
+    let targetPrefix, ipv6;
 
-    if (addressTypeRandom < 0.65) {
-        // 65% - Global Unicast addresses (most common in real world)
-        targetType = "Global Unicast";
+    if (addressTypeRandom < 0.37) {
+        // 37% - Global Unicast addresses (real-world internet addresses)
         targetPrefix = ["/32", "/48", "/56", "/64"][
             Math.floor(Math.random() * 4)
         ];
-
-        // 80% documentation addresses for education, 20% other global unicast
-        if (Math.random() < 0.8) {
-            ipv6 = generateDocumentationIPv6();
-        } else {
-            ipv6 = generateSimpleGlobalUnicast();
-        }
-    } else if (addressTypeRandom < 0.85) {
-        // 20% - ULA addresses (private IPv6, important for enterprise)
-        targetType = "ULA";
+        ipv6 = generateSimpleGlobalUnicast();
+    } else if (addressTypeRandom < 0.58) {
+        // 21% - Documentation addresses (important for learning)
+        targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
+        ipv6 = generateDocumentationIPv6();
+    } else if (addressTypeRandom < 0.79) {
+        // 21% - ULA addresses (private IPv6, important for enterprise)
         targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
         ipv6 = generateSimpleULA();
     } else {
-        // 15% - Link-Local addresses (auto-configuration, networking basics)
-        targetType = "Link-Local";
+        // 21% - Link-Local addresses (auto-configuration, networking basics)
         targetPrefix = "/64"; // Link-Local is always /64
         ipv6 = generateSimpleLinkLocal();
     }
@@ -1237,6 +1242,9 @@ export const generateIPv6WithPrefix = () => {
     // Ensure we always have both full and abbreviated forms
     const fullAddress = expandIPv6(ipv6); // Always expand to full form
     const abbreviatedAddress = abbreviateIPv6(fullAddress); // Create proper abbreviation
+
+    // Determine the actual type of the generated address
+    const actualType = getIPv6AddressType(fullAddress);
 
     // Final validation - ensure we have valid calculation-suitable addresses
     if (
