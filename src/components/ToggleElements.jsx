@@ -100,9 +100,9 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             if (address === "fe80::")
                 return "Link-Local / Automatisch konfiguriert";
             if (address === "fc00::")
-                return "ULA zentral / Private IPv6 (selten)";
+                return "ULA (Unique Local Address) zentral / Private IPv6 (selten)";
             if (address === "fd00::")
-                return "ULA lokal / Private IPv6 (häufig)";
+                return "ULA (Unique Local Address) lokal / Private IPv6 (häufig)";
             if (address === "2001::")
                 return "Global Unicast 2xxx / Internet-routbar";
             if (address === "3000::")
@@ -254,9 +254,9 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             // Private Networks (ULA)
             if (address === "fc00::")
-                return "Zentral zugewiesene private IPv6-Adressen (seltener verwendet)";
+                return "Zentral zugewiesene private IPv6-Adressen (ULA - Unique Local Address, seltener verwendet)";
             if (address === "fd00::")
-                return "Lokal generierte private IPv6-Adressen - häufigste Form in Unternehmen";
+                return "Lokal generierte private IPv6-Adressen (ULA - Unique Local Address) - häufigste Form in Unternehmen";
 
             // Global Unicast
             if (address === "2001::")

@@ -83,7 +83,7 @@ const ihkEssentialIPv6Addresses = [
     // === UNIQUE LOCAL - Private addressing ===
     {
         address: "fd00::1",
-        type: "Unique Local",
+        type: "ULA",
         commonUse: "Private IPv6 Adresse (ULA)",
         importance: "Important",
         ihkTopic: "IPv6 Private Adressen",
@@ -91,7 +91,7 @@ const ihkEssentialIPv6Addresses = [
     },
     {
         address: "fc00::1",
-        type: "Unique Local",
+        type: "ULA",
         commonUse: "ULA Zentral zugewiesen",
         importance: "Moderate",
         ihkTopic: "IPv6 Private Adressen",
@@ -655,9 +655,9 @@ export const getIPv6AddressType = (ipv6) => {
         return "Link-Local";
     }
 
-    // Unique Local (fc00::/7)
+    // Unique Local (fc00::/7) - now returns "ULA"
     if (address.startsWith("fc") || address.startsWith("fd")) {
-        return "Unique Local";
+        return "ULA";
     }
 
     // Global Unicast (everything else, primarily 2000::/3)
@@ -1006,7 +1006,7 @@ export const getIPv6EducationalHints = (ipv6, prefix) => {
             hints.hints.push("🚫 Wird nicht geroutet");
             break;
 
-        case "Unique Local":
+        case "ULA":
             hints.hints.push("🏢 Private IPv6-Adressen (wie RFC 1918 in IPv4)");
             hints.hints.push("🔒 Nicht im Internet routbar");
             if (ipv6.toLowerCase().startsWith("fd")) {
@@ -1108,7 +1108,7 @@ export const getIPv6AddressInfo = (ipv6) => {
             description = "Auto-configured on every interface, not routed";
             educational = true;
             break;
-        case "Unique Local":
+        case "ULA":
             description = "Private address space, similar to RFC 1918 in IPv4";
             educational = true;
             break;
@@ -1146,7 +1146,7 @@ export const generateIPv6Prefix = (ipv6) => {
             // fe80::/10 is the overall range, but individual addresses use /64
             return "/64";
 
-        case "Unique Local":
+        case "ULA":
             // For IHK: Focus on practical business scenarios
             const ulaOptions = ["/48", "/56", "/64"]; // Removed /7 (too abstract for IHK)
             const ulaWeights = [0.4, 0.3, 0.3];
@@ -1204,27 +1204,34 @@ const weightedRandomChoice = (options, weights) => {
 // Simplified generation for IHK Fachinformatiker exam focus - calculation suitable only
 export const generateIPv6WithPrefix = () => {
     // Focus only on addresses suitable for network calculations
+    // Distribution based on real-world importance and educational value
     const addressTypeRandom = Math.random();
 
     let targetType, targetPrefix, ipv6;
 
-    if (addressTypeRandom < 0.2) {
-        // 20% - ULA addresses (private IPv6, good for calculations)
-        targetType = "Unique Local";
-        targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
-        ipv6 = generateSimpleULA();
-    } else if (addressTypeRandom < 0.4) {
-        // 20% - Simple Global Unicast (good for calculations)
+    if (addressTypeRandom < 0.65) {
+        // 65% - Global Unicast addresses (most common in real world)
         targetType = "Global Unicast";
         targetPrefix = ["/32", "/48", "/56", "/64"][
             Math.floor(Math.random() * 4)
         ];
-        ipv6 = generateSimpleGlobalUnicast();
+
+        // 80% documentation addresses for education, 20% other global unicast
+        if (Math.random() < 0.8) {
+            ipv6 = generateDocumentationIPv6();
+        } else {
+            ipv6 = generateSimpleGlobalUnicast();
+        }
+    } else if (addressTypeRandom < 0.85) {
+        // 20% - ULA addresses (private IPv6, important for enterprise)
+        targetType = "ULA";
+        targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
+        ipv6 = generateSimpleULA();
     } else {
-        // 60% - Focus on calculation-suitable addresses from known list and documentation
-        ipv6 = getRandomIPv6();
-        targetPrefix = generateIPv6Prefix(ipv6);
-        targetType = getIPv6AddressType(ipv6);
+        // 15% - Link-Local addresses (auto-configuration, networking basics)
+        targetType = "Link-Local";
+        targetPrefix = "/64"; // Link-Local is always /64
+        ipv6 = generateSimpleLinkLocal();
     }
 
     // Ensure we always have both full and abbreviated forms
@@ -1494,7 +1501,7 @@ const specialPurposeAddresses = [
     // UNIQUE LOCAL - Critical for private networks (equivalent to RFC 1918)
     {
         address: "fc00::",
-        commonUse: "ULA zentral zugewiesen",
+        commonUse: "ULA (Unique Local Address) zentral zugewiesen",
         importance: "Important",
         category: "Private Networks",
         range: "fc00::/7 (zentral zugewiesen)",
@@ -1503,7 +1510,8 @@ const specialPurposeAddresses = [
     },
     {
         address: "fd00::",
-        commonUse: "ULA lokal generiert - Häufigste private IPv6",
+        commonUse:
+            "ULA (Unique Local Address) lokal generiert - Häufigste private IPv6",
         importance: "Critical",
         category: "Private Networks",
         range: "fc00::/7 (lokal generiert)",
