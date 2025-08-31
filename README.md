@@ -46,10 +46,11 @@ Access the application at `http://localhost:5173`
 
 ### 🎨 User Experience
 
--   **🎯 Visual Feedback**: Color-coded validation (green for correct, red for errors)
+-   **🎯 Visual Feedback**: Color-coded validation with detailed results display showing correct/incorrect field counts
 -   **📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
 -   **🌙 Dark Theme**: Professional dark interface with blue accent colors
 -   **🇩🇪 German Localization**: Complete German interface for IHK exam preparation
+-   **📊 Progress Tracking**: Interactive validation results with field-by-field feedback
 
 ## 📋 Training Fields
 
@@ -75,13 +76,14 @@ Access the application at `http://localhost:5173`
 
 1. **📥 Input Method A**: Enter IPv4 address and subnet mask → system calculates network/broadcast/hosts
 2. **🎲 Input Method B**: System generates IPv4 address → you calculate subnet mask and other fields
-3. **✅ Validation**: Check your calculations with "Prüfen" or reveal answers with "Antworten anzeigen"
+3. **✅ Validation**: Check your calculations with "Überprüfen" button for detailed field-by-field results or reveal answers with "Antworten anzeigen"
 
 ### 🌐 IPv6 Mode
 
 1. **🎲 Generate Exercise**: System provides either full or abbreviated IPv6 address with prefix
 2. **📝 Complete Missing Fields**: Fill in the opposite format (full↔abbreviated) and calculate network data
 3. **🔍 Analyze Components**: Determine address type and extract subnet/interface portions
+4. **✅ Smart Validation**: Accepts equivalent IPv6 address formats (e.g., `fd01:8e:0::` = `fd01:8e::`)
 
 ## 🎲 Address Generation Logic
 
@@ -102,8 +104,9 @@ Access the application at `http://localhost:5173`
 -   **🎯 IHK-Aligned Content**: German terminology and exam-relevant scenarios
 -   **🧠 Smart Generation**: Mix of essential "must-know" addresses and realistic examples
 -   **💡 Interactive Learning**: Special address reference popups with color-coded categories
--   **🔄 Flexible Validation**: Accepts multiple valid input formats
--   **👀 Visual Feedback**: Immediate color-coded results
+-   **🔄 Flexible Validation**: Accepts multiple valid input formats and equivalent address representations
+-   **📊 Detailed Feedback**: Field-by-field validation results with correct/incorrect counts
+-   **👀 Visual Feedback**: Immediate color-coded results with professional styling
 -   **✨ Unambiguous Exercises**: Network address is always calculated (never generated) to prevent cases where multiple CIDR values could be technically correct
 
 ## 🛠️ Technology Stack
