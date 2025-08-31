@@ -166,6 +166,7 @@ footer {
     background-size: 400% 400%;
     animation: gradientAnimation 3s ease infinite;
     border: 2px solid #646cff;
+    border-left: 4px solid #646cff;
     border-radius: 12px;
     padding: 0.5rem;
     margin-bottom: 2rem;
@@ -175,7 +176,7 @@ footer {
 
 .instruction-container.input-mode {
     background-color: #e3f2fd; /* Light blue background */
-    border-left: 4px solid #2196f3; /* Blue left border */
+    border-left: 4px solid #646cff; /* Match main border color */
 }
 
 .instruction-container.input-mode-complete {
@@ -185,11 +186,30 @@ footer {
 
 .instruction-container.input-mode .instruction-text,
 .instruction-container.input-mode-complete .instruction-text {
-    color: #1565c0; /* Darker blue text for input mode */
+    color: #cccccc; /* Standardized to #cccccc */
+}
+
+.instruction-container.input-mode .instruction-text strong,
+.instruction-container.input-mode-complete .instruction-text strong {
+    color: #888888; /* Top text in Eingabe Modus */
 }
 
 .instruction-container.input-mode-complete .instruction-text {
-    color: #2e7d32; /* Darker green text for completed mode */
+    color: #cccccc; /* Standardized to #cccccc */
+}
+
+.instruction-container.correct-answers {
+    background-color: #e8f5e8; /* Light green background */
+    border-left: 4px solid #4caf50; /* Green left border */
+}
+
+.instruction-container.correct-answers .instruction-text {
+    color: #cccccc; /* Standardized to #cccccc */
+}
+
+/* Eingabe Modus error state: red left border */
+.instruction-container.input-mode-error {
+    border-left: 4px solid #ff0044; /* Red left border for error */
 }
 
 .instruction-text {
@@ -199,7 +219,85 @@ footer {
 }
 
 .instruction-text strong {
-    color: #646cff;
+    color: #888888;
+}
+
+.calculate-icon {
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(0%)
+        hue-rotate(173deg) brightness(95%) contrast(87%);
+    /* Applies the standard color #cccccc */
+}
+
+.again-icon {
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(0%)
+        hue-rotate(173deg) brightness(95%) contrast(87%);
+    /* Applies the standard color #cccccc */
+}
+
+.keyboard-input-icon {
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(0%)
+        hue-rotate(173deg) brightness(95%) contrast(87%);
+    /* Applies the standard color #cccccc */
+}
+
+.network-node-icon {
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(0%)
+        hue-rotate(173deg) brightness(95%) contrast(87%);
+    /* Applies the standard color #cccccc */
+}
+
+.data-check-icon {
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(0%)
+        hue-rotate(173deg) brightness(95%) contrast(87%);
+    /* Applies the standard color #cccccc */
+}
+
+.correction-icon {
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(0%)
+        hue-rotate(173deg) brightness(95%) contrast(87%);
+    /* Applies the standard color #cccccc */
+}
+
+.check-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%)
+        hue-rotate(346deg) brightness(104%) contrast(97%);
+    /* Green color for correct answers */
+}
+
+.cross-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(8%) sepia(50%) saturate(3207%)
+        hue-rotate(326deg) brightness(119%) contrast(119%);
+    /* Red color for wrong answers */
+}
+
+.field-result {
+    display: inline-block;
+    margin: 0 8px;
+    font-size: 14px;
 }
 
 @keyframes gradientAnimation {
@@ -249,4 +347,59 @@ footer {
     h1 {
         font-size: 2.5rem;
     }
+}
+
+/* Green gradient animation for network brain icon */
+@keyframes greenGradient {
+    0% {
+        filter: brightness(0) saturate(100%) invert(80%) sepia(8%)
+            saturate(284%) hue-rotate(201deg) brightness(99%) contrast(85%);
+    }
+    50% {
+        filter: brightness(0) saturate(100%) invert(64%) sepia(39%)
+            saturate(2783%) hue-rotate(79deg) brightness(119%) contrast(119%);
+    }
+    100% {
+        filter: brightness(0) saturate(100%) invert(80%) sepia(8%)
+            saturate(284%) hue-rotate(201deg) brightness(99%) contrast(85%);
+    }
+}
+
+/* Styling for result lines */
+.result-line-1,
+.result-line-2,
+.result-line-3,
+.result-line-4 {
+    display: block;
+}
+
+.result-line-1 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.result-line-2,
+.result-line-3 {
+    font-size: 1em;
+    margin-bottom: 0.25rem;
+}
+
+.result-line-4 {
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.field-result-inline {
+    margin-right: 1rem;
+}
+
+/* Separate sizing for text and emojis in field results */
+.field-result-inline span:first-child {
+    font-size: 1em; /* Text size */
+}
+
+.field-result-inline span:last-child {
+    font-size: 0.85em; /* Emoji size */
 }

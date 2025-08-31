@@ -20,7 +20,7 @@ function MiddleInputs({
                 />
             </label>
             <label>
-                Broadcast:
+                Broadcastadresse:
                 <br className="responsive-break" />
                 <input
                     id="broadcast"

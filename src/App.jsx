@@ -67,6 +67,11 @@ function App() {
                             isInputMode={ipv4Logic.userIsInputting}
                             isValidIp={ipv4Logic.ipValid}
                             hasInputStarted={ipv4Logic.hasInputStarted}
+                            showAnswers={ipv4Logic.showAnswers}
+                            cidrValid={ipv4Logic.cidrValid}
+                            subnetMaskValid={ipv4Logic.subnetMaskValid}
+                            checkResults={ipv4Logic.checkResults}
+                            showCheckResults={ipv4Logic.showCheckResults}
                         />
                         <TopInputs
                             ipData={ipv4Logic.ipData}
@@ -103,6 +108,9 @@ function App() {
                             ipVersion="ipv6"
                             ipData={ipv6Logic.ipData}
                             mode={ipv6Logic.mode}
+                            showAnswers={ipv6Logic.showAnswers}
+                            checkResults={ipv6Logic.checkResults}
+                            showCheckResults={ipv6Logic.showCheckResults}
                         />
                         <TopInputsIPv6
                             ipData={ipv6Logic.ipData}
@@ -135,6 +143,18 @@ function App() {
                     ipVersion === "ipv4"
                         ? ipv4Logic.handleCheck
                         : ipv6Logic.handleCheck // Updated to include IPv6 functionality
+                }
+                attention={
+                    ipVersion === "ipv4"
+                        ? ipv4Logic.bottomButtonsAttention
+                        : ipv6Logic.bottomButtonsAttention
+                }
+                disabled={
+                    ipVersion === "ipv4"
+                        ? // Disable if no generated data OR in Eingabe Modus
+                          !ipv4Logic.ipData.ip || ipv4Logic.userIsInputting
+                        : // Disable if no generated IPv6 data
+                          !ipv6Logic.ipData.ipv6
                 }
             />
             <Footer />

@@ -38,10 +38,16 @@ export const useIPv6 = () => {
         fullAddress: "",
         abbreviatedAddress: "",
     });
+    const [checkResults, setCheckResults] = useState([]);
+    const [showCheckResults, setShowCheckResults] = useState(false);
+    const [bottomButtonsAttention, setBottomButtonsAttention] = useState(false);
 
     const handleStart = () => {
         setAttention(false);
         resetInputBorders();
+        setCheckResults([]);
+        setShowCheckResults(false);
+        setBottomButtonsAttention(false);
 
         const generationResult = generateIPv6WithPrefix();
         const { ipv6, prefix, abbreviated, networkData } = generationResult;
@@ -105,9 +111,19 @@ export const useIPv6 = () => {
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setUserInput((prev) => ({ ...prev, [id]: value }));
+
+        // Set bottom buttons attention when user starts inputting (but not when answers are shown)
+        if (!showAnswers && ipData.ipv6 && value.trim() !== "") {
+            setBottomButtonsAttention(true);
+        }
     };
 
     const handleShowAnswers = () => {
+        // Don't execute if no IPv6 data is generated
+        if (!ipData.ipv6) {
+            return;
+        }
+
         setIpData((prev) => ({
             ...prev,
             fullAddress: generated.fullAddress,
@@ -116,6 +132,10 @@ export const useIPv6 = () => {
             interfaceId: generated.interfaceId,
         }));
         setShowAnswers(true);
+        setAttention(true); // Highlight generate buttons
+        setCheckResults([]);
+        setShowCheckResults(false);
+        setBottomButtonsAttention(false);
 
         const ids = [
             "fullAddress",
@@ -149,7 +169,13 @@ export const useIPv6 = () => {
     };
 
     const handleCheck = () => {
+        // Don't execute if no IPv6 data is generated
+        if (!ipData.ipv6) {
+            return;
+        }
+
         resetInputBorders();
+        setShowCheckResults(false); // Reset check results display
 
         const fieldsToCheck = [
             "fullAddress",
@@ -160,6 +186,8 @@ export const useIPv6 = () => {
             "subnetId",
             "interfaceId",
         ];
+
+        const results = [];
 
         fieldsToCheck.forEach((fieldId) => {
             // Identify generated/provided fields that should keep attention class
@@ -187,6 +215,11 @@ export const useIPv6 = () => {
                     inputElement.classList.remove("correct");
                     inputElement.classList.add("wrong");
                 }
+                results.push({
+                    field: fieldId,
+                    isCorrect: false,
+                    value: value || "",
+                });
                 return;
             }
 
@@ -196,7 +229,8 @@ export const useIPv6 = () => {
             try {
                 switch (fieldId) {
                     case "fullAddress":
-                    case "abbreviatedAddress": {
+                    case "abbreviatedAddress":
+                    case "networkAddress": {
                         // Basic IPv6 format validation
                         const ipv6Pattern =
                             /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$|^::$|^([0-9a-fA-F]{0,4}:){1,7}:$|^:([0-9a-fA-F]{0,4}:){1,7}$/;
@@ -432,6 +466,13 @@ export const useIPv6 = () => {
                             isCorrect = normalizedUser === normalizedCorrect;
                         }
                     }
+                } else if (fieldId === "networkAddress") {
+                    // Special comparison for IPv6 network addresses - normalize both addresses
+                    const userExpanded = expandIPv6(value);
+                    const correctExpanded = expandIPv6(correctValue);
+                    isCorrect =
+                        userExpanded.toLowerCase() ===
+                        correctExpanded.toLowerCase();
                 } else {
                     isCorrect =
                         value.toLowerCase() === correctValue.toLowerCase();
@@ -442,14 +483,30 @@ export const useIPv6 = () => {
                     inputElement.classList.remove("correct", "wrong");
                     inputElement.classList.add(isCorrect ? "correct" : "wrong");
                 }
+
+                results.push({ field: fieldId, isCorrect, value });
             } catch (error) {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
                     inputElement.classList.remove("correct");
                     inputElement.classList.add("wrong");
                 }
+                results.push({ field: fieldId, isCorrect: false, value });
             }
         });
+
+        // Only show check results if we have any results from user-filled fields
+        if (results.length > 0) {
+            setCheckResults(results);
+            setShowCheckResults(true);
+            setBottomButtonsAttention(false); // Remove attention after check
+
+            // If all answers are correct, give attention to top buttons
+            const allCorrect = results.every((result) => result.isCorrect);
+            if (allCorrect) {
+                setAttention(true);
+            }
+        }
     };
 
     const renderValue = (id) => {
@@ -468,6 +525,9 @@ export const useIPv6 = () => {
         attention,
         mode,
         generated,
+        checkResults,
+        showCheckResults,
+        bottomButtonsAttention,
         // Functions
         handleStart,
         handleInputChange,

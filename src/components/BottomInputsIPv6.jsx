@@ -2,7 +2,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
     return (
         <div className="default-container">
             <label>
-                Typ:
+                Adresstyp:
                 <br className="responsive-break" />
                 <select
                     id="type"

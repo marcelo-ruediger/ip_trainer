@@ -38,12 +38,18 @@ export const useIPv4 = () => {
     const [userIsInputting, setUserIsInputting] = useState(false);
     const [generatedField, setGeneratedField] = useState("");
     const [hasInputStarted, setHasInputStarted] = useState(false);
+    const [checkResults, setCheckResults] = useState([]);
+    const [showCheckResults, setShowCheckResults] = useState(false);
+    const [bottomButtonsAttention, setBottomButtonsAttention] = useState(false);
 
     const handleIpInput = (e) => {
         resetInputBorders();
         setUserIsInputting(true);
         setHasInputStarted(true);
         setShowAnswers(false);
+        setCheckResults([]);
+        setShowCheckResults(false);
+        setBottomButtonsAttention(false);
         setGeneratedField(null); // ← Make sure this is being set to null!
 
         setUserInput({
@@ -71,7 +77,7 @@ export const useIPv4 = () => {
             ipClass: "",
             usableIps: "",
         });
-        setAttention(true);
+        setAttention(false);
 
         setCidrValid(null);
         setSubnetMaskValid(null);
@@ -218,7 +224,7 @@ export const useIPv4 = () => {
                 subnetMask: "",
             });
 
-            setAttention(false);
+            setAttention(true);
 
             // Mark generated fields as correct immediately
             setTimeout(() => {
@@ -273,6 +279,9 @@ export const useIPv4 = () => {
         setUserIsInputting(false);
         setHasInputStarted(false);
         setShowAnswers(false);
+        setCheckResults([]);
+        setShowCheckResults(false);
+        setBottomButtonsAttention(false);
 
         let ip, cidr, subnetMask, data, randomField;
         let attempts = 0;
@@ -362,18 +371,32 @@ export const useIPv4 = () => {
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setUserInput((prev) => ({ ...prev, [id]: value }));
+
+        // Set bottom buttons attention when user starts inputting in practice mode (not input mode and not when answers are shown)
+        if (
+            !userIsInputting &&
+            !showAnswers &&
+            ipData.ip &&
+            value.trim() !== ""
+        ) {
+            setBottomButtonsAttention(true);
+        }
     };
 
     const handleShowAnswers = () => {
-        // In input mode, once all calculations are complete, don't change field states
+        // Don't execute if no IP data is generated
+        if (!ipData.ip) {
+            return;
+        }
+
+        // In input mode, once all calculations are complete, don't show answers
         if (
             userIsInputting &&
             ipValid &&
             (ipData.cidr || ipData.subnetMask) &&
             ipData.networkId
         ) {
-            setShowAnswers(true);
-            return; // Keep existing field states
+            return; // Do nothing - keep existing field states and don't change showAnswers
         }
 
         setUserInput({
@@ -385,6 +408,10 @@ export const useIPv4 = () => {
             subnetMask: generated.subnetMask,
         });
         setShowAnswers(true);
+        setAttention(true); // Highlight generate buttons
+        setCheckResults([]);
+        setShowCheckResults(false);
+        setBottomButtonsAttention(false);
 
         const ids = [
             "networkId",
@@ -426,6 +453,11 @@ export const useIPv4 = () => {
     };
 
     const handleCheck = () => {
+        // Don't execute if no IP data is generated
+        if (!ipData.ip) {
+            return;
+        }
+
         // In input mode, once all calculations are complete, don't perform any validation
         if (
             userIsInputting &&
@@ -437,6 +469,7 @@ export const useIPv4 = () => {
         }
 
         resetInputBorders();
+        setShowCheckResults(false); // Reset check results display
 
         const fieldsToCheck = [
             "networkId",
@@ -446,6 +479,8 @@ export const useIPv4 = () => {
             "cidr",
             "subnetMask",
         ];
+
+        const results = [];
 
         fieldsToCheck.forEach((fieldId) => {
             const displayedValue = renderValue(fieldId);
@@ -471,6 +506,11 @@ export const useIPv4 = () => {
                     inputElement.classList.remove("correct");
                     inputElement.classList.add("wrong");
                 }
+                results.push({
+                    field: fieldId,
+                    isCorrect: false,
+                    value: value || "",
+                });
                 return;
             }
 
@@ -620,14 +660,30 @@ export const useIPv4 = () => {
                     inputElement.classList.remove("correct", "wrong");
                     inputElement.classList.add(isCorrect ? "correct" : "wrong");
                 }
+
+                results.push({ field: fieldId, isCorrect, value });
             } catch (error) {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
                     inputElement.classList.remove("correct");
                     inputElement.classList.add("wrong");
                 }
+                results.push({ field: fieldId, isCorrect: false, value });
             }
         });
+
+        // Only show check results if we have any results from user-filled fields
+        if (results.length > 0) {
+            setCheckResults(results);
+            setShowCheckResults(true);
+            setBottomButtonsAttention(false); // Remove attention after check
+
+            // If all answers are correct, give attention to top buttons
+            const allCorrect = results.every((result) => result.isCorrect);
+            if (allCorrect) {
+                setAttention(true);
+            }
+        }
     };
 
     return {
@@ -643,6 +699,9 @@ export const useIPv4 = () => {
         generated,
         userIsInputting,
         hasInputStarted,
+        checkResults,
+        showCheckResults,
+        bottomButtonsAttention,
         // Functions
         handleIpInput,
         handleCidrOrMaskInput,
