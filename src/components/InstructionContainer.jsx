@@ -120,6 +120,17 @@ function InstructionContainer({
         const totalCount = checkResults.length;
         const allCorrect = correctCount === totalCount;
 
+        // Check if specific IPv6 fields are wrong for showing the hint
+        const showIPv6Hint =
+            ipVersion === "ipv6" &&
+            checkResults.some(
+                (result) =>
+                    !result.isCorrect &&
+                    (result.field === "subnetId" ||
+                        result.field === "networkAddress" ||
+                        result.field === "interfaceId")
+            );
+
         // Calculate border color based on correctness percentage
         const percentage = totalCount > 0 ? correctCount / totalCount : 0;
         let borderColor;
@@ -289,6 +300,30 @@ function InstructionContainer({
                             </>
                         )}
                     </div>
+
+                    {/* IPv6 hint message - show only if specific fields are wrong */}
+                    {showIPv6Hint && (
+                        <div
+                            className="ipv6-hint"
+                            style={{
+                                fontSize: "0.85em",
+                                color: "#888888",
+                                marginTop: "1rem",
+                                textAlign: "center",
+                                fontStyle: "italic",
+                                lineHeight: "1.4",
+                            }}
+                        >
+                            <div>
+                                ⚠️ Kürzeste gültige Abkürzung für Netzadresse
+                                und Interfaceanteil ("kein" möglich) nutzen
+                            </div>
+                            <div>
+                                ⚠️ Subnetzanteil alle Bits eingeben ("kein"
+                                möglich)
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -326,6 +361,26 @@ function InstructionContainer({
                         alt="calculate"
                         className="calculate-icon"
                     />
+                    {/* IPv6 hint message */}
+                    <div
+                        className="ipv6-hint"
+                        style={{
+                            fontSize: "0.85em",
+                            color: "#888888",
+                            marginTop: "1rem",
+                            textAlign: "center",
+                            fontStyle: "italic",
+                            lineHeight: "1.4",
+                        }}
+                    >
+                        <div>
+                            ⚠️ Kürzeste gültige Abkürzung für Netzadresse und
+                            Interfaceanteil ("kein" möglich) nutzen
+                        </div>
+                        <div>
+                            ⚠️ Subnetzanteil alle Bits eingeben ("kein" möglich)
+                        </div>
+                    </div>
                 </div>
             </div>
         );

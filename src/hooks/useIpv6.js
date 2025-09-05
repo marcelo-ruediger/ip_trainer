@@ -299,12 +299,9 @@ export const useIPv6 = () => {
 
                 // Special comparison for IPv6 addresses
                 if (fieldId === "fullAddress") {
-                    // Compare expanded versions
-                    const userExpanded = expandIPv6(value);
-                    const correctExpanded = expandIPv6(correctValue);
-                    isCorrect =
-                        userExpanded.toLowerCase() ===
-                        correctExpanded.toLowerCase();
+                    // For full address, require exact match to the full format (no abbreviation allowed)
+                    // The correct value should already be in full format from generation
+                    isCorrect = value.toLowerCase() === correctValue.toLowerCase();
                 } else if (fieldId === "abbreviatedAddress") {
                     // For abbreviated address, require EXACT match to the properly abbreviated form
                     // Do not accept full addresses or other abbreviations
