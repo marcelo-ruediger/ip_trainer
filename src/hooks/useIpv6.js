@@ -306,25 +306,17 @@ export const useIPv6 = () => {
                         userExpanded.toLowerCase() ===
                         correctExpanded.toLowerCase();
                 } else if (fieldId === "abbreviatedAddress") {
-                    // Compare both as expanded versions (since there can be multiple valid abbreviations)
-                    const userExpanded = expandIPv6(value);
-                    const correctExpanded = expandIPv6(correctValue);
-                    isCorrect =
-                        userExpanded.toLowerCase() ===
-                        correctExpanded.toLowerCase();
+                    // For abbreviated address, require EXACT match to the properly abbreviated form
+                    // Do not accept full addresses or other abbreviations
+                    isCorrect = value.toLowerCase() === correctValue.toLowerCase();
+                } else if (fieldId === "networkAddress") {
+                    // For network address, also require exact match to the properly abbreviated form
+                    isCorrect = value.toLowerCase() === correctValue.toLowerCase();
                 } else if (
                     fieldId === "subnetId" ||
                     fieldId === "interfaceId"
                 ) {
                     if (fieldId === "subnetId") {
-                        // Debug logging to help troubleshoot
-                        console.log("Debug Subnetzanteil validation:", {
-                            fieldId,
-                            userInput: value,
-                            correctValue,
-                            userInputLower: value.toLowerCase().trim(),
-                        });
-
                         // Check if the correct answer is "kein" (no subnet for /64 or longer)
                         if (correctValue === "kein") {
                             // Accept multiple valid German and English responses for "no subnet"
@@ -340,22 +332,10 @@ export const useIPv6 = () => {
                                 value.toLowerCase().trim()
                             );
                         } else {
-                            // For actual hex subnet values, normalize and compare
-                            const normalizeHex = (val) => {
-                                if (!val) return "";
-                                return val
-                                    .toString()
-                                    .toLowerCase()
-                                    .replace(/^0x/, "")
-                                    .trim();
-                            };
-
-                            const normalizedUser = normalizeHex(value);
-                            const normalizedCorrect =
-                                normalizeHex(correctValue);
-                            isCorrect = normalizedUser === normalizedCorrect;
+                            // For actual hex subnet values, require exact match
+                            isCorrect = value.toLowerCase() === correctValue.toLowerCase();
                         }
-                    } else {
+                    } else if (fieldId === "interfaceId") {
                         // For interfaceId, check for "kein" answers first
                         if (correctValue === "kein") {
                             // Accept multiple valid German and English responses for "no interface"
@@ -371,108 +351,10 @@ export const useIPv6 = () => {
                                 value.toLowerCase().trim()
                             );
                         } else {
-                            // For actual interface values, compare as IPv6 segments
-                            // Both values should be treated as IPv6 interface parts (last 64 bits)
-                            const normalizeInterfaceId = (val) => {
-                                if (!val) return "";
-                                let normalized = val
-                                    .toString()
-                                    .toLowerCase()
-                                    .trim();
-
-                                // If it starts with ::, it's already in abbreviated form
-                                if (normalized.startsWith("::")) {
-                                    return normalized;
-                                }
-
-                                // Split by colons and pad to 4 groups for interface portion
-                                let groups = normalized.split(":");
-
-                                // Pad with zeros to make it 4 groups (64 bits / 16 bits per group)
-                                while (groups.length < 4) {
-                                    groups.unshift("0");
-                                }
-
-                                // Remove leading zeros from each group
-                                groups = groups.map(
-                                    (group) => group.replace(/^0+/, "") || "0"
-                                );
-
-                                // Check if we can abbreviate with ::
-                                // Find longest sequence of consecutive zeros
-                                let maxZeroStart = -1;
-                                let maxZeroLength = 0;
-                                let currentZeroStart = -1;
-                                let currentZeroLength = 0;
-
-                                for (let i = 0; i < groups.length; i++) {
-                                    if (groups[i] === "0") {
-                                        if (currentZeroStart === -1) {
-                                            currentZeroStart = i;
-                                            currentZeroLength = 1;
-                                        } else {
-                                            currentZeroLength++;
-                                        }
-                                    } else {
-                                        if (currentZeroLength > maxZeroLength) {
-                                            maxZeroStart = currentZeroStart;
-                                            maxZeroLength = currentZeroLength;
-                                        }
-                                        currentZeroStart = -1;
-                                        currentZeroLength = 0;
-                                    }
-                                }
-
-                                // Check if the last sequence was the longest
-                                if (currentZeroLength > maxZeroLength) {
-                                    maxZeroStart = currentZeroStart;
-                                    maxZeroLength = currentZeroLength;
-                                }
-
-                                // Compress with :: if we have 2+ consecutive zeros
-                                if (maxZeroLength >= 2) {
-                                    const before = groups.slice(
-                                        0,
-                                        maxZeroStart
-                                    );
-                                    const after = groups.slice(
-                                        maxZeroStart + maxZeroLength
-                                    );
-
-                                    if (
-                                        before.length === 0 &&
-                                        after.length === 0
-                                    ) {
-                                        return "::";
-                                    } else if (before.length === 0) {
-                                        return "::" + after.join(":");
-                                    } else if (after.length === 0) {
-                                        return before.join(":") + "::";
-                                    } else {
-                                        return (
-                                            before.join(":") +
-                                            "::" +
-                                            after.join(":")
-                                        );
-                                    }
-                                }
-
-                                return groups.join(":");
-                            };
-
-                            const normalizedUser = normalizeInterfaceId(value);
-                            const normalizedCorrect =
-                                normalizeInterfaceId(correctValue);
-                            isCorrect = normalizedUser === normalizedCorrect;
+                            // For actual interface values, require exact match to the expected abbreviated form
+                            isCorrect = value.toLowerCase() === correctValue.toLowerCase();
                         }
                     }
-                } else if (fieldId === "networkAddress") {
-                    // Special comparison for IPv6 network addresses - normalize both addresses
-                    const userExpanded = expandIPv6(value);
-                    const correctExpanded = expandIPv6(correctValue);
-                    isCorrect =
-                        userExpanded.toLowerCase() ===
-                        correctExpanded.toLowerCase();
                 } else {
                     isCorrect =
                         value.toLowerCase() === correctValue.toLowerCase();
