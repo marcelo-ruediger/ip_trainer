@@ -47,7 +47,8 @@ Access the application at `http://localhost:5173`
 ### 🎨 User Experience
 
 -   **🎯 Visual Feedback**: Color-coded validation with detailed results display showing correct/incorrect field counts
--   **📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
+-   **� Empty Field Detection**: Gray highlighting for unfilled fields during validation checks
+-   **�📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
 -   **🌙 Dark Theme**: Professional dark interface with blue accent colors
 -   **🇩🇪 German Localization**: Complete German interface for IHK exam preparation
 -   **📊 Progress Tracking**: Interactive validation results with field-by-field feedback

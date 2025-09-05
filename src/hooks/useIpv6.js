@@ -164,10 +164,10 @@ export const useIPv6 = () => {
                         mode === "abbreviatedAddress");
 
                 if (isGeneratedField) {
-                    input.classList.remove("correct", "wrong");
+                    input.classList.remove("correct", "wrong", "empty");
                     input.classList.add("attention");
                 } else {
-                    input.classList.remove("wrong");
+                    input.classList.remove("wrong", "empty");
                     input.classList.add("correct");
                 }
             }
@@ -206,7 +206,7 @@ export const useIPv6 = () => {
             if (isGeneratedField) {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
-                    inputElement.classList.remove("correct", "wrong");
+                    inputElement.classList.remove("correct", "wrong", "empty");
                     inputElement.classList.add("attention");
                 }
                 return;
@@ -218,12 +218,13 @@ export const useIPv6 = () => {
             if (!value || value === "") {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
-                    inputElement.classList.remove("correct");
-                    inputElement.classList.add("wrong");
+                    inputElement.classList.remove("correct", "wrong");
+                    inputElement.classList.add("empty");
                 }
                 results.push({
                     field: fieldId,
                     isCorrect: false,
+                    isEmpty: true,
                     value: value || "",
                 });
                 return;
@@ -434,7 +435,7 @@ export const useIPv6 = () => {
 
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
-                    inputElement.classList.remove("correct", "wrong");
+                    inputElement.classList.remove("correct", "wrong", "empty");
                     inputElement.classList.add(isCorrect ? "correct" : "wrong");
                 }
 
@@ -442,7 +443,7 @@ export const useIPv6 = () => {
             } catch (error) {
                 const inputElement = document.getElementById(fieldId);
                 if (inputElement) {
-                    inputElement.classList.remove("correct");
+                    inputElement.classList.remove("correct", "empty");
                     inputElement.classList.add("wrong");
                 }
                 results.push({ field: fieldId, isCorrect: false, value });

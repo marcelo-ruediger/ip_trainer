@@ -75,6 +75,11 @@ input.wrong {
     box-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044;
 }
 
+input.empty {
+    border-color: #888888;
+    box-shadow: 0 0 10px #888888, 0 0 20px #888888;
+}
+
 select.correct {
     border-color: #00ff88;
     box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
@@ -83,6 +88,11 @@ select.correct {
 select.wrong {
     border-color: #ff0044;
     box-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044;
+}
+
+select.empty {
+    border-color: #888888;
+    box-shadow: 0 0 10px #888888, 0 0 20px #888888;
 }
 
 /* Fix for disabled select elements */
@@ -104,6 +114,14 @@ select:disabled.wrong {
     color: #cccccc !important;
     border-color: #ff0044;
     box-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #cccccc !important;
+}
+
+select:disabled.empty {
+    color: #cccccc !important;
+    border-color: #888888;
+    box-shadow: 0 0 10px #888888, 0 0 20px #888888;
     opacity: 1 !important;
     -webkit-text-fill-color: #cccccc !important;
 }

@@ -986,7 +986,7 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
 
 export const resetInputBorders = () => {
     document.querySelectorAll("input").forEach((input) => {
-        input.classList.remove("correct", "wrong");
+        input.classList.remove("correct", "wrong", "empty");
     });
 };
 

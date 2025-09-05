@@ -117,7 +117,11 @@ function InstructionContainer({
         const correctCount = checkResults.filter(
             (result) => result.isCorrect
         ).length;
+        const emptyCount = checkResults.filter(
+            (result) => result.isEmpty
+        ).length;
         const totalCount = checkResults.length;
+        const wrongCount = totalCount - correctCount - emptyCount;
         const allCorrect = correctCount === totalCount;
 
         // Check if specific IPv6 fields are wrong for showing the hint
@@ -158,7 +162,6 @@ function InstructionContainer({
         // Split results into groups of 3 and 2
         const firstGroup = checkResults.slice(0, 3);
         const secondGroup = checkResults.slice(3, 5);
-        const wrongCount = totalCount - correctCount;
 
         return (
             <div
@@ -184,6 +187,21 @@ function InstructionContainer({
                         <span style={{ color: "#888888", margin: "0 0.3rem" }}>
                             /
                         </span>
+                        {emptyCount > 0 && (
+                            <>
+                                <span style={{ color: "#888888" }}>
+                                    {emptyCount} Leer
+                                </span>
+                                <span
+                                    style={{
+                                        color: "#888888",
+                                        margin: "0 0.3rem",
+                                    }}
+                                >
+                                    /
+                                </span>
+                            </>
+                        )}
                         <span style={{ color: "#ff0044" }}>
                             {wrongCount} Falsch
                         </span>
@@ -219,7 +237,15 @@ function InstructionContainer({
                                     {getFieldDisplayName(result.field)}
                                 </span>
                                 <span style={{ fontSize: "0.85em" }}>
-                                    {result.isCorrect ? "✅" : "❌"}
+                                    {result.isCorrect ? (
+                                        "✅"
+                                    ) : result.isEmpty ? (
+                                        <span style={{ color: "#cccccc" }}>
+                                            ➖
+                                        </span>
+                                    ) : (
+                                        "❌"
+                                    )}
                                 </span>
                             </span>
                         ))}
@@ -245,7 +271,15 @@ function InstructionContainer({
                                         {getFieldDisplayName(result.field)}
                                     </span>
                                     <span style={{ fontSize: "0.85em" }}>
-                                        {result.isCorrect ? "✅" : "❌"}
+                                        {result.isCorrect ? (
+                                            "✅"
+                                        ) : result.isEmpty ? (
+                                            <span style={{ color: "#cccccc" }}>
+                                                ➖
+                                            </span>
+                                        ) : (
+                                            "❌"
+                                        )}
                                     </span>
                                 </span>
                             ))}
