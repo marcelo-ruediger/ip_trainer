@@ -54,6 +54,12 @@ export const useIPv6 = () => {
 
         console.log("Generation result:", generationResult); // Debug log
         console.log("Network data:", networkData); // Debug log
+        console.log("Generated address type:", networkData.type); // Debug log
+        console.log("Generated prefix:", prefix); // Debug log
+        console.log(
+            "Network address from networkData:",
+            networkData.networkAddress
+        ); // Debug log
 
         // Randomly choose which field to show (full or abbreviated)
         const newMode =
@@ -206,7 +212,7 @@ export const useIPv6 = () => {
                 return;
             }
 
-            const displayedValue = renderValue(fieldId);
+            const displayedValue = userInput[fieldId];
             const value = displayedValue?.toString().trim();
 
             if (!value || value === "") {
@@ -231,12 +237,25 @@ export const useIPv6 = () => {
                     case "fullAddress":
                     case "abbreviatedAddress":
                     case "networkAddress": {
-                        // Basic IPv6 format validation
+                        // Basic IPv6 format validation OR text answers for "no network address"
                         const ipv6Pattern =
                             /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$|^::$|^([0-9a-fA-F]{0,4}:){1,7}:$|^:([0-9a-fA-F]{0,4}:){1,7}$/;
+                        const textAnswers = [
+                            "kein",
+                            "keine",
+                            "keiner",
+                            "nicht",
+                            "nichts",
+                            "none",
+                            "no",
+                            "nothing",
+                        ];
                         isValid =
                             ipv6Pattern.test(value) ||
-                            /^([0-9a-fA-F]{4}:){7}[0-9a-fA-F]{4}$/.test(value);
+                            /^([0-9a-fA-F]{4}:){7}[0-9a-fA-F]{4}$/.test(
+                                value
+                            ) ||
+                            textAnswers.includes(value.toLowerCase().trim());
                         break;
                     }
                     case "networkPrefix": {
@@ -297,18 +316,66 @@ export const useIPv6 = () => {
                     correctValue = ipData[fieldId];
                 }
 
+                console.log(
+                    "Getting correct value for",
+                    fieldId,
+                    "from ipData:",
+                    ipData[fieldId],
+                    "ipData:",
+                    ipData
+                );
+
                 // Special comparison for IPv6 addresses
                 if (fieldId === "fullAddress") {
                     // For full address, require exact match to the full format (no abbreviation allowed)
                     // The correct value should already be in full format from generation
-                    isCorrect = value.toLowerCase() === correctValue.toLowerCase();
+                    isCorrect =
+                        value.toLowerCase() === correctValue.toLowerCase();
                 } else if (fieldId === "abbreviatedAddress") {
                     // For abbreviated address, require EXACT match to the properly abbreviated form
                     // Do not accept full addresses or other abbreviations
-                    isCorrect = value.toLowerCase() === correctValue.toLowerCase();
+                    isCorrect =
+                        value.toLowerCase() === correctValue.toLowerCase();
                 } else if (fieldId === "networkAddress") {
-                    // For network address, also require exact match to the properly abbreviated form
-                    isCorrect = value.toLowerCase() === correctValue.toLowerCase();
+                    // For network address, check for "kein" answers first (loopback/unspecified with /128)
+                    console.log(
+                        "NetworkAddress validation - fieldId:",
+                        fieldId,
+                        "value:",
+                        value,
+                        "correctValue:",
+                        correctValue
+                    );
+                    if (correctValue === "kein") {
+                        // Accept multiple valid German and English responses for "no network address"
+                        const validNoNetworkAnswers = [
+                            "kein",
+                            "keine",
+                            "keiner",
+                            "nicht",
+                            "nichts",
+                            "none",
+                            "no",
+                            "nothing",
+                        ];
+                        isCorrect = validNoNetworkAnswers.includes(
+                            value.toLowerCase().trim()
+                        );
+                        console.log(
+                            "Special kein validation - isCorrect:",
+                            isCorrect,
+                            "validAnswers:",
+                            validNoNetworkAnswers
+                        );
+                    } else {
+                        // For actual network addresses, require exact match to the properly abbreviated form
+                        isCorrect =
+                            value.toLowerCase() === correctValue.toLowerCase();
+                        console.log(
+                            "Regular network validation - isCorrect:",
+                            isCorrect
+                        );
+                    }
                 } else if (
                     fieldId === "subnetId" ||
                     fieldId === "interfaceId"
@@ -321,16 +388,20 @@ export const useIPv6 = () => {
                                 "kein",
                                 "keine",
                                 "keiner",
+                                "nicht",
+                                "nichts",
                                 "none",
                                 "no",
-                                "0",
+                                "nothing",
                             ];
                             isCorrect = validNoSubnetAnswers.includes(
                                 value.toLowerCase().trim()
                             );
                         } else {
                             // For actual hex subnet values, require exact match
-                            isCorrect = value.toLowerCase() === correctValue.toLowerCase();
+                            isCorrect =
+                                value.toLowerCase() ===
+                                correctValue.toLowerCase();
                         }
                     } else if (fieldId === "interfaceId") {
                         // For interfaceId, check for "kein" answers first
@@ -340,16 +411,20 @@ export const useIPv6 = () => {
                                 "kein",
                                 "keine",
                                 "keiner",
+                                "nicht",
+                                "nichts",
                                 "none",
                                 "no",
-                                "0",
+                                "nothing",
                             ];
                             isCorrect = validNoInterfaceAnswers.includes(
                                 value.toLowerCase().trim()
                             );
                         } else {
                             // For actual interface values, require exact match to the expected abbreviated form
-                            isCorrect = value.toLowerCase() === correctValue.toLowerCase();
+                            isCorrect =
+                                value.toLowerCase() ===
+                                correctValue.toLowerCase();
                         }
                     }
                 } else {

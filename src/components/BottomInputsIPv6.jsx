@@ -16,6 +16,9 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                     <option value="Documentation">Documentation</option>
                     <option value="ULA">ULA</option>
                     <option value="Link-Local">Link-Local</option>
+                    <option value="Loopback">Loopback</option>
+                    <option value="Multicast">Multicast</option>
+                    <option value="Unspecified">Unspecified</option>
                 </select>
             </label>
             <label>

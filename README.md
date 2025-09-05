@@ -95,11 +95,13 @@ Access the application at `http://localhost:5173`
 
 ### 🌐 IPv6 System
 
--   **37% Global Unicast**: Real-world internet addresses (most common in practice)
--   **21% Documentation**: Documentation addresses (2001:db8::) for learning examples
--   **21% ULA**: Private IPv6 addresses for enterprise networking scenarios
--   **21% Link-Local**: Auto-configuration addresses for networking basics
+-   **47% Must-Know Addresses**: Critical IHK exam addresses from the essential address list
+-   **30% Documentation**: Documentation addresses (2001:db8::) for learning examples
+-   **9% ULA**: Private IPv6 addresses for enterprise networking scenarios
+-   **9% Link-Local/Global**: Auto-configuration and internet addresses for networking basics
+-   **5% Special Addresses**: Loopback (::1), Unspecified (::), and Multicast addresses
 -   **🎯 Smart Filtering**: Only generates addresses suitable for standard network calculations
+-   **✅ Enhanced Validation**: Accepts "kein" responses for network addresses in special cases (Loopback/Unspecified with /128)
 
 ## 🎓 Educational Benefits
 

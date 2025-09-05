@@ -315,8 +315,8 @@ function InstructionContainer({
                             }}
                         >
                             <div>
-                                ⚠️ Kürzeste gültige Abkürzung für Netzadresse
-                                und Interfaceanteil ("kein" möglich) nutzen
+                                ⚠️ Kürzeste gültige Abkürzung für Netzadresse +
+                                Interfaceanteil nutzen ("kein" möglich)
                             </div>
                             <div>
                                 ⚠️ Subnetzanteil alle Bits eingeben ("kein"
@@ -374,8 +374,8 @@ function InstructionContainer({
                         }}
                     >
                         <div>
-                            ⚠️ Kürzeste gültige Abkürzung für Netzadresse und
-                            Interfaceanteil ("kein" möglich) nutzen
+                            ⚠️ Kürzeste gültige Abkürzung für Netzadresse +
+                            Interfaceanteil nutzen ("kein" möglich)
                         </div>
                         <div>
                             ⚠️ Subnetzanteil alle Bits eingeben ("kein" möglich)

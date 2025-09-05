@@ -7,7 +7,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "IPv6 Loopback (localhost)",
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
-        calculationSuitable: false, // Special address, not for network calculations
+        calculationSuitable: true, // Include for abbreviation learning - but rare
     },
     {
         address: "::",
@@ -15,7 +15,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Unspezifizierte Adresse (alle Nullen)",
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
-        calculationSuitable: false, // Special address, not for network calculations
+        calculationSuitable: true, // Include for abbreviation learning - but rare
     },
 
     // === DOKUMENTATION - Critical for learning ===
@@ -69,7 +69,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Alle Knoten (All Nodes)",
         importance: "Critical",
         ihkTopic: "IPv6 Multicast",
-        calculationSuitable: false, // Multicast address, not for network calculations
+        calculationSuitable: true, // Include for abbreviation learning - special case
     },
     {
         address: "ff02::2",
@@ -77,7 +77,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Alle Router (All Routers)",
         importance: "Critical",
         ihkTopic: "IPv6 Multicast",
-        calculationSuitable: false, // Multicast address, not for network calculations
+        calculationSuitable: true, // Include for abbreviation learning - special case
     },
 
     // === UNIQUE LOCAL - Private addressing ===
@@ -198,8 +198,26 @@ const specialIpv6Addresses = ihkEssentialIPv6Addresses;
 
 // Optimized IPv6 generation for IHK Fachinformatiker exam - calculation suitable only
 export const getRandomIPv6 = () => {
-    // 50% must-know addresses for IHK, 50% educational realistic addresses
-    const useMustKnow = Math.random() < 0.5;
+    // First, directly check for special addresses with low probability
+    const specialRand = Math.random();
+
+    // 5% chance for special addresses (rare but educational)
+    if (specialRand < 0.05) {
+        const specialAddresses = [
+            { address: "::1", type: "Loopback" },
+            { address: "::", type: "Unspecified" },
+            { address: "ff02::1", type: "Multicast" },
+            { address: "ff02::2", type: "Multicast" },
+        ];
+        const chosen =
+            specialAddresses[
+                Math.floor(Math.random() * specialAddresses.length)
+            ];
+        return expandIPv6(chosen.address);
+    }
+
+    // 50% must-know addresses for IHK, 45% educational realistic addresses
+    const useMustKnow = specialRand < 0.5;
 
     if (useMustKnow) {
         // Only use addresses suitable for network calculations
@@ -220,11 +238,12 @@ export const getRandomIPv6 = () => {
             return generateDocumentationIPv6();
         }
 
-        const rand = Math.random();
+        const poolRand = Math.random();
         let pool;
-        if (rand < 0.5 && critical.length > 0) pool = critical; // 50% critical
-        else if (rand < 0.9 && important.length > 0)
-            pool = important; // 40% important
+        if (poolRand < 0.6 && critical.length > 0)
+            pool = critical; // 60% critical
+        else if (poolRand < 0.9 && important.length > 0)
+            pool = important; // 30% important
         else if (moderate.length > 0) pool = moderate; // 10% moderate
         else pool = allSuitable; // Fallback to any suitable address
 
@@ -636,11 +655,21 @@ export const getIPv6AddressType = (ipv6) => {
 
     const address = ipv6.toLowerCase();
 
-    // Loopback
-    if (address === "::1") return "Loopback";
+    // Loopback - handle both abbreviated and full forms
+    if (
+        address === "::1" ||
+        address === "0000:0000:0000:0000:0000:0000:0000:0001"
+    ) {
+        return "Loopback";
+    }
 
-    // Unspecified
-    if (address === "::") return "Unspecified";
+    // Unspecified - handle both abbreviated and full forms
+    if (
+        address === "::" ||
+        address === "0000:0000:0000:0000:0000:0000:0000:0000"
+    ) {
+        return "Unspecified";
+    }
 
     // Documentation addresses (2001:db8::/32)
     if (address.startsWith("2001:db8:") || address.startsWith("2001:0db8:")) {
@@ -678,100 +707,71 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
         const expanded = expandIPv6(ipv6);
         const groups = expanded.split(":");
 
-        // Convert to binary representation
-        let binaryAddress = "";
-        for (const group of groups) {
-            const decimal = parseInt(group, 16);
-            binaryAddress += decimal.toString(2).padStart(16, "0");
-        }
-
-        // Apply prefix mask
         const prefix = parseInt(prefixLength.replace("/", ""));
-        const networkBinary =
-            binaryAddress.substring(0, prefix) + "0".repeat(128 - prefix);
 
-        // Convert back to IPv6 format
+        // Calculate which group the prefix ends in and how many bits
+        const completeGroups = Math.floor(prefix / 16);
+        const remainingBits = prefix % 16;
+
+        // Build the network address
         const networkGroups = [];
-        for (let i = 0; i < 128; i += 16) {
-            const groupBinary = networkBinary.substring(i, i + 16);
-            const groupHex = parseInt(groupBinary, 2)
-                .toString(16)
-                .padStart(4, "0");
-            networkGroups.push(groupHex);
+
+        // Add complete groups (remove leading zeros)
+        for (let i = 0; i < completeGroups; i++) {
+            const cleanGroup = groups[i].replace(/^0+/, "") || "0";
+            networkGroups.push(cleanGroup);
         }
 
-        const fullNetworkAddress = networkGroups.join(":");
+        // Handle partial group if prefix doesn't align with group boundary
+        if (remainingBits > 0 && completeGroups < 8) {
+            const partialGroup = groups[completeGroups];
+            const decimal = parseInt(partialGroup, 16);
+            const binary = decimal.toString(2).padStart(16, "0");
 
-        // For network addresses, we need to be careful about abbreviation
-        // to preserve the network boundary indication
-        const abbreviatedNetworkAddress = abbreviateIPv6(fullNetworkAddress);
+            // Keep only the network bits (don't add trailing zeros for host portion)
+            const networkBits = binary.substring(0, remainingBits);
+            const networkDecimal = parseInt(networkBits, 2);
 
-        // Special handling: if the prefix length doesn't align with group boundaries,
-        // we need to ensure the network boundary is preserved in the representation
-        const groupBoundary = Math.floor(prefix / 16);
-        const bitsInPartialGroup = prefix % 16;
-
-        if (bitsInPartialGroup > 0) {
-            // The prefix crosses a group boundary
-            // We need to ensure the partial group is visible in the representation
-            const cleanGroups = networkGroups.map(
-                (group) => group.replace(/^0+/, "") || "0"
-            );
-
-            // Find the longest sequence of zeros starting from the partial group + 1
-            let maxZeroStart = -1;
-            let maxZeroLength = 0;
-            let currentZeroStart = -1;
-            let currentZeroLength = 0;
-
-            // Only consider compression from the group after the partial group
-            for (let i = groupBoundary + 1; i < cleanGroups.length; i++) {
-                if (cleanGroups[i] === "0") {
-                    if (currentZeroStart === -1) {
-                        currentZeroStart = i;
-                        currentZeroLength = 1;
-                    } else {
-                        currentZeroLength++;
-                    }
-                } else {
-                    if (currentZeroLength > maxZeroLength) {
-                        maxZeroStart = currentZeroStart;
-                        maxZeroLength = currentZeroLength;
-                    }
-                    currentZeroStart = -1;
-                    currentZeroLength = 0;
-                }
+            // Only add the partial group if it's not zero
+            if (networkDecimal > 0) {
+                const networkHex = networkDecimal.toString(16);
+                networkGroups.push(networkHex);
             }
-
-            // Check if the last sequence was the longest
-            if (currentZeroLength > maxZeroLength) {
-                maxZeroStart = currentZeroStart;
-                maxZeroLength = currentZeroLength;
-            }
-
-            // Only compress if we have 2 or more consecutive zeros after the network boundary
-            if (maxZeroLength >= 2 && maxZeroStart > groupBoundary) {
-                const before = cleanGroups.slice(0, maxZeroStart);
-                const after = cleanGroups.slice(maxZeroStart + maxZeroLength);
-
-                if (after.length === 0) {
-                    return before.join(":") + "::";
-                } else {
-                    return before.join(":") + "::" + after.join(":");
-                }
-            }
-
-            // No valid compression after network boundary, return without compression
-            return (
-                cleanGroups.slice(0, groupBoundary + 1).join(":") +
-                (cleanGroups.slice(groupBoundary + 1).every((g) => g === "0")
-                    ? "::"
-                    : ":" + cleanGroups.slice(groupBoundary + 1).join(":"))
-            );
         }
 
-        // If prefix aligns with group boundary, use normal abbreviation
-        return abbreviatedNetworkAddress;
+        // Create the network address
+        if (networkGroups.length === 0) {
+            return "::";
+        }
+
+        // For /128, we have the complete address - return properly abbreviated form
+        if (prefix === 128) {
+            const fullAddress = networkGroups
+                .map((group) => group.padStart(4, "0"))
+                .join(":");
+            return abbreviateIPv6(fullAddress);
+        }
+
+        // For partial networks, create and abbreviate the network portion
+        const networkWithZeros = networkGroups.join(":") + "::";
+
+        // Try to abbreviate the network address properly
+        const paddedGroups = [...networkGroups];
+        while (paddedGroups.length < 8) {
+            paddedGroups.push("0000");
+        }
+        const fullNetworkAddress = paddedGroups
+            .map((group) => (group.length < 4 ? group.padStart(4, "0") : group))
+            .join(":");
+
+        const abbreviated = abbreviateIPv6(fullNetworkAddress);
+
+        // If abbreviation gives us the same or better result, use it
+        if (abbreviated.length <= networkWithZeros.length) {
+            return abbreviated;
+        }
+
+        return networkWithZeros;
     } catch (error) {
         console.error("Error calculating network address:", error);
         return "";
@@ -960,8 +960,21 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
     }
 
     const addressType = getIPv6AddressType(ipv6);
-    const networkAddress = calculateIPv6NetworkAddress(ipv6, prefix);
     const prefixLength = parseInt(prefix.replace("/", ""));
+
+    // Special handling for loopback and unspecified addresses with /128
+    if (
+        (addressType === "Loopback" || addressType === "Unspecified") &&
+        prefixLength === 128
+    ) {
+        return {
+            networkAddress: "kein",
+            type: addressType,
+            interfaceId: "kein",
+        };
+    }
+
+    const networkAddress = calculateIPv6NetworkAddress(ipv6, prefix);
     const interfaceId = calculateInterfaceId(ipv6, prefixLength);
 
     return {
@@ -1147,7 +1160,13 @@ export const generateIPv6Prefix = (ipv6) => {
     const address = ipv6.toLowerCase();
 
     // Special addresses have specific prefix lengths per RFC standards
-    if (address === "::1" || address === "::") {
+    // Handle both abbreviated and full forms
+    if (
+        address === "::1" ||
+        address === "0000:0000:0000:0000:0000:0000:0000:0001" ||
+        address === "::" ||
+        address === "0000:0000:0000:0000:0000:0000:0000:0000"
+    ) {
         return "/128"; // Host addresses (Loopback and Unspecified)
     }
 
@@ -1213,31 +1232,11 @@ const weightedRandomChoice = (options, weights) => {
 
 // Simplified generation for IHK Fachinformatiker exam focus - calculation suitable only
 export const generateIPv6WithPrefix = () => {
-    // Focus only on addresses suitable for network calculations
-    // Balanced distribution based on real-world importance and educational value
-    const addressTypeRandom = Math.random();
+    // Use the same generation logic as getRandomIPv6() to ensure special addresses appear
+    const ipv6 = getRandomIPv6();
 
-    let targetPrefix, ipv6;
-
-    if (addressTypeRandom < 0.37) {
-        // 37% - Global Unicast addresses (real-world internet addresses)
-        targetPrefix = ["/32", "/48", "/56", "/64"][
-            Math.floor(Math.random() * 4)
-        ];
-        ipv6 = generateSimpleGlobalUnicast();
-    } else if (addressTypeRandom < 0.58) {
-        // 21% - Documentation addresses (important for learning)
-        targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
-        ipv6 = generateDocumentationIPv6();
-    } else if (addressTypeRandom < 0.79) {
-        // 21% - ULA addresses (private IPv6, important for enterprise)
-        targetPrefix = ["/48", "/56", "/64"][Math.floor(Math.random() * 3)];
-        ipv6 = generateSimpleULA();
-    } else {
-        // 21% - Link-Local addresses (auto-configuration, networking basics)
-        targetPrefix = "/64"; // Link-Local is always /64
-        ipv6 = generateSimpleLinkLocal();
-    }
+    // Generate appropriate prefix for this address
+    const targetPrefix = generateIPv6Prefix(ipv6);
 
     // Ensure we always have both full and abbreviated forms
     const fullAddress = expandIPv6(ipv6); // Always expand to full form
@@ -1246,15 +1245,14 @@ export const generateIPv6WithPrefix = () => {
     // Determine the actual type of the generated address
     const actualType = getIPv6AddressType(fullAddress);
 
-    // Final validation - ensure we have valid calculation-suitable addresses
+    // Final validation - ensure we have valid addresses (allow special addresses now)
     if (
         !isValidIPv6Address(fullAddress) ||
         !abbreviatedAddress ||
-        abbreviatedAddress === ":" ||
-        isSpecialPurposeAddress(fullAddress)
+        abbreviatedAddress === ":"
     ) {
         console.warn(
-            "Generated invalid or special-purpose IPv6 address, using fallback:",
+            "Generated invalid IPv6 address, using fallback:",
             fullAddress,
             abbreviatedAddress
         );
