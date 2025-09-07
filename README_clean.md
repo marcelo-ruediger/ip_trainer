@@ -65,10 +65,10 @@ Access the application at `http://localhost:5173`
 
 ### IPv6 System (Optimized for Real Networks)
 
--   **50%** Must-know addresses (DNS servers, documentation, Link-Local, ULA, special addresses)
+-   **50%** Must-know addresses (DNS servers, documentation, special addresses)
 -   **38%** Generated Global Unicast (web servers, mail servers, CDNs)
 -   **15%** Documentation addresses (RFC 3849 examples)
--   **3%** Special addresses (Loopback, Multicast, Unspecified)
+-   **3%** Special addresses (Loopback, Multicast)
 
 **Result**: ~75-80% Global Unicast addresses for maximum real-world relevance
 

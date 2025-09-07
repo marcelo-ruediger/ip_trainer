@@ -248,7 +248,7 @@ export const getRandomIPv6 = () => {
         return expandIPv6(chosen.address);
     }
 
-    // 50% must-know addresses (now with more Global Unicast), 47% realistic addresses (Global Unicast focused)
+    // 50% must-know addresses (fe80::1, fd00::1, fc00::1, etc.), 47% realistic addresses (ZERO duplicate types)
     const useMustKnow = specialRand < 0.53;
 
     if (useMustKnow) {
@@ -284,20 +284,15 @@ export const getRandomIPv6 = () => {
         return expandIPv6(chosen.address);
     }
 
-    // Rebalanced realistic generation - FAVOR Global Unicast for daily network use
+    // Rebalanced realistic generation - MAXIMUM Global Unicast focus (no duplicate types)
     const rand = Math.random();
-    if (rand < 0.3) {
-        // 30% - Global Unicast addresses (MOST IMPORTANT for real networks!)
+    if (rand < 0.38) {
+        // 38% - Global Unicast addresses (MAXIMIZED - no duplicates with must-know)
         return generateSimpleGlobalUnicast();
-    } else if (rand < 0.45) {
-        // 15% - Documentation addresses (educational, but less than before)
-        return generateDocumentationIPv6();
-    } else if (rand < 0.52) {
-        // 7% - ULA addresses (private networking, calculation-suitable)
-        return generateSimpleULA();
     } else {
-        // 1% - Link-Local addresses (reduced since they're less common in calculations)
-        return generateSimpleLinkLocal();
+        // 15% - Documentation addresses (educational variety beyond must-know 2001:db8::1)
+        // ULA and Link-Local REMOVED to prevent double-counting with must-know addresses
+        return generateDocumentationIPv6();
     }
 };
 
