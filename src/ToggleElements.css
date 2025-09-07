@@ -194,7 +194,6 @@
 
     .ipv6-structure-title {
         font-size: 1rem;
-        margin-bottom: 0.2rem;
     }
 
     .ipv6-structure-text {
@@ -527,13 +526,73 @@
     color: white;
 }
 
+/* Language toggle styles */
+.language-toggle-container {
+    display: flex;
+    align-items: center;
+    /* gap: 8px; */
+    background: transparent;
+    border-radius: 8px;
+    /* padding: 4px 8px; */
+}
+
+.language-button {
+    background: none;
+    border: none !important;
+    outline: none !important;
+    color: #cccccc;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: color 0.3s ease;
+    user-select: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.language-button:hover {
+    color: #646cff;
+    border: none !important;
+    outline: none !important;
+}
+
+.language-button:focus {
+    border: none !important;
+    outline: none !important;
+}
+
+.language-button.active {
+    color: #646cff;
+    font-weight: 700;
+    border: none !important;
+    outline: none !important;
+}
+
+.language-button .button-text {
+    transition: transform 0.3s ease;
+}
+
+.language-button:hover .button-text {
+    transform: scale(1.05);
+}
+
+.language-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
 /* Image toggle container styles */
 .image-toggle-container {
     display: flex;
     justify-content: space-between;
     margin: auto;
     text-align: center;
-    padding: 0 1rem 1rem 1rem;
+    padding: 0 1rem 1.5rem 1rem;
     gap: 1rem;
 }
 
@@ -730,8 +789,23 @@
     /* Responsive checkbox adjustments */
     .image-toggle-container {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 0.8rem;
         align-items: center;
+        padding: 0 1rem 1rem 1rem;
+    }
+
+    .language-toggle-container {
+        order: -1; /* Keep language toggle at top on mobile */
+    }
+
+    .language-button {
+        font-size: 15px;
+        padding: 0px 10px;
+    }
+
+    .language-icon {
+        width: 20px;
+        height: 20px;
     }
 
     .image-toggle-container > label {

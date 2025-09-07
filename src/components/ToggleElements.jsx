@@ -2,9 +2,11 @@ import { useState } from "react";
 import { getAllSpecialAddresses } from "../utils/ipv4Utils";
 import { getAllSpecialAddresses as getAllIPv6SpecialAddresses } from "../utils/ipv6Utils";
 import "../ToggleElements.css";
+import languageIcon from "../images/language.svg";
 
 function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
     const [showSpecialAddresses, setShowSpecialAddresses] = useState(false);
+    const [currentLanguage, setCurrentLanguage] = useState("DE");
 
     // Use appropriate special addresses based on IP version
     const specialAddresses =
@@ -14,6 +16,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
     const handleSpecialAddressesToggle = () => {
         setShowSpecialAddresses(true);
+    };
+
+    const handleLanguageToggle = (language) => {
+        setCurrentLanguage(language);
+        // TODO: Add language change logic here
     };
 
     const closePopup = () => {
@@ -307,6 +314,30 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
     return (
         <>
             <div className="image-toggle-container">
+                <div className="language-toggle-container">
+                    <button
+                        className={`language-button ${
+                            currentLanguage === "DE" ? "active" : ""
+                        }`}
+                        onClick={() => handleLanguageToggle("DE")}
+                    >
+                        <span className="button-text">DE</span>
+                    </button>
+                    <img
+                        src={languageIcon}
+                        alt="Language"
+                        className="language-icon"
+                    />
+                    <button
+                        className={`language-button ${
+                            currentLanguage === "EN" ? "active" : ""
+                        }`}
+                        onClick={() => handleLanguageToggle("EN")}
+                    >
+                        <span className="button-text">EN</span>
+                    </button>
+                </div>
+
                 <label className="toggle-label">
                     <input
                         type="checkbox"

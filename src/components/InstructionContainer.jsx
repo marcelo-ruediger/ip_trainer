@@ -178,7 +178,6 @@ function InstructionContainer({
                         style={{
                             fontSize: "1.2em",
                             fontWeight: "bold",
-                            marginBottom: "0.75rem",
                         }}
                     >
                         <span style={{ color: "#00ff88" }}>
@@ -258,7 +257,6 @@ function InstructionContainer({
                             style={{
                                 color: "#cccccc",
                                 fontSize: "0.9em",
-                                marginBottom: "0.75rem",
                             }}
                         >
                             {secondGroup.map((result, index) => (
@@ -337,17 +335,7 @@ function InstructionContainer({
 
                     {/* IPv6 hint message - show only if specific fields are wrong */}
                     {showIPv6Hint && (
-                        <div
-                            className="ipv6-hint"
-                            style={{
-                                fontSize: "0.85em",
-                                color: "#888888",
-                                marginTop: "1rem",
-                                textAlign: "center",
-                                fontStyle: "italic",
-                                lineHeight: "1.4",
-                            }}
-                        >
+                        <div className="ipv6-hint">
                             <div>
                                 ⚠️ Kürzeste gültige Abkürzung für Netzadresse +
                                 Interfaceanteil nutzen ("kein" möglich)
@@ -396,17 +384,7 @@ function InstructionContainer({
                         className="calculate-icon"
                     />
                     {/* IPv6 hint message */}
-                    <div
-                        className="ipv6-hint"
-                        style={{
-                            fontSize: "0.85em",
-                            color: "#888888",
-                            marginTop: "1rem",
-                            textAlign: "center",
-                            fontStyle: "italic",
-                            lineHeight: "1.4",
-                        }}
-                    >
+                    <div className="ipv6-hint">
                         <div>
                             ⚠️ Kürzeste gültige Abkürzung für Netzadresse +
                             Interfaceanteil nutzen ("kein" möglich)
