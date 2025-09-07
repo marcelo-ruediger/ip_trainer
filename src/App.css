@@ -34,6 +34,7 @@ select {
     transition: box-shadow 0.3s, border-color 0.3s;
     outline: none;
     margin-top: 0.5rem;
+    margin-left: 0.3rem; /* Standardized small space when label and input are inline */
 }
 
 input:focus,
@@ -46,15 +47,29 @@ select:focus {
     max-width: 100%;
 }
 
+/* Specific sizing for Vollständige IPv6-Adresse to maintain consistency */
+input#fullAddress {
+    min-width: 300px !important;
+    max-width: 400px !important;
+    width: 300px;
+}
+
 .long-input-abbreviation {
     min-width: 230px;
     max-width: 100%;
 }
 
+/* Specific sizing for Abkürzung field to maintain consistency */
+input#abbreviatedAddress {
+    min-width: 230px !important;
+    max-width: 320px !important;
+    width: 230px;
+}
+
 .network-address-input,
 .interface-id-input {
-    width: 200px;
-    min-width: 120px;
+    width: 220px;
+    min-width: 160px;
 }
 
 .network-prefix {
@@ -359,14 +374,55 @@ footer {
         min-width: 200px;
         max-width: calc(100% - 2rem);
     }
+
+    /* Override for fullAddress to maintain consistent size */
+    input#fullAddress {
+        min-width: 300px !important;
+        max-width: 400px !important;
+        width: 300px !important;
+    }
     .long-input-abbreviation {
         min-width: 180px;
         max-width: calc(100% - 2rem);
     }
+
+    /* Override for abbreviatedAddress to maintain consistent size */
+    input#abbreviatedAddress {
+        min-width: 230px !important;
+        max-width: 320px !important;
+        width: 230px !important;
+    }
     .network-address-input,
     .interface-id-input {
-        width: 150px;
+        width: 170px;
         max-width: calc(100% - 2rem);
+        min-width: 160px;
+    }
+
+    /* Add spacing between labels and inputs when they're inline */
+    .default-container
+        label:not(:has(input#fullAddress)):not(:has(input#abbreviatedAddress)) {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        flex-wrap: nowrap;
+    }
+
+    .default-container
+        label:not(:has(input#fullAddress)):not(:has(input#abbreviatedAddress))
+        br.responsive-break {
+        display: none;
+    }
+
+    .default-container
+        label:not(:has(input#fullAddress)):not(:has(input#abbreviatedAddress))
+        input,
+    .default-container
+        label:not(:has(input#fullAddress)):not(:has(input#abbreviatedAddress))
+        select {
+        margin-top: 0;
+        margin-left: 0;
+        flex-shrink: 0;
     }
     main {
         width: 100%;
@@ -380,6 +436,130 @@ footer {
     }
     .top-buttons {
         margin-bottom: 0.5rem;
+    }
+
+    /* IPv6 specific: Place Adresstyp label inline with select */
+    .default-container label:has(select#type) {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+    }
+
+    .default-container label:has(select#type) br.responsive-break {
+        display: none;
+    }
+
+    .default-container label:has(select#type) select {
+        margin-top: 0;
+        margin-left: 0;
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+/* Medium small screens - Center Vollständige IPv6-Adresse between 450px and 550px */
+@media (min-width: 451px) and (max-width: 550px) {
+    .default-container label:has(input#fullAddress) {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .default-container label:has(input#fullAddress) input {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        min-width: 300px !important;
+        max-width: 400px !important;
+        width: 300px !important;
+    }
+}
+
+/* Additional responsive styles for very small screens */
+@media (max-width: 450px) {
+    /* Center the Vollständige IPv6-Adresse label and input */
+    .default-container label:has(input#fullAddress) {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .default-container label:has(input#fullAddress) input {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        min-width: 300px !important;
+        max-width: 400px !important;
+        width: 300px !important;
+    }
+
+    /* Center the Abkürzung label and input */
+    .default-container label:has(input#abbreviatedAddress) {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .default-container label:has(input#abbreviatedAddress) input {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        min-width: 230px !important;
+        max-width: 320px !important;
+        width: 230px !important;
+    }
+
+    /* Keep other inputs inline with their labels and ensure proper spacing */
+    .default-container
+        label:not(:has(input#fullAddress)):not(:has(input#abbreviatedAddress)) {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        flex-wrap: nowrap;
+    }
+
+    .default-container
+        label:not(:has(input#fullAddress)):not(:has(input#abbreviatedAddress))
+        input,
+    .default-container
+        label:not(:has(input#fullAddress)):not(:has(input#abbreviatedAddress))
+        select {
+        margin-top: 0;
+        margin-left: 0;
+        flex-shrink: 0;
+    }
+
+    /* Center the Netzwerkadresse and Interfaceanteil labels and inputs */
+    input {
+        margin-left: 0;
+    }
+
+    .long-input {
+        min-width: 150px;
+        max-width: 100%;
+    }
+
+    /* Ensure fullAddress maintains consistent size even on very small screens */
+    input#fullAddress {
+        min-width: 300px !important;
+        max-width: 400px !important;
+        width: 300px !important;
+    }
+
+    /* Ensure abbreviatedAddress maintains consistent size even on very small screens */
+    input#abbreviatedAddress {
+        min-width: 230px !important;
+        max-width: 320px !important;
+        width: 230px !important;
+    }
+
+    .default-container {
+        padding: 0.75rem;
+        gap: 0.75rem;
     }
 }
 
