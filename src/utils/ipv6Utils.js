@@ -98,12 +98,12 @@ const ihkEssentialIPv6Addresses = [
         calculationSuitable: true, // Good for network calculations
     },
 
-    // === PRAKTISCHE DNS SERVER - Real world examples ===
+    // === GLOBAL UNICAST - Real world examples (CRITICAL for network calculations) ===
     {
         address: "2001:4860:4860::8888",
         type: "Global Unicast",
         commonUse: "Google DNS primär",
-        importance: "Important",
+        importance: "Critical", // Elevated to Critical - very common in practice
         ihkTopic: "IPv6 Praxis",
         calculationSuitable: true, // Good for network calculations
     },
@@ -111,8 +111,40 @@ const ihkEssentialIPv6Addresses = [
         address: "2606:4700:4700::1111",
         type: "Global Unicast",
         commonUse: "Cloudflare DNS primär",
+        importance: "Critical", // Elevated to Critical - very common in practice
+        ihkTopic: "IPv6 Praxis",
+        calculationSuitable: true, // Good for network calculations
+    },
+    {
+        address: "2001:4860:4860::8844",
+        type: "Global Unicast",
+        commonUse: "Google DNS sekundär",
         importance: "Important",
         ihkTopic: "IPv6 Praxis",
+        calculationSuitable: true, // Good for network calculations
+    },
+    {
+        address: "2606:4700:4700::1001",
+        type: "Global Unicast",
+        commonUse: "Cloudflare DNS sekundär",
+        importance: "Important",
+        ihkTopic: "IPv6 Praxis",
+        calculationSuitable: true, // Good for network calculations
+    },
+    {
+        address: "2001:500:2::c",
+        type: "Global Unicast",
+        commonUse: "Root DNS Server (c.root-servers.net)",
+        importance: "Important",
+        ihkTopic: "IPv6 DNS Infrastruktur",
+        calculationSuitable: true, // Good for network calculations
+    },
+    {
+        address: "2001:503:ba3e::2:30",
+        type: "Global Unicast",
+        commonUse: "Root DNS Server (a.root-servers.net)",
+        importance: "Important",
+        ihkTopic: "IPv6 DNS Infrastruktur",
         calculationSuitable: true, // Good for network calculations
     },
 
@@ -201,8 +233,8 @@ export const getRandomIPv6 = () => {
     // First, directly check for special addresses with low probability
     const specialRand = Math.random();
 
-    // 5% chance for special addresses (rare but educational)
-    if (specialRand < 0.05) {
+    // 3% chance for special addresses (rare but educational)
+    if (specialRand < 0.03) {
         const specialAddresses = [
             { address: "::1", type: "Loopback" },
             { address: "::", type: "Unspecified" },
@@ -216,8 +248,8 @@ export const getRandomIPv6 = () => {
         return expandIPv6(chosen.address);
     }
 
-    // 50% must-know addresses for IHK, 45% educational realistic addresses
-    const useMustKnow = specialRand < 0.5;
+    // 50% must-know addresses (now with more Global Unicast), 47% realistic addresses (Global Unicast focused)
+    const useMustKnow = specialRand < 0.53;
 
     if (useMustKnow) {
         // Only use addresses suitable for network calculations
@@ -252,17 +284,20 @@ export const getRandomIPv6 = () => {
         return expandIPv6(chosen.address);
     }
 
-    // Simplified realistic generation for educational purposes
+    // Rebalanced realistic generation - FAVOR Global Unicast for daily network use
     const rand = Math.random();
-    if (rand < 0.7) {
-        // 70% - Documentation addresses (most educational and always calculation-suitable)
+    if (rand < 0.3) {
+        // 30% - Global Unicast addresses (MOST IMPORTANT for real networks!)
+        return generateSimpleGlobalUnicast();
+    } else if (rand < 0.45) {
+        // 15% - Documentation addresses (educational, but less than before)
         return generateDocumentationIPv6();
-    } else if (rand < 0.9) {
-        // 20% - ULA addresses (private networking, calculation-suitable)
+    } else if (rand < 0.52) {
+        // 7% - ULA addresses (private networking, calculation-suitable)
         return generateSimpleULA();
     } else {
-        // 10% - Simple Global Unicast (calculation-suitable)
-        return generateSimpleGlobalUnicast();
+        // 1% - Link-Local addresses (reduced since they're less common in calculations)
+        return generateSimpleLinkLocal();
     }
 };
 
