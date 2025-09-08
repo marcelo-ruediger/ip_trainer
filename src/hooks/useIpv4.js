@@ -289,14 +289,27 @@ export const useIPv4 = () => {
 
         // Keep generating until we get a non-ambiguous case
         do {
-            ip = getRandomIp();
+            // 20% chance to include special addresses for educational purposes
+            const includeSpecial = Math.random() < 0.2;
+            ip = getRandomIp(includeSpecial);
             cidr = getRandomCIDR();
             subnetMask = cidrToMask(cidr);
             data = calculateNetworkData(ip, cidr);
 
+            // Check if this is a special address that should auto-fill ipClass
+            const isSpecialAddress = !["A", "B", "C", "D", "E"].includes(
+                data.ipClass
+            );
+
             // Randomly select which field to generate
             // Note: networkId removed due to inherent ambiguity issues
             let fieldOptions = ["cidr", "subnetMask", "broadcast", "usableIps"];
+
+            // If it's a special address, also include ipClass as a generated field
+            if (isSpecialAddress) {
+                fieldOptions.push("ipClass");
+            }
+
             // If CIDR is 30 or 31, remove 'usableIps' to avoid ambiguity
             if (cidr === 30 || cidr === 31) {
                 fieldOptions = fieldOptions.filter((f) => f !== "usableIps");
@@ -343,6 +356,9 @@ export const useIPv4 = () => {
                 break;
             case "usableIps":
                 initialData.usableIps = data.usableIps;
+                break;
+            case "ipClass":
+                initialData.ipClass = data.ipClass;
                 break;
         }
 
@@ -568,7 +584,25 @@ export const useIPv4 = () => {
                     }
 
                     case "ipClass":
-                        isValid = /^[a-eA-E]$/.test(value);
+                        // Check for single letter classes (A, B, C, D, E)
+                        if (/^[a-eA-E]$/.test(value)) {
+                            isValid = true;
+                        } else {
+                            // Check for special address types (case-insensitive)
+                            const validSpecialTypes = [
+                                "reserved",
+                                "loopback",
+                                "link-local",
+                                "carrier-grade nat",
+                                "multicast",
+                                "d (multicast)",
+                                "e (reserved)",
+                                "cgn",
+                            ];
+                            isValid = validSpecialTypes.includes(
+                                value.toLowerCase()
+                            );
+                        }
                         break;
 
                     case "usableIps":
@@ -617,13 +651,21 @@ export const useIPv4 = () => {
                     correctValue = correctValue.replace("/", "");
                 }
                 if (fieldId === "ipClass") {
-                    correctValue = generated.ipClass
-                        .toUpperCase()
-                        .startsWith("D")
-                        ? "D"
-                        : generated.ipClass.toUpperCase().startsWith("E")
-                        ? "E"
-                        : generated.ipClass.toUpperCase();
+                    // Handle single letter classes (A, B, C, D, E)
+                    if (/^[A-E]$/.test(generated.ipClass)) {
+                        correctValue = generated.ipClass.toUpperCase();
+                    } else if (
+                        generated.ipClass.toUpperCase().startsWith("D")
+                    ) {
+                        correctValue = "D";
+                    } else if (
+                        generated.ipClass.toUpperCase().startsWith("E")
+                    ) {
+                        correctValue = "E";
+                    } else {
+                        // Keep the full special address type for comparison
+                        correctValue = generated.ipClass;
+                    }
                 }
 
                 // Special comparison logic for broadcast field
@@ -650,6 +692,41 @@ export const useIPv4 = () => {
                         "no",
                     ];
                     isCorrect = validZeroAnswers.includes(value.toLowerCase());
+                } else if (fieldId === "ipClass") {
+                    // Special comparison logic for IP class
+                    const userValue = value.toUpperCase().trim();
+                    const correctValueUpper = correctValue.toUpperCase().trim();
+
+                    // If correct value is a single letter, accept only single letter
+                    if (/^[A-E]$/.test(correctValueUpper)) {
+                        isCorrect = userValue === correctValueUpper;
+                    } else {
+                        // For special address types, accept various valid inputs
+                        if (correctValueUpper === "LOOPBACK") {
+                            isCorrect = ["LOOPBACK", "LOOP", "LO"].includes(
+                                userValue
+                            );
+                        } else if (correctValueUpper === "LINK-LOCAL") {
+                            isCorrect = [
+                                "LINK-LOCAL",
+                                "LINK LOCAL",
+                                "APIPA",
+                                "AUTO",
+                            ].includes(userValue);
+                        } else if (correctValueUpper === "CARRIER-GRADE NAT") {
+                            isCorrect = [
+                                "CARRIER-GRADE NAT",
+                                "CGN",
+                                "CARRIER GRADE NAT",
+                                "SHARED",
+                            ].includes(userValue);
+                        } else if (correctValueUpper === "RESERVED") {
+                            isCorrect = ["RESERVED", "RES"].includes(userValue);
+                        } else {
+                            // Default case-insensitive comparison
+                            isCorrect = userValue === correctValueUpper;
+                        }
+                    }
                 } else {
                     isCorrect =
                         value.replace("/", "").toUpperCase() ===

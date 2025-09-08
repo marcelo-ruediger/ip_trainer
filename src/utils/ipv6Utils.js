@@ -4,17 +4,19 @@ const ihkEssentialIPv6Addresses = [
     {
         address: "::1",
         type: "Loopback",
-        commonUse: "IPv6 Loopback (localhost)",
+        commonUse: "Loopback Network",
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
+        range: "::1/128",
         calculationSuitable: true, // Include for abbreviation learning - but rare
     },
     {
         address: "::",
         type: "Unspecified",
-        commonUse: "Unspezifizierte Adresse (alle Nullen)",
+        commonUse: "Unspecified Network",
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
+        range: "::/128",
         calculationSuitable: true, // Include for abbreviation learning - but rare
     },
 
@@ -28,11 +30,12 @@ const ihkEssentialIPv6Addresses = [
         calculationSuitable: true, // Good for network calculations
     },
     {
-        address: "2001:db8::",
+        address: "2001:db8:0000::",
         type: "Documentation",
-        commonUse: "Dokumentationsnetz (RFC 3849)",
+        commonUse: "Documentation Network",
         importance: "Critical",
         ihkTopic: "IPv6 Adressierung",
+        range: "2001:db8::/32",
         calculationSuitable: false, // Network address, not suitable for host calculations
     },
     {
@@ -54,11 +57,12 @@ const ihkEssentialIPv6Addresses = [
         calculationSuitable: true, // Good for network calculations
     },
     {
-        address: "fe80::",
+        address: "fe80:0000::",
         type: "Link-Local",
-        commonUse: "Link-Local Netzwerk",
+        commonUse: "Link-Local Network",
         importance: "Important",
         ihkTopic: "IPv6 Autokonfiguration",
+        range: "fe80::/10",
         calculationSuitable: false, // Network address, not suitable for host calculations
     },
 
@@ -1521,7 +1525,7 @@ const specialPurposeAddresses = [
         category: "Documentation",
         range: "2001:db8::/32",
         specialRules:
-            "RFC 3849 - Ausschließlich für Dokumentation und Beispiele",
+            "RFC 3849 - Ausschließlich für Dokumentation und Beispiele, entspricht 192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24 in IPv4",
     },
 
     // LINK-LOCAL - Critical for IPv6 operation (equivalent to APIPA)
@@ -1531,28 +1535,27 @@ const specialPurposeAddresses = [
         importance: "Critical",
         category: "Link-Local",
         range: "fe80::/10",
-        specialRules: "Automatisch konfiguriert, entspricht APIPA in IPv4",
+        specialRules: "Automatisch konfiguriert, entspricht APIPA (169.254.0.0/16) in IPv4",
     },
 
     // UNIQUE LOCAL - Critical for private networks (equivalent to RFC 1918)
     {
-        address: "fc00::",
-        commonUse: "ULA (Unique Local Address) zentral zugewiesen",
+        address: "fc00:0000::",
+        commonUse: "ULA Central Network",
         importance: "Important",
         category: "Private Networks",
-        range: "fc00::/7 (zentral zugewiesen)",
+        range: "fc00::/7",
         specialRules:
-            "Zentral zugewiesene private IPv6-Adressen (seltener verwendet)",
+            "Zentral zugewiesene private IPv6-Adressen (seltener verwendet), entspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
     },
     {
-        address: "fd00::",
-        commonUse:
-            "ULA (Unique Local Address) lokal generiert - Häufigste private IPv6",
+        address: "fd00:0000::",
+        commonUse: "ULA Local Network",
         importance: "Critical",
         category: "Private Networks",
-        range: "fc00::/7 (lokal generiert)",
+        range: "fc00::/7",
         specialRules:
-            "Meist verwendete private IPv6-Adressen in Unternehmen, entspricht RFC 1918",
+            "Meist verwendete private IPv6-Adressen in Unternehmen, entspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
     },
 
     // GLOBAL UNICAST - Critical for understanding (equivalent to public IPv4)
@@ -1563,7 +1566,7 @@ const specialPurposeAddresses = [
         category: "Global Unicast",
         range: "2000::/3",
         specialRules:
-            "Internet-routbare IPv6-Adressen, häufig von ISPs zugewiesen",
+            "Internet-routbare IPv6-Adressen, häufig von ISPs zugewiesen, entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)",
     },
     {
         address: "3000::",
@@ -1571,18 +1574,18 @@ const specialPurposeAddresses = [
         importance: "Important",
         category: "Global Unicast",
         range: "2000::/3",
-        specialRules: "Weiterer Global Unicast Adressbereich, Internet-routbar",
+        specialRules: "Weiterer Global Unicast Adressbereich, Internet-routbar, entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)",
     },
 
     // MULTICAST - Important concept (equivalent to Class D)
     {
-        address: "ff00::",
-        commonUse: "Multicast-Adressen",
+        address: "ff00:0000::",
+        commonUse: "Multicast Network",
         importance: "Critical",
         category: "Multicast",
         range: "ff00::/8",
         specialRules:
-            "Gruppenkommunkation, ersetzt IPv4-Broadcast (224.0.0.0/4)",
+            "Gruppenkommunkation, ersetzt IPv4-Broadcast, entspricht Klasse D (224.0.0.0/4) in IPv4",
     },
     {
         address: "ff02::1",
@@ -1590,7 +1593,7 @@ const specialPurposeAddresses = [
         importance: "Important",
         category: "Multicast",
         range: "ff00::/8",
-        specialRules: "Ersetzt IPv4-Broadcast 255.255.255.255",
+        specialRules: "Ersetzt IPv4-Broadcast, entspricht 255.255.255.255 in IPv4",
     },
     {
         address: "ff02::2",
@@ -1598,7 +1601,7 @@ const specialPurposeAddresses = [
         importance: "Important",
         category: "Multicast",
         range: "ff00::/8",
-        specialRules: "Spezielle Multicast-Adresse für alle Router",
+        specialRules: "Spezielle Multicast-Adresse für alle Router, kein direktes IPv4-Äquivalent (IPv4 nutzt Broadcast)",
     },
 
     // IPv4-COMPATIBLE (Basic transition concept)

@@ -60,8 +60,9 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             : [
                   "Loopback",
                   "APIPA",
+                  "Carrier-Grade NAT",
                   "Broadcast",
-                  "Routing",
+                  "Unspezifiziert",
                   "Private Networks",
                   "Public Networks",
                   "Classes D and E",
@@ -87,6 +88,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                   APIPA: "APIPA",
                   Broadcast: "Broadcast",
                   Routing: "Routing",
+                  "Carrier-Grade NAT": "Carrier-Grade NAT",
+                  Unspezifiziert: "Unspezifiziert",
                   "Private Networks": "Private Netzwerke",
                   "Public Networks": "Öffentliche Netzwerke",
                   "Classes D and E": "Klassen D und E",
@@ -129,7 +132,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             if (address === "169.254.1.1") return "APIPA / Link-lokale Adresse";
             if (address === "255.255.255.255")
                 return "Eingeschränkter Broadcast";
-            if (address === "0.0.0.0") return "Default Route / Unspezifiziert";
+            if (address === "0.0.0.0")
+                return "Default Route - nicht zugewiesene Adresse";
             if (address === "10.0.0.0")
                 return "Private Klasse A - Große Unternehmen";
             if (address === "172.16.0.0")
@@ -154,49 +158,59 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             // IPv6 address badges
 
             // Loopback
-            if (address === "::1") return { text: "System", class: "system" };
+            if (address === "::1") return { text: "Loopback", class: "system" };
 
             // Unspecified
             if (address === "::")
-                return { text: "Unspezifiziert", class: "unspecified" };
+                return { text: "Unspezifiziert", class: "routing" };
 
             // Documentation
             if (address === "2001:db8::")
                 return { text: "Dokumentation", class: "documentation" };
+            if (address === "2001:db8::1")
+                return { text: "Dokumentation", class: "documentation" };
+            if (address === "2001:db8:0000::")
+                return { text: "Dokumentation", class: "documentation" };
+            if (address === "2001:db8:1::")
+                return { text: "Dokumentation", class: "documentation" };
 
             // Link-Local
             if (address === "fe80::")
-                return { text: "Link-Local", class: "link-local" };
+                return { text: "Link-Local", class: "network" };
+            if (address === "fe80::1")
+                return { text: "Link-Local", class: "network" };
+            if (address === "fe80:0000::")
+                return { text: "Link-Local", class: "network" };
 
             // Private Networks (ULA)
-            if (address === "fc00::")
-                return { text: "ULA zentral", class: "private" };
-            if (address === "fd00::")
-                return { text: "ULA lokal", class: "private" };
+            if (address === "fc00::1")
+                return { text: "ULA zentral", class: "class-a" };
+            if (address === "fc00:0000::")
+                return { text: "ULA zentral", class: "class-a" };
+            if (address === "fd00::1")
+                return { text: "ULA lokal", class: "class-a" };
+            if (address === "fd00:0000::")
+                return { text: "ULA lokal", class: "class-a" };
 
             // Global Unicast
             if (address === "2001::")
-                return { text: "Global 2xxx", class: "global" };
+                return { text: "Global 2xxx", class: "class-b" };
             if (address === "3000::")
-                return { text: "Global 3xxx", class: "global" };
+                return { text: "Global 3xxx", class: "class-b" };
 
             // Multicast
-            if (address === "ff00::")
-                return { text: "Multicast", class: "multicast" };
+            if (address === "ff00:0000::")
+                return { text: "Multicast", class: "class-d" };
             if (address === "ff02::1")
-                return { text: "Alle Knoten", class: "multicast" };
+                return { text: "Alle Knoten", class: "special" };
             if (address === "ff02::2")
-                return { text: "Alle Router", class: "multicast" };
+                return { text: "Alle Router", class: "class-d" };
 
             // Transition
             if (address === "::ffff:0:0")
                 return { text: "IPv4-mapped", class: "transition" };
-            if (address === "2001::")
-                return { text: "Teredo", class: "transition" };
             if (address === "64:ff9b::")
                 return { text: "IPv4-embed", class: "transition" };
-            if (address === "::ffff:0:0")
-                return { text: "IPv4-mapped", class: "transition" };
 
             return null;
         } else {
@@ -219,18 +233,25 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 return { text: "Klasse C", class: "class-c" };
 
             // Special addresses
-            if (address === "127.0.0.1")
-                return { text: "System", class: "system" };
-            if (address === "169.254.1.1")
-                return { text: "Link-Local", class: "network" };
+            if (address === "127.0.0.0")
+                return { text: "Loopback", class: "system" };
+            if (address === "169.254.0.0")
+                return { text: "APIPA", class: "network" };
+            if (address === "100.64.0.0") return { text: "CGN", class: "cgn" };
             if (address === "255.255.255.255")
                 return { text: "Broadcast", class: "special" };
             if (address === "0.0.0.0")
-                return { text: "Default", class: "routing" };
+                return { text: "Unspezifiziert", class: "routing" };
             if (address === "224.0.0.0")
                 return { text: "Klasse D", class: "class-d" };
             if (address === "240.0.0.0")
                 return { text: "Klasse E", class: "class-e" };
+            if (address === "192.0.2.0")
+                return { text: "Dokumentation", class: "documentation" };
+            if (address === "198.51.100.0")
+                return { text: "Dokumentation", class: "documentation" };
+            if (address === "203.0.113.0")
+                return { text: "Dokumentation", class: "documentation" };
 
             return null;
         }
@@ -245,39 +266,53 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             // Loopback
             if (address === "::1")
-                return "Entspricht 127.0.0.1 in IPv4 - immer lokaler Computer";
+                return "Immer lokaler Computer - niemals über Netzwerk geroutet.\nEntspricht 127.0.0.1 in IPv4";
 
             // Unspecified
             if (address === "::")
-                return "Entspricht 0.0.0.0 in IPv4 - wird während der Adresskonfiguration verwendet";
+                return "Wird während der Adresskonfiguration verwendet.\nEntspricht 0.0.0.0 in IPv4";
 
             // Documentation
             if (address === "2001:db8::")
-                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele";
+                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
+            if (address === "2001:db8::1")
+                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
+            if (address === "2001:db8:0000::")
+                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
+            if (address === "2001:db8:1::")
+                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
 
             // Link-Local
             if (address === "fe80::")
-                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert - entspricht APIPA in IPv4";
+                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert.\nEntspricht APIPA (169.254.0.0/16) in IPv4";
+            if (address === "fe80::1")
+                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert.\nEntspricht APIPA (169.254.0.0/16) in IPv4";
+            if (address === "fe80:0000::")
+                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert.\nEntspricht APIPA (169.254.0.0/16) in IPv4";
 
             // Private Networks (ULA)
-            if (address === "fc00::")
-                return "Zentral zugewiesene private IPv6-Adressen (ULA - Unique Local Address, seltener verwendet)";
-            if (address === "fd00::")
-                return "Lokal generierte private IPv6-Adressen (ULA - Unique Local Address) - häufigste Form in Unternehmen";
+            if (address === "fc00::1")
+                return "Zentral zugewiesene private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
+            if (address === "fc00:0000::")
+                return "Zentral zugewiesene private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
+            if (address === "fd00::1")
+                return "Lokal generierte private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
+            if (address === "fd00:0000::")
+                return "Lokal generierte private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
 
             // Global Unicast
             if (address === "2001::")
-                return "Häufigster Global Unicast Bereich - von ISPs zugewiesen";
+                return "Häufigster Global Unicast Bereich - von ISPs zugewiesen.\nEntspricht öffentlichen IPv4-Adressen (Klasse A, B, C)";
             if (address === "3000::")
-                return "Weiterer Global Unicast Adressbereich - Internet-routbar";
+                return "Weiterer Global Unicast Adressbereich - Internet-routbar.\nEntspricht öffentlichen IPv4-Adressen (Klasse A, B, C)";
 
             // Multicast
-            if (address === "ff00::")
-                return "Ersetzt IPv4-Broadcast komplett - entspricht 224.0.0.0/4 in IPv4";
+            if (address === "ff00:0000::")
+                return "Ersetzt IPv4-Broadcast komplett - Gruppenkommunkation.\nEntspricht Klasse D (224.0.0.0/4) in IPv4";
             if (address === "ff02::1")
-                return "Ersetzt IPv4-Broadcast 255.255.255.255 - erreicht alle IPv6-Knoten";
+                return "Erreicht alle IPv6-Knoten - ersetzt IPv4-Broadcast.\nEntspricht 255.255.255.255 in IPv4";
             if (address === "ff02::2")
-                return "Erreicht alle IPv6-Router im lokalen Segment";
+                return "Erreicht alle IPv6-Router im lokalen Segment.\nKein direktes IPv4-Äquivalent (IPv4 nutzt Broadcast)";
 
             // Transition
             if (address === "::ffff:0:0")
@@ -287,25 +322,38 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         } else {
             // IPv4 special information (existing logic)
 
-            if (address === "169.254.1.1")
-                return "APIPA = Automatic Private IP Addressing (wenn DHCP fehlschlägt)";
-            if (address === "127.0.0.1") return "Immer lokaler Computer";
-            if (address === "0.0.0.0") return "Standard-Route";
+            if (address === "169.254.0.0")
+                return "Automatische Adressvergabe wenn DHCP fehlschlägt";
+            if (address === "100.64.0.0")
+                return "Geteilte IP-Adressen bei Internetanbietern für mehrere Kunden";
+            if (address === "127.0.0.0")
+                return "Immer lokaler Computer - niemals über Netzwerk geroutet";
+            if (address === "0.0.0.0")
+                return "Standard-Route oder unspezifizierte Adresse";
             if (address === "255.255.255.255")
                 return "An alle Geräte im lokalen Netzwerk";
+            if (address === "192.0.2.0")
+                return "Reserviert für Dokumentation und Beispiele";
+            if (address === "198.51.100.0")
+                return "Reserviert für Dokumentation und Beispiele";
+            if (address === "203.0.113.0")
+                return "Reserviert für Dokumentation und Beispiele";
             if (address === "224.0.0.0")
-                return "Multicast - Gruppenkommunkation";
+                return "Gruppenkommunikation - eine Nachricht an mehrere Empfänger";
             if (address === "240.0.0.0")
-                return "Experimentell / Zukünftige Nutzung";
+                return "Experimenteller Adressbereich - für zukünftige Nutzung reserviert";
             if (address === "10.0.0.0")
-                return "16,7 Millionen Adressen - Große Unternehmen";
+                return "16,7 Millionen private Adressen für große Unternehmen";
             if (address === "172.16.0.0")
-                return "1 Million Adressen - Mittlere Unternehmen";
+                return "1 Million private Adressen für mittlere Unternehmen";
             if (address === "192.168.0.0")
-                return "65.536 Adressen - Heimnetz oder Kleinbüros";
-            if (address === "1.0.0.0") return "Internet-routbar";
-            if (address === "128.0.0.0") return "Internet-routbar";
-            if (address === "192.0.0.0") return "Internet-routbar";
+                return "65.536 private Adressen für Heimnetzwerke und kleine Büros";
+            if (address === "1.0.0.0")
+                return "Öffentliche Adressen - über das Internet erreichbar";
+            if (address === "128.0.0.0")
+                return "Öffentliche Adressen - über das Internet erreichbar";
+            if (address === "192.0.0.0")
+                return "Öffentliche Adressen - über das Internet erreichbar";
 
             return null;
         }
@@ -432,7 +480,10 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                             unendlich viele Adressen und wird
                                             voraussichtlich IPv4 in den
                                             kommenden Jahren weitgehend
-                                            ersetzen.
+                                            ersetzen. IPv6 verwendet{" "}
+                                            <strong>kein Broadcast</strong>,
+                                            sondern nur Multicast für
+                                            Gruppenkommunikation.
                                         </div>
                                     </div>
 

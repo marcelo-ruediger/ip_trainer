@@ -246,111 +246,149 @@ const subnetCalculationAddresses = [
 const specialPurposeAddresses = [
     // LOOPBACK - Critical for exam
     {
-        address: "127.0.0.1",
-        commonUse: "Localhost/Loopback",
+        address: "127.0.0.0",
+        commonUse: "Loopback Netzwerk",
         importance: "Critical",
         category: "Loopback",
-        range: "127.0.0.0/8",
+        range: "127.0.0.1 - 127.255.255.255/8",
         specialRules: "Always refers to local machine, cannot be subnetted",
     },
 
     // APIPA - Important for DHCP troubleshooting
     {
-        address: "169.254.1.1",
-        commonUse: "APIPA/Link-local address",
+        address: "169.254.0.0",
+        commonUse: "APIPA Netzwerk",
         importance: "Important",
         category: "APIPA",
-        range: "169.254.0.0/16",
+        range: "169.254.0.1 - 169.254.255.254/16 (+ Broadcast)",
         specialRules: "Auto-assigned when DHCP fails",
+    },
+
+    // CARRIER-GRADE NAT - Important for ISP networks
+    {
+        address: "100.64.0.0",
+        commonUse: "Carrier-Grade NAT Netzwerk",
+        importance: "Important",
+        category: "Carrier-Grade NAT",
+        range: "100.64.0.1 - 100.127.255.254/10 (+ Broadcast)",
+        specialRules: "Used by ISPs for shared customer connections (RFC 6598)",
     },
 
     // BROADCAST - Critical concept
     {
         address: "255.255.255.255",
-        commonUse: "Limited broadcast",
+        commonUse: "Limitierter Broadcast",
         importance: "Critical",
         category: "Broadcast",
-        range: "Single address",
+        range: "Einzeladresse",
         specialRules: "Broadcast to all hosts on local network",
     },
 
-    // DEFAULT ROUTE - Critical for routing
+    // UNSPECIFIED/DEFAULT ROUTE - Critical for routing
     {
         address: "0.0.0.0",
-        commonUse: "Default route/Unspecified",
+        commonUse: "Default Route - nicht zugewiesene Adresse",
         importance: "Critical",
-        category: "Routing",
-        range: "Single address",
-        specialRules: "Default route or unspecified address",
+        category: "Unspezifiziert",
+        range: "Einzeladresse",
+        specialRules: "Unspecified address and default route (RFC 1122)",
+    },
+
+    // DOCUMENTATION ADDRESSES - Important for examples
+    {
+        address: "192.0.2.0",
+        commonUse: "Testnetz-1",
+        importance: "Important",
+        category: "Other",
+        range: "192.0.2.1 - 192.0.2.254/24 (+ Broadcast)",
+        specialRules: "Reserved for documentation and examples (RFC 5737)",
+    },
+
+    {
+        address: "198.51.100.0",
+        commonUse: "Testnetz-2",
+        importance: "Important",
+        category: "Other",
+        range: "198.51.100.1 - 198.51.100.254/24 (+ Broadcast)",
+        specialRules: "Reserved for documentation and examples (RFC 5737)",
+    },
+
+    {
+        address: "203.0.113.0",
+        commonUse: "Testnetz-3",
+        importance: "Important",
+        category: "Other",
+        range: "203.0.113.1 - 203.0.113.254/24 (+ Broadcast)",
+        specialRules: "Reserved for documentation and examples (RFC 5737)",
     },
 
     // PRIVATE NETWORKS - Critical for exam (ordered A → B → C)
     {
         address: "10.0.0.0",
-        commonUse: "Private Class A - Large enterprises",
+        commonUse: "Private Class A Network",
         importance: "Critical",
         category: "Private Networks",
-        range: "10.0.0.0/8",
+        range: "10.0.0.1 - 10.255.255.254/8 (+ Broadcast)",
         specialRules: "Largest private address space - enterprise networks",
     },
     {
         address: "172.16.0.0",
-        commonUse: "Private Class B - Medium businesses",
+        commonUse: "Private Class B Network",
         importance: "Critical",
         category: "Private Networks",
-        range: "172.16.0.0/12",
+        range: "172.16.0.1 - 172.31.255.254/12 (+ Broadcast)",
         specialRules: "Medium-sized private networks - business environments",
     },
     {
         address: "192.168.0.0",
-        commonUse: "Private Class C - Home networks",
+        commonUse: "Private Class C Network",
         importance: "Critical",
         category: "Private Networks",
-        range: "192.168.0.0/16",
+        range: "192.168.0.1 - 192.168.255.254/16 (+ Broadcast)",
         specialRules: "Small private networks - home routers and small offices",
     },
 
     // PUBLIC NETWORKS - Critical for understanding public vs private (ordered A → B → C)
     {
         address: "1.0.0.0",
-        commonUse: "Public Class A start",
+        commonUse: "Public Class A Network",
         importance: "Critical",
         category: "Public Networks",
-        range: "1.0.0.0 - 126.255.255.255",
+        range: "1.0.0.1 - 126.255.255.254 (+ Broadcast)",
         specialRules: "Public Class A addresses - globally routable",
     },
     {
         address: "128.0.0.0",
-        commonUse: "Public Class B start",
+        commonUse: "Public Class B Network",
         importance: "Critical",
         category: "Public Networks",
-        range: "128.0.0.0 - 191.255.255.255",
+        range: "128.0.0.1 - 191.255.255.254 (+ Broadcast)",
         specialRules: "Public Class B addresses - globally routable",
     },
     {
         address: "192.0.0.0",
-        commonUse: "Public Class C start",
+        commonUse: "Public Class C Network",
         importance: "Critical",
         category: "Public Networks",
-        range: "192.0.0.0 - 223.255.255.255",
+        range: "192.0.0.1 - 223.255.255.254 (+ Broadcast)",
         specialRules: "Public Class C addresses - globally routable",
     },
 
     // CLASS D and E boundaries - Important for exam
     {
         address: "224.0.0.0",
-        commonUse: "Class D start (Multicast)",
+        commonUse: "Klasse D Netzwerk (Multicast)",
         importance: "Important",
         category: "Classes D and E",
-        range: "224.0.0.0 - 239.255.255.255",
+        range: "224.0.0.0 - 239.255.255.255/4 (Kein Broadcast, kein Hostanteil)",
         specialRules: "Start of Class D address space - multicast",
     },
     {
         address: "240.0.0.0",
-        commonUse: "Class E start (Reserved)",
+        commonUse: "Klasse E Netzwerk (Reserviert)",
         importance: "Important",
         category: "Classes D and E",
-        range: "240.0.0.0 - 255.255.255.255",
+        range: "240.0.0.0 - 255.255.255.254/4 (Kein Broadcast, kein Hostanteil)",
         specialRules: "Start of Class E - reserved for future use",
     },
 ];
@@ -569,12 +607,13 @@ export const calculateNetworkData = (ipStr, cidr) => {
     if (ip[0] === 0) ipClass = "Reserved";
     else if (ip[0] === 127) ipClass = "Loopback";
     else if (ip[0] === 169 && ip[1] === 254) ipClass = "Link-Local";
-    else if (ip[0] >= 100 && ip[0] <= 127) ipClass = "Carrier-Grade NAT";
+    else if (ip[0] === 100 && ip[1] >= 64 && ip[1] <= 127)
+        ipClass = "Carrier-Grade NAT";
     else if (ip[0] >= 1 && ip[0] <= 126) ipClass = "A";
     else if (ip[0] >= 128 && ip[0] <= 191) ipClass = "B";
     else if (ip[0] >= 192 && ip[0] <= 223) ipClass = "C";
-    else if (ip[0] >= 224 && ip[0] <= 239) ipClass = "D (Multicast)";
-    else if (ip[0] >= 240) ipClass = "E (Reserved)";
+    else if (ip[0] >= 224 && ip[0] <= 239) ipClass = "D";
+    else if (ip[0] >= 240) ipClass = "E";
 
     return {
         networkId: network.join("."),
