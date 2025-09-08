@@ -826,7 +826,7 @@
         grid-row: 2;
         justify-self: center;
         min-width: 0; /* Prevent overflow */
-        overflow: hidden; /* Prevent content overflow */
+        /* overflow: hidden;  */
         max-width: 100%; /* Ensure it doesn't exceed container */
     }
 
@@ -858,28 +858,28 @@
     }
 
     .image-toggle-container > label::before {
-        width: 45px;
-        height: 24px;
+        width: 40px;
+        height: 22px;
     }
 
     .image-toggle-container > label::after {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         left: 4px;
     }
 
     .image-toggle-container > label:has(input[type="checkbox"]:checked)::after {
-        transform: translateY(-50%) translateX(21px);
+        transform: translateY(-50%) translateX(22px);
     }
 
     .image-toggle-container
         > label:has(input[type="checkbox"]:checked):hover::after {
-        transform: translateY(-50%) translateX(21px) scale(1.05);
+        transform: translateY(-50%) translateX(22px) scale(1.05);
     }
 
     .image-toggle-container
         > label:has(input[type="checkbox"]:checked):active::after {
-        transform: translateY(-50%) translateX(21px) scale(0.95);
+        transform: translateY(-50%) translateX(22px) scale(0.95);
     }
 }
 
