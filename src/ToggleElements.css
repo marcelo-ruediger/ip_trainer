@@ -534,10 +534,8 @@
 .language-toggle-container {
     display: flex;
     align-items: center;
-    /* gap: 8px; */
     background: transparent;
     border-radius: 8px;
-    /* padding: 4px 8px; */
 }
 
 .language-button {
@@ -811,6 +809,7 @@
         justify-self: start;
         min-width: 0; /* Prevent overflow */
         overflow: hidden; /* Prevent content overflow */
+        max-width: 100%;
     }
 
     .image-toggle-container > .info-label {
@@ -839,6 +838,17 @@
     .language-icon {
         width: 20px;
         height: 20px;
+    }
+
+    /* Make info icon same size as language icon on mobile */
+    .image-toggle-container > .info-label::before {
+        width: 20px;
+        height: 20px;
+        background-size: 20px 20px;
+    }
+
+    .image-toggle-container > .info-label:hover::before {
+        background-size: 18px 18px;
     }
 
     .image-toggle-container > label {
@@ -896,10 +906,9 @@
 }
 
 .image-toggle-container,
-.language-toggle-container,
 .ipv6-container,
 .table-image-container {
-    max-width: 100%;
+    max-width: 600px;
     overflow-x: hidden;
 }
 

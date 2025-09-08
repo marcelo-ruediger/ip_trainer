@@ -145,6 +145,21 @@ button:hover {
     transform: scale(1.05);
 }
 
+/* Remove white outline/border after button click for specific buttons */
+.top-buttons button:focus,
+.top-buttons button:focus-visible,
+.bottom-btns button:focus,
+.bottom-btns button:focus-visible {
+    outline: none !important;
+    border: 1px solid transparent !important;
+}
+
+/* Maintain hover border but remove focus outline */
+.top-buttons button:hover,
+.bottom-btns button:hover {
+    border: solid 1px #646cff;
+}
+
 .top-buttons {
     display: flex;
     justify-content: space-around;
