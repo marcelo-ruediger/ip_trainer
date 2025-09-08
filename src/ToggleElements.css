@@ -243,6 +243,41 @@
     }
 }
 
+/* Ultra small screens - ensure IPv6 structure text is fully visible */
+@media (max-width: 545px) {
+    .ipv6-structure-text {
+        white-space: normal; /* Allow text wrapping */
+        overflow: visible; /* Show all content */
+        text-overflow: unset; /* Remove ellipsis */
+        font-size: 0.7rem;
+        line-height: 1.3;
+        letter-spacing: -0.1px;
+        word-spacing: -1px;
+    }
+
+    .ipv6-structure-part {
+        padding: 1px 3px;
+        margin: 0 0.5px;
+        font-size: 0.7rem;
+        border-width: 1px;
+    }
+
+    .ipv6-structure-separator {
+        margin: 0 1px;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .ipv6-info-header {
+        padding: 0.15rem 0.8rem 0.2rem 0.8rem;
+    }
+
+    .ipv6-structure-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+    }
+}
+
 .popup-overlay {
     position: fixed;
     top: 0;
