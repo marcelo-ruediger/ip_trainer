@@ -166,6 +166,28 @@ button:hover {
     margin-bottom: 1rem;
 }
 
+/* Professional grey background and equal 3D effects for top buttons */
+.top-buttons button {
+    background-color: #3a3a3a;
+    border: 1px solid #555555;
+    border-radius: 6px;
+    box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+        /* Top-left inner highlight */ inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+        /* Bottom-right inner shadow */ 2px 2px 6px rgba(0, 0, 0, 0.2),
+        /* Top-left outer shadow */ -1px -1px 3px rgba(255, 255, 255, 0.05); /* Bottom-right outer highlight */
+    transition: box-shadow 0.3s, background-color 0.3s, transform 0.3s;
+}
+
+.top-buttons button:hover {
+    background-color: #484848;
+    box-shadow: inset 3px 3px 6px rgba(255, 255, 255, 0.12),
+        /* Enhanced top-left inner highlight */ inset -3px -3px 6px
+            rgba(0, 0, 0, 0.35),
+        /* Enhanced bottom-right inner shadow */ 3px 3px 8px rgba(0, 0, 0, 0.25),
+        /* Enhanced top-left outer shadow */ -2px -2px 4px
+            rgba(255, 255, 255, 0.08); /* Enhanced bottom-right outer highlight */
+}
+
 main {
     width: 600px;
     max-width: 600px;
@@ -200,6 +222,28 @@ label {
     margin-bottom: 2rem;
 }
 
+/* Professional grey background and equal 3D effects for bottom buttons */
+.bottom-btns button {
+    background-color: #3a3a3a;
+    border: 1px solid #555555;
+    border-radius: 6px;
+    box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+        /* Top-left inner highlight */ inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+        /* Bottom-right inner shadow */ 2px 2px 6px rgba(0, 0, 0, 0.2),
+        /* Top-left outer shadow */ -1px -1px 3px rgba(255, 255, 255, 0.05); /* Bottom-right outer highlight */
+    transition: box-shadow 0.3s, background-color 0.3s, transform 0.3s;
+}
+
+.bottom-btns button:hover {
+    background-color: #484848;
+    box-shadow: inset 3px 3px 6px rgba(255, 255, 255, 0.12),
+        /* Enhanced top-left inner highlight */ inset -3px -3px 6px
+            rgba(0, 0, 0, 0.35),
+        /* Enhanced bottom-right inner shadow */ 3px 3px 8px rgba(0, 0, 0, 0.25),
+        /* Enhanced top-left outer shadow */ -2px -2px 4px
+            rgba(255, 255, 255, 0.08); /* Enhanced bottom-right outer highlight */
+}
+
 footer {
     font-size: 12px;
 }
@@ -207,6 +251,51 @@ footer {
 .attention {
     border: solid 2px #646cff;
     transform: scale(1.05);
+}
+
+/* Enhanced attention effects for buttons */
+.top-buttons button.attention {
+    border: solid 3px #646cff !important;
+    box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.3),
+        /* Outer glow */ inset 2px 2px 4px rgba(255, 255, 255, 0.15),
+        /* Top-left inner highlight */ inset -2px -2px 4px rgba(0, 0, 0, 0.35),
+        /* Bottom-right inner shadow */ 2px 2px 6px rgba(0, 0, 0, 0.25),
+        /* Top-left outer shadow */ -1px -1px 3px rgba(255, 255, 255, 0.08); /* Bottom-right outer highlight */
+    background-color: #4a4a4a !important;
+}
+
+.top-buttons button.attention:hover {
+    border: solid 3px #7c84ff !important;
+    box-shadow: 0 0 0 3px rgba(124, 132, 255, 0.4),
+        /* Enhanced outer glow */ inset 3px 3px 6px rgba(255, 255, 255, 0.18),
+        /* Enhanced top-left inner highlight */ inset -3px -3px 6px
+            rgba(0, 0, 0, 0.4),
+        /* Enhanced bottom-right inner shadow */ 3px 3px 8px rgba(0, 0, 0, 0.3),
+        /* Enhanced top-left outer shadow */ -2px -2px 4px
+            rgba(255, 255, 255, 0.1); /* Enhanced bottom-right outer highlight */
+    background-color: #5a5a5a !important;
+}
+
+.bottom-btns button.attention {
+    border: solid 3px #646cff !important;
+    box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.3),
+        /* Outer glow */ inset 2px 2px 4px rgba(255, 255, 255, 0.15),
+        /* Top-left inner highlight */ inset -2px -2px 4px rgba(0, 0, 0, 0.35),
+        /* Bottom-right inner shadow */ 2px 2px 6px rgba(0, 0, 0, 0.25),
+        /* Top-left outer shadow */ -1px -1px 3px rgba(255, 255, 255, 0.08); /* Bottom-right outer highlight */
+    background-color: #4a4a4a !important;
+}
+
+.bottom-btns button.attention:hover {
+    border: solid 3px #7c84ff !important;
+    box-shadow: 0 0 0 3px rgba(124, 132, 255, 0.4),
+        /* Enhanced outer glow */ inset 3px 3px 6px rgba(255, 255, 255, 0.18),
+        /* Enhanced top-left inner highlight */ inset -3px -3px 6px
+            rgba(0, 0, 0, 0.4),
+        /* Enhanced bottom-right inner shadow */ 3px 3px 8px rgba(0, 0, 0, 0.3),
+        /* Enhanced top-left outer shadow */ -2px -2px 4px
+            rgba(255, 255, 255, 0.1); /* Enhanced bottom-right outer highlight */
+    background-color: #5a5a5a !important;
 }
 
 .instruction-container {
@@ -466,6 +555,25 @@ footer {
     }
 
     .default-container label:has(select#type) select {
+        margin-top: 0;
+        margin-left: 0;
+        flex: 1;
+        min-width: 120px;
+    }
+
+    /* IPv4 specific: Place Adresstyp label inline with select */
+    .default-container label:has(select#ipClass) {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+    }
+
+    .default-container label:has(select#ipClass) br.responsive-break {
+        display: none;
+    }
+
+    .default-container label:has(select#ipClass) select {
         margin-top: 0;
         margin-left: 0;
         flex: 1;

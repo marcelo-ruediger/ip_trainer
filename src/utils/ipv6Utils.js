@@ -1535,7 +1535,8 @@ const specialPurposeAddresses = [
         importance: "Critical",
         category: "Link-Local",
         range: "fe80::/10",
-        specialRules: "Automatisch konfiguriert, entspricht APIPA (169.254.0.0/16) in IPv4",
+        specialRules:
+            "Automatisch konfiguriert, entspricht APIPA (169.254.0.0/16) in IPv4",
     },
 
     // UNIQUE LOCAL - Critical for private networks (equivalent to RFC 1918)
@@ -1574,7 +1575,8 @@ const specialPurposeAddresses = [
         importance: "Important",
         category: "Global Unicast",
         range: "2000::/3",
-        specialRules: "Weiterer Global Unicast Adressbereich, Internet-routbar, entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)",
+        specialRules:
+            "Weiterer Global Unicast Adressbereich, Internet-routbar, entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)",
     },
 
     // MULTICAST - Important concept (equivalent to Class D)
@@ -1593,7 +1595,8 @@ const specialPurposeAddresses = [
         importance: "Important",
         category: "Multicast",
         range: "ff00::/8",
-        specialRules: "Ersetzt IPv4-Broadcast, entspricht 255.255.255.255 in IPv4",
+        specialRules:
+            "Ersetzt IPv4-Broadcast, entspricht 255.255.255.255 in IPv4",
     },
     {
         address: "ff02::2",
@@ -1601,7 +1604,8 @@ const specialPurposeAddresses = [
         importance: "Important",
         category: "Multicast",
         range: "ff00::/8",
-        specialRules: "Spezielle Multicast-Adresse für alle Router, kein direktes IPv4-Äquivalent (IPv4 nutzt Broadcast)",
+        specialRules:
+            "Spezielle Multicast-Adresse für alle Router, kein direktes IPv4-Äquivalent (IPv4 nutzt Broadcast)",
     },
 
     // IPv4-COMPATIBLE (Basic transition concept)

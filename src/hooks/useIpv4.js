@@ -5,6 +5,8 @@ import {
     cidrToMask,
     maskToCidr,
     calculateNetworkData,
+    getSpecialAddressFixedNetwork,
+    isValidNoneValue,
 } from "../utils/ipv4Utils";
 import { resetInputBorders } from "../utils/commonUtils";
 
@@ -103,6 +105,70 @@ export const useIPv4 = () => {
             // Valid IP - mark as correct
             ipInput.classList.remove("wrong");
             ipInput.classList.add("correct");
+
+            // Check if this is a special address with fixed network size
+            const specialNetwork = getSpecialAddressFixedNetwork(value);
+            if (specialNetwork) {
+                // Auto-fill CIDR and subnet mask for special addresses
+                const networkData = calculateNetworkData(
+                    value,
+                    specialNetwork.cidr
+                );
+
+                if (networkData) {
+                    setIpData({
+                        ip: value,
+                        cidr: `/${specialNetwork.cidr}`,
+                        subnetMask: specialNetwork.subnetMask,
+                        networkId: networkData.networkId,
+                        broadcast: networkData.broadcast,
+                        ipClass: networkData.ipClass,
+                        usableIps: networkData.usableIps,
+                    });
+
+                    setGenerated({
+                        cidr: `/${specialNetwork.cidr}`,
+                        subnetMask: specialNetwork.subnetMask,
+                        networkId: networkData.networkId,
+                        broadcast: networkData.broadcast,
+                        usableIps: networkData.usableIps,
+                        ipClass: networkData.ipClass,
+                    });
+
+                    setCidrValid(true);
+                    setSubnetMaskValid(true);
+                    setAttention(true);
+
+                    // Mark CIDR and subnet mask inputs as correct immediately
+                    setTimeout(() => {
+                        const cidrElement = document.getElementById("cidr");
+                        const maskElement =
+                            document.getElementById("subnetMask");
+                        const networkElement =
+                            document.getElementById("networkId");
+                        const broadcastElement =
+                            document.getElementById("broadcast");
+                        const usableElement =
+                            document.getElementById("usableIps");
+                        const ipClassElement =
+                            document.getElementById("ipClass");
+
+                        [
+                            cidrElement,
+                            maskElement,
+                            networkElement,
+                            broadcastElement,
+                            usableElement,
+                            ipClassElement,
+                        ].forEach((element) => {
+                            if (element) {
+                                element.classList.remove("wrong", "empty");
+                                element.classList.add("correct");
+                            }
+                        });
+                    }, 50);
+                }
+            }
         }
 
         // Add this line to ensure both CIDR and subnet mask inputs are available
@@ -126,6 +192,9 @@ export const useIPv4 = () => {
             }
             return;
         }
+
+        // Check if this IP has a fixed network size
+        const specialNetwork = getSpecialAddressFixedNetwork(currentIp);
 
         let cidr = null;
         let subnetMask = "";
@@ -289,11 +358,23 @@ export const useIPv4 = () => {
 
         // Keep generating until we get a non-ambiguous case
         do {
-            // 20% chance to include special addresses for educational purposes
-            const includeSpecial = Math.random() < 0.2;
+            // 30% chance to include special addresses for educational purposes
+            // Higher percentage because these are important for certification/learning
+            const includeSpecial = Math.random() < 0.3;
             ip = getRandomIp(includeSpecial);
-            cidr = getRandomCIDR();
-            subnetMask = cidrToMask(cidr);
+
+            // Check if this IP has special network requirements
+            const specialNetwork = getSpecialAddressFixedNetwork(ip);
+            if (specialNetwork) {
+                // Special addresses must use their fixed CIDR/mask values
+                cidr = specialNetwork.cidr;
+                subnetMask = specialNetwork.subnetMask;
+            } else {
+                // Normal addresses can use random CIDR values
+                cidr = getRandomCIDR();
+                subnetMask = cidrToMask(cidr);
+            }
+
             data = calculateNetworkData(ip, cidr);
 
             // Check if this is a special address that should auto-fill ipClass
@@ -302,18 +383,25 @@ export const useIPv4 = () => {
             );
 
             // Randomly select which field to generate
-            // Note: networkId removed due to inherent ambiguity issues
-            let fieldOptions = ["cidr", "subnetMask", "broadcast", "usableIps"];
+            // Only these fields provide unambiguous calculation paths and should be generated:
+            // - CIDR: Directly determines all network calculations
+            // - Subnet Mask: Directly determines all network calculations
+            // - usableIps: Can be calculated from to determine network size
+            //
+            // Adresstyp (ipClass) should NEVER be generated - user must always calculate it
+            let fieldOptions = ["cidr", "subnetMask", "usableIps"];
 
-            // If it's a special address, also include ipClass as a generated field
-            if (isSpecialAddress) {
-                fieldOptions.push("ipClass");
-            }
-
-            // If CIDR is 30 or 31, remove 'usableIps' to avoid ambiguity
+            // If CIDR is 30 or 31, remove 'usableIps' to avoid edge case ambiguity
+            // (both /30 and /31 have very few hosts, making calculation tricky)
             if (cidr === 30 || cidr === 31) {
                 fieldOptions = fieldOptions.filter((f) => f !== "usableIps");
             }
+
+            // If this is a special address that returns "kein" for usableIps, don't generate usableIps field
+            if (data && data.usableIps === "kein") {
+                fieldOptions = fieldOptions.filter((f) => f !== "usableIps");
+            }
+
             randomField =
                 fieldOptions[Math.floor(Math.random() * fieldOptions.length)];
 
@@ -351,14 +439,8 @@ export const useIPv4 = () => {
             case "subnetMask":
                 initialData.subnetMask = subnetMask;
                 break;
-            case "broadcast":
-                initialData.broadcast = data.broadcast;
-                break;
             case "usableIps":
                 initialData.usableIps = data.usableIps;
-                break;
-            case "ipClass":
-                initialData.ipClass = data.ipClass;
                 break;
         }
 
@@ -537,25 +619,19 @@ export const useIPv4 = () => {
             try {
                 switch (fieldId) {
                     case "networkId":
+                    case "networkId":
                     case "broadcast":
                     case "subnetMask": {
-                        // Special validation for broadcast field
-                        if (fieldId === "broadcast") {
-                            // Check if it should be "kein" (for /31 and /32 networks)
+                        // Special validation for fields that can be "kein" for special addresses
+                        if (
+                            fieldId === "broadcast" ||
+                            fieldId === "networkId"
+                        ) {
+                            // Check if it should be "kein" (for special addresses)
                             const correctValue = generated[fieldId];
                             if (correctValue === "kein") {
-                                // Accept multiple valid German and English responses for "no broadcast"
-                                const validNoBroadcastAnswers = [
-                                    "keiner",
-                                    "kein",
-                                    "keine",
-                                    "0",
-                                    "none",
-                                    "no",
-                                ];
-                                isValid = validNoBroadcastAnswers.includes(
-                                    value.toLowerCase()
-                                );
+                                // Accept comprehensive "none" values using utility function
+                                isValid = isValidNoneValue(value);
                                 break;
                             }
                         }
@@ -584,43 +660,42 @@ export const useIPv4 = () => {
                     }
 
                     case "ipClass":
-                        // Check for single letter classes (A, B, C, D, E)
-                        if (/^[a-eA-E]$/.test(value)) {
-                            isValid = true;
-                        } else {
-                            // Check for special address types (case-insensitive)
-                            const validSpecialTypes = [
-                                "reserved",
-                                "loopback",
-                                "link-local",
-                                "carrier-grade nat",
-                                "multicast",
-                                "d (multicast)",
-                                "e (reserved)",
-                                "cgn",
-                            ];
-                            isValid = validSpecialTypes.includes(
-                                value.toLowerCase()
-                            );
-                        }
+                        // Accept all dropdown values - validation is handled by the dropdown
+                        const validDropdownValues = [
+                            // Single letter classes
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "E",
+                            // Private/Public class distinctions
+                            "A (privat)",
+                            "A (öffentlich)",
+                            "B (privat)",
+                            "B (öffentlich)",
+                            "C (privat)",
+                            "C (öffentlich)",
+                            // Special address types (exact match with dropdown options)
+                            "Loopback",
+                            "APIPA",
+                            "Carrier-Grade NAT",
+                            "Dokumentation",
+                            "Broadcast",
+                            "Unspezifiziert",
+                        ];
+                        isValid =
+                            validDropdownValues.includes(value) || value === "";
                         break;
 
                     case "usableIps":
-                        // Check if the correct answer is 0 (for /32 networks)
+                        // Check if the correct answer is "kein" (for special addresses) or "0" (for /32 networks)
                         const correctUsableIps = generated[fieldId];
-                        if (correctUsableIps === "0") {
-                            // Accept multiple valid responses for "no host addresses"
-                            const validZeroAnswers = [
-                                "0",
-                                "keiner",
-                                "kein",
-                                "keine",
-                                "none",
-                                "no",
-                            ];
-                            isValid = validZeroAnswers.includes(
-                                value.toLowerCase()
-                            );
+                        if (
+                            correctUsableIps === "kein" ||
+                            correctUsableIps === "0"
+                        ) {
+                            // Use comprehensive validation for "none" values
+                            isValid = isValidNoneValue(value);
                         } else {
                             // Standard numeric validation for non-zero values
                             isValid = /^\d+$/.test(value);
@@ -668,21 +743,17 @@ export const useIPv4 = () => {
                     }
                 }
 
-                // Special comparison logic for broadcast field
-                if (fieldId === "broadcast" && correctValue === "kein") {
-                    const validNoBroadcastAnswers = [
-                        "keiner",
-                        "kein",
-                        "keine",
-                        "0",
-                        "none",
-                        "no",
-                    ];
-                    isCorrect = validNoBroadcastAnswers.includes(
-                        value.toLowerCase()
-                    );
+                // Special comparison logic for fields that can be "kein" for special addresses
+                if (
+                    (fieldId === "broadcast" ||
+                        fieldId === "networkId" ||
+                        fieldId === "usableIps") &&
+                    correctValue === "kein"
+                ) {
+                    // Use the comprehensive validation function for "none" values
+                    isCorrect = isValidNoneValue(value);
                 } else if (fieldId === "usableIps" && correctValue === "0") {
-                    // Special comparison logic for usableIps when answer is 0
+                    // Special comparison logic for usableIps when answer is 0 (legacy support)
                     const validZeroAnswers = [
                         "0",
                         "keiner",
@@ -693,39 +764,28 @@ export const useIPv4 = () => {
                     ];
                     isCorrect = validZeroAnswers.includes(value.toLowerCase());
                 } else if (fieldId === "ipClass") {
-                    // Special comparison logic for IP class
-                    const userValue = value.toUpperCase().trim();
-                    const correctValueUpper = correctValue.toUpperCase().trim();
+                    // Special comparison logic for IP class with dropdown
+                    const userValue = value.trim();
+                    const correctValue = generated.ipClass.trim();
 
-                    // If correct value is a single letter, accept only single letter
-                    if (/^[A-E]$/.test(correctValueUpper)) {
-                        isCorrect = userValue === correctValueUpper;
+                    // For A, B, C classes: extract just the letter from dropdown selection
+                    // The dropdown has options like "A (privat)" or "A (öffentlich)" but value is just "A"
+                    if (/^[A-E]$/.test(correctValue)) {
+                        // Correct answer is a basic class letter
+                        isCorrect = userValue === correctValue;
+                    } else if (
+                        ["Testnetz-1", "Testnetz-2", "Testnetz-3"].includes(
+                            correctValue
+                        )
+                    ) {
+                        // Map all documentation test networks to single dropdown option
+                        isCorrect = userValue === "Dokumentation";
+                    } else if (correctValue === "Dokumentation") {
+                        // Direct match for new documentation detection
+                        isCorrect = userValue === "Dokumentation";
                     } else {
-                        // For special address types, accept various valid inputs
-                        if (correctValueUpper === "LOOPBACK") {
-                            isCorrect = ["LOOPBACK", "LOOP", "LO"].includes(
-                                userValue
-                            );
-                        } else if (correctValueUpper === "LINK-LOCAL") {
-                            isCorrect = [
-                                "LINK-LOCAL",
-                                "LINK LOCAL",
-                                "APIPA",
-                                "AUTO",
-                            ].includes(userValue);
-                        } else if (correctValueUpper === "CARRIER-GRADE NAT") {
-                            isCorrect = [
-                                "CARRIER-GRADE NAT",
-                                "CGN",
-                                "CARRIER GRADE NAT",
-                                "SHARED",
-                            ].includes(userValue);
-                        } else if (correctValueUpper === "RESERVED") {
-                            isCorrect = ["RESERVED", "RES"].includes(userValue);
-                        } else {
-                            // Default case-insensitive comparison
-                            isCorrect = userValue === correctValueUpper;
-                        }
+                        // For other special address types, do exact matching
+                        isCorrect = userValue === correctValue;
                     }
                 } else {
                     isCorrect =
