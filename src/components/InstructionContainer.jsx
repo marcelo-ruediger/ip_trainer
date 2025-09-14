@@ -476,6 +476,13 @@ function InstructionContainer({
                         alt="network node"
                         className="network-node-icon"
                     />
+                    {/* Initial state hint message */}
+                    <div className="ipv6-hint">
+                        <div>
+                            ⚠️ Für Hilfe jederzeit IPv4-/IPv6-Hilfstabelle und
+                            Hinweise verwenden
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -492,6 +499,12 @@ function InstructionContainer({
                     alt="calculate"
                     className="calculate-icon"
                 />
+                {/* IPv4 hint message */}
+                <div className="ipv6-hint">
+                    <div>
+                        ⚠️ "kein" Netzwerk-, Broadcast- und Hostadressen möglich
+                    </div>
+                </div>
             </div>
         </div>
     );
