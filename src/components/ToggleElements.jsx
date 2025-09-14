@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getAllSpecialAddresses } from "../utils/ipv4Utils";
 import { getAllSpecialAddresses as getAllIPv6SpecialAddresses } from "../utils/ipv6Utils";
+import infoIcon from "../images/info.svg";
 import "../ToggleElements.css";
 
 function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
@@ -373,6 +374,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         type="checkbox"
                         checked={false}
                         onChange={handleSpecialAddressesToggle}
+                    />
+                    <img 
+                        src={infoIcon} 
+                        alt="info" 
+                        className="info-icon"
                     />
                     <span className="label-text">
                         {ipVersion === "ipv6"

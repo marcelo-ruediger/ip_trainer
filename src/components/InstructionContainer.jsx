@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 
+// Import all images
+import againIcon from "../images/again.svg";
+import correctionIcon from "../images/correction.svg";
+import networkBrainIcon from "../images/network_brain.svg";
+import mouseCursorIcon from "../images/mouse_cursor.svg";
+import calculateIcon from "../images/calculate.svg";
+import keyboardInputIcon from "../images/keybord_input.svg";
+import dataCheckIcon from "../images/data_check.svg";
+import networkNodeIcon from "../images/network_node.svg";
+
 function InstructionContainer({
     generatedField,
     ipData,
@@ -102,11 +112,7 @@ function InstructionContainer({
             <div className="instruction-container answers-shown correct-answers">
                 <div className="instruction-text">
                     Antworten wurden ausgefüllt. Versuche es nochmal{" "}
-                    <img
-                        src="./src/images/again.svg"
-                        alt="again"
-                        className="again-icon"
-                    />
+                    <img src={againIcon} alt="again" className="again-icon" />
                 </div>
             </div>
         );
@@ -205,7 +211,7 @@ function InstructionContainer({
                             {wrongCount} Falsch
                         </span>
                         <img
-                            src="./src/images/correction.svg"
+                            src={correctionIcon}
                             alt="correction"
                             className="correction-icon"
                             style={{
@@ -301,7 +307,7 @@ function InstructionContainer({
                             <>
                                 <span>100% richtig</span>
                                 <img
-                                    src="./src/images/network_brain.svg"
+                                    src={networkBrainIcon}
                                     alt="perfect"
                                     className="network-brain-icon"
                                     style={{
@@ -320,7 +326,7 @@ function InstructionContainer({
                                     anzeigen
                                 </span>
                                 <img
-                                    src="./src/images/mouse_cursor.svg"
+                                    src={mouseCursorIcon}
                                     alt="click"
                                     className="cursor-icon"
                                     style={{
@@ -379,7 +385,7 @@ function InstructionContainer({
                     <strong>Aufgabe:</strong> Fülle die anderen Felder anhand
                     der generierten Daten aus{" "}
                     <img
-                        src="./src/images/calculate.svg"
+                        src={calculateIcon}
                         alt="calculate"
                         className="calculate-icon"
                     />
@@ -414,7 +420,7 @@ function InstructionContainer({
                     <br />
                     Geben Sie eine gültige IPv4-Adresse ein{" "}
                     <img
-                        src="./src/images/keybord_input.svg"
+                        src={keyboardInputIcon}
                         alt="keyboard input"
                         className="keyboard-input-icon"
                     />
@@ -432,7 +438,7 @@ function InstructionContainer({
                     <br />
                     Geben Sie nun die CIDR-Notation oder die Subnetzmaske ein{" "}
                     <img
-                        src="./src/images/keybord_input.svg"
+                        src={keyboardInputIcon}
                         alt="keyboard input"
                         className="keyboard-input-icon"
                     />
@@ -455,7 +461,7 @@ function InstructionContainer({
                     <br />
                     Alle Netzwerkfelder wurden automatisch berechnet{" "}
                     <img
-                        src="./src/images/data_check.svg"
+                        src={dataCheckIcon}
                         alt="data check"
                         className="data-check-icon"
                     />
@@ -472,7 +478,7 @@ function InstructionContainer({
                     Erzeugen Sie eine IP + Feld zum Üben oder geben Sie IP +
                     CIDR/Subnetzmaske für Berechnungen ein{" "}
                     <img
-                        src="./src/images/network_node.svg"
+                        src={networkNodeIcon}
                         alt="network node"
                         className="network-node-icon"
                     />
@@ -495,7 +501,7 @@ function InstructionContainer({
                 <strong>Aufgabe:</strong> Fülle die anderen Felder anhand der
                 generierten Daten aus{" "}
                 <img
-                    src="./src/images/calculate.svg"
+                    src={calculateIcon}
                     alt="calculate"
                     className="calculate-icon"
                 />
