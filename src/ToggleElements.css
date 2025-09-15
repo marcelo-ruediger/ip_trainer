@@ -840,46 +840,30 @@
         gap: 6px;
     }
 
-    /* Responsive checkbox adjustments - Two line layout */
+    /* Responsive checkbox adjustments - Keep both toggles on same line */
     .image-toggle-container {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        grid-template-rows: auto auto;
+        display: flex;
+        justify-content: space-between;
         gap: 0.8rem;
         align-items: center;
-        justify-items: center;
         padding: 0 1rem 1rem 1rem;
         max-width: 100%; /* Prevent overflow */
         overflow-x: hidden; /* Prevent horizontal scrolling */
         box-sizing: border-box; /* Include padding in width calculation */
     }
 
-    /* First row: Language toggle (left) and Info label (right) */
-    .language-toggle-container {
-        grid-column: 1;
-        grid-row: 1;
+    /* Hilfstabelle toggle on the left */
+    .image-toggle-container > label:not(.info-label) {
         justify-self: start;
         min-width: 0; /* Prevent overflow */
-        overflow: hidden; /* Prevent content overflow */
-        max-width: 100%;
+        max-width: 100%; /* Ensure it doesn't exceed container */
     }
 
+    /* Info label on the right */
     .image-toggle-container > .info-label {
-        grid-column: 3;
-        grid-row: 1;
         justify-self: end;
         min-width: 0; /* Prevent overflow */
         overflow: hidden; /* Prevent content overflow */
-    }
-
-    /* Second row: Hilfstabelle button centered */
-    .image-toggle-container > label:not(.info-label) {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        justify-self: center;
-        min-width: 0; /* Prevent overflow */
-        /* overflow: hidden;  */
-        max-width: 100%; /* Ensure it doesn't exceed container */
     }
 
     .language-button {
