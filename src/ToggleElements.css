@@ -864,6 +864,8 @@
         justify-self: end;
         min-width: 0; /* Prevent overflow */
         overflow: hidden; /* Prevent content overflow */
+        gap: 8px; /* Reduce space between icon and label on mobile */
+        padding: 0 1rem; /* Add horizontal padding */
     }
 
     .language-button {
@@ -876,15 +878,15 @@
         height: 20px;
     }
 
-    /* Make info icon same size on mobile */
+    /* Make info icon bigger on mobile to match toggle size */
     .image-toggle-container > .info-label .info-icon {
-        width: 20px;
-        height: 20px;
+        width: 26px;
+        height: 26px;
     }
 
     .image-toggle-container > .info-label:hover .info-icon {
-        width: 18px;
-        height: 18px;
+        width: 24px;
+        height: 24px;
     }
 
     .image-toggle-container > label {
