@@ -1,0 +1,174 @@
+{
+    "de": {
+        "ipVersionButtons": {
+            "generateIPv4": "IPv4 erzeugen",
+            "generateIPv6": "IPv6 erzeugen"
+        },
+        "topInputs": {
+            "ipv4Address": "IPv4-Adresse:",
+            "placeholder": "Eingeben...",
+            "cidrNotation": "CIDR-Notation:",
+            "subnetMask": "Subnetzmaske:",
+            "inputMode": "Eingabe Modus",
+            "practiceMode": "Übung Modus",
+            "modeDescription": "Geben Sie IP und CIDR/Maske ein um alle anderen Felder zu berechnen",
+            "practiceDescription": "Berechnen Sie die fehlenden Felder basierend auf den generierten Werten"
+        },
+        "middleInputs": {
+            "networkAddress": "Netzwerkadresse:",
+            "broadcastAddress": "Broadcast-Adresse:",
+            "wildcardMask": "Wildcard-Maske:",
+            "firstHost": "Erste Host-Adresse:",
+            "lastHost": "Letzte Host-Adresse:"
+        },
+        "bottomInputs": {
+            "totalHosts": "Anzahl Hosts gesamt:",
+            "usableHosts": "Hostanzahl:",
+            "networkClass": "Adresstyp:",
+            "isPrivate": "Privates Netzwerk:",
+            "yes": "Ja",
+            "no": "Nein",
+            "selectPlaceholder": "Bitte wählen",
+            "classOptions": {
+                "APrivate": "A (privat)",
+                "APublic": "A (öffentlich)",
+                "BPrivate": "B (privat)",
+                "BPublic": "B (öffentlich)",
+                "CPrivate": "C (privat)",
+                "CPublic": "C (öffentlich)",
+                "D": "D",
+                "E": "E",
+                "Loopback": "Loopback",
+                "APIPA": "APIPA",
+                "CarrierGradeNAT": "Carrier-Grade NAT",
+                "Documentation": "Dokumentation",
+                "Broadcast": "Broadcast",
+                "Unspecified": "Unspezifiziert"
+            }
+        },
+        "bottomButtons": {
+            "check": "Überprüfen",
+            "showAnswers": "Antworten anzeigen"
+        },
+        "toggleElements": {
+            "helpTableIPv4": "Hilfstabelle IPv4",
+            "helpTableIPv6": "Hilfstabelle IPv6",
+            "hintsIPv4": "IPv4 Hinweise",
+            "hintsIPv6": "IPv6 Hinweise"
+        },
+        "topInputsIPv6": {
+            "fullAddress": "Vollständige IPv6-Adresse:",
+            "networkPrefix": "Netzwerkpräfix:"
+        },
+        "middleInputsIPv6": {
+            "abbreviatedAddress": "Abkürzung:",
+            "networkAddress": "Netzwerkadresse:",
+            "abbreviatedPlaceholder": "Abgekürzt..."
+        },
+        "bottomInputsIPv6": {
+            "addressType": "Adresstyp:",
+            "subnetPart": "Subnetzanteil:",
+            "interfacePart": "Interfaceanteil:",
+            "selectPlaceholder": "Bitte wählen",
+            "subnetPlaceholder": "Alle Bits...",
+            "interfacePlaceholder": "Abgekürzt...",
+            "subnetTitle": "Der Subnetz-Anteil der Adresse (normalerweise 4. Hextet-Gruppe)",
+            "interfaceTitle": "Der Interface-Anteil der Adresse (letzten 64 Bits)",
+            "typeOptions": {
+                "globalUnicast": "Global Unicast",
+                "documentation": "Dokumentation",
+                "ula": "ULA",
+                "linkLocal": "Link-Local",
+                "loopback": "Loopback",
+                "multicast": "Multicast",
+                "unspecified": "Unspezifiziert"
+            }
+        }
+    },
+    "en": {
+        "ipVersionButtons": {
+            "generateIPv4": "Generate IPv4",
+            "generateIPv6": "Generate IPv6"
+        },
+        "topInputs": {
+            "ipv4Address": "IPv4 Address:",
+            "placeholder": "Enter...",
+            "cidrNotation": "CIDR Notation:",
+            "subnetMask": "Subnet Mask:",
+            "inputMode": "Input Mode",
+            "practiceMode": "Practice Mode",
+            "modeDescription": "Enter IP and CIDR/Mask to calculate all other fields",
+            "practiceDescription": "Calculate the missing fields based on the generated values"
+        },
+        "middleInputs": {
+            "networkAddress": "Network Address:",
+            "broadcastAddress": "Broadcast Address:",
+            "wildcardMask": "Wildcard Mask:",
+            "firstHost": "First Host Address:",
+            "lastHost": "Last Host Address:"
+        },
+        "bottomInputs": {
+            "totalHosts": "Total Hosts:",
+            "usableHosts": "Host Count:",
+            "networkClass": "Address Type:",
+            "isPrivate": "Private Network:",
+            "yes": "Yes",
+            "no": "No",
+            "selectPlaceholder": "Please select",
+            "classOptions": {
+                "APrivate": "A (private)",
+                "APublic": "A (public)",
+                "BPrivate": "B (private)",
+                "BPublic": "B (public)",
+                "CPrivate": "C (private)",
+                "CPublic": "C (public)",
+                "D": "D",
+                "E": "E",
+                "Loopback": "Loopback",
+                "APIPA": "APIPA",
+                "CarrierGradeNAT": "Carrier-Grade NAT",
+                "Documentation": "Documentation",
+                "Broadcast": "Broadcast",
+                "Unspecified": "Unspecified"
+            }
+        },
+        "bottomButtons": {
+            "check": "Check",
+            "showAnswers": "Show Answers"
+        },
+        "toggleElements": {
+            "helpTableIPv4": "IPv4 Help Table",
+            "helpTableIPv6": "IPv6 Help Table",
+            "hintsIPv4": "IPv4 Hints",
+            "hintsIPv6": "IPv6 Hints"
+        },
+        "topInputsIPv6": {
+            "fullAddress": "Full IPv6 Address:",
+            "networkPrefix": "Network Prefix:"
+        },
+        "middleInputsIPv6": {
+            "abbreviatedAddress": "Abbreviation:",
+            "networkAddress": "Network Address:",
+            "abbreviatedPlaceholder": "Abbreviated..."
+        },
+        "bottomInputsIPv6": {
+            "addressType": "Address Type:",
+            "subnetPart": "Subnet ID:",
+            "interfacePart": "Interface ID:",
+            "selectPlaceholder": "Please select",
+            "subnetPlaceholder": "All bits...",
+            "interfacePlaceholder": "Abbreviated...",
+            "subnetTitle": "The subnet part of the address (usually 4th hextet group)",
+            "interfaceTitle": "The interface part of the address (last 64 bits)",
+            "typeOptions": {
+                "globalUnicast": "Global Unicast",
+                "documentation": "Documentation",
+                "ula": "ULA",
+                "linkLocal": "Link-Local",
+                "loopback": "Loopback",
+                "multicast": "Multicast",
+                "unspecified": "Unspecified"
+            }
+        }
+    }
+}

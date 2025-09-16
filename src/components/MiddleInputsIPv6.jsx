@@ -1,13 +1,17 @@
+import { useLanguage } from "../contexts/LanguageContext";
+
 function MiddleInputsIPv6({
     renderValue,
     handleInputChange,
     showAnswers,
     mode,
 }) {
+    const { t } = useLanguage();
+
     return (
         <div className="default-container">
             <label>
-                Abkürzung:
+                {t("middleInputsIPv6.abbreviatedAddress")}
                 <br className="responsive-break" />
                 <input
                     id="abbreviatedAddress"
@@ -20,14 +24,14 @@ function MiddleInputsIPv6({
                 />
             </label>
             <label>
-                Netzwerkadresse:
+                {t("middleInputsIPv6.networkAddress")}
                 <br className="responsive-break" />
                 <input
                     id="networkAddress"
                     value={renderValue("networkAddress")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
-                    placeholder="Abgekürzt..."
+                    placeholder={t("middleInputsIPv6.abbreviatedPlaceholder")}
                     className="network-address-input"
                 />
             </label>

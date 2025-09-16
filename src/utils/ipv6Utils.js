@@ -295,7 +295,6 @@ export const getRandomIPv6 = () => {
         return generateSimpleGlobalUnicast();
     } else {
         // 15% - Documentation addresses (educational variety beyond must-know 2001:db8::1)
-        // ULA and Link-Local REMOVED to prevent double-counting with must-know addresses
         return generateDocumentationIPv6();
     }
 };

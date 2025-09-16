@@ -1,3 +1,5 @@
+import { useLanguage } from "../contexts/LanguageContext";
+
 function TopInputsIPv6({
     ipData,
     renderValue,
@@ -5,10 +7,12 @@ function TopInputsIPv6({
     showAnswers,
     mode,
 }) {
+    const { t } = useLanguage();
+
     return (
         <div className="default-container">
             <label>
-                Vollständige IPv6-Adresse:
+                {t("topInputsIPv6.fullAddress")}
                 <br className="responsive-break" />
                 <input
                     id="fullAddress"
@@ -21,7 +25,7 @@ function TopInputsIPv6({
                 />
             </label>
             <label>
-                Netzwerkpräfix:
+                {t("topInputsIPv6.networkPrefix")}
                 <br className="responsive-break" />
                 <input
                     id="networkPrefix"

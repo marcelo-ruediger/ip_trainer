@@ -1,8 +1,12 @@
+import { useLanguage } from "../contexts/LanguageContext";
+
 function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
+    const { t } = useLanguage();
+
     return (
         <div className="default-container">
             <label>
-                Adresstyp:
+                {t("bottomInputsIPv6.addressType")}
                 <br className="responsive-break" />
                 <select
                     id="type"
@@ -11,39 +15,55 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                     disabled={showAnswers}
                     style={{ width: "100%" }}
                 >
-                    <option value="">Bitte wählen</option>
-                    <option value="Global Unicast">Global Unicast</option>
-                    <option value="Documentation">Documentation</option>
-                    <option value="ULA">ULA</option>
-                    <option value="Link-Local">Link-Local</option>
-                    <option value="Loopback">Loopback</option>
-                    <option value="Multicast">Multicast</option>
-                    <option value="Unspecified">Unspecified</option>
+                    <option value="">
+                        {t("bottomInputsIPv6.selectPlaceholder")}
+                    </option>
+                    <option value="Global Unicast">
+                        {t("bottomInputsIPv6.typeOptions.globalUnicast")}
+                    </option>
+                    <option value="Documentation">
+                        {t("bottomInputsIPv6.typeOptions.documentation")}
+                    </option>
+                    <option value="ULA">
+                        {t("bottomInputsIPv6.typeOptions.ula")}
+                    </option>
+                    <option value="Link-Local">
+                        {t("bottomInputsIPv6.typeOptions.linkLocal")}
+                    </option>
+                    <option value="Loopback">
+                        {t("bottomInputsIPv6.typeOptions.loopback")}
+                    </option>
+                    <option value="Multicast">
+                        {t("bottomInputsIPv6.typeOptions.multicast")}
+                    </option>
+                    <option value="Unspecified">
+                        {t("bottomInputsIPv6.typeOptions.unspecified")}
+                    </option>
                 </select>
             </label>
             <label>
-                Subnetzanteil:
+                {t("bottomInputsIPv6.subnetPart")}
                 <br className="responsive-break" />
                 <input
                     id="subnetId"
                     value={renderValue("subnetId")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
-                    placeholder="Alle Bits..."
-                    title="Der Subnetz-Anteil der Adresse (normalerweise 4. Hextet-Gruppe)"
+                    placeholder={t("bottomInputsIPv6.subnetPlaceholder")}
+                    title={t("bottomInputsIPv6.subnetTitle")}
                     className="subnet-id-input"
                 />
             </label>
             <label>
-                Interfaceanteil:
+                {t("bottomInputsIPv6.interfacePart")}
                 <br className="responsive-break" />
                 <input
                     id="interfaceId"
                     value={renderValue("interfaceId")}
                     onChange={handleInputChange}
                     disabled={showAnswers}
-                    placeholder="Abgekürzt..."
-                    title="Der Interface-Anteil der Adresse (letzten 64 Bits)"
+                    placeholder={t("bottomInputsIPv6.interfacePlaceholder")}
+                    title={t("bottomInputsIPv6.interfaceTitle")}
                     className="interface-id-input"
                 />
             </label>

@@ -1,3 +1,5 @@
+import { useLanguage } from "../contexts/LanguageContext";
+
 function TopInputs({
     ipData,
     mode,
@@ -14,16 +16,18 @@ function TopInputs({
     generatedField,
     renderValue,
 }) {
+    const { t } = useLanguage();
+
     return (
         <div className="default-container three-inputs-container">
             <label>
-                IPv4-Adresse:
+                {t("topInputs.ipv4Address")}
                 <br className="responsive-break" />
                 <input
                     id="ip"
                     value={ipData.ip}
                     onChange={onIpInput}
-                    placeholder="Eingeben..."
+                    placeholder={t("topInputs.placeholder")}
                     className={[
                         attention && "attention",
                         ipValid === true ? "correct" : "",
@@ -36,7 +40,7 @@ function TopInputs({
             </label>
             <br className="responsive-break" />
             <label>
-                CIDR:
+                {t("topInputs.cidrNotation")}
                 <br className="responsive-break" />
                 <input
                     id="cidr"
@@ -51,7 +55,9 @@ function TopInputs({
                         .filter(Boolean)
                         .join(" ")}
                     placeholder={
-                        userIsInputting && ipValid === true ? "Eingeben..." : ""
+                        userIsInputting && ipValid === true
+                            ? t("topInputs.placeholder")
+                            : ""
                     }
                     value={renderValue("cidr")}
                     onChange={(e) => {
@@ -65,7 +71,7 @@ function TopInputs({
             </label>
             <br className="responsive-break" />
             <label>
-                Subnetzmaske:
+                {t("topInputs.subnetMask")}
                 <br className="responsive-break" />
                 <input
                     id="subnetMask"
@@ -80,7 +86,9 @@ function TopInputs({
                         .filter(Boolean)
                         .join(" ")}
                     placeholder={
-                        userIsInputting && ipValid === true ? "Eingeben..." : ""
+                        userIsInputting && ipValid === true
+                            ? t("topInputs.placeholder")
+                            : ""
                     }
                     value={renderValue("subnetMask")}
                     onChange={(e) => {

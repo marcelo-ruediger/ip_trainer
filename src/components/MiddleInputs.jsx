@@ -1,13 +1,17 @@
+import { useLanguage } from "../contexts/LanguageContext";
+
 function MiddleInputs({
     renderValue,
     handleInputChange,
     showAnswers,
     generatedField,
 }) {
+    const { t } = useLanguage();
+
     return (
         <div className="default-container">
             <label>
-                Netzwerkadresse:
+                {t("middleInputs.networkAddress")}
                 <br className="responsive-break" />
                 <input
                     id="networkId"
@@ -20,7 +24,7 @@ function MiddleInputs({
                 />
             </label>
             <label>
-                Broadcastadresse:
+                {t("middleInputs.broadcastAddress")}
                 <br className="responsive-break" />
                 <input
                     id="broadcast"

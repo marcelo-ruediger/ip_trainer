@@ -1,9 +1,9 @@
 {
-    "name": "ipv4_trainer_app",
+    "name": "ip_trainer_app",
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "homepage": "https://Manobrawn.github.io/ipv4_trainer",
+    "homepage": "https://Manobrawn.github.io/ip_trainer",
     "scripts": {
         "dev": "vite",
         "build": "vite build",

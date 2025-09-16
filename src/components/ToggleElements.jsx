@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { getAllSpecialAddresses } from "../utils/ipv4Utils";
 import { getAllSpecialAddresses as getAllIPv6SpecialAddresses } from "../utils/ipv6Utils";
+import { useLanguage } from "../contexts/LanguageContext";
 import "../ToggleElements.css";
 import languageIcon from "../images/language.svg";
 
 function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
     const [showSpecialAddresses, setShowSpecialAddresses] = useState(false);
-    const [currentLanguage, setCurrentLanguage] = useState("DE");
+    const { language, setLanguage, t } = useLanguage();
 
     // Use appropriate special addresses based on IP version
     const specialAddresses =
@@ -18,9 +19,9 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         setShowSpecialAddresses(true);
     };
 
-    const handleLanguageToggle = (language) => {
-        setCurrentLanguage(language);
-        // TODO: Add language change logic here
+    const handleLanguageToggle = (newLanguage) => {
+        const langCode = newLanguage.toLowerCase();
+        setLanguage(langCode);
     };
 
     const closePopup = () => {
@@ -365,7 +366,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 <div className="language-toggle-container">
                     <button
                         className={`language-button ${
-                            currentLanguage === "DE" ? "active" : ""
+                            language === "de" ? "active" : ""
                         }`}
                         onClick={() => handleLanguageToggle("DE")}
                     >
@@ -378,7 +379,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     />
                     <button
                         className={`language-button ${
-                            currentLanguage === "EN" ? "active" : ""
+                            language === "en" ? "active" : ""
                         }`}
                         onClick={() => handleLanguageToggle("EN")}
                     >
@@ -394,8 +395,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     />
                     <span className="label-text">
                         {ipVersion === "ipv6"
-                            ? "Hilfstabelle IPv6"
-                            : "Hilfstabelle IPv4"}
+                            ? t("toggleElements.helpTableIPv6")
+                            : t("toggleElements.helpTableIPv4")}
                     </span>
                 </label>
 
@@ -407,8 +408,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     />
                     <span className="label-text">
                         {ipVersion === "ipv6"
-                            ? "IPv6 Hinweise"
-                            : "IPv4 Hinweise"}
+                            ? t("toggleElements.hintsIPv6")
+                            : t("toggleElements.hintsIPv4")}
                     </span>
                 </label>
             </div>
