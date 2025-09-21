@@ -212,6 +212,22 @@ export const useIPv6 = () => {
                 return;
             }
 
+            // If answers are already shown, keep fields as correct
+            if (showAnswers) {
+                const inputElement = document.getElementById(fieldId);
+                if (inputElement) {
+                    inputElement.classList.remove("wrong", "empty");
+                    inputElement.classList.add("correct");
+                }
+                // Add to results as correct
+                results.push({
+                    field: fieldId,
+                    isCorrect: true,
+                    value: ipData[fieldId] || "",
+                });
+                return;
+            }
+
             const displayedValue = userInput[fieldId];
             const value = displayedValue?.toString().trim();
 

@@ -395,7 +395,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     />
                     <span className="label-text">
                         {ipVersion === "ipv6"
-                            ? t("toggleElements.helpTableIPv6")
+                            ? t("toggleElements.helpTableIPv6.buttonLabel")
                             : t("toggleElements.helpTableIPv4")}
                     </span>
                 </label>
@@ -423,18 +423,26 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 {ipVersion === "ipv6" && (
                     <div className="ipv6-info-header">
                         <div className="ipv6-structure-title">
-                            IPv6-Struktur (128 bits):
+                            {t("toggleElements.helpTableIPv6.title")} (128
+                            bits):
                         </div>
                         <div className="ipv6-structure-text">
                             <span className="ipv6-structure-part network-part">
-                                64 Bits Netzwerkanteil (Präfix + Subnetz)
+                                64 Bits{" "}
+                                {t(
+                                    "toggleElements.helpTableIPv6.networkPrefix"
+                                )}
                             </span>
                             <span className="ipv6-structure-separator">
                                 {" "}
                                 +{" "}
                             </span>
                             <span className="ipv6-structure-part interface-part">
-                                64 Bits Interfaceanteil (Hosts)
+                                64 Bits{" "}
+                                {t(
+                                    "toggleElements.helpTableIPv6.interfacePrefix"
+                                )}{" "}
+                                (Hosts)
                             </span>
                         </div>
                     </div>

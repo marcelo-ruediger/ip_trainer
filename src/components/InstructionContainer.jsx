@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 function InstructionContainer({
     generatedField,
@@ -14,79 +15,64 @@ function InstructionContainer({
     checkResults, // Add checkResults prop for validation results
     showCheckResults, // Add prop to show check results
 }) {
+    const { t } = useLanguage();
+
+    // Move hooks to the top level - always call them in the same order
+    const containerRef = useRef(null);
+
+    // Move useEffect to top level but make the logic conditional
+    useEffect(() => {
+        // Only run scroll logic when we have checkResults and showCheckResults
+        if (showCheckResults && checkResults && containerRef.current) {
+            const correctCount = checkResults.filter(
+                (result) => result.isCorrect
+            ).length;
+            const totalCount = checkResults.length;
+            const allCorrect = correctCount === totalCount;
+
+            if (allCorrect) {
+                const elementTop = containerRef.current.offsetTop;
+                const offset = 32; // 2rem margin
+                window.scrollTo({
+                    top: elementTop - offset,
+                    behavior: "smooth",
+                });
+            }
+        }
+    }, [showCheckResults, checkResults]); // Dependencies to watch for changes
+
     const getFieldDisplayName = (field) => {
         switch (field) {
             // IPv4 fields
             case "cidr":
                 return "CIDR";
             case "subnetMask":
-                return "Subnetzmaske";
+                return t("instructionContainer.feedback.subnetMask");
             case "networkId":
-                return "Netzwerkadresse";
+                return t("instructionContainer.feedback.networkAddress");
             case "broadcast":
-                return "Broadcast-Adresse";
+                return t("instructionContainer.feedback.broadcastAddress");
             case "usableIps":
-                return "Host-Adressen Anzahl";
+                return t("instructionContainer.feedback.hostCount");
             case "ipClass":
-                return "IP-Klasse";
+                return t("instructionContainer.feedback.addressType");
             // IPv6 fields
             case "fullAddress":
-                return "Vollständige Adresse";
+                return t("instructionContainer.feedback.fullIpv6Address");
             case "abbreviatedAddress":
-                return "Abkürzung";
+                return t("instructionContainer.feedback.abbreviation");
             case "networkPrefix":
                 return "Netzwerk-Präfix";
             case "networkAddress":
-                return "Netzwerkadresse";
+                return t("instructionContainer.feedback.networkAddress");
             case "type":
-                return "Adresstyp";
+                return t("instructionContainer.feedback.addressType");
             case "interfaceId":
-                return "Interface-ID";
+                return t("instructionContainer.feedback.interfaceId");
             case "subnetId":
-                return "Subnetzanteil";
-            case "possibleSubnets":
-                return "Anzahl von Subnetze";
-            case "targetPrefix":
-                return "Subnetz Ziel-Präfix";
+                return t("instructionContainer.feedback.subnetId");
             default:
                 return field;
-        }
-    };
-
-    const getFieldValue = (field) => {
-        switch (field) {
-            // IPv4 fields
-            case "cidr":
-                return ipData.cidr;
-            case "subnetMask":
-                return ipData.subnetMask;
-            case "networkId":
-                return ipData.networkId;
-            case "broadcast":
-                return ipData.broadcast;
-            case "usableIps":
-                return ipData.usableIps;
-            // IPv6 fields
-            case "fullAddress":
-                return ipData.fullAddress;
-            case "abbreviatedAddress":
-                return ipData.abbreviatedAddress;
-            case "networkPrefix":
-                return ipData.networkPrefix;
-            case "networkAddress":
-                return ipData.networkAddress;
-            case "type":
-                return ipData.type;
-            case "interfaceId":
-                return ipData.interfaceId;
-            case "subnetId":
-                return ipData.subnetId;
-            case "possibleSubnets":
-                return ipData.possibleSubnets;
-            case "targetPrefix":
-                return ipData.targetPrefix;
-            default:
-                return "";
         }
     };
 
@@ -145,20 +131,6 @@ function InstructionContainer({
         else if (percentage >= 0.2) borderColor = "#ef4444"; // Light red
         else borderColor = "#dc2626"; // Red (.wrong)
 
-        const containerRef = useRef(null);
-
-        useEffect(() => {
-            // Scroll to show instruction container at top
-            if (containerRef.current) {
-                const elementTop = containerRef.current.offsetTop;
-                const offset = 32; // 2rem margin
-                window.scrollTo({
-                    top: elementTop - offset,
-                    behavior: "smooth",
-                });
-            }
-        }, [allCorrect]);
-
         // Split results into groups of 3 and 2
         const firstGroup = checkResults.slice(0, 3);
         const secondGroup = checkResults.slice(3, 5);
@@ -181,7 +153,8 @@ function InstructionContainer({
                         }}
                     >
                         <span style={{ color: "#00ff88" }}>
-                            Richtig {correctCount}
+                            {t("instructionContainer.feedback.correct")}{" "}
+                            {correctCount}
                         </span>
                         <span style={{ color: "#888888", margin: "0 0.3rem" }}>
                             /
@@ -189,7 +162,8 @@ function InstructionContainer({
                         {emptyCount > 0 && (
                             <>
                                 <span style={{ color: "#888888" }}>
-                                    {emptyCount} Leer
+                                    {emptyCount}{" "}
+                                    {t("instructionContainer.feedback.empty")}
                                 </span>
                                 <span
                                     style={{
@@ -202,7 +176,8 @@ function InstructionContainer({
                             </>
                         )}
                         <span style={{ color: "#ff0044" }}>
-                            {wrongCount} Falsch
+                            {wrongCount}{" "}
+                            {t("instructionContainer.feedback.wrong")}
                         </span>
                         <img
                             src="./src/images/correction.svg"
@@ -316,8 +291,7 @@ function InstructionContainer({
                         ) : (
                             <>
                                 <span>
-                                    Versuche es weiter oder klicke Antworten
-                                    anzeigen
+                                    {t("instructionContainer.feedback.message")}
                                 </span>
                                 <img
                                     src="./src/images/mouse_cursor.svg"
@@ -336,14 +310,8 @@ function InstructionContainer({
                     {/* IPv6 hint message - show only if specific fields are wrong */}
                     {showIPv6Hint && (
                         <div className="ipv6-hint">
-                            <div>
-                                ⚠️ Kürzeste gültige Abkürzung für Netzadresse +
-                                Interfaceanteil nutzen ("kein" möglich)
-                            </div>
-                            <div>
-                                ⚠️ Subnetzanteil alle Bits eingeben ("kein"
-                                möglich)
-                            </div>
+                            <div>⚠️ {t("instructionContainer.ipv6Hints1")}</div>
+                            <div>⚠️ {t("instructionContainer.ipv6Hints2")}</div>
                         </div>
                     )}
                 </div>
@@ -376,8 +344,8 @@ function InstructionContainer({
         return (
             <div className="instruction-container">
                 <div className="instruction-text">
-                    <strong>Aufgabe:</strong> Fülle die anderen Felder anhand
-                    der generierten Daten aus{" "}
+                    <strong>{t("instructionContainer.practiceMode")}:</strong>{" "}
+                    {t("instructionContainer.ipPracticeMode")}{" "}
                     <img
                         src="./src/images/calculate.svg"
                         alt="calculate"
@@ -385,13 +353,8 @@ function InstructionContainer({
                     />
                     {/* IPv6 hint message */}
                     <div className="ipv6-hint">
-                        <div>
-                            ⚠️ Kürzeste gültige Abkürzung für Netzadresse +
-                            Interfaceanteil nutzen ("kein" möglich)
-                        </div>
-                        <div>
-                            ⚠️ Subnetzanteil alle Bits eingeben ("kein" möglich)
-                        </div>
+                        <div>⚠️ {t("instructionContainer.ipv6Hints1")}</div>
+                        <div>⚠️ {t("instructionContainer.ipv6Hints2")}</div>
                     </div>
                 </div>
             </div>
@@ -410,9 +373,9 @@ function InstructionContainer({
         return (
             <div className="instruction-container input-mode input-mode-error">
                 <div className="instruction-text">
-                    <strong>Eingabe Modus</strong>
+                    <strong>{t("instructionContainer.inputMode.title")}</strong>
                     <br />
-                    Geben Sie eine gültige IPv4-Adresse ein{" "}
+                    {t("instructionContainer.inputMode.askForIp")}{" "}
                     <img
                         src="./src/images/keybord_input.svg"
                         alt="keyboard input"
@@ -428,9 +391,9 @@ function InstructionContainer({
         return (
             <div className="instruction-container input-mode">
                 <div className="instruction-text">
-                    <strong>Eingabe Modus</strong>
+                    <strong>{t("instructionContainer.inputMode.title")}</strong>
                     <br />
-                    Geben Sie nun die CIDR-Notation oder die Subnetzmaske ein{" "}
+                    {t("instructionContainer.inputMode.askForCIDR")}{" "}
                     <img
                         src="./src/images/keybord_input.svg"
                         alt="keyboard input"
@@ -451,9 +414,16 @@ function InstructionContainer({
         return (
             <div className="instruction-container input-mode-complete">
                 <div className="instruction-text">
-                    <strong>Eingabe Modus - Berechnung abgeschlossen</strong>
+                    <strong>
+                        {t("instructionContainer.inputMode.title")} -{" "}
+                        {t(
+                            "instructionContainer.inputMode.calculationCompletedTitle"
+                        )}
+                    </strong>
                     <br />
-                    Alle Netzwerkfelder wurden automatisch berechnet{" "}
+                    {t(
+                        "instructionContainer.inputMode.calculationCompletedMessage"
+                    )}{" "}
                     <img
                         src="./src/images/data_check.svg"
                         alt="data check"
@@ -469,8 +439,7 @@ function InstructionContainer({
         return (
             <div className="instruction-container">
                 <div className="instruction-text">
-                    Erzeugen Sie eine IP + Feld zum Üben oder geben Sie IP +
-                    CIDR/Subnetzmaske für Berechnungen ein{" "}
+                    {t("instructionContainer.initialState")}{" "}
                     <img
                         src="./src/images/network_node.svg"
                         alt="network node"
@@ -478,10 +447,7 @@ function InstructionContainer({
                     />
                     {/* Initial state hint message */}
                     <div className="ipv6-hint">
-                        <div>
-                            ⚠️ Für Hilfe jederzeit IPv4-/IPv6-Hilfstabelle und
-                            Hinweise verwenden
-                        </div>
+                        <div>⚠️ {t("instructionContainer.ipHints")}</div>
                     </div>
                 </div>
             </div>
@@ -492,8 +458,8 @@ function InstructionContainer({
     return (
         <div className="instruction-container">
             <div className="instruction-text">
-                <strong>Aufgabe:</strong> Fülle die anderen Felder anhand der
-                generierten Daten aus{" "}
+                <strong>{t("instructionContainer.practiceMode")}:</strong>{" "}
+                {t("instructionContainer.ipPracticeMode")}{" "}
                 <img
                     src="./src/images/calculate.svg"
                     alt="calculate"
@@ -501,9 +467,7 @@ function InstructionContainer({
                 />
                 {/* IPv4 hint message */}
                 <div className="ipv6-hint">
-                    <div>
-                        ⚠️ "kein" Netzwerk-, Broadcast- und Hostadressen möglich
-                    </div>
+                    <div>⚠️ {t("instructionContainer.ipv4Hints")}</div>
                 </div>
             </div>
         </div>

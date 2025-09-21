@@ -1,7 +1,11 @@
+import { useLanguage } from "../contexts/LanguageContext";
+
 function Header() {
+    const { t } = useLanguage();
+
     return (
         <header>
-            <h1>Übung macht den Meister</h1>
+            <h1>{t("h1")}</h1>
         </header>
     );
 }

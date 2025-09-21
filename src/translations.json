@@ -1,5 +1,6 @@
 {
     "de": {
+        "h1": "Übung macht den Meister",
         "ipVersionButtons": {
             "generateIPv4": "IPv4 erzeugen",
             "generateIPv6": "IPv6 erzeugen"
@@ -52,7 +53,12 @@
         },
         "toggleElements": {
             "helpTableIPv4": "Hilfstabelle IPv4",
-            "helpTableIPv6": "Hilfstabelle IPv6",
+            "helpTableIPv6": {
+                "buttonLabel": "Hilfstabelle IPv6",
+                "title": "IPv6-Struktur",
+                "networkPrefix": "Netzwerkanteil (Präfix + Subnetz)",
+                "interfacePrefix": "Interfaceanteil"
+            },
             "hintsIPv4": "IPv4 Hinweise",
             "hintsIPv6": "IPv6 Hinweise"
         },
@@ -83,9 +89,41 @@
                 "multicast": "Multicast",
                 "unspecified": "Unspezifiziert"
             }
+        },
+        "instructionContainer": {
+            "initialState": "Erzeugen Sie eine IP + ein Feld zum Üben oder geben Sie IP + CIDR/Subnetzmaske für automatische Berechnungen ein ",
+            "ipHints": "Für Hilfe jederzeit IPv4-/IPv6-Hilfstabelle und Hinweise verwenden",
+            "practiceMode": "Aufgabe",
+            "ipPracticeMode": "Fülle die anderen Felder anhand der generierten Daten aus",
+            "ipv4Hints": "\"Kein\" Netzwerk-, Broadcast- und Hostadressen möglich",
+            "ipv6Hints1": "Kürzeste gültige Abkürzung für Netzadresse + Interfaceanteil nutzen (\"kein\" möglich)",
+            "ipv6Hints2": "Subnetzanteil alle Bits eingeben (\"kein\" möglich)",
+            "feedback": {
+                "correct": "Richtig",
+                "empty": "Leer",
+                "wrong": "Falsch",
+                "networkAddress": "Netzwerkadresse",
+                "broadcastAddress": "Broadcast-Adresse",
+                "addressType": "Adresstyp",
+                "hostCount": "Hostanzahl",
+                "subnetMask": "Subnetzmaske",
+                "message": "Versuche es weiter oder klicke Antworten anzeigen",
+                "fullIpv6Address": "Vollständige IPv6",
+                "subnetId": "Subnetzanteil",
+                "interfaceId": "Interfaceanteil",
+                "abbreviation": "Abkürzung"
+            },
+            "inputMode": {
+                "title": "Eingabe Modus",
+                "askForIp": "Geben Sie eine gültige IPv4-Adresse ein",
+                "askForCIDR": "Geben Sie nun die CIDR-Notation oder die Subnetzmaske ein",
+                "calculationCompletedTitle": "Berechnung abgeschlossen",
+                "calculationCompletedMessage": "Alle Felder wurden automatisch berechnet"
+            }
         }
     },
     "en": {
+        "h1": "Practice makes perfect",
         "ipVersionButtons": {
             "generateIPv4": "Generate IPv4",
             "generateIPv6": "Generate IPv6"
@@ -138,7 +176,12 @@
         },
         "toggleElements": {
             "helpTableIPv4": "IPv4 Help Table",
-            "helpTableIPv6": "IPv6 Help Table",
+            "helpTableIPv6": {
+                "buttonLabel": "IPv6 Help Table",
+                "title": "IPv6 Structure",
+                "networkPrefix": "Network Prefix (Prefix + Subnet)",
+                "interfacePrefix": "Interface ID"
+            },
             "hintsIPv4": "IPv4 Hints",
             "hintsIPv6": "IPv6 Hints"
         },
@@ -168,6 +211,37 @@
                 "loopback": "Loopback",
                 "multicast": "Multicast",
                 "unspecified": "Unspecified"
+            }
+        },
+        "instructionContainer": {
+            "initialState": "Generate an IP + one field to practice, or enter an IP + CIDR/subnet mask for automatic calculation ",
+            "ipHints": "Use the IPv4/IPv6 Help Table and Hints for help at any time",
+            "practiceMode": "Task",
+            "ipPracticeMode": "Fill in the other fields based on the generated data",
+            "ipv4Hints": "\"No\" Network, Broadcast and Host Addresses possible",
+            "ipv6Hints1": "Use the shortest valid abbreviation for the Network Address + Interface ID (\"none\" possible)",
+            "ipv6Hints2": "Enter all bits of the Subnet ID (\"none\" possible)",
+            "feedback": {
+                "correct": "Correct",
+                "empty": "Empty",
+                "wrong": "Wrong",
+                "networkAddress": "Network Address",
+                "broadcastAddress": "Broadcast Address",
+                "addressType": "Address Type",
+                "hostCount": "Host Count",
+                "subnetMask": "Subnet Mask",
+                "message": "Keep trying or click Show Answers",
+                "fullIpv6Address": "Full IPv6",
+                "subnetId": "Subnet ID",
+                "interfaceId": "Interface ID",
+                "abbreviation": "Abbreviation"
+            },
+            "inputMode": {
+                "title": "Input Mode",
+                "askForIp": "Enter a valid IPv4 address",
+                "askForCIDR": "Now enter the CIDR notation or the Subnet Mask",
+                "calculationCompletedTitle": "Calculation completed",
+                "calculationCompletedMessage": "All fields were calculated automatically"
             }
         }
     }
