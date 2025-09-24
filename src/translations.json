@@ -486,7 +486,7 @@
                 "title": "IPv6 Hints",
                 "whatIsIpv6": {
                     "title": "What is IPv6?",
-                    "content": "IPv6 (Internet Protocol Version 6) is the successor to IPv4. It uses <b>128-bit</b> long addresses, divided into <b>8 blocks of 16 bits (hexadecimal)</b>. IPv6 provides practically unlimited addresses and is expected to largely replace IPv4 in the coming years. IPv6 <b>does not use broadcast</b>, but only <b>multicast for group communication</b>"
+                    "content": "IPv6 (Internet Protocol Version 6) is the successor to IPv4. It uses <b>128-bit</b> long addresses, divided into <b>8 blocks of 16 bits (hexadecimal)</b>. IPv6 provides practically unlimited addresses and is expected to largely replace IPv4 in the coming years. IPv6 <b>does not use broadcast</b>, but only <b>multicast for group communication</b>."
                 },
                 "ipv6AbreviattionRules": {
                     "title": "IPv6 Abbreviation Rules",
