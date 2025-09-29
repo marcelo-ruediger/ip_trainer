@@ -80,7 +80,7 @@ button,
         background-color: #000 !important; /* Consistent dark background */
         color: #cccccc !important;
         border: 1px solid transparent;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
         outline: none;
     }
 
@@ -162,7 +162,7 @@ button,
         padding: 1rem !important; /* Consistent with desktop */
         /* Remove conflicting styles */
         backdrop-filter: none;
-        box-shadow: none;
+        /* Removed box-shadow: none to allow input validation shadows */
     }
 
     .instruction-container {
@@ -259,17 +259,62 @@ button,
 
 /* 15. NATIVE-STYLE ERROR STATES */
 @media (max-width: 768px) {
+    /* Input validation styles - consistent with desktop */
+    input.correct {
+        border-color: #00ff88;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
+    }
+
     input.wrong {
         animation: shake 0.5s ease-in-out;
         border-color: #ff0044;
-        box-shadow: 0 0 0 3px rgba(255, 0, 68, 0.15),
-            0 2px 8px rgba(255, 0, 68, 0.2);
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
     }
 
-    input.correct {
+    input.empty {
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
+    }
+
+    /* Select validation styles - consistent with desktop */
+    select.correct {
         border-color: #00ff88;
-        box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.15),
-            0 2px 8px rgba(0, 255, 136, 0.2);
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
+    }
+
+    select.wrong {
+        border-color: #ff0044;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
+    }
+
+    select.empty {
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
+    }
+
+    /* Disabled select validation styles - consistent with desktop */
+    select:disabled.correct {
+        color: #cccccc !important;
+        border-color: #00ff88;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+
+    select:disabled.wrong {
+        color: #cccccc !important;
+        border-color: #ff0044;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+
+    select:disabled.empty {
+        color: #cccccc !important;
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
     }
 }
 

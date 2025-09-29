@@ -180,6 +180,117 @@ body {
     }
 }
 
+/* MOBILE VALIDATION SHADOW EFFECTS - COMPREHENSIVE */
+@media (max-width: 768px) {
+    /* Ensure validation shadows work on all mobile screen sizes */
+    input.correct,
+    select.correct {
+        border-color: #00ff88 !important;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88 !important;
+    }
+
+    input.wrong,
+    select.wrong {
+        border-color: #ff0044 !important;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044 !important;
+    }
+
+    input.empty,
+    select.empty {
+        border-color: #888888 !important;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888 !important;
+    }
+
+    /* Disabled select elements with validation states */
+    select:disabled.correct {
+        color: #cccccc !important;
+        border-color: #00ff88 !important;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88 !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+
+    select:disabled.wrong {
+        color: #cccccc !important;
+        border-color: #ff0044 !important;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044 !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+
+    select:disabled.empty {
+        color: #cccccc !important;
+        border-color: #888888 !important;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888 !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+}
+
+/* ADDITIONAL MOBILE BREAKPOINTS FOR VALIDATION SHADOWS */
+@media (max-width: 600px) {
+    /* Ensure validation shadows work on smaller screens */
+    input.correct,
+    select.correct {
+        border-color: #00ff88 !important;
+        box-shadow: 0 0 3px #00ff88, 0 0 6px #00ff88 !important;
+    }
+
+    input.wrong,
+    select.wrong {
+        border-color: #ff0044 !important;
+        box-shadow: 0 0 3px #ff0044, 0 0 6px #ff0044 !important;
+    }
+
+    input.empty,
+    select.empty {
+        border-color: #888888 !important;
+        box-shadow: 0 0 3px #888888, 0 0 6px #888888 !important;
+    }
+}
+
+@media (max-width: 450px) {
+    /* Ensure validation shadows work on very small screens */
+    input.correct,
+    select.correct {
+        border-color: #00ff88 !important;
+        box-shadow: 0 0 2px #00ff88, 0 0 4px #00ff88 !important;
+    }
+
+    input.wrong,
+    select.wrong {
+        border-color: #ff0044 !important;
+        box-shadow: 0 0 2px #ff0044, 0 0 4px #ff0044 !important;
+    }
+
+    input.empty,
+    select.empty {
+        border-color: #888888 !important;
+        box-shadow: 0 0 2px #888888, 0 0 4px #888888 !important;
+    }
+}
+
+@media (max-width: 380px) {
+    /* Ensure validation shadows work on the smallest screens */
+    input.correct,
+    select.correct {
+        border-color: #00ff88 !important;
+        box-shadow: 0 0 2px #00ff88, 0 0 3px #00ff88 !important;
+    }
+
+    input.wrong,
+    select.wrong {
+        border-color: #ff0044 !important;
+        box-shadow: 0 0 2px #ff0044, 0 0 3px #ff0044 !important;
+    }
+
+    input.empty,
+    select.empty {
+        border-color: #888888 !important;
+        box-shadow: 0 0 2px #888888, 0 0 3px #888888 !important;
+    }
+}
+
 /* 10. ORIENTATION CHANGE SUPPORT */
 @media (orientation: landscape) and (max-height: 500px) {
     .popup-content {
