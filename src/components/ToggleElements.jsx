@@ -4,6 +4,7 @@ import { getAllSpecialAddresses as getAllIPv6SpecialAddresses } from "../utils/i
 import { useLanguage } from "../contexts/LanguageContext";
 import "../styles/ToggleElements.css";
 import languageIcon from "../images/language.svg";
+import infoIcon from "../images/info.svg";
 
 function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
     const [showSpecialAddresses, setShowSpecialAddresses] = useState(false);

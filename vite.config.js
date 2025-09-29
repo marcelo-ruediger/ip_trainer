@@ -11,7 +11,7 @@ export default defineConfig({
             workbox: {
                 globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg}"],
             },
-            includeAssets: ["src/images/ip_icon_138457.png"],
+            includeAssets: ["ip_icon_138457.png"],
             manifest: {
                 name: "IP Trainer - Netzwerktrainer",
                 short_name: "IP Trainer",
@@ -29,19 +29,19 @@ export default defineConfig({
                 prefer_related_applications: false,
                 icons: [
                     {
-                        src: "src/images/ip_icon_138457.png",
+                        src: "ip_icon_138457.png",
                         sizes: "138x138",
                         type: "image/png",
                         purpose: "any",
                     },
                     {
-                        src: "src/images/ip_icon_138457.png",
+                        src: "ip_icon_138457.png",
                         sizes: "192x192",
                         type: "image/png",
                         purpose: "any maskable",
                     },
                     {
-                        src: "src/images/ip_icon_138457.png",
+                        src: "ip_icon_138457.png",
                         sizes: "512x512",
                         type: "image/png",
                         purpose: "any maskable",
