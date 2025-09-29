@@ -191,3 +191,126 @@
         height: 30px;
     }
 }
+
+/* iOS-specific install prompt styling */
+.pwa-install-prompt.ios-prompt {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    z-index: 1000;
+    animation: slideUp 0.4s ease-out;
+}
+
+.ios-prompt .install-content {
+    background: rgba(28, 28, 30, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(84, 84, 88, 0.6);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    color: #cccccc;
+}
+
+.ios-install-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.ios-install-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #646cff;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.ios-install-header .install-icon {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.ios-install-header .install-close {
+    background: rgba(84, 84, 88, 0.3);
+    border: 1px solid rgba(84, 84, 88, 0.6);
+    border-radius: 8px;
+    color: #cccccc;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+}
+
+.ios-install-header .install-close:hover {
+    background: rgba(84, 84, 88, 0.5);
+}
+
+.ios-install-steps {
+    text-align: left;
+}
+
+.ios-install-steps p {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #cccccc;
+}
+
+.ios-install-steps ol {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.ios-install-steps li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.step-icon {
+    font-size: 16px;
+    margin-right: 12px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.ios-note {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(84, 84, 88, 0.6);
+    text-align: center;
+}
+
+.ios-note small {
+    color: #888888;
+    font-style: italic;
+}
+
+/* Mobile adjustments for iOS prompt */
+@media (max-width: 480px) {
+    .pwa-install-prompt.ios-prompt {
+        width: 95%;
+        bottom: 10px;
+    }
+
+    .ios-prompt .install-content {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .ios-install-header h3 {
+        font-size: 16px;
+    }
+
+    .ios-install-steps p,
+    .ios-install-steps li {
+        font-size: 13px;
+    }
+}

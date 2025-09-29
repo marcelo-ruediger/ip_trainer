@@ -319,6 +319,16 @@
                 "subnetId": "Gib \"kein\" ein, falls keine Subnetzanteil",
                 "interfaceId": "Gib \"kein'\" ein, falls keine Interfaceanteil"
             }
+        },
+        "pwaInstaller": {
+            "installApp": "App installieren",
+            "install": "Installieren",
+            "iosTitle": "App zum Startbildschirm hinzufügen",
+            "iosDescription": "Diese App kann auf Ihrem iPhone installiert werden. Folgen Sie diesen einfachen Schritten:",
+            "iosStep1": "Tippen Sie auf das Teilen-Symbol (□↗) in der Safari-Leiste",
+            "iosStep2": "Scrollen Sie runter und wählen Sie 'Zum Home-Bildschirm'",
+            "iosStep3": "Bestätigen Sie mit 'Hinzufügen'",
+            "iosNote": "Hinweis: Diese Funktion ist nur in Safari verfügbar"
         }
     },
     "en": {
@@ -642,6 +652,16 @@
                 "subnetId": "Use \"none\" if no Subnet ID",
                 "interfaceId": "Use \"none\" if no Interface ID"
             }
+        },
+        "pwaInstaller": {
+            "installApp": "Install App",
+            "install": "Install",
+            "iosTitle": "Add to Home Screen",
+            "iosDescription": "This app can be installed on your iPhone. Follow these simple steps:",
+            "iosStep1": "Tap the Share button (□↗) in Safari's toolbar",
+            "iosStep2": "Scroll down and select 'Add to Home Screen'",
+            "iosStep3": "Confirm by tapping 'Add'",
+            "iosNote": "Note: This feature is only available in Safari"
         }
     }
 }
