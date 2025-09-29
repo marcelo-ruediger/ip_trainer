@@ -1,0 +1,193 @@
+.pwa-install-prompt {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+}
+
+.install-content {
+    background: linear-gradient(135deg, #646cff, #4338ca);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    user-select: none;
+}
+
+.install-icon {
+    font-size: 20px;
+}
+
+.install-text {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.install-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-size: 13px;
+}
+
+.install-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.install-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.install-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateX(-50%) translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive design for screens smaller than 570px */
+@media (max-width: 570px) {
+    .pwa-install-prompt {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        z-index: 1000;
+    }
+
+    .install-content {
+        background: linear-gradient(135deg, #646cff, #4338ca);
+        color: white;
+        padding: 14px 16px;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        user-select: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .install-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .install-text {
+        font-weight: 600;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .install-button {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+
+    .install-button:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .install-close {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 22px;
+        cursor: pointer;
+        padding: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .install-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+}
+
+/* Additional adjustments for very small screens */
+@media (max-width: 400px) {
+    .pwa-install-prompt {
+        width: 80%;
+    }
+
+    .install-content {
+        padding: 12px 14px;
+        border-radius: 20px;
+    }
+
+    .install-icon {
+        font-size: 20px;
+    }
+
+    .install-text {
+        font-size: 14px;
+    }
+
+    .install-button {
+        padding: 5px 10px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+
+    .install-close {
+        font-size: 24px;
+        width: 30px;
+        height: 30px;
+    }
+}

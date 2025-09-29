@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 function BottomButtons({
     handleCheck,
@@ -7,6 +8,7 @@ function BottomButtons({
     attention = false,
 }) {
     const buttonsRef = useRef(null);
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (attention && buttonsRef.current) {
@@ -29,14 +31,14 @@ function BottomButtons({
                 onClick={handleCheck}
                 disabled={disabled}
             >
-                Überprüfen
+                {t("bottomButtons.check")}
             </button>
             <button
                 className={`show-answers ${attention ? "attention" : ""}`}
                 onClick={handleShowAnswers}
                 disabled={disabled}
             >
-                Antworten anzeigen
+                {t("bottomButtons.showAnswers")}
             </button>
         </div>
     );

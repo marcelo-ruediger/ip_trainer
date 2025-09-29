@@ -1,0 +1,377 @@
+/* ==============================================
+   NATIVE MOBILE APP STYLING
+   ============================================== */
+
+/* 1. NATIVE APP BEHAVIORS */
+/* Prevent text selection on interactive elements (like native apps) */
+button,
+.language-button,
+.close-button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Remove tap highlight that looks un-native */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* 2. NATIVE-STYLE HAPTIC FEEDBACK ANIMATIONS */
+@keyframes nativeTap {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.96);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.native-tap {
+    animation: nativeTap 0.1s ease-out;
+}
+
+/* 3. NATIVE APP STATUS BAR INTEGRATION */
+@supports (padding-top: env(safe-area-inset-top)) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+}
+
+/* 4. NATIVE-STYLE BUTTONS WITH DEPTH */
+@media (max-width: 768px) {
+    .top-buttons button,
+    .bottom-btns button {
+        /* Native iOS/Android button feel */
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 48px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    .top-buttons button:active,
+    .bottom-btns button:active {
+        transform: scale(0.96);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* 5. NATIVE-STYLE INPUTS */
+@media (max-width: 768px) {
+    input,
+    select {
+        border-radius: 12px !important; /* Increased border-radius for consistency */
+        font-size: 14px !important; /* Reduced from 16px to maintain content fit */
+        padding: 8px 12px !important; /* Reduced from 12px 16px for better space utilization */
+        min-height: 44px; /* Maintain touch target size */
+        background-color: #000 !important; /* Consistent dark background */
+        color: #cccccc !important;
+        border: 1px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        outline: none;
+    }
+
+    input:focus,
+    select:focus {
+        background-color: #000 !important; /* Keep dark on focus */
+        border-color: #646cff !important;
+        transform: scale(1.02);
+    }
+
+    /* Ensure select elements get proper dark styling */
+    select {
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23cccccc' viewBox='0 0 16 16'%3e%3cpath d='M8 13.1l-6.8-6.8L2.6 4.9 8 10.3l5.4-5.4 1.4 1.4L8 13.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 12px;
+        padding-right: 32px;
+    }
+}
+
+/* 6. NATIVE APP SCROLLING */
+.popup-body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+}
+
+/* 7. NATIVE-STYLE POPUP/MODAL */
+@media (max-width: 768px) {
+    .popup-overlay {
+        backdrop-filter: blur(10px);
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .popup-content {
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+            0 10px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        background: rgba(36, 36, 36, 0.95);
+    }
+
+    .popup-header {
+        border-radius: 20px 20px 0 0;
+        background: linear-gradient(135deg, #646cff 0%, #4338ca 100%);
+        padding: 16px 20px;
+    }
+
+    .close-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .close-button:active {
+        transform: scale(0.9);
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* 8. NATIVE-STYLE CARDS/CONTAINERS */
+@media (max-width: 768px) {
+    .default-container {
+        border-radius: 12px !important; /* Consistent with all screen sizes */
+        background: rgba(
+            28,
+            28,
+            30,
+            0.8
+        ) !important; /* Consistent with desktop */
+        border: 1px solid rgba(84, 84, 88, 0.6) !important; /* Consistent with desktop */
+        padding: 1rem !important; /* Consistent with desktop */
+        /* Remove conflicting styles */
+        backdrop-filter: none;
+        /* Removed box-shadow: none to allow input validation shadows */
+    }
+
+    .instruction-container {
+        border-radius: 12px; /* Keep existing instruction container styling */
+        backdrop-filter: blur(15px);
+        box-shadow: 0 6px 20px rgba(100, 108, 255, 0.2),
+            0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .ipv6-container {
+        border-radius: 12px; /* Keep existing IPv6 container styling */
+        backdrop-filter: blur(15px);
+    }
+}
+
+/* 9. NATIVE-STYLE TOGGLES */
+@media (max-width: 768px) {
+    .image-toggle-container > label::before {
+        backdrop-filter: blur(10px);
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2),
+            0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-toggle-container
+        > label:has(input[type="checkbox"]:checked)::before {
+        box-shadow: inset 0 2px 8px rgba(100, 108, 255, 0.3),
+            0 0 20px rgba(100, 108, 255, 0.4),
+            0 4px 12px rgba(100, 108, 255, 0.2);
+    }
+}
+
+/* 10. PULL-TO-REFRESH SIMULATION */
+@media (max-width: 768px) {
+    body {
+        overscroll-behavior-y: contain;
+    }
+
+    main {
+        transform: translate3d(0, 0, 0); /* Hardware acceleration */
+    }
+}
+
+/* 11. NATIVE-STYLE LOADING STATES */
+@keyframes nativeShimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.loading-shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    background-size: 200px 100%;
+    animation: nativeShimmer 1.5s infinite;
+}
+
+/* 12. NATIVE APP HEADER/TITLE BAR */
+@media (max-width: 768px) {
+    h1 {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        text-align: center;
+        margin-top: 8px; /* Account for status bar */
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+}
+
+/* 13. HAPTIC FEEDBACK CLASSES */
+.haptic-light {
+    animation: nativeTap 0.1s ease-out;
+}
+.haptic-medium {
+    animation: nativeTap 0.15s ease-out;
+}
+.haptic-heavy {
+    animation: nativeTap 0.2s ease-out;
+}
+
+/* 14. NATIVE-STYLE FOCUS INDICATORS */
+@media (max-width: 768px) {
+    *:focus-visible {
+        outline: 3px solid rgba(100, 108, 255, 0.5);
+        outline-offset: 2px;
+        border-radius: 8px;
+    }
+}
+
+/* 15. NATIVE-STYLE ERROR STATES */
+@media (max-width: 768px) {
+    /* Input validation styles - consistent with desktop */
+    input.correct {
+        border-color: #00ff88;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
+    }
+
+    input.wrong {
+        animation: shake 0.5s ease-in-out;
+        border-color: #ff0044;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
+    }
+
+    input.empty {
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
+    }
+
+    /* Select validation styles - consistent with desktop */
+    select.correct {
+        border-color: #00ff88;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
+    }
+
+    select.wrong {
+        border-color: #ff0044;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
+    }
+
+    select.empty {
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
+    }
+
+    /* Disabled select validation styles - consistent with desktop */
+    select:disabled.correct {
+        color: #cccccc !important;
+        border-color: #00ff88;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+
+    select:disabled.wrong {
+        color: #cccccc !important;
+        border-color: #ff0044;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+
+    select:disabled.empty {
+        color: #cccccc !important;
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #cccccc !important;
+    }
+}
+
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+/* 16. NATIVE-STYLE DARK MODE ENHANCEMENTS */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+    /* Commented out to maintain consistent background across all screen sizes */
+    /* body {
+        background: #000;
+    } */
+
+    .default-container {
+        background: rgba(28, 28, 30, 0.8);
+        border: 1px solid rgba(84, 84, 88, 0.6);
+    }
+
+    .popup-content {
+        background: rgba(28, 28, 30, 0.95);
+        border: 1px solid rgba(84, 84, 88, 0.6);
+    }
+}
+
+/* 17. PREVENT OVERSCROLL (NATIVE BEHAVIOR) */
+html,
+body {
+    overscroll-behavior: none;
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+#root {
+    overflow: auto;
+    height: 100vh;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    #root {
+        padding: 0;
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+}

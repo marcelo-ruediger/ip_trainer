@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 function IpVersionButtons({
     ipVersion,
@@ -8,6 +9,7 @@ function IpVersionButtons({
     handleStartIPv6,
 }) {
     const buttonsRef = useRef(null);
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (attention && buttonsRef.current) {
@@ -29,7 +31,7 @@ function IpVersionButtons({
                 }}
                 className={attention ? "attention" : ""}
             >
-                IPv4 erzeugen
+                {t("ipVersionButtons.generateIPv4")}
             </button>
             <button
                 onClick={() => {
@@ -43,7 +45,7 @@ function IpVersionButtons({
                     .filter(Boolean)
                     .join(" ")}
             >
-                IPv6 erzeugen
+                {t("ipVersionButtons.generateIPv6")}
             </button>
         </div>
     );

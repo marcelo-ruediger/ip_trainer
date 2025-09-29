@@ -1,0 +1,647 @@
+{
+    "de": {
+        "h1": "Übung macht den Meister",
+        "ipVersionButtons": {
+            "generateIPv4": "IPv4 erzeugen",
+            "generateIPv6": "IPv6 erzeugen"
+        },
+        "topInputs": {
+            "ipv4Address": "IPv4-Adresse:",
+            "placeholder": "Eingeben...",
+            "cidrNotation": "CIDR:",
+            "subnetMask": "Subnetzmaske:",
+            "inputMode": "Eingabe Modus",
+            "practiceMode": "Übung Modus",
+            "modeDescription": "Geben Sie IP und CIDR/Maske ein um alle anderen Felder zu berechnen",
+            "practiceDescription": "Berechnen Sie die fehlenden Felder basierend auf den generierten Werten"
+        },
+        "middleInputs": {
+            "networkAddress": "Netzwerkadresse:",
+            "broadcastAddress": "Broadcast-Adresse:",
+            "wildcardMask": "Wildcard-Maske:",
+            "firstHost": "Erste Host-Adresse:",
+            "lastHost": "Letzte Host-Adresse:"
+        },
+        "bottomInputs": {
+            "totalHosts": "Anzahl Hosts gesamt:",
+            "usableHosts": "Hostanzahl:",
+            "networkClass": "Adresstyp:",
+            "isPrivate": "Privates Netzwerk:",
+            "yes": "Ja",
+            "no": "Nein",
+            "selectPlaceholder": "Bitte wählen",
+            "classOptions": {
+                "APrivate": "A (privat)",
+                "APublic": "A (öffentlich)",
+                "BPrivate": "B (privat)",
+                "BPublic": "B (öffentlich)",
+                "CPrivate": "C (privat)",
+                "CPublic": "C (öffentlich)",
+                "D": "D",
+                "E": "E",
+                "Loopback": "Loopback",
+                "APIPA": "APIPA",
+                "CarrierGradeNAT": "Carrier-Grade NAT",
+                "Documentation": "Dokumentation",
+                "Broadcast": "Broadcast",
+                "Unspecified": "Unspezifiziert"
+            }
+        },
+        "bottomButtons": {
+            "check": "Überprüfen",
+            "showAnswers": "Antworten anzeigen"
+        },
+        "toggleElements": {
+            "helpTableIPv4": "Hilfstabelle IPv4",
+            "helpTableIPv6": {
+                "buttonLabel": "Hilfstabelle IPv6",
+                "title": "IPv6-Struktur",
+                "networkPrefix": "Netzwerkanteil (Präfix + Subnetz)",
+                "interfacePrefix": "Interfaceanteil"
+            },
+            "hintsIPv4": {
+                "title": "IPv4 Hinweise",
+                "whatIsIpv4": {
+                    "title": "Was ist IPv4?",
+                    "content": "IPv4 (Internet Protocol Version 4) ist das derzeit am weitesten verbreitete Internet-Protokoll. Es verwendet <b>32 Bit</b> lange Adressen, aufgeteilt in <b>4 Blöcke zu je 8 Bit (0-255)</b>. Aufgrund der begrenzten Anzahl von <b>etwa 4,3 Milliarden Adressen</b> wird IPv4 wahrscheinlich schrittweise durch IPv6 ersetzt werden."
+                },
+                "loopback": {
+                    "commonUse": "Loopback Netzwerk",
+                    "range": "Bereich",
+                    "specialInfo": "Immer lokaler Computer - niemals über Netzwerk geroutet"
+                },
+                "apipa": {
+                    "commonUse": "APIPA Netzwerk",
+                    "range": "Bereich",
+                    "specialInfo": "Automatische Adressvergabe wenn DHCP fehlschlägt"
+                },
+                "cng": {
+                    "commonUse": "Carrier-Grade NAT Netzwerk",
+                    "range": "Bereich",
+                    "specialInfo": "Geteilte IP-Adressen bei Internetanbietern für mehrere Kunden"
+                },
+                "broadcast": {
+                    "commonUse": "Eingeschränkter Broadcast",
+                    "range": "Bereich: Einzeladresse",
+                    "specialInfo": "An alle Geräte im lokalen Netzwerk"
+                },
+                "unspecified": {
+                    "title": "Unspezifiziert",
+                    "commonUse": "Default Route - nicht zugewiesene Adresse",
+                    "range": "Bereich: Einzeladresse",
+                    "specialInfo": "Standard-Route oder unspezifizierte Adresse",
+                    "badget": "Unspezifiziert"
+                },
+                "privateNetworks": {
+                    "title": "Private Netzwerke",
+                    "classA": {
+                        "commonUse": "Private Klasse A - Große Unternehmen",
+                        "range": "Bereich",
+                        "specialInfo": "16,7 Millionen private Adressen für große Unternehmen",
+                        "badget": "Klasse A"
+                    },
+                    "class B": {
+                        "commonUse": "Private Klasse B - Mittlere Unternehmen",
+                        "range": "Bereich",
+                        "specialInfo": "1 Million private Adressen für mittlere Unternehmen",
+                        "badget": "Klasse B"
+                    },
+                    "class C": {
+                        "commonUse": "Private Klasse C - Heimnetzwerke",
+                        "range": "Bereich",
+                        "specialInfo": "65.536 private Adressen für Heimnetzwerke und kleine Büros",
+                        "badget": "Klasse C"
+                    }
+                },
+                "publicNetworks": {
+                    "title": "Öffentliche Netzwerke",
+                    "classA": {
+                        "commonUse": "Öffentliche Klasse A",
+                        "range": "Bereich",
+                        "specialInfo": "Öffentliche Adressen - über das Internet erreichbar",
+                        "badget": "Klasse A"
+                    },
+                    "class B": {
+                        "commonUse": "Öffentliche Klasse B",
+                        "range": "Bereich",
+                        "specialInfo": "Öffentliche Adressen - über das Internet erreichbar",
+                        "badget": "Klasse B"
+                    },
+                    "class C": {
+                        "commonUse": "Öffentliche Klasse C",
+                        "range": "Bereich",
+                        "specialInfo": "Öffentliche Adressen - über das Internet erreichbar",
+                        "badget": "Klasse C"
+                    }
+                },
+                "classesDandE": {
+                    "title": "Klassen D und E",
+                    "class D": {
+                        "commonUse": "Klasse D (Multicast)",
+                        "range": "Bereich: 224.0.0.0 - 239.255.255.255/4 (Kein Broadcast, kein Hostanteil)",
+                        "specialInfo": "Gruppenkommunikation - eine Nachricht an mehrere Empfänger",
+                        "badget": "Klasse D"
+                    },
+                    "class E": {
+                        "commonUse": "Klasse E (Reserviert)",
+                        "range": "Bereich: 240.0.0.0 - 255.255.255.254/4 (Kein Broadcast, kein Hostanteil)",
+                        "specialInfo": "Experimenteller Adressbereich - für zukünftige Nutzung reserviert",
+                        "badget": "Klasse E"
+                    }
+                },
+                "documentation": {
+                    "title": "Dokumentation",
+                    "testnet1": {
+                        "commonUse": "Testnetz-1",
+                        "range": "Bereich",
+                        "specialInfo": "Reserviert für Dokumentation und Beispiele",
+                        "badget": "Dokumentation"
+                    },
+                    "testnet2": {
+                        "commonUse": "Testnetz-2",
+                        "range": "Bereich",
+                        "specialInfo": "Reserviert für Dokumentation und Beispiele",
+                        "badget": "Dokumentation"
+                    },
+                    "testnet3": {
+                        "commonUse": "Testnetz-3",
+                        "range": "Bereich",
+                        "specialInfo": "Reserviert für Dokumentation und Beispiele",
+                        "badget": "Dokumentation"
+                    }
+                }
+            },
+            "hintsIPv6": {
+                "title": "IPv6 Hinweise",
+                "whatIsIpv6": {
+                    "title": "Was ist IPv6?",
+                    "content": "IPv6 (Internet Protocol Version 6) ist der Nachfolger von IPv4. Es verwendet <b>128 Bit</b> lange Adressen, aufgeteilt in <b>8 Blöcke à 16 Bit (hexadezimal)</b>. IPv6 bietet praktisch unendlich viele Adressen und wird voraussichtlich IPv4 in den kommenden Jahren weitgehend ersetzen. IPv6 verwendet <b>kein Broadcast</b>, sondern nur <b>Multicast für Gruppenkommunikation</b>."
+                },
+                "ipv6AbreviattionRules": {
+                    "title": "IPv6 Abkürzungsregeln",
+                    "1stRule": "<b>1. Führende Nullen weglassen:</b>",
+
+                    "2ndRule": "<b>2. Längste Null-Sequenz mit \"::\" ersetzen:</b>",
+                    "rangeText": "<b>Bei gleich langen Null-Sequenzen:</b> Erste (linkeste) ersetzen",
+                    "specialInfo1": "\"::\" darf nur einmal pro Adresse verwendet werden!",
+                    "specialInfo2": "\"::\" ersetzt mindestens zwei aufeinanderfolgende 0000-Blöcke!"
+                },
+                "loopback": {
+                    "specialInfo": "Immer lokaler Computer - niemals über Netzwerk geroutet. Entspricht 127.0.0.1 in IPv4"
+                },
+                "unspecified": {
+                    "title": "Unspezifiziert",
+                    "commonUse": "Unspezifizierte Adresse / Null-Adresse",
+                    "specialInfo": "Wird während der Adresskonfiguration verwendet. Entspricht 0.0.0.0 in IPv4",
+                    "badget": "Unspezifiziert"
+                },
+                "documentation": {
+                    "title": "Dokumentation",
+                    "commonUse": "Dokumentation / Beispieladressen",
+                    "specialInfo": "RFC 3849 - Ausschließlich für Dokumentation und Beispiele. Entspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)",
+                    "badget": "Dokumentation"
+                },
+                "linkLocal": {
+                    "commonUse": "Link-Local / Automatisch konfiguriert",
+                    "specialInfo": "Automatisch auf jeder IPv6-Schnittstelle konfiguriert. Entspricht APIPA (169.254.0.0/16) in IPv4"
+                },
+                "privateNetworks": {
+                    "ulaCentral": {
+                        "commonUse": "ULA-Zentrales Netzwerk",
+                        "specialInfo": "Zentral zugewiesene private IPv6-Adressen (ULA - Unique Local Address). Entspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
+                        "badget": "ULA zentral"
+                    },
+                    "ulaLocal": {
+                        "commonUse": "ULA-Lokales Netzwerk",
+                        "speciaInfo": "Lokal generierte private IPv6-Adressen (ULA - Unique Local Address). Entspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
+                        "badget": "ULA lokal"
+                    }
+                },
+                "globalUnicast": {
+                    "global2xxx": {
+                        "commonUse": "Global Unicast 2xxx / Internet-routbar",
+                        "specialInfo": "Häufigster Global Unicast Bereich - von ISPs zugewiesen. Entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)"
+                    },
+                    "global3xxx": {
+                        "commonUse": "Global Unicast 3xxx / Internet-routbar",
+                        "specialInfo": "Weiterer Global Unicast Adressbereich - Internet-routbar. Entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)"
+                    }
+                },
+                "multicast": {
+                    "multicast": {
+                        "commonUse": "Multicast-Netzwerk",
+                        "specialInfo": "Ersetzt IPv4-Broadcast komplett - Gruppenkommunkation. Entspricht Klasse D (224.0.0.0/4) in IPv4"
+                    },
+                    "allNodes": {
+                        "commonUse": "Alle IPv6-Knoten / Ersetzt Broadcast",
+                        "speciaInfo": "Erreicht alle IPv6-Knoten - ersetzt IPv4-Broadcast. Entspricht 255.255.255.255 in IPv4",
+                        "badget": "Alle Knoten"
+                    },
+                    "allRouters": {
+                        "commonUse": "Alle IPv6-Router / Router-Kommunikation",
+                        "specialInfo": "Erreicht alle IPv6-Router im lokalen Segment. Kein direktes IPv4-Äquivalent (IPv4 nutzt Broadcast)",
+                        "badget": "Alle Router"
+                    }
+                },
+                "ipv4Mapped": {
+                    "commonUse": "IPv4-kompatibel / Übergangs-Adresse",
+                    "specialInfo": "Ermöglicht IPv4-Kompatibilität in reinen IPv6-Umgebungen"
+                }
+            }
+        },
+        "topInputsIPv6": {
+            "fullAddress": "Vollständige IPv6-Adresse:",
+            "networkPrefix": "Präfix:"
+        },
+        "middleInputsIPv6": {
+            "abbreviatedAddress": "Abkürzung:",
+            "networkAddress": "Netzwerkadresse:",
+            "abbreviatedPlaceholder": "Abgekürzt..."
+        },
+        "bottomInputsIPv6": {
+            "addressType": "Adresstyp:",
+            "subnetPart": "Subnetzanteil:",
+            "interfacePart": "Interfaceanteil:",
+            "selectPlaceholder": "Bitte wählen",
+            "subnetPlaceholder": "Alle Bits...",
+            "interfacePlaceholder": "Abgekürzt...",
+            "subnetTitle": "Der Subnetz-Anteil der Adresse (normalerweise 4. Hextet-Gruppe)",
+            "interfaceTitle": "Der Interface-Anteil der Adresse (letzten 64 Bits)",
+            "typeOptions": {
+                "globalUnicast": "Global Unicast",
+                "documentation": "Dokumentation",
+                "ula": "ULA",
+                "linkLocal": "Link-Local",
+                "loopback": "Loopback",
+                "multicast": "Multicast",
+                "unspecified": "Unspezifiziert"
+            }
+        },
+        "instructionContainer": {
+            "initialState": "Erzeugen Sie eine IP + ein Feld zum Üben oder geben Sie IP + CIDR/Subnetzmaske für automatische Berechnungen ein ",
+            "ipHints": "Für Hilfe jederzeit IPv4-/IPv6-Hilfstabelle und Hinweise verwenden",
+            "practiceMode": "Aufgabe",
+            "ipPracticeMode": "Fülle die anderen Felder anhand der generierten Daten aus",
+            "ipv4Hints": "\"Kein\" Netzwerk-, Broadcast- und Hostadressen möglich",
+            "ipv6Hints1": "Kürzeste gültige Abkürzung für Netzadresse + Interfaceanteil nutzen (\"kein\" möglich)",
+            "ipv6Hints2": "Subnetzanteil alle Bits eingeben (\"kein\" möglich)",
+            "feedback": {
+                "correct": "Richtig",
+                "empty": "Leer",
+                "wrong": "Falsch",
+                "networkAddress": "Netzwerkadresse",
+                "broadcastAddress": "Broadcast-Adresse",
+                "addressType": "Adresstyp",
+                "hostCount": "Hostanzahl",
+                "subnetMask": "Subnetzmaske",
+                "message": "Versuche es weiter oder klicke Antworten anzeigen",
+                "fullIpv6Address": "Vollständige IPv6",
+                "subnetId": "Subnetzanteil",
+                "interfaceId": "Interfaceanteil",
+                "abbreviation": "Abkürzung"
+            },
+            "inputMode": {
+                "title": "Eingabe Modus",
+                "askForIp": "Geben Sie eine gültige IPv4-Adresse ein",
+                "askForCIDR": "Geben Sie nun die CIDR oder die Subnetzmaske ein",
+                "calculationCompletedTitle": "Berechnung abgeschlossen",
+                "calculationCompletedMessage": "Alle Felder wurden automatisch berechnet"
+            }
+        },
+        "tooltips": {
+            "ipv4": {
+                "networkAddress": "Gib \"kein\" ein, falls keine Netzwerkadresse",
+                "broadcastAddress": "Gib \"kein\" ein, falls keine Broadcast-Adresse",
+                "hostCount": "Gib \"kein\" ein, falls keine Hosts"
+            },
+            "ipv6": {
+                "networkAddress": "Gib \"kein\" ein, falls keine Netzwerkadresse",
+                "subnetId": "Gib \"kein\" ein, falls keine Subnetzanteil",
+                "interfaceId": "Gib \"kein'\" ein, falls keine Interfaceanteil"
+            }
+        }
+    },
+    "en": {
+        "h1": "Practice makes perfect",
+        "ipVersionButtons": {
+            "generateIPv4": "Generate IPv4",
+            "generateIPv6": "Generate IPv6"
+        },
+        "topInputs": {
+            "ipv4Address": "IPv4 Address:",
+            "placeholder": "Enter...",
+            "cidrNotation": "CIDR:",
+            "subnetMask": "Subnet Mask:",
+            "inputMode": "Input Mode",
+            "practiceMode": "Practice Mode",
+            "modeDescription": "Enter IP and CIDR/Mask to calculate all other fields",
+            "practiceDescription": "Calculate the missing fields based on the generated values"
+        },
+        "middleInputs": {
+            "networkAddress": "Network Address:",
+            "broadcastAddress": "Broadcast Address:",
+            "wildcardMask": "Wildcard Mask:",
+            "firstHost": "First Host Address:",
+            "lastHost": "Last Host Address:"
+        },
+        "bottomInputs": {
+            "totalHosts": "Total Hosts:",
+            "usableHosts": "Host Count:",
+            "networkClass": "Address Type:",
+            "isPrivate": "Private Network:",
+            "yes": "Yes",
+            "no": "No",
+            "selectPlaceholder": "Please select",
+            "classOptions": {
+                "APrivate": "A (private)",
+                "APublic": "A (public)",
+                "BPrivate": "B (private)",
+                "BPublic": "B (public)",
+                "CPrivate": "C (private)",
+                "CPublic": "C (public)",
+                "D": "D",
+                "E": "E",
+                "Loopback": "Loopback",
+                "APIPA": "APIPA",
+                "CarrierGradeNAT": "Carrier-Grade NAT",
+                "Documentation": "Documentation",
+                "Broadcast": "Broadcast",
+                "Unspecified": "Unspecified"
+            }
+        },
+        "bottomButtons": {
+            "check": "Check",
+            "showAnswers": "Show Answers"
+        },
+        "toggleElements": {
+            "helpTableIPv4": "IPv4 Help Table",
+            "helpTableIPv6": {
+                "buttonLabel": "IPv6 Help Table",
+                "title": "IPv6 Structure",
+                "networkPrefix": "Network Prefix (Prefix + Subnet)",
+                "interfacePrefix": "Interface ID"
+            },
+            "hintsIPv4": {
+                "title": "IPv4 Hints",
+                "whatIsIpv4": {
+                    "title": "What is IPv4?",
+                    "content": "IPv4 (Internet Protocol Version 4) is currently the most widely used Internet protocol. It uses <b>32 bit</b> addresses, divided into <b>4 blocks of 8 bits each (0-255)</b>. Due to the limited number of <b>about 4.3 billion addresses</b>, IPv4 will likely be gradually replaced by IPv6."
+                },
+
+                "loopback": {
+                    "commonUse": "Loopback Network",
+                    "range": "Range",
+                    "specialInfo": "Always local computer – never routed over a network"
+                },
+                "apipa": {
+                    "commonUse": "Apipa Network",
+                    "range": "Range",
+                    "specialInfo": "Automatic address assignment when DHCP fails"
+                },
+                "cng": {
+                    "commonUse": "Carrier-Grade NAT Network",
+                    "range": "Range",
+                    "specialInfo": "Shared IP addresses by Internet providers for multiple customers"
+                },
+                "broadcast": {
+                    "commonUse": "Limited broadcast",
+                    "range": "Range: Single address",
+                    "specialInfo": "To all devices on the local network"
+                },
+                "unspecified": {
+                    "title": "Unspecified",
+                    "commonUse": "Default route - unassigned address",
+                    "range": "Range: Single address",
+                    "specialInfo": "Default route or unspecified address",
+                    "badget": "Unspecified"
+                },
+                "privateNetworks": {
+                    "title": "Private Networks",
+                    "classA": {
+                        "commonUse": "Private Class A - large companies",
+                        "range": "Range",
+                        "specialInfo": "16.7 million private addresses for large companies",
+                        "badget": "Class A"
+                    },
+                    "class B": {
+                        "commonUse": "Private Class B - medium-sized companies",
+                        "range": "Range",
+                        "specialInfo": "1 million private addresses for medium-sized companies",
+                        "badget": "Class B"
+                    },
+                    "class C": {
+                        "commonUse": "Private Class C - home networks",
+                        "range": "Range",
+                        "specialInfo": "65.536 private addresses for home networks and small offices",
+                        "badget": "Class C"
+                    }
+                },
+                "publicNetworks": {
+                    "title": "Public Networks",
+                    "classA": {
+                        "commonUse": "Public Class A",
+                        "range": "Range",
+                        "specialInfo": "Public addresses - reachable over the Internet",
+                        "badget": "Class A"
+                    },
+                    "class B": {
+                        "commonUse": "Public Class B",
+                        "range": "Range",
+                        "specialInfo": "Public addresses - reachable over the Internet",
+                        "badget": "Class B"
+                    },
+                    "class C": {
+                        "commonUse": "Public Class C",
+                        "range": "Range",
+                        "specialInfo": "Public addresses - reachable over the Internet",
+                        "badget": "Class C"
+                    }
+                },
+                "classesDandE": {
+                    "title": "Classes D and E",
+                    "class D": {
+                        "commonUse": "Class D (Multicast)",
+                        "range": "Range: 224.0.0.0 - 239.255.255.255/4 (no broadcast, no host)",
+                        "specialInfo": "Group communication - one message to several recipients",
+                        "badget": "Class D"
+                    },
+                    "class E": {
+                        "commonUse": "Class E (Reserved)",
+                        "range": "Range: 240.0.0.0 - 255.255.255.254/4 (no broadcast, no host)",
+                        "specialInfo": "Experimental address range - reserved for future use",
+                        "badget": "Class E"
+                    }
+                },
+                "documentation": {
+                    "title": "Documentation",
+                    "testnet1": {
+                        "commonUse": "Testnet-1",
+                        "range": "Range",
+                        "specialInfo": "Reserved for documentation and examples",
+                        "badget": "Documentation"
+                    },
+                    "testnet2": {
+                        "commonUse": "Testnet-2",
+                        "range": "Range",
+                        "specialInfo": "Reserved for documentation and examples",
+                        "badget": "Documentation"
+                    },
+                    "testnet3": {
+                        "commonUse": "Testnet-3",
+                        "range": "Range",
+                        "specialInfo": "Reserved for documentation and examples",
+                        "badget": "Documentation"
+                    }
+                }
+            },
+            "hintsIPv6": {
+                "title": "IPv6 Hints",
+                "whatIsIpv6": {
+                    "title": "What is IPv6?",
+                    "content": "IPv6 (Internet Protocol Version 6) is the successor to IPv4. It uses <b>128-bit</b> long addresses, divided into <b>8 blocks of 16 bits (hexadecimal)</b>. IPv6 provides practically unlimited addresses and is expected to largely replace IPv4 in the coming years. IPv6 <b>does not use broadcast</b>, but only <b>multicast for group communication</b>."
+                },
+                "ipv6AbreviattionRules": {
+                    "title": "IPv6 Abbreviation Rules",
+                    "1stRule": "<b>1. Omit leading zeros:</b>",
+
+                    "2ndRule": "<b>2. Replace the longest sequence of zeros with \"::\":</b>",
+                    "rangeText": "<b>In case of equally long zero sequences:</b> replace the first (leftmost) one",
+                    "specialInfo1": "\"::\" can only be used once per address!",
+                    "specialInfo2": "\"::\" replaces at least two consecutive 0000 blocks!"
+                },
+                "loopback": {
+                    "specialInfo": "Always local computer - never routed over the network. Equivalent to 127.0.0.1 in IPv4"
+                },
+                "unspecified": {
+                    "title": "Unspecified",
+                    "commonUse": "Unspecified address / all-zero address",
+                    "specialInfo": "Used during address configuration. Equivalent to 0.0.0.0 in IPv4",
+                    "badget": "Unspecified"
+                },
+                "documentation": {
+                    "title": "Documentation",
+                    "commonUse": "Documentation / Example addresses",
+                    "specialInfo": "RFC 3849 - For documentation and example use only. Equivalent to: Test Network 1 (192.0.2.0/24), Test Network 2 (198.51.100.0/24), and Test Network 3 (203.0.113.0/24)",
+                    "badget": "Documentation"
+                },
+                "linkLocal": {
+                    "commonUse": "Link-Local / Automatically configured",
+                    "specialInfo": "Automatically configured on every IPv6 interface. Equivalent to APIPA (169.254.0.0/16) in IPv4"
+                },
+                "privateNetworks": {
+                    "ulaCentral": {
+                        "commonUse": "ULA Central Network",
+                        "specialInfo": "Centrally assigned private IPv6 addresses (ULA - Unique Local Address). Equivalent to RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
+                        "badget": "Central ULA"
+                    },
+                    "ulaLocal": {
+                        "commonUse": "ULA Local Network",
+                        "speciaInfo": "Locally generated private IPv6 addresses (ULA - Unique Local Address). Equivalent to RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
+                        "badget": "Local ULA"
+                    }
+                },
+                "globalUnicast": {
+                    "global2xxx": {
+                        "commonUse": "Global Unicast 2xxx / Internet-routable",
+                        "specialInfo": "Most common Global Unicast range - assigned by ISPs. Equivalent to public IPv4 addresses (Class A, B, C)"
+                    },
+                    "global3xxx": {
+                        "commonUse": "Global Unicast 3xxx / Internet-routable",
+                        "specialInfo": "Additional Global Unicast address range - Internet-routable. Equivalent to public IPv4 addresses (Class A, B, C)"
+                    }
+                },
+                "multicast": {
+                    "multicast": {
+                        "commonUse": "Multicast Network",
+                        "specialInfo": "Completely replaces IPv4 broadcast - group communication. Equivalent to Class D (224.0.0.0/4) in IPv4"
+                    },
+                    "allNodes": {
+                        "commonUse": "All IPv6 nodes / Replaces broadcast",
+                        "speciaInfo": "Reaches all IPv6 nodes - replaces IPv4 broadcast. Equivalent to 255.255.255.255 in IPv4",
+                        "badget": "All nodes"
+                    },
+                    "allRouters": {
+                        "commonUse": "All IPv6 routers / Router communication",
+                        "specialInfo": "Reaches all IPv6 routers in the local segment. No direct IPv4 equivalent (IPv4 uses broadcast)",
+                        "badget": "All routers"
+                    }
+                },
+                "ipv4Mapped": {
+                    "commonUse": "IPv4-compatible / Transition address",
+                    "specialInfo": "Enables IPv4 compatibility in pure IPv6 environments"
+                }
+            }
+        },
+        "topInputsIPv6": {
+            "fullAddress": "Full IPv6 Address:",
+            "networkPrefix": "Prefix:"
+        },
+        "middleInputsIPv6": {
+            "abbreviatedAddress": "Abbreviation:",
+            "networkAddress": "Network Address:",
+            "abbreviatedPlaceholder": "Abbreviated..."
+        },
+        "bottomInputsIPv6": {
+            "addressType": "Address Type:",
+            "subnetPart": "Subnet ID:",
+            "interfacePart": "Interface ID:",
+            "selectPlaceholder": "Please select",
+            "subnetPlaceholder": "All bits...",
+            "interfacePlaceholder": "Abbreviated...",
+            "subnetTitle": "The subnet part of the address (usually 4th hextet group)",
+            "interfaceTitle": "The interface part of the address (last 64 bits)",
+            "typeOptions": {
+                "globalUnicast": "Global Unicast",
+                "documentation": "Documentation",
+                "ula": "ULA",
+                "linkLocal": "Link-Local",
+                "loopback": "Loopback",
+                "multicast": "Multicast",
+                "unspecified": "Unspecified"
+            }
+        },
+        "instructionContainer": {
+            "initialState": "Generate an IP + one field to practice, or enter an IP + CIDR/subnet mask for automatic calculation ",
+            "ipHints": "Use the IPv4/IPv6 Help Table and Hints for help at any time",
+            "practiceMode": "Task",
+            "ipPracticeMode": "Fill in the other fields based on the generated data",
+            "ipv4Hints": "\"No\" Network, Broadcast and Host Addresses possible",
+            "ipv6Hints1": "Use the shortest valid abbreviation for the Network Address + Interface ID (\"none\" possible)",
+            "ipv6Hints2": "Enter all bits of the Subnet ID (\"none\" possible)",
+            "feedback": {
+                "correct": "Correct",
+                "empty": "Empty",
+                "wrong": "Wrong",
+                "networkAddress": "Network Address",
+                "broadcastAddress": "Broadcast Address",
+                "addressType": "Address Type",
+                "hostCount": "Host Count",
+                "subnetMask": "Subnet Mask",
+                "message": "Keep trying or click Show Answers",
+                "fullIpv6Address": "Full IPv6",
+                "subnetId": "Subnet ID",
+                "interfaceId": "Interface ID",
+                "abbreviation": "Abbreviation"
+            },
+            "inputMode": {
+                "title": "Input Mode",
+                "askForIp": "Enter a valid IPv4 address",
+                "askForCIDR": "Now enter the CIDR notation or the Subnet Mask",
+                "calculationCompletedTitle": "Calculation completed",
+                "calculationCompletedMessage": "All fields were calculated automatically"
+            }
+        },
+        "tooltips": {
+            "ipv4": {
+                "networkAddress": "Use \"none\" if no Network Address",
+                "broadcastAddress": "Use \"none\" if no Broadcast Address",
+                "hostCount": "Use \"none\" if no Hosts"
+            },
+            "ipv6": {
+                "networkAddress": "Use \"none\" if no Network Address",
+                "subnetId": "Use \"none\" if no Subnet ID",
+                "interfaceId": "Use \"none\" if no Interface ID"
+            }
+        }
+    }
+}

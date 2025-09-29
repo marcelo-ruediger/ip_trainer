@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { getAllSpecialAddresses } from "../utils/ipv4Utils";
 import { getAllSpecialAddresses as getAllIPv6SpecialAddresses } from "../utils/ipv6Utils";
-import infoIcon from "../images/info.svg";
-import "../ToggleElements.css";
+import { useLanguage } from "../contexts/LanguageContext";
+import "../styles/ToggleElements.css";
+import languageIcon from "../images/language.svg";
 
 function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
     const [showSpecialAddresses, setShowSpecialAddresses] = useState(false);
+    const { language, setLanguage, t } = useLanguage();
 
     // Use appropriate special addresses based on IP version
     const specialAddresses =
@@ -15,6 +17,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
     const handleSpecialAddressesToggle = () => {
         setShowSpecialAddresses(true);
+    };
+
+    const handleLanguageToggle = (newLanguage) => {
+        const langCode = newLanguage.toLowerCase();
+        setLanguage(langCode);
     };
 
     const closePopup = () => {
@@ -74,7 +81,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                   "Private Networks": "Private Netzwerke",
                   "Global Unicast": "Global Unicast",
                   Multicast: "Multicast",
-                  Transition: "Übergang",
+                  Transition: "IPv4-Mapped",
                   Other: "Sonstige",
               }
             : {
@@ -95,50 +102,110 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         const address = addr.address;
 
         if (ipVersion === "ipv6") {
-            // IPv6 simplified descriptions
+            // IPv6 simplified descriptions using translations
             if (address === "::1") return "IPv6 Localhost / Loopback";
             if (address === "::")
-                return "Unspezifizierte Adresse / Null-Adresse";
+                return t("toggleElements.hintsIPv6.unspecified.commonUse");
             if (address === "2001:db8::")
-                return "Dokumentation / Beispieladressen";
+                return t("toggleElements.hintsIPv6.documentation.commonUse");
             if (address === "fe80::")
-                return "Link-Local / Automatisch konfiguriert";
+                return t("toggleElements.hintsIPv6.linkLocal.commonUse");
             if (address === "fc00::")
-                return "ULA (Unique Local Address) zentral / Private IPv6 (selten)";
+                return t(
+                    "toggleElements.hintsIPv6.privateNetworks.ulaCentral.commonUse"
+                );
             if (address === "fd00::")
-                return "ULA (Unique Local Address) lokal / Private IPv6 (häufig)";
+                return t(
+                    "toggleElements.hintsIPv6.privateNetworks.ulaLocal.commonUse"
+                );
             if (address === "2001::")
-                return "Global Unicast 2xxx / Internet-routbar";
+                return t(
+                    "toggleElements.hintsIPv6.globalUnicast.global2xxx.commonUse"
+                );
             if (address === "3000::")
-                return "Global Unicast 3xxx / Internet-routbar";
-            if (address === "ff00::") return "Multicast / Gruppenkommunikation";
+                return t(
+                    "toggleElements.hintsIPv6.globalUnicast.global3xxx.commonUse"
+                );
+            if (address === "ff00::")
+                return t(
+                    "toggleElements.hintsIPv6.multicast.multicast.commonUse"
+                );
             if (address === "ff02::1")
-                return "Alle IPv6-Knoten / Ersetzt Broadcast";
+                return t(
+                    "toggleElements.hintsIPv6.multicast.allNodes.commonUse"
+                );
             if (address === "ff02::2")
-                return "Alle IPv6-Router / Router-Kommunikation";
+                return t(
+                    "toggleElements.hintsIPv6.multicast.allRouters.commonUse"
+                );
             if (address === "::ffff:0:0")
-                return "IPv4-mapped / Übergangs-Adresse";
+                return t("toggleElements.hintsIPv6.ipv4Mapped.commonUse");
 
             return addr.commonUse;
         } else {
-            // IPv4 simplified descriptions
-            if (address === "127.0.0.1") return "Localhost / Loopback";
-            if (address === "169.254.1.1") return "APIPA / Link-lokale Adresse";
+            // IPv4 descriptions using translations
+            if (address === "127.0.0.0")
+                return t("toggleElements.hintsIPv4.loopback.commonUse");
+            if (address === "169.254.0.0")
+                return t("toggleElements.hintsIPv4.apipa.commonUse");
+            if (address === "100.64.0.0")
+                return t("toggleElements.hintsIPv4.cng.commonUse");
             if (address === "255.255.255.255")
-                return "Eingeschränkter Broadcast";
+                return t("toggleElements.hintsIPv4.broadcast.commonUse");
             if (address === "0.0.0.0")
-                return "Default Route - nicht zugewiesene Adresse";
+                return t("toggleElements.hintsIPv4.unspecified.commonUse");
+
+            // Private Networks
             if (address === "10.0.0.0")
-                return "Private Klasse A - Große Unternehmen";
+                return t(
+                    "toggleElements.hintsIPv4.privateNetworks.classA.commonUse"
+                );
             if (address === "172.16.0.0")
-                return "Private Klasse B - Mittlere Unternehmen";
+                return t(
+                    "toggleElements.hintsIPv4.privateNetworks.class B.commonUse"
+                );
             if (address === "192.168.0.0")
-                return "Private Klasse C - Heimnetzwerke";
-            if (address === "1.0.0.0") return "Öffentliche Klasse A Beginn";
-            if (address === "128.0.0.0") return "Öffentliche Klasse B Beginn";
-            if (address === "192.0.0.0") return "Öffentliche Klasse C Beginn";
-            if (address === "224.0.0.0") return "Klasse D Beginn (Multicast)";
-            if (address === "240.0.0.0") return "Klasse E Beginn (Reserviert)";
+                return t(
+                    "toggleElements.hintsIPv4.privateNetworks.class C.commonUse"
+                );
+
+            // Public Networks
+            if (address === "1.0.0.0")
+                return t(
+                    "toggleElements.hintsIPv4.publicNetworks.classA.commonUse"
+                );
+            if (address === "128.0.0.0")
+                return t(
+                    "toggleElements.hintsIPv4.publicNetworks.class B.commonUse"
+                );
+            if (address === "192.0.0.0")
+                return t(
+                    "toggleElements.hintsIPv4.publicNetworks.class C.commonUse"
+                );
+
+            // Classes D and E
+            if (address === "224.0.0.0")
+                return t(
+                    "toggleElements.hintsIPv4.classesDandE.class D.commonUse"
+                );
+            if (address === "240.0.0.0")
+                return t(
+                    "toggleElements.hintsIPv4.classesDandE.class E.commonUse"
+                );
+
+            // Documentation
+            if (address === "192.0.2.0")
+                return t(
+                    "toggleElements.hintsIPv4.documentation.testnet1.commonUse"
+                );
+            if (address === "198.51.100.0")
+                return t(
+                    "toggleElements.hintsIPv4.documentation.testnet2.commonUse"
+                );
+            if (address === "203.0.113.0")
+                return t(
+                    "toggleElements.hintsIPv4.documentation.testnet3.commonUse"
+                );
 
             return addr.commonUse;
         }
@@ -149,24 +216,39 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         const address = addr.address;
 
         if (ipVersion === "ipv6") {
-            // IPv6 address badges
+            // IPv6 address badges using translations
 
             // Loopback
             if (address === "::1") return { text: "Loopback", class: "system" };
 
             // Unspecified
             if (address === "::")
-                return { text: "Unspezifiziert", class: "routing" };
+                return {
+                    text: t("toggleElements.hintsIPv6.unspecified.badget"),
+                    class: "routing",
+                };
 
             // Documentation
             if (address === "2001:db8::")
-                return { text: "Dokumentation", class: "documentation" };
+                return {
+                    text: t("toggleElements.hintsIPv6.documentation.badget"),
+                    class: "documentation",
+                };
             if (address === "2001:db8::1")
-                return { text: "Dokumentation", class: "documentation" };
+                return {
+                    text: t("toggleElements.hintsIPv6.documentation.badget"),
+                    class: "documentation",
+                };
             if (address === "2001:db8:0000::")
-                return { text: "Dokumentation", class: "documentation" };
+                return {
+                    text: t("toggleElements.hintsIPv6.documentation.badget"),
+                    class: "documentation",
+                };
             if (address === "2001:db8:1::")
-                return { text: "Dokumentation", class: "documentation" };
+                return {
+                    text: t("toggleElements.hintsIPv6.documentation.badget"),
+                    class: "documentation",
+                };
 
             // Link-Local
             if (address === "fe80::")
@@ -178,13 +260,33 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             // Private Networks (ULA)
             if (address === "fc00::1")
-                return { text: "ULA zentral", class: "class-a" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv6.privateNetworks.ulaCentral.badget"
+                    ),
+                    class: "class-a",
+                };
             if (address === "fc00:0000::")
-                return { text: "ULA zentral", class: "class-a" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv6.privateNetworks.ulaCentral.badget"
+                    ),
+                    class: "class-a",
+                };
             if (address === "fd00::1")
-                return { text: "ULA lokal", class: "class-a" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv6.privateNetworks.ulaLocal.badget"
+                    ),
+                    class: "class-a",
+                };
             if (address === "fd00:0000::")
-                return { text: "ULA lokal", class: "class-a" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv6.privateNetworks.ulaLocal.badget"
+                    ),
+                    class: "class-a",
+                };
 
             // Global Unicast
             if (address === "2001::")
@@ -196,9 +298,19 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             if (address === "ff00:0000::")
                 return { text: "Multicast", class: "class-d" };
             if (address === "ff02::1")
-                return { text: "Alle Knoten", class: "special" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv6.multicast.allNodes.badget"
+                    ),
+                    class: "special",
+                };
             if (address === "ff02::2")
-                return { text: "Alle Router", class: "class-d" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv6.multicast.allRouters.badget"
+                    ),
+                    class: "class-d",
+                };
 
             // Transition
             if (address === "::ffff:0:0")
@@ -208,23 +320,53 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             return null;
         } else {
-            // IPv4 address badges (existing logic)
+            // IPv4 address badges using translations
 
             // Private Networks
             if (address === "10.0.0.0")
-                return { text: "Klasse A", class: "class-a" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.privateNetworks.classA.badget"
+                    ),
+                    class: "class-a",
+                };
             if (address === "172.16.0.0")
-                return { text: "Klasse B", class: "class-b" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.privateNetworks.class B.badget"
+                    ),
+                    class: "class-b",
+                };
             if (address === "192.168.0.0")
-                return { text: "Klasse C", class: "class-c" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.privateNetworks.class C.badget"
+                    ),
+                    class: "class-c",
+                };
 
             // Public Networks
             if (address === "1.0.0.0")
-                return { text: "Klasse A", class: "class-a" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.publicNetworks.classA.badget"
+                    ),
+                    class: "class-a",
+                };
             if (address === "128.0.0.0")
-                return { text: "Klasse B", class: "class-b" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.publicNetworks.class B.badget"
+                    ),
+                    class: "class-b",
+                };
             if (address === "192.0.0.0")
-                return { text: "Klasse C", class: "class-c" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.publicNetworks.class C.badget"
+                    ),
+                    class: "class-c",
+                };
 
             // Special addresses
             if (address === "127.0.0.0")
@@ -235,17 +377,45 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             if (address === "255.255.255.255")
                 return { text: "Broadcast", class: "special" };
             if (address === "0.0.0.0")
-                return { text: "Unspezifiziert", class: "routing" };
+                return {
+                    text: t("toggleElements.hintsIPv4.unspecified.badget"),
+                    class: "routing",
+                };
             if (address === "224.0.0.0")
-                return { text: "Klasse D", class: "class-d" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.classesDandE.class D.badget"
+                    ),
+                    class: "class-d",
+                };
             if (address === "240.0.0.0")
-                return { text: "Klasse E", class: "class-e" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.classesDandE.class E.badget"
+                    ),
+                    class: "class-e",
+                };
             if (address === "192.0.2.0")
-                return { text: "Dokumentation", class: "documentation" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.documentation.testnet1.badget"
+                    ),
+                    class: "documentation",
+                };
             if (address === "198.51.100.0")
-                return { text: "Dokumentation", class: "documentation" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.documentation.testnet2.badget"
+                    ),
+                    class: "documentation",
+                };
             if (address === "203.0.113.0")
-                return { text: "Dokumentation", class: "documentation" };
+                return {
+                    text: t(
+                        "toggleElements.hintsIPv4.documentation.testnet3.badget"
+                    ),
+                    class: "documentation",
+                };
 
             return null;
         }
@@ -256,106 +426,234 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         const address = addr.address;
 
         if (ipVersion === "ipv6") {
-            // IPv6 special information
+            // IPv6 special information using translations
 
             // Loopback
             if (address === "::1")
-                return "Immer lokaler Computer - niemals über Netzwerk geroutet.\nEntspricht 127.0.0.1 in IPv4";
+                return t("toggleElements.hintsIPv6.loopback.specialInfo");
 
             // Unspecified
             if (address === "::")
-                return "Wird während der Adresskonfiguration verwendet.\nEntspricht 0.0.0.0 in IPv4";
+                return t("toggleElements.hintsIPv6.unspecified.specialInfo");
 
             // Documentation
             if (address === "2001:db8::")
-                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
+                return t("toggleElements.hintsIPv6.documentation.specialInfo");
             if (address === "2001:db8::1")
-                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
+                return t("toggleElements.hintsIPv6.documentation.specialInfo");
             if (address === "2001:db8:0000::")
-                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
+                return t("toggleElements.hintsIPv6.documentation.specialInfo");
             if (address === "2001:db8:1::")
-                return "RFC 3849 - Ausschließlich für Dokumentation und Beispiele.\nEntspricht: Testnetz-1 (192.0.2.0/24), Testnetz-2 (198.51.100.0/24) und Testnetz-3 (203.0.113.0/24)";
+                return t("toggleElements.hintsIPv6.documentation.specialInfo");
 
             // Link-Local
             if (address === "fe80::")
-                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert.\nEntspricht APIPA (169.254.0.0/16) in IPv4";
+                return t("toggleElements.hintsIPv6.linkLocal.specialInfo");
             if (address === "fe80::1")
-                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert.\nEntspricht APIPA (169.254.0.0/16) in IPv4";
+                return t("toggleElements.hintsIPv6.linkLocal.specialInfo");
             if (address === "fe80:0000::")
-                return "Automatisch auf jeder IPv6-Schnittstelle konfiguriert.\nEntspricht APIPA (169.254.0.0/16) in IPv4";
+                return t("toggleElements.hintsIPv6.linkLocal.specialInfo");
 
             // Private Networks (ULA)
             if (address === "fc00::1")
-                return "Zentral zugewiesene private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
+                return t(
+                    "toggleElements.hintsIPv6.privateNetworks.ulaCentral.specialInfo"
+                );
             if (address === "fc00:0000::")
-                return "Zentral zugewiesene private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
+                return t(
+                    "toggleElements.hintsIPv6.privateNetworks.ulaCentral.specialInfo"
+                );
             if (address === "fd00::1")
-                return "Lokal generierte private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
+                return t(
+                    "toggleElements.hintsIPv6.privateNetworks.ulaLocal.speciaInfo"
+                );
             if (address === "fd00:0000::")
-                return "Lokal generierte private IPv6-Adressen (ULA - Unique Local Address).\nEntspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4";
+                return t(
+                    "toggleElements.hintsIPv6.privateNetworks.ulaLocal.speciaInfo"
+                );
 
             // Global Unicast
             if (address === "2001::")
-                return "Häufigster Global Unicast Bereich - von ISPs zugewiesen.\nEntspricht öffentlichen IPv4-Adressen (Klasse A, B, C)";
+                return t(
+                    "toggleElements.hintsIPv6.globalUnicast.global2xxx.specialInfo"
+                );
             if (address === "3000::")
-                return "Weiterer Global Unicast Adressbereich - Internet-routbar.\nEntspricht öffentlichen IPv4-Adressen (Klasse A, B, C)";
+                return t(
+                    "toggleElements.hintsIPv6.globalUnicast.global3xxx.specialInfo"
+                );
 
             // Multicast
             if (address === "ff00:0000::")
-                return "Ersetzt IPv4-Broadcast komplett - Gruppenkommunkation.\nEntspricht Klasse D (224.0.0.0/4) in IPv4";
+                return t(
+                    "toggleElements.hintsIPv6.multicast.multicast.specialInfo"
+                );
             if (address === "ff02::1")
-                return "Erreicht alle IPv6-Knoten - ersetzt IPv4-Broadcast.\nEntspricht 255.255.255.255 in IPv4";
+                return t(
+                    "toggleElements.hintsIPv6.multicast.allNodes.speciaInfo"
+                );
             if (address === "ff02::2")
-                return "Erreicht alle IPv6-Router im lokalen Segment.\nKein direktes IPv4-Äquivalent (IPv4 nutzt Broadcast)";
+                return t(
+                    "toggleElements.hintsIPv6.multicast.allRouters.specialInfo"
+                );
 
             // Transition
             if (address === "::ffff:0:0")
-                return "Ermöglicht IPv4-Kompatibilität in reinen IPv6-Umgebungen";
+                return t("toggleElements.hintsIPv6.ipv4Mapped.specialInfo");
 
             return null;
         } else {
-            // IPv4 special information (existing logic)
-
-            if (address === "169.254.0.0")
-                return "Automatische Adressvergabe wenn DHCP fehlschlägt";
-            if (address === "100.64.0.0")
-                return "Geteilte IP-Adressen bei Internetanbietern für mehrere Kunden";
+            // IPv4 special information using translations
             if (address === "127.0.0.0")
-                return "Immer lokaler Computer - niemals über Netzwerk geroutet";
-            if (address === "0.0.0.0")
-                return "Standard-Route oder unspezifizierte Adresse";
+                return t("toggleElements.hintsIPv4.loopback.specialInfo");
+            if (address === "169.254.0.0")
+                return t("toggleElements.hintsIPv4.apipa.specialInfo");
+            if (address === "100.64.0.0")
+                return t("toggleElements.hintsIPv4.cng.specialInfo");
             if (address === "255.255.255.255")
-                return "An alle Geräte im lokalen Netzwerk";
-            if (address === "192.0.2.0")
-                return "Reserviert für Dokumentation und Beispiele";
-            if (address === "198.51.100.0")
-                return "Reserviert für Dokumentation und Beispiele";
-            if (address === "203.0.113.0")
-                return "Reserviert für Dokumentation und Beispiele";
-            if (address === "224.0.0.0")
-                return "Gruppenkommunikation - eine Nachricht an mehrere Empfänger";
-            if (address === "240.0.0.0")
-                return "Experimenteller Adressbereich - für zukünftige Nutzung reserviert";
+                return t("toggleElements.hintsIPv4.broadcast.specialInfo");
+            if (address === "0.0.0.0")
+                return t("toggleElements.hintsIPv4.unspecified.specialInfo");
+
+            // Private Networks
             if (address === "10.0.0.0")
-                return "16,7 Millionen private Adressen für große Unternehmen";
+                return t(
+                    "toggleElements.hintsIPv4.privateNetworks.classA.specialInfo"
+                );
             if (address === "172.16.0.0")
-                return "1 Million private Adressen für mittlere Unternehmen";
+                return t(
+                    "toggleElements.hintsIPv4.privateNetworks.class B.specialInfo"
+                );
             if (address === "192.168.0.0")
-                return "65.536 private Adressen für Heimnetzwerke und kleine Büros";
+                return t(
+                    "toggleElements.hintsIPv4.privateNetworks.class C.specialInfo"
+                );
+
+            // Public Networks
             if (address === "1.0.0.0")
-                return "Öffentliche Adressen - über das Internet erreichbar";
+                return t(
+                    "toggleElements.hintsIPv4.publicNetworks.classA.specialInfo"
+                );
             if (address === "128.0.0.0")
-                return "Öffentliche Adressen - über das Internet erreichbar";
+                return t(
+                    "toggleElements.hintsIPv4.publicNetworks.class B.specialInfo"
+                );
             if (address === "192.0.0.0")
-                return "Öffentliche Adressen - über das Internet erreichbar";
+                return t(
+                    "toggleElements.hintsIPv4.publicNetworks.class C.specialInfo"
+                );
+
+            // Classes D and E
+            if (address === "224.0.0.0")
+                return t(
+                    "toggleElements.hintsIPv4.classesDandE.class D.specialInfo"
+                );
+            if (address === "240.0.0.0")
+                return t(
+                    "toggleElements.hintsIPv4.classesDandE.class E.specialInfo"
+                );
+
+            // Documentation
+            if (address === "192.0.2.0")
+                return t(
+                    "toggleElements.hintsIPv4.documentation.testnet1.specialInfo"
+                );
+            if (address === "198.51.100.0")
+                return t(
+                    "toggleElements.hintsIPv4.documentation.testnet2.specialInfo"
+                );
+            if (address === "203.0.113.0")
+                return t(
+                    "toggleElements.hintsIPv4.documentation.testnet3.specialInfo"
+                );
 
             return null;
+        }
+    };
+
+    // Function to get category titles using translations for IPv4
+    const getCategoryTitle = (category) => {
+        switch (category) {
+            case "Private Networks":
+                return t("toggleElements.hintsIPv4.privateNetworks.title");
+            case "Public Networks":
+                return t("toggleElements.hintsIPv4.publicNetworks.title");
+            case "Classes D and E":
+                return t("toggleElements.hintsIPv4.classesDandE.title");
+            case "Documentation":
+                return t("toggleElements.hintsIPv4.documentation.title");
+            case "Unspezifiziert":
+                return t("toggleElements.hintsIPv4.unspecified.title");
+            case "Loopback":
+                return "Loopback";
+            case "APIPA":
+                return "APIPA";
+            case "Carrier-Grade NAT":
+                return "Carrier-Grade NAT";
+            case "Broadcast":
+                return "Broadcast";
+            default:
+                return category;
+        }
+    };
+
+    // Function to get range translations for IPv4
+    const getRangeTranslation = (addr) => {
+        const address = addr.address;
+
+        if (ipVersion === "ipv6") {
+            // Keep original for IPv6
+            return addr.range;
+        } else {
+            // IPv4 - only translate special cases with complex text, keep original ranges for simple ones
+            const rangeLabel = language === "en" ? "Range" : "Bereich";
+
+            switch (address) {
+                case "255.255.255.255":
+                    return t("toggleElements.hintsIPv4.broadcast.range");
+                case "0.0.0.0":
+                    return t("toggleElements.hintsIPv4.unspecified.range");
+                case "224.0.0.0":
+                    return t(
+                        "toggleElements.hintsIPv4.classesDandE.class D.range"
+                    );
+                case "240.0.0.0":
+                    return t(
+                        "toggleElements.hintsIPv4.classesDandE.class E.range"
+                    );
+                default:
+                    // For simple cases, use translated label + original range numbers
+                    return `${rangeLabel}: ${addr.range}`;
+            }
         }
     };
 
     return (
         <>
             <div className="image-toggle-container">
+                <div className="language-toggle-container">
+                    <button
+                        className={`language-button ${
+                            language === "de" ? "active" : ""
+                        }`}
+                        onClick={() => handleLanguageToggle("DE")}
+                    >
+                        <span className="button-text">DE</span>
+                    </button>
+                    <img
+                        src={languageIcon}
+                        alt="Language"
+                        className="language-icon"
+                    />
+                    <button
+                        className={`language-button ${
+                            language === "en" ? "active" : ""
+                        }`}
+                        onClick={() => handleLanguageToggle("EN")}
+                    >
+                        <span className="button-text">EN</span>
+                    </button>
+                </div>
+
                 <label className="toggle-label">
                     <input
                         type="checkbox"
@@ -364,8 +662,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     />
                     <span className="label-text">
                         {ipVersion === "ipv6"
-                            ? "Hilfstabelle IPv6"
-                            : "Hilfstabelle IPv4"}
+                            ? t("toggleElements.helpTableIPv6.buttonLabel")
+                            : t("toggleElements.helpTableIPv4")}
                     </span>
                 </label>
 
@@ -375,15 +673,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         checked={false}
                         onChange={handleSpecialAddressesToggle}
                     />
-                    <img 
-                        src={infoIcon} 
-                        alt="info" 
-                        className="info-icon"
-                    />
+                    <img src={infoIcon} alt="info" className="info-icon" />
                     <span className="label-text">
                         {ipVersion === "ipv6"
-                            ? "IPv6 Hinweise"
-                            : "IPv4 Hinweise"}
+                            ? t("toggleElements.hintsIPv6.title")
+                            : t("toggleElements.hintsIPv4.title")}
                     </span>
                 </label>
             </div>
@@ -397,18 +691,26 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 {ipVersion === "ipv6" && (
                     <div className="ipv6-info-header">
                         <div className="ipv6-structure-title">
-                            IPv6-Struktur (128 bits):
+                            {t("toggleElements.helpTableIPv6.title")} (128
+                            bits):
                         </div>
                         <div className="ipv6-structure-text">
                             <span className="ipv6-structure-part network-part">
-                                64 Bits Netzwerkanteil (Präfix + Subnetz)
+                                64 Bits{" "}
+                                {t(
+                                    "toggleElements.helpTableIPv6.networkPrefix"
+                                )}
                             </span>
                             <span className="ipv6-structure-separator">
                                 {" "}
                                 +{" "}
                             </span>
                             <span className="ipv6-structure-part interface-part">
-                                64 Bits Interfaceanteil (Hosts)
+                                64 Bits{" "}
+                                {t(
+                                    "toggleElements.helpTableIPv6.interfacePrefix"
+                                )}{" "}
+                                (Hosts)
                             </span>
                         </div>
                     </div>
@@ -426,8 +728,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         <div className="popup-header">
                             <h2>
                                 {ipVersion === "ipv6"
-                                    ? "IPv6 Hinweise"
-                                    : "IPv4 Hinweise"}
+                                    ? t("toggleElements.hintsIPv6.title")
+                                    : t("toggleElements.hintsIPv4.title")}
                             </h2>
                             <button
                                 className="close-button"
@@ -443,84 +745,77 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                     {/* IPv6 Introduction Section */}
                                     <div className="address-category">
                                         <h3 className="category-title">
-                                            Was ist IPv6?
+                                            {t(
+                                                "toggleElements.hintsIPv6.whatIsIpv6.title"
+                                            )}
                                         </h3>
-                                        <div className="popup-description">
-                                            IPv6 (Internet Protocol Version 6)
-                                            ist der Nachfolger von IPv4. Es
-                                            verwendet <strong>128 Bit</strong>{" "}
-                                            lange Adressen, aufgeteilt in{" "}
-                                            <strong>8 Blöcke</strong> à 16 Bit
-                                            (hexadezimal). IPv6 bietet praktisch
-                                            unendlich viele Adressen und wird
-                                            voraussichtlich IPv4 in den
-                                            kommenden Jahren weitgehend
-                                            ersetzen. IPv6 verwendet{" "}
-                                            <strong>kein Broadcast</strong>,
-                                            sondern nur Multicast für
-                                            Gruppenkommunikation.
-                                        </div>
+                                        <div
+                                            className="popup-description"
+                                            dangerouslySetInnerHTML={{
+                                                __html: t(
+                                                    "toggleElements.hintsIPv6.whatIsIpv6.content"
+                                                ),
+                                            }}
+                                        />
                                     </div>
 
                                     {/* IPv6 Abbreviation Rules Section */}
                                     <div className="address-category">
                                         <h3 className="category-title">
-                                            IPv6 Abkürzungsregeln
+                                            {t(
+                                                "toggleElements.hintsIPv6.ipv6AbreviattionRules.title"
+                                            )}
                                         </h3>
                                         <div className="address-item">
                                             <div className="address-details">
-                                                <p className="common-use">
-                                                    <strong>
-                                                        1. Führende Nullen
-                                                        weglassen:
-                                                    </strong>
-                                                </p>
+                                                <p
+                                                    className="common-use"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: t(
+                                                            "toggleElements.hintsIPv6.ipv6AbreviattionRules.1stRule"
+                                                        ),
+                                                    }}
+                                                />
+
                                                 <p className="range">
                                                     2001:0db8:0000:0042 →
                                                     2001:db8:0:42
                                                 </p>
 
-                                                <p className="common-use">
-                                                    <strong>
-                                                        2. Längste Null-Sequenz
-                                                        mit "::" ersetzen:
-                                                    </strong>
-                                                </p>
+                                                <p
+                                                    className="common-use"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: t(
+                                                            "toggleElements.hintsIPv6.ipv6AbreviattionRules.2ndRule"
+                                                        ),
+                                                    }}
+                                                />
+
                                                 <p className="range">
                                                     2001:db8:0:0:0:0:0:1 →
                                                     2001:db8::1
                                                 </p>
 
-                                                <p className="range">
-                                                    <strong>
-                                                        Bei gleich langen
-                                                        Null-Sequenzen:
-                                                    </strong>{" "}
-                                                    Erste (linkeste) ersetzen
-                                                </p>
+                                                <p
+                                                    className="range"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: t(
+                                                            "toggleElements.hintsIPv6.ipv6AbreviattionRules.rangeText"
+                                                        ),
+                                                    }}
+                                                />
 
                                                 <p className="special-info">
-                                                    "::" darf nur einmal pro
-                                                    Adresse verwendet werden!
+                                                    {t(
+                                                        "toggleElements.hintsIPv6.ipv6AbreviattionRules.specialInfo1"
+                                                    )}
                                                     <br />
-                                                    "::" ersetzt mindestens zwei
-                                                    aufeinanderfolgende
-                                                    0000-Blöcke!
+                                                    {t(
+                                                        "toggleElements.hintsIPv6.ipv6AbreviattionRules.specialInfo2"
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    {/* Special Addresses Introduction */}
-                                    <div className="address-category">
-                                        <h3 className="category-title">
-                                            Spezielle IPv6-Adressen
-                                        </h3>
-                                        <p className="popup-description">
-                                            Diese Adressen haben besondere
-                                            Eigenschaften und folgen nicht den
-                                            standardmäßigen Subnetting-Regeln:
-                                        </p>
                                     </div>
                                 </>
                             ) : (
@@ -528,33 +823,18 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                     {/* IPv4 Introduction Section */}
                                     <div className="address-category">
                                         <h3 className="category-title">
-                                            Was ist IPv4?
+                                            {t(
+                                                "toggleElements.hintsIPv4.whatIsIpv4.title"
+                                            )}
                                         </h3>
-                                        <div className="popup-description">
-                                            IPv4 (Internet Protocol Version 4)
-                                            ist das derzeit am weitesten
-                                            verbreitete Internet-Protokoll. Es
-                                            verwendet <strong>32 Bit</strong>{" "}
-                                            lange Adressen, aufgeteilt in{" "}
-                                            <strong>4 Blöcke</strong> à 8 Bit
-                                            (0-255). Aufgrund der begrenzten
-                                            Anzahl von etwa 4,3 Milliarden
-                                            Adressen wird IPv4 wahrscheinlich
-                                            schrittweise durch IPv6 ersetzt
-                                            werden.
-                                        </div>
-                                    </div>
-
-                                    {/* Special Addresses Introduction */}
-                                    <div className="address-category">
-                                        <h3 className="category-title">
-                                            Spezielle IPv4-Adressen
-                                        </h3>
-                                        <p className="popup-description">
-                                            Diese Adressen haben besondere
-                                            Eigenschaften und folgen nicht den
-                                            standardmäßigen Subnetting-Regeln:
-                                        </p>
+                                        <div
+                                            className="popup-description"
+                                            dangerouslySetInnerHTML={{
+                                                __html: t(
+                                                    "toggleElements.hintsIPv4.whatIsIpv4.content"
+                                                ),
+                                            }}
+                                        />
                                     </div>
                                 </>
                             )}
@@ -570,8 +850,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                         className="address-category subcategory"
                                     >
                                         <h3 className="category-title">
-                                            {categoryTranslations[category] ||
-                                                category}
+                                            {ipVersion === "ipv6"
+                                                ? categoryTranslations[
+                                                      category
+                                                  ] || category
+                                                : getCategoryTitle(category)}
                                         </h3>
 
                                         {addresses.map((addr, index) => {
@@ -605,8 +888,9 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                                         </p>
                                                         {addr.range && (
                                                             <p className="range">
-                                                                Bereich:{" "}
-                                                                {addr.range}
+                                                                {getRangeTranslation(
+                                                                    addr
+                                                                )}
                                                             </p>
                                                         )}
                                                         {specialInfo && (

@@ -1,10 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+//TODO: Impressum und Bugs and Feedback report funktion. Code refactoring.
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles/index.css";
+import App from "./App.jsx";
+import { LanguageProvider } from "./contexts/LanguageContext.jsx";
+
+createRoot(document.getElementById("root")).render(
+    <StrictMode>
+        <LanguageProvider>
+            <App />
+        </LanguageProvider>
+    </StrictMode>
+);
