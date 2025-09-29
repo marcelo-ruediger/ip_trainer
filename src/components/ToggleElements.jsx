@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getAllSpecialAddresses } from "../utils/ipv4Utils";
 import { getAllSpecialAddresses as getAllIPv6SpecialAddresses } from "../utils/ipv6Utils";
 import { useLanguage } from "../contexts/LanguageContext";
-import "../ToggleElements.css";
+import "../styles/ToggleElements.css";
 import languageIcon from "../images/language.svg";
 
 function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {

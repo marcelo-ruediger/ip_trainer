@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./App.css";
-import "./MobileOptimizations.css";
-import "./NativeMobileStyles.css";
+import "./styles/App.css";
+import "./styles/MobileOptimizations.css";
+import "./styles/NativeMobileStyles.css";
 import tableImg from "./images/table.png";
 import ipv6StructureImg from "./images/ipv6_struktur.jpg";
 import Header from "./components/Header";

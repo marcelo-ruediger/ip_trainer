@@ -307,6 +307,18 @@
                 "calculationCompletedTitle": "Berechnung abgeschlossen",
                 "calculationCompletedMessage": "Alle Felder wurden automatisch berechnet"
             }
+        },
+        "tooltips": {
+            "ipv4": {
+                "networkAddress": "Gib \"kein\" ein, falls keine Netzwerkadresse",
+                "broadcastAddress": "Gib \"kein\" ein, falls keine Broadcast-Adresse",
+                "hostCount": "Gib \"kein\" ein, falls keine Hosts"
+            },
+            "ipv6": {
+                "networkAddress": "Gib \"kein\" ein, falls keine Netzwerkadresse",
+                "subnetId": "Gib \"kein\" ein, falls keine Subnetzanteil",
+                "interfaceId": "Gib \"kein'\" ein, falls keine Interfaceanteil"
+            }
         }
     },
     "en": {
@@ -617,6 +629,18 @@
                 "askForCIDR": "Now enter the CIDR notation or the Subnet Mask",
                 "calculationCompletedTitle": "Calculation completed",
                 "calculationCompletedMessage": "All fields were calculated automatically"
+            }
+        },
+        "tooltips": {
+            "ipv4": {
+                "networkAddress": "Use \"none\" if no Network Address",
+                "broadcastAddress": "Use \"none\" if no Broadcast Address",
+                "hostCount": "Use \"none\" if no Hosts"
+            },
+            "ipv6": {
+                "networkAddress": "Use \"none\" if no Network Address",
+                "subnetId": "Use \"none\" if no Subnet ID",
+                "interfaceId": "Use \"none\" if no Interface ID"
             }
         }
     }

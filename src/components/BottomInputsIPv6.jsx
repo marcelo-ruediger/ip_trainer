@@ -19,6 +19,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                             placeholder={t(
                                 "middleInputsIPv6.abbreviatedPlaceholder"
                             )}
+                            title={t("tooltips.ipv6.networkAddress")}
                             className="network-address-input"
                         />
                     </label>
@@ -36,7 +37,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                             placeholder={t(
                                 "bottomInputsIPv6.subnetPlaceholder"
                             )}
-                            title={t("bottomInputsIPv6.subnetTitle")}
+                            title={t("tooltips.ipv6.subnetId")}
                             className="subnet-id-input"
                         />
                     </label>
@@ -57,7 +58,7 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                             placeholder={t(
                                 "bottomInputsIPv6.interfacePlaceholder"
                             )}
-                            title={t("bottomInputsIPv6.interfaceTitle")}
+                            title={t("tooltips.ipv6.interfaceId")}
                             className="interface-id-input"
                         />
                     </label>

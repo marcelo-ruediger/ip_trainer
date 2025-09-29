@@ -18,6 +18,7 @@ function MiddleInputs({
                     value={renderValue("networkId")}
                     onChange={handleInputChange}
                     disabled={showAnswers || generatedField === "networkId"}
+                    title={t("tooltips.ipv4.networkAddress")}
                     className={
                         generatedField === "networkId" ? "attention" : ""
                     }
@@ -31,6 +32,7 @@ function MiddleInputs({
                     value={renderValue("broadcast")}
                     onChange={handleInputChange}
                     disabled={showAnswers || generatedField === "broadcast"}
+                    title={t("tooltips.ipv4.broadcastAddress")}
                     className={
                         generatedField === "broadcast" ? "attention" : ""
                     }

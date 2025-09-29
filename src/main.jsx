@@ -1,9 +1,8 @@
-//BUG: Shadow effect from .correct and .wrong looking different.
-//TODO: Hints for none fields, Impressum und Bugs and Feedback report funktion.
+//TODO: Impressum und Bugs and Feedback report funktion. Code refactoring.
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
+import "./styles/index.css";
 import App from "./App.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
 

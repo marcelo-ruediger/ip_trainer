@@ -23,6 +23,7 @@ function BottomInputs({
                             disabled={
                                 showAnswers || generatedField === "networkId"
                             }
+                            title={t("tooltips.ipv4.networkAddress")}
                             className={
                                 generatedField === "networkId"
                                     ? "attention"
@@ -43,6 +44,7 @@ function BottomInputs({
                             disabled={
                                 showAnswers || generatedField === "broadcast"
                             }
+                            title={t("tooltips.ipv4.broadcastAddress")}
                             className={
                                 generatedField === "broadcast"
                                     ? "attention"
@@ -130,6 +132,7 @@ function BottomInputs({
                             disabled={
                                 showAnswers || generatedField === "usableIps"
                             }
+                            title={t("tooltips.ipv4.hostCount")}
                             className={
                                 generatedField === "usableIps"
                                     ? "attention"
