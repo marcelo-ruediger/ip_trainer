@@ -1,3 +1,6 @@
+//BUG: Weird elevation on fields marked with .attention in screens bigger than 600px. Shadow effect from .correct and .wrong looking different.
+//TODO: Hints for none fields, Impressum und Bugs and Feedback report funktion.
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";

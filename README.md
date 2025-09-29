@@ -1,104 +1,113 @@
 # 🌐 IPv4/IPv6 Network Trainer
 
-A comprehensive network training application designed for German **IHK Fachinformatiker** exam preparation. Master IPv4 and IPv6 networking through practical address calculations, subnet analysis, and complete coverage of all address types including special cases.
+[![PWA](https://img.shields.io/badge/PWA-enabled-blue?logo=pwa)](https://web.dev/progressive-web-apps/)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![React](https://img.shields.io/badge/React-19.1.0-blue?logo=react)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.0.0-yellow?logo=vite)](https://vitejs.dev/)
 
-> **🎓 Perfect for IHK Exam Prep** - Practice with real-world scenarios, essential addresses, and RFC-compliant special cases
+A comprehensive **Progressive Web App** for German **IHK Fachinformatiker** exam preparation. Master IPv4 and IPv6 networking through practical address calculations with **offline support** and **native app experience**. Available in **German and English**.
 
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/Manobrawn/ipv4_trainer.git
-cd ipv4_trainer
-
-# Install dependencies
+git clone https://github.com/Manobrawn/ip_trainer.git
+cd ip_trainer
 npm install
-
-# Start development server
 npm run dev
 ```
 
-Access the application at `http://localhost:5173`
+Visit `http://localhost:5173/ip_trainer/` and install as PWA for offline use!
 
-## ✨ Features
+## ✨ Key Features
 
-### 📊 IPv4 Training
+| Feature              | IPv4                                           | IPv6                                       |
+| -------------------- | ---------------------------------------------- | ------------------------------------------ |
+| **Address Types**    | All 15 types (A-E, private/public, special)    | Global Unicast, Link-Local, ULA, Multicast |
+| **Calculations**     | Network, broadcast, host count (RFC compliant) | Address formats, prefix planning, subnets  |
+| **Special Cases**    | APIPA, CGN, Documentation, /31, /32 networks   | Documentation, special addresses           |
+| **Real-World Focus** | 50% private networks, 24% public examples      | 75% Global Unicast addresses               |
 
--   **Comprehensive Address Support**: All 15 IP address types (A-E, private/public, special addresses)
--   **RFC-Compliant Calculations**: Network address, broadcast address, and host count following exact standards
--   **Special Address Handling**: Proper treatment of Multicast, Loopback, Documentation, APIPA, and Carrier-Grade NAT
--   **Advanced CIDR Support**: /31 and /32 networks with correct point-to-point and host route logic
--   **Smart Validation**: Flexible input formats with immediate feedback
+### 📱 Progressive Web App
 
-### 🌍 IPv6 Training
+-   **🔄 Offline-first**: Works without internet after first visit
+-   **📲 Installable**: Add to home screen like native app
+-   **⚡ Fast**: Vite PWA with intelligent caching
+-   **🔄 Auto-updates**: Background updates with notifications
+-   **📱 Mobile optimized**: Touch targets, haptic feedback, responsive design
 
--   **Address Formats**: Convert between full and abbreviated IPv6 notation
--   **Network Analysis**: Address types, prefix planning, and subnet calculations
--   **Real-World Focus**: 75% Global Unicast addresses for practical training
--   **Special Addresses**: Proper handling of Link-Local, ULA, Multicast, and Documentation addresses
+### 🎯 Smart Training System
 
-### 🎨 User Experience
+-   **Practice Mode**: Generate scenarios → solve missing fields
+-   **Input Mode**: Enter IP/subnet → calculate all parameters
+-   **Visual Feedback**: Color-coded validation (red/green/gray)
+-   **Bilingual Interface**: German and English for international use
 
--   **Visual Feedback**: Color-coded validation with red/green indicators
--   **Empty Field Recognition**: Gray highlighting identifies unfilled required fields
--   **Flexible Input**: Accepts "kein", "keine", "none", "0" for special address fields
--   **German Localization**: Complete German interface for IHK preparation
--   **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+## 🛠️ Tech Stack
 
-## 🎯 How It Works
+-   **Frontend**: React 19.1 + Vite 7.0
+-   **PWA**: Vite PWA Plugin (Workbox)
+-   **Styling**: Custom responsive CSS
+-   **Standards**: RFC-compliant IPv4/IPv6 logic
+-   **Deployment**: GitHub Pages
 
-### IPv4 Mode
+## 📱 Installation
 
-1. **Practice Mode**: System generates an IP address with one field filled → calculate the remaining fields
-2. **Input Mode**: Enter IP address and subnet mask → system calculates network/broadcast/hosts
-3. **Validation**: Click "Überprüfen" to check answers or "Antworten anzeigen" to reveal solutions
-4. **Special Cases**: System recognizes when special addresses require "kein" answers instead of calculations
+### As Web App
 
-### IPv6 Mode
+1. Visit the app in Chrome/Safari
+2. Click "Install App" prompt or browser install button
+3. App appears on home screen/desktop
 
-1. System provides full or abbreviated IPv6 address with prefix
-2. Complete missing fields and calculate network data
-3. Analyze address type and extract subnet/interface portions
-4. Click validation buttons to check work or reveal answers
+### As PWA Benefits
 
-## 🎲 Address Generation
-
-### IPv4 System
-
--   **50%** Private networks (10.x.x.x, 172.16-31.x.x, 192.168.x.x) - Most common in practice
--   **24%** Public examples (DNS servers, Class A/B/C ranges) - Educational importance
--   **16%** Special purpose (APIPA, Carrier-Grade NAT, Documentation) - Modern networking
--   **10%** Special addresses (Multicast, Reserved, Loopback, Broadcast) - Complete coverage
-
-All 15 dropdown address types are covered with appropriate educational weighting.
-
-### IPv6 System
-
--   **50%** Must-know addresses (DNS servers, documentation, Link-Local, ULA, special addresses)
--   **38%** Generated Global Unicast (web servers, mail servers, CDNs)
--   **12%** Special and documentation addresses for complete learning coverage
-
-Results in ~75-80% Global Unicast addresses for maximum real-world relevance.
-
-## 🛠️ Technology Stack
-
--   **Frontend**: React.js 18.x with modern hooks
--   **Build Tool**: Vite 5.x for fast development
--   **Styling**: Custom CSS with responsive design
--   **Standards**: RFC compliant IPv4/IPv6 implementations
--   **Logic**: Comprehensive address classification following networking standards
+-   ⚡ Instant loading
+-   🔄 Offline functionality
+-   📱 Native app experience
+-   🔔 Update notifications
+-   💾 Local caching
 
 ## 🎯 Target Audience
 
--   **IHK Fachinformatiker Students**: German IT certification exam prep
--   **Network Administration Trainees**: Practical IPv4/IPv6 skills
--   **IT Professionals**: Refreshing knowledge with realistic scenarios
--   **IT Educators**: Teaching with production-like examples
+| Group                      | Use Case                                          |
+| -------------------------- | ------------------------------------------------- |
+| **IHK Students**           | German exam preparation with native interface     |
+| **International Students** | English interface for global networking education |
+| **Network Trainees**       | Practical IPv4/IPv6 skill building                |
+| **IT Professionals**       | Quick reference and skill refreshing              |
+| **Educators**              | Teaching tool with real-world examples            |
+
+## 📊 Address Generation Logic
+
+**IPv4 Distribution**:
+
+-   50% Private networks (most common in practice)
+-   24% Public examples (educational importance)
+-   16% Special purpose (APIPA, CGN, Documentation)
+-   10% Special addresses (Multicast, Reserved, Loopback)
+
+**IPv6 Distribution**:
+
+-   50% Must-know addresses (DNS, docs, Link-Local, ULA)
+-   38% Generated Global Unicast (web/mail/CDN servers)
+-   12% Special and documentation addresses
+
+## � Development
+
+```bash
+# Development
+npm run dev          # Start dev server with PWA
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run deploy       # Deploy to GitHub Pages
+
+# Linting
+npm run lint         # ESLint check
+```
 
 ## 📄 License
 
-MIT License - Free to use, modify, and share for educational purposes.
+MIT © 2025 - Built with ❤️ for German IT Students
 
 ---
 
-**Built with ❤️ for German IT Students**
+**[Live Demo](https://manobrawn.github.io/ip_trainer/)** • **[Report Bug](https://github.com/Manobrawn/ip_trainer/issues)** • **[Request Feature](https://github.com/Manobrawn/ip_trainer/issues)**

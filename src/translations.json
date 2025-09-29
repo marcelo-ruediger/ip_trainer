@@ -8,7 +8,7 @@
         "topInputs": {
             "ipv4Address": "IPv4-Adresse:",
             "placeholder": "Eingeben...",
-            "cidrNotation": "CIDR-Notation:",
+            "cidrNotation": "CIDR:",
             "subnetMask": "Subnetzmaske:",
             "inputMode": "Eingabe Modus",
             "practiceMode": "Übung Modus",
@@ -251,7 +251,7 @@
         },
         "topInputsIPv6": {
             "fullAddress": "Vollständige IPv6-Adresse:",
-            "networkPrefix": "Netzwerkpräfix:"
+            "networkPrefix": "Präfix:"
         },
         "middleInputsIPv6": {
             "abbreviatedAddress": "Abkürzung:",
@@ -303,7 +303,7 @@
             "inputMode": {
                 "title": "Eingabe Modus",
                 "askForIp": "Geben Sie eine gültige IPv4-Adresse ein",
-                "askForCIDR": "Geben Sie nun die CIDR-Notation oder die Subnetzmaske ein",
+                "askForCIDR": "Geben Sie nun die CIDR oder die Subnetzmaske ein",
                 "calculationCompletedTitle": "Berechnung abgeschlossen",
                 "calculationCompletedMessage": "Alle Felder wurden automatisch berechnet"
             }
@@ -318,7 +318,7 @@
         "topInputs": {
             "ipv4Address": "IPv4 Address:",
             "placeholder": "Enter...",
-            "cidrNotation": "CIDR Notation:",
+            "cidrNotation": "CIDR:",
             "subnetMask": "Subnet Mask:",
             "inputMode": "Input Mode",
             "practiceMode": "Practice Mode",
@@ -562,7 +562,7 @@
         },
         "topInputsIPv6": {
             "fullAddress": "Full IPv6 Address:",
-            "networkPrefix": "Network Prefix:"
+            "networkPrefix": "Prefix:"
         },
         "middleInputsIPv6": {
             "abbreviatedAddress": "Abbreviation:",

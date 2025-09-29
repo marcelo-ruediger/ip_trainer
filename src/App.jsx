@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import "./App.css";
+import "./MobileOptimizations.css";
+import "./NativeMobileStyles.css";
 import tableImg from "./images/table.png";
 import ipv6StructureImg from "./images/ipv6_struktur.jpg";
 import Header from "./components/Header";
 import ToggleElements from "./components/ToggleElements"; // Updated import name
 import TopInputs from "./components/TopInputs";
-import MiddleInputs from "./components/MiddleInputs";
 import BottomInputs from "./components/BottomInputs";
 import Footer from "./components/Footer";
 import BottomButtons from "./components/BottomButtons";
 import TopInputsIPv6 from "./components/TopInputsIPv6";
-import MiddleInputsIPv6 from "./components/MiddleInputsIPv6";
 import BottomInputsIPv6 from "./components/BottomInputsIPv6";
 import InstructionContainer from "./components/InstructionContainer";
 import IpVersionButtons from "./components/IpVersionButtons";
+import PWAInstaller from "./components/PWAInstaller";
 import { useIPv4 } from "./hooks/useIpv4";
 import { useIPv6 } from "./hooks/useIpv6";
 
@@ -89,12 +90,6 @@ function App() {
                             generatedField={ipv4Logic.generatedField}
                             renderValue={ipv4Logic.renderValue}
                         />
-                        <MiddleInputs
-                            renderValue={ipv4Logic.renderValue}
-                            handleInputChange={ipv4Logic.handleInputChange}
-                            showAnswers={ipv4Logic.showAnswers}
-                            generatedField={ipv4Logic.generatedField}
-                        />
                         <BottomInputs
                             renderValue={ipv4Logic.renderValue}
                             handleInputChange={ipv4Logic.handleInputChange}
@@ -114,12 +109,6 @@ function App() {
                         />
                         <TopInputsIPv6
                             ipData={ipv6Logic.ipData}
-                            renderValue={ipv6Logic.renderValue}
-                            handleInputChange={ipv6Logic.handleInputChange}
-                            showAnswers={ipv6Logic.showAnswers}
-                            mode={ipv6Logic.mode}
-                        />
-                        <MiddleInputsIPv6
                             renderValue={ipv6Logic.renderValue}
                             handleInputChange={ipv6Logic.handleInputChange}
                             showAnswers={ipv6Logic.showAnswers}
@@ -158,6 +147,7 @@ function App() {
                 }
             />
             <Footer />
+            <PWAInstaller />
         </>
     );
 }
