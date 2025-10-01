@@ -5,7 +5,7 @@ import "./styles/NativeMobileStyles.css";
 import tableImg from "./images/table.png";
 import ipv6StructureImg from "./images/ipv6_struktur.jpg";
 import Header from "./components/Header";
-import ToggleElements from "./components/ToggleElements"; // Updated import name
+import ToggleElements from "./components/ToggleElements";
 import TopInputs from "./components/TopInputs";
 import BottomInputs from "./components/BottomInputs";
 import Footer from "./components/Footer";
@@ -126,12 +126,12 @@ function App() {
                 handleShowAnswers={
                     ipVersion === "ipv4"
                         ? ipv4Logic.handleShowAnswers
-                        : ipv6Logic.handleShowAnswers // Updated to include IPv6 functionality
+                        : ipv6Logic.handleShowAnswers
                 }
                 handleCheck={
                     ipVersion === "ipv4"
                         ? ipv4Logic.handleCheck
-                        : ipv6Logic.handleCheck // Updated to include IPv6 functionality
+                        : ipv6Logic.handleCheck
                 }
                 attention={
                     ipVersion === "ipv4"
@@ -140,10 +140,8 @@ function App() {
                 }
                 disabled={
                     ipVersion === "ipv4"
-                        ? // Disable if no generated data OR in Eingabe Modus
-                          !ipv4Logic.ipData.ip || ipv4Logic.userIsInputting
-                        : // Disable if no generated IPv6 data
-                          !ipv6Logic.ipData.ipv6
+                        ? !ipv4Logic.ipData.ip || ipv4Logic.userIsInputting
+                        : !ipv6Logic.ipData.ipv6
                 }
             />
             <Footer />

@@ -4,7 +4,7 @@ import translations from "../translations.json";
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-    const [language, setLanguage] = useState("de"); // Default to German
+    const [language, setLanguage] = useState("de");
 
     const t = (path) => {
         const keys = path.split(".");

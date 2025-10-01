@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-// Import all images
 import againIcon from "../images/again.svg";
 import correctionIcon from "../images/correction.svg";
 import networkBrainIcon from "../images/network_brain.svg";
@@ -17,22 +16,19 @@ function InstructionContainer({
     isInputMode,
     isValidIp,
     hasInputStarted,
-    ipVersion = "ipv4", // Add ipVersion prop with default
-    mode, // Add mode prop for IPv6
-    showAnswers, // Add showAnswers prop
-    cidrValid, // Add cidrValid prop
-    subnetMaskValid, // Add subnetMaskValid prop
-    checkResults, // Add checkResults prop for validation results
-    showCheckResults, // Add prop to show check results
+    ipVersion = "ipv4",
+    mode,
+    showAnswers,
+    cidrValid,
+    subnetMaskValid,
+    checkResults,
+    showCheckResults,
 }) {
     const { t } = useLanguage();
 
-    // Move hooks to the top level - always call them in the same order
     const containerRef = useRef(null);
 
-    // Move useEffect to top level but make the logic conditional
     useEffect(() => {
-        // Only run scroll logic when we have checkResults and showCheckResults
         if (showCheckResults && checkResults && containerRef.current) {
             const correctCount = checkResults.filter(
                 (result) => result.isCorrect
@@ -49,11 +45,10 @@ function InstructionContainer({
                 });
             }
         }
-    }, [showCheckResults, checkResults]); // Dependencies to watch for changes
+    }, [showCheckResults, checkResults]);
 
     const getFieldDisplayName = (field) => {
         switch (field) {
-            // IPv4 fields
             case "cidr":
                 return "CIDR";
             case "subnetMask":
@@ -66,7 +61,6 @@ function InstructionContainer({
                 return t("instructionContainer.feedback.hostCount");
             case "ipClass":
                 return t("instructionContainer.feedback.addressType");
-            // IPv6 fields
             case "fullAddress":
                 return t("instructionContainer.feedback.fullIpv6Address");
             case "abbreviatedAddress":
@@ -86,7 +80,6 @@ function InstructionContainer({
         }
     };
 
-    // Show answers message when answers are displayed (but not in completed input mode)
     const isCompletedInputMode =
         isInputMode &&
         isValidIp &&
@@ -104,7 +97,6 @@ function InstructionContainer({
         );
     }
 
-    // Check results state: Show validation results after überprüfen is clicked
     if (showCheckResults && checkResults) {
         const correctCount = checkResults.filter(
             (result) => result.isCorrect
@@ -116,7 +108,6 @@ function InstructionContainer({
         const wrongCount = totalCount - correctCount - emptyCount;
         const allCorrect = correctCount === totalCount;
 
-        // Check if specific IPv6 fields are wrong for showing the hint
         const showIPv6Hint =
             ipVersion === "ipv6" &&
             checkResults.some(
@@ -130,14 +121,13 @@ function InstructionContainer({
         // Calculate border color based on correctness percentage
         const percentage = totalCount > 0 ? correctCount / totalCount : 0;
         let borderColor;
-        if (percentage === 1) borderColor = "#4ade80"; // Green (.correct)
-        else if (percentage >= 0.8) borderColor = "#84cc16"; // Light green
-        else if (percentage >= 0.6) borderColor = "#eab308"; // Yellow
-        else if (percentage >= 0.4) borderColor = "#f97316"; // Orange
-        else if (percentage >= 0.2) borderColor = "#ef4444"; // Light red
-        else borderColor = "#dc2626"; // Red (.wrong)
+        if (percentage === 1) borderColor = "#4ade80";
+        else if (percentage >= 0.8) borderColor = "#84cc16";
+        else if (percentage >= 0.6) borderColor = "#eab308";
+        else if (percentage >= 0.4) borderColor = "#f97316";
+        else if (percentage >= 0.2) borderColor = "#ef4444";
+        else borderColor = "#dc2626";
 
-        // Split results into groups of 3 and 2
         const firstGroup = checkResults.slice(0, 3);
         const secondGroup = checkResults.slice(3, 5);
 
@@ -150,7 +140,6 @@ function InstructionContainer({
                 style={{ borderLeftColor: borderColor }}
             >
                 <div className="instruction-text">
-                    {/* First line: Results with colored numbers - larger text */}
                     <div
                         className="result-line-1"
                         style={{
@@ -198,7 +187,6 @@ function InstructionContainer({
                         />
                     </div>
 
-                    {/* Second line: First 3 fields - medium text */}
                     <div
                         className="result-line-2"
                         style={{
@@ -231,7 +219,6 @@ function InstructionContainer({
                         ))}
                     </div>
 
-                    {/* Third line: Remaining fields - medium text */}
                     {secondGroup.length > 0 && (
                         <div
                             className="result-line-3"
@@ -265,7 +252,6 @@ function InstructionContainer({
                         </div>
                     )}
 
-                    {/* Fourth line: Dynamic message - smaller text, centered */}
                     <div
                         className="result-line-4"
                         style={{
@@ -313,7 +299,6 @@ function InstructionContainer({
                         )}
                     </div>
 
-                    {/* IPv6 hint message - show only if specific fields are wrong */}
                     {showIPv6Hint && (
                         <div className="ipv6-hint">
                             <div>⚠️ {t("instructionContainer.ipv6Hints1")}</div>
@@ -325,9 +310,7 @@ function InstructionContainer({
         );
     }
 
-    // IPv6 mode: Practice mode instructions
     if (ipVersion === "ipv6") {
-        // No generated field yet
         if (!ipData.ipv6) {
             return (
                 <div className="instruction-container">
@@ -338,7 +321,6 @@ function InstructionContainer({
             );
         }
 
-        // Generated field for calculation practice
         const shownField =
             mode === "fullAddress" ? "fullAddress" : "abbreviatedAddress";
         const shownValue =
@@ -357,7 +339,6 @@ function InstructionContainer({
                         alt="calculate"
                         className="calculate-icon"
                     />
-                    {/* IPv6 hint message */}
                     <div className="ipv6-hint">
                         <div>⚠️ {t("instructionContainer.ipv6Hints1")}</div>
                         <div>⚠️ {t("instructionContainer.ipv6Hints2")}</div>
@@ -367,7 +348,6 @@ function InstructionContainer({
         );
     }
 
-    // IPv4 mode: Input mode: User is entering IP address OR invalid CIDR/Subnet Mask
     if (
         isInputMode &&
         hasInputStarted &&
@@ -392,7 +372,6 @@ function InstructionContainer({
         );
     }
 
-    // IPv4 mode: Input mode: Valid IP entered, waiting for CIDR or Subnet Mask
     if (isInputMode && isValidIp && !ipData.networkId) {
         return (
             <div className="instruction-container input-mode">
@@ -410,7 +389,6 @@ function InstructionContainer({
         );
     }
 
-    // IPv4 mode: Input mode: All fields calculated
     if (
         isInputMode &&
         isValidIp &&
@@ -440,7 +418,6 @@ function InstructionContainer({
         );
     }
 
-    // IPv4 mode: Practice mode: No generated field yet
     if (!generatedField || !ipData.ip) {
         return (
             <div className="instruction-container">
@@ -451,7 +428,6 @@ function InstructionContainer({
                         alt="network node"
                         className="network-node-icon"
                     />
-                    {/* Initial state hint message */}
                     <div className="ipv6-hint">
                         <div>⚠️ {t("instructionContainer.ipHints")}</div>
                     </div>
@@ -460,7 +436,6 @@ function InstructionContainer({
         );
     }
 
-    // IPv4 mode: Practice mode: Generated field for calculation practice
     return (
         <div className="instruction-container">
             <div className="instruction-text">
@@ -471,7 +446,6 @@ function InstructionContainer({
                     alt="calculate"
                     className="calculate-icon"
                 />
-                {/* IPv4 hint message */}
                 <div className="ipv6-hint">
                     <div>⚠️ {t("instructionContainer.ipv4Hints")}</div>
                 </div>

@@ -1,18 +1,31 @@
+const createWeightedArray = (items) => {
+    const weighted = [];
+    items.forEach((item) => {
+        for (let i = 0; i < item.weight; i++) {
+            weighted.push(item);
+        }
+    });
+    return weighted;
+};
+
+const getRandomWeightedItem = (weightedArray) => {
+    return weightedArray[Math.floor(Math.random() * weightedArray.length)];
+};
+
+const generateRandomOctet = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export const getRandomIp = (includeSpecialAddresses = false) => {
     if (includeSpecialAddresses) {
-        // Return special addresses that have different calculation rules
         return getRandomSpecialIp();
     }
 
-    const useImportantAddress = Math.random() < 0.35; // 35% chance for must-know addresses
+    const useImportantAddress = Math.random() < 0.35;
 
     if (useImportantAddress) {
-        // Only use addresses suitable for standard subnet calculations
-        const validAddresses = subnetCalculationAddresses.filter((addr) => {
-            return true; // All addresses in this array are pre-validated
-        });
+        const validAddresses = subnetCalculationAddresses;
 
-        // Weight addresses by importance from the filtered list
         const criticalAddresses = validAddresses.filter(
             (addr) => addr.importance === "Critical"
         );
@@ -43,43 +56,25 @@ export const getRandomIp = (includeSpecialAddresses = false) => {
         }
     }
 
-    // Generate realistic IPv4 addresses (65% of the time)
-    // Weighted heavily toward real-world usage patterns
-    const usePrivateAddress = Math.random() < 0.85; // 85% private (reflects real usage)
+    const usePrivateAddress = Math.random() < 0.85;
 
     if (usePrivateAddress) {
-        // Weighted private ranges based on real-world usage
         const privateRanges = [
-            // 192.168.x.x - Most common (home networks, small business)
             { min: [192, 168, 1, 1], max: [192, 168, 254, 254], weight: 60 },
-            // 10.x.x.x - Enterprise networks
             { min: [10, 0, 0, 1], max: [10, 255, 255, 254], weight: 25 },
-            // 172.16-31.x.x - Less common but still important
             { min: [172, 16, 0, 1], max: [172, 31, 255, 254], weight: 15 },
         ];
 
-        // Create weighted array
-        const weightedRanges = [];
-        privateRanges.forEach((range) => {
-            for (let i = 0; i < range.weight; i++) {
-                weightedRanges.push(range);
-            }
-        });
-
-        const range =
-            weightedRanges[Math.floor(Math.random() * weightedRanges.length)];
+        const weightedRanges = createWeightedArray(privateRanges);
+        const range = getRandomWeightedItem(weightedRanges);
 
         let ip;
         do {
             ip = [
-                Math.floor(Math.random() * (range.max[0] - range.min[0] + 1)) +
-                    range.min[0],
-                Math.floor(Math.random() * (range.max[1] - range.min[1] + 1)) +
-                    range.min[1],
-                Math.floor(Math.random() * (range.max[2] - range.min[2] + 1)) +
-                    range.min[2],
-                Math.floor(Math.random() * (range.max[3] - range.min[3] + 1)) +
-                    range.min[3],
+                generateRandomOctet(range.min[0], range.max[0]),
+                generateRandomOctet(range.min[1], range.max[1]),
+                generateRandomOctet(range.min[2], range.max[2]),
+                generateRandomOctet(range.min[3], range.max[3]),
             ];
         } while (
             ip[3] === 0 ||
@@ -90,53 +85,34 @@ export const getRandomIp = (includeSpecialAddresses = false) => {
         return ip.join(".");
     }
 
-    // Generate public addresses (15% of the time - reflects real learning scenarios)
-    // Focus on educational/common public ranges
     const publicRanges = [
-        // Class A public - common examples
         { range: [1, 126], class: "A", weight: 20 },
-        // Class B public - common examples
         { range: [128, 191], class: "B", weight: 30 },
-        // Class C public - most common in examples
         { range: [193, 223], class: "C", weight: 50 },
     ];
 
-    // Create weighted public array
-    const weightedPublicRanges = [];
-    publicRanges.forEach((range) => {
-        for (let i = 0; i < range.weight; i++) {
-            weightedPublicRanges.push(range);
-        }
-    });
-
-    const selectedRange =
-        weightedPublicRanges[
-            Math.floor(Math.random() * weightedPublicRanges.length)
-        ];
+    const weightedPublicRanges = createWeightedArray(publicRanges);
+    const selectedRange = getRandomWeightedItem(weightedPublicRanges);
 
     let octets;
     do {
-        const firstOctet =
-            Math.floor(
-                Math.random() *
-                    (selectedRange.range[1] - selectedRange.range[0] + 1)
-            ) + selectedRange.range[0];
+        const firstOctet = generateRandomOctet(
+            selectedRange.range[0],
+            selectedRange.range[1]
+        );
         octets = [
             firstOctet,
-            Math.floor(Math.random() * 256),
-            Math.floor(Math.random() * 256),
-            Math.floor(Math.random() * 254) + 1, // 1-254 (avoid network/broadcast)
+            generateRandomOctet(0, 255),
+            generateRandomOctet(0, 255),
+            generateRandomOctet(1, 254),
         ];
     } while (
-        // Avoid private ranges
         octets[0] === 10 ||
         (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31) ||
         (octets[0] === 192 && octets[1] === 168) ||
-        // Avoid special ranges that shouldn't be in standard training
-        (octets[0] === 169 && octets[1] === 254) || // Link-local/APIPA
-        (octets[0] === 100 && octets[1] >= 64 && octets[1] <= 127) || // CGN range 100.64.0.0/10 FIXED
-        octets[0] === 127 || // Loopback
-        // Avoid documentation ranges (these are in special addresses)
+        (octets[0] === 169 && octets[1] === 254) ||
+        (octets[0] === 100 && octets[1] >= 64 && octets[1] <= 127) ||
+        octets[0] === 127 ||
         (octets[0] === 192 && octets[1] === 0 && octets[2] === 2) ||
         (octets[0] === 198 && octets[1] === 51 && octets[2] === 100) ||
         (octets[0] === 203 && octets[1] === 0 && octets[2] === 113)
@@ -145,86 +121,61 @@ export const getRandomIp = (includeSpecialAddresses = false) => {
     return octets.join(".");
 };
 
-// Special addresses suitable for network calculations (educational focus)
-// Weighted by real-world importance and usage frequency
 const calculationSuitableSpecialAddresses = [
-    // === PRIVATE NETWORKS (Highest Weight for Practice) ===
-    // Most common in real world - higher probability for subnet calculations
-    { address: "192.168.0.0", weight: 25, type: "standard" }, // Most common home network
-    { address: "192.168.1.0", weight: 25, type: "standard" }, // Most common home network
-    { address: "10.0.0.0", weight: 20, type: "standard" }, // Enterprise standard
-    { address: "172.16.0.0", weight: 15, type: "standard" }, // Business networks
-    { address: "192.168.100.0", weight: 12, type: "standard" }, // Common subnet variant
-    { address: "10.10.0.0", weight: 8, type: "standard" }, // Common enterprise variant
-    { address: "172.20.0.0", weight: 5, type: "standard" }, // Mid-range private
+    { address: "192.168.0.0", weight: 25, type: "standard" },
+    { address: "192.168.1.0", weight: 25, type: "standard" },
+    { address: "10.0.0.0", weight: 20, type: "standard" },
+    { address: "172.16.0.0", weight: 15, type: "standard" },
+    { address: "192.168.100.0", weight: 12, type: "standard" },
+    { address: "10.10.0.0", weight: 8, type: "standard" },
+    { address: "172.20.0.0", weight: 5, type: "standard" },
 
-    // === PUBLIC ADDRESS EXAMPLES (High Weight for Practice) ===
-    // Class A public examples
-    { address: "1.1.1.1", weight: 12, type: "standard" }, // Cloudflare DNS - very educational
-    { address: "8.8.8.8", weight: 12, type: "standard" }, // Google DNS - very educational
-    { address: "126.255.255.254", weight: 6, type: "standard" }, // Edge of Class A
+    { address: "1.1.1.1", weight: 12, type: "standard" },
+    { address: "8.8.8.8", weight: 12, type: "standard" },
+    { address: "126.255.255.254", weight: 6, type: "standard" },
 
-    // Class B public examples
-    { address: "128.0.0.1", weight: 8, type: "standard" }, // Class B start
-    { address: "151.101.1.1", weight: 6, type: "standard" }, // Reddit CDN example
-    { address: "191.255.255.254", weight: 6, type: "standard" }, // Class B end
+    { address: "128.0.0.1", weight: 8, type: "standard" },
+    { address: "151.101.1.1", weight: 6, type: "standard" },
+    { address: "191.255.255.254", weight: 6, type: "standard" },
 
-    // Class C public examples
-    { address: "193.0.0.1", weight: 8, type: "standard" }, // Class C start
-    { address: "208.67.222.222", weight: 6, type: "standard" }, // OpenDNS
-    { address: "223.255.255.254", weight: 6, type: "standard" }, // Class C end
+    { address: "193.0.0.1", weight: 8, type: "standard" },
+    { address: "208.67.222.222", weight: 6, type: "standard" },
+    { address: "223.255.255.254", weight: 6, type: "standard" },
 
-    // === SPECIAL PURPOSE NETWORKS (Medium Weight) ===
-    // APIPA - important for troubleshooting but still allows subnet calculations
-    { address: "169.254.1.1", weight: 8, type: "standard" }, // Can be subnetted
-    { address: "169.254.100.100", weight: 6, type: "standard" }, // Can be subnetted
+    { address: "169.254.1.1", weight: 8, type: "standard" },
+    { address: "169.254.100.100", weight: 6, type: "standard" },
 
-    // Carrier-Grade NAT - modern ISP usage, can be subnetted
-    { address: "100.64.0.1", weight: 7, type: "standard" }, // Can be subnetted
-    { address: "100.100.100.1", weight: 5, type: "standard" }, // Can be subnetted
+    { address: "100.64.0.1", weight: 7, type: "standard" },
+    { address: "100.100.100.1", weight: 5, type: "standard" },
 
-    // Documentation networks - educational importance, can be subnetted
-    { address: "192.0.2.1", weight: 8, type: "standard" }, // Testnetz-1
-    { address: "198.51.100.1", weight: 6, type: "standard" }, // Testnetz-2
-    { address: "203.0.113.1", weight: 6, type: "standard" }, // Testnetz-3
+    { address: "192.0.2.1", weight: 8, type: "standard" },
+    { address: "198.51.100.1", weight: 6, type: "standard" },
+    { address: "203.0.113.1", weight: 6, type: "standard" },
 
-    // === SPECIAL ADDRESSES (Lower Weight - Educational but Limited) ===
-    // Loopback examples - educational but limited subnet calculation value
-    { address: "127.0.0.1", weight: 6, type: "special" }, // Most common
-    { address: "127.1.1.1", weight: 3, type: "special" }, // Variant
-    { address: "127.255.255.254", weight: 2, type: "special" }, // Edge case
+    { address: "127.0.0.1", weight: 6, type: "special" },
+    { address: "127.1.1.1", weight: 3, type: "special" },
+    { address: "127.255.255.254", weight: 2, type: "special" },
 
-    // Class D (Multicast) examples - educational but no normal subnetting
-    { address: "224.0.0.1", weight: 4, type: "special" }, // All Systems multicast
-    { address: "224.0.0.2", weight: 2, type: "special" }, // All Routers multicast
-    { address: "239.255.255.250", weight: 2, type: "special" }, // UPnP multicast
+    { address: "224.0.0.1", weight: 4, type: "special" },
+    { address: "224.0.0.2", weight: 2, type: "special" },
+    { address: "239.255.255.250", weight: 2, type: "special" },
 
-    // Class E (Reserved) examples - rare but educational
     { address: "240.0.0.1", weight: 2, type: "special" },
     { address: "250.250.250.250", weight: 1, type: "special" },
 
-    // === CRITICAL INDIVIDUAL ADDRESSES (Lower Weight - Very Special) ===
-    // Broadcast address - important but very limited calculation value
     { address: "255.255.255.255", weight: 4, type: "special" },
 
-    // Unspecified/Default route - important but very limited calculation value
     { address: "0.0.0.0", weight: 4, type: "special" },
 ];
 
-// Create weighted array for realistic probability distribution
 const createWeightedAddressArray = () => {
-    const weightedArray = [];
-    calculationSuitableSpecialAddresses.forEach((item) => {
-        for (let i = 0; i < item.weight; i++) {
-            weightedArray.push(item.address);
-        }
-    });
-    return weightedArray;
+    return createWeightedArray(calculationSuitableSpecialAddresses).map(
+        (item) => item.address
+    );
 };
 
 const weightedSpecialAddresses = createWeightedAddressArray();
 
-// New function for special addresses suitable for subnet calculations
 export const getRandomSpecialIp = () => {
     const randomIndex = Math.floor(
         Math.random() * weightedSpecialAddresses.length
@@ -232,14 +183,11 @@ export const getRandomSpecialIp = () => {
     return weightedSpecialAddresses[randomIndex];
 };
 
-// Get all special addresses (for the toggle feature you'll create)
 export const getAllSpecialAddresses = () => {
     return specialPurposeAddresses;
 };
 
-// Addresses suitable for standard subnet calculation training
 const subnetCalculationAddresses = [
-    // === PRIVATE ADDRESSES (RFC 1918) - Perfect for subnet training ===
     {
         address: "192.168.1.1",
         commonUse: "Home router gateway",
@@ -291,7 +239,6 @@ const subnetCalculationAddresses = [
         importance: "Important",
     },
 
-    // === PUBLIC DNS SERVERS - Good for Class A/B training ===
     {
         address: "8.8.8.8",
         commonUse: "Google DNS primary",
@@ -338,7 +285,6 @@ const subnetCalculationAddresses = [
         importance: "Moderate",
     },
 
-    // === Additional useful training addresses ===
     {
         address: "192.168.50.1",
         commonUse: "Common subnet gateway",
@@ -361,9 +307,7 @@ const subnetCalculationAddresses = [
     },
 ];
 
-// Most important IPv4 addresses for IHK Fachinformatiker exam
 const specialPurposeAddresses = [
-    // LOOPBACK - Critical for exam
     {
         address: "127.0.0.0",
         commonUse: "Loopback Netzwerk",
@@ -373,7 +317,6 @@ const specialPurposeAddresses = [
         specialRules: "Always refers to local machine, cannot be subnetted",
     },
 
-    // APIPA - Important for DHCP troubleshooting
     {
         address: "169.254.0.0",
         commonUse: "APIPA Netzwerk",
@@ -383,7 +326,6 @@ const specialPurposeAddresses = [
         specialRules: "Auto-assigned when DHCP fails",
     },
 
-    // CARRIER-GRADE NAT - Important for ISP networks
     {
         address: "100.64.0.0",
         commonUse: "Carrier-Grade NAT Netzwerk",
@@ -393,7 +335,6 @@ const specialPurposeAddresses = [
         specialRules: "Used by ISPs for shared customer connections (RFC 6598)",
     },
 
-    // BROADCAST - Critical concept
     {
         address: "255.255.255.255",
         commonUse: "Limitierter Broadcast",
@@ -403,7 +344,6 @@ const specialPurposeAddresses = [
         specialRules: "Broadcast to all hosts on local network",
     },
 
-    // UNSPECIFIED/DEFAULT ROUTE - Critical for routing
     {
         address: "0.0.0.0",
         commonUse: "Default Route - nicht zugewiesene Adresse",
@@ -413,7 +353,6 @@ const specialPurposeAddresses = [
         specialRules: "Unspecified address and default route (RFC 1122)",
     },
 
-    // DOCUMENTATION ADDRESSES - Important for examples
     {
         address: "192.0.2.0",
         commonUse: "Testnetz-1",
@@ -441,7 +380,6 @@ const specialPurposeAddresses = [
         specialRules: "Reserved for documentation and examples (RFC 5737)",
     },
 
-    // PRIVATE NETWORKS - Critical for exam (ordered A → B → C)
     {
         address: "10.0.0.0",
         commonUse: "Private Class A Network",
@@ -467,7 +405,6 @@ const specialPurposeAddresses = [
         specialRules: "Small private networks - home routers and small offices",
     },
 
-    // PUBLIC NETWORKS - Critical for understanding public vs private (ordered A → B → C)
     {
         address: "1.0.0.0",
         commonUse: "Public Class A Network",
@@ -493,7 +430,6 @@ const specialPurposeAddresses = [
         specialRules: "Public Class C addresses - globally routable",
     },
 
-    // CLASS D and E boundaries - Important for exam
     {
         address: "224.0.0.0",
         commonUse: "Klasse D Netzwerk (Multicast)",
@@ -512,9 +448,7 @@ const specialPurposeAddresses = [
     },
 ];
 
-// Updated function to check if an address is special
 export const getIPv4AddressInfo = (ipAddress) => {
-    // Check subnet calculation addresses first
     const foundStandardAddress = subnetCalculationAddresses.find(
         (addr) => addr.address === ipAddress
     );
@@ -529,7 +463,6 @@ export const getIPv4AddressInfo = (ipAddress) => {
         };
     }
 
-    // Check special addresses
     const foundSpecialAddress = specialPurposeAddresses.find(
         (addr) => addr.address === ipAddress
     );
@@ -547,7 +480,6 @@ export const getIPv4AddressInfo = (ipAddress) => {
         };
     }
 
-    // Check if it's in a known range
     const ip = ipAddress.split(".").map(Number);
 
     if (ip[0] === 10) {
@@ -605,11 +537,9 @@ export const getIPv4AddressInfo = (ipAddress) => {
     };
 };
 
-// Keep existing utility functions
 export const getRandomCIDR = () => {
-    // Exclude /0 as it's only used for default route (0.0.0.0/0)
-    const commonCidrs = [8, 16, 24, 25, 26, 27, 28, 29, 30, 31, 32]; // Added 32
-    const allCidrs = Math.floor(Math.random() * 32) + 1; // 1-32 instead of 1-31
+    const commonCidrs = [8, 16, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+    const allCidrs = Math.floor(Math.random() * 32) + 1;
 
     return Math.random() < 0.5
         ? commonCidrs[Math.floor(Math.random() * commonCidrs.length)]
@@ -617,9 +547,8 @@ export const getRandomCIDR = () => {
 };
 
 export const cidrToMask = (cidr) => {
-    // Validate CIDR range - exclude /0 as it's only for default route
     if (cidr < 1 || cidr > 32) {
-        return null; // Invalid CIDR
+        return null;
     }
 
     const mask = [];
@@ -633,9 +562,8 @@ export const cidrToMask = (cidr) => {
 
 export const maskToCidr = (subnetMask) => {
     try {
-        // Check for 0.0.0.0 subnet mask (invalid for practical subnetting)
         if (subnetMask === "0.0.0.0") {
-            return null; // This is only valid for default route 0.0.0.0/0
+            return null;
         }
 
         const octets = subnetMask.split(".").map(Number);
@@ -656,7 +584,6 @@ export const maskToCidr = (subnetMask) => {
 
         const cidr = match[1].length;
 
-        // Exclude /0 as it's only for default route
         if (cidr === 0) return null;
 
         return cidr;
@@ -665,192 +592,159 @@ export const maskToCidr = (subnetMask) => {
     }
 };
 
+const getIPClass = (ipStr, ip) => {
+    if (ipStr === "255.255.255.255") return "Broadcast";
+    if (ip[0] === 0) return "Unspezifiziert";
+    if (ip[0] === 127) return "Loopback";
+    if (
+        (ip[0] === 192 && ip[1] === 0 && ip[2] === 2) ||
+        (ip[0] === 198 && ip[1] === 51 && ip[2] === 100) ||
+        (ip[0] === 203 && ip[1] === 0 && ip[2] === 113)
+    ) {
+        return "Dokumentation";
+    }
+    if (ip[0] === 169 && ip[1] === 254) return "APIPA";
+    if (ip[0] === 100 && ip[1] >= 64 && ip[1] <= 127)
+        return "Carrier-Grade NAT";
+    if (ip[0] === 10) return "A (privat)";
+    if (ip[0] === 172 && ip[1] >= 16 && ip[1] <= 31) return "B (privat)";
+    if (ip[0] === 192 && ip[1] === 168) return "C (privat)";
+    if (ip[0] >= 224 && ip[0] <= 239) return "D";
+    if (ip[0] >= 240 && ip[0] <= 254) return "E";
+    if (ip[0] >= 1 && ip[0] <= 126) return "A (öffentlich)";
+    if (ip[0] >= 128 && ip[0] <= 191 && !(ip[0] === 169 && ip[1] === 254)) {
+        return "B (öffentlich)";
+    }
+    if (
+        ip[0] >= 192 &&
+        ip[0] <= 223 &&
+        !(ip[0] === 192 && ip[1] === 168) &&
+        !(ip[0] === 192 && ip[1] === 0 && ip[2] === 2) &&
+        !(ip[0] === 198 && ip[1] === 51 && ip[2] === 100) &&
+        !(ip[0] === 203 && ip[1] === 0 && ip[2] === 113)
+    ) {
+        return "C (öffentlich)";
+    }
+    return "";
+};
+
 export const calculateNetworkData = (ipStr, cidr) => {
-    // More comprehensive validation
     if (!ipStr || cidr === null || cidr === undefined) {
-        return null; // Missing required parameters
+        return null;
     }
 
-    // Convert cidr to number and validate range - exclude /0 and invalid values
     const cidrNum =
         typeof cidr === "string"
             ? parseInt(cidr.toString().replace("/", ""))
             : cidr;
     if (isNaN(cidrNum) || cidrNum < 1 || cidrNum > 32) {
-        return null; // Invalid CIDR for practical subnetting
+        return null;
     }
 
-    // Validate IP format
     if (typeof ipStr !== "string" || !ipStr.includes(".")) {
-        return null; // Invalid IP format
+        return null;
     }
 
     const ipParts = ipStr.split(".");
     if (ipParts.length !== 4) {
-        return null; // Invalid IP format
+        return null;
     }
 
     const ip = ipParts.map(Number);
     if (ip.some((octet) => isNaN(octet) || octet < 0 || octet > 255)) {
-        return null; // Invalid IP octets
+        return null;
     }
 
-    // === SPECIAL ADDRESS HANDLING (Before Normal Calculations) ===
-    // Only addresses that should return "kein" (❌) for ALL network fields according to table
-
-    // Limited Broadcast address (255.255.255.255) - Special case
     if (ipStr === "255.255.255.255") {
         return {
-            networkId: "kein", // No network for limited broadcast
-            broadcast: "kein", // No broadcast concept - this IS the broadcast
+            networkId: "kein",
+            broadcast: "kein",
             ipClass: "Broadcast",
-            usableIps: "kein", // No usable IPs - this IS the broadcast
+            usableIps: "kein",
             isPointToPoint: false,
             isSpecial: true,
         };
     }
 
-    // Unspecified address (0.0.0.0) - Special case
     if (ipStr === "0.0.0.0") {
         return {
-            networkId: "kein", // No network concept
-            broadcast: "kein", // No broadcast concept
+            networkId: "kein",
+            broadcast: "kein",
             ipClass: "Unspezifiziert",
-            usableIps: "kein", // Not usable as host address
+            usableIps: "kein",
             isPointToPoint: false,
             isSpecial: true,
         };
     }
 
-    // Class D (Multicast) - Special handling - NO network/broadcast concept
     if (ip[0] >= 224 && ip[0] <= 239) {
         return {
-            networkId: "kein", // Multicast doesn't use network/host concept
-            broadcast: "kein", // Multicast uses group addressing, not broadcast
+            networkId: "kein",
+            broadcast: "kein",
             ipClass: "D",
-            usableIps: "kein", // Multicast addressing model
+            usableIps: "kein",
             isPointToPoint: false,
             isSpecial: true,
         };
     }
 
-    // Class E (Reserved/Experimental) - Special handling - NO network/broadcast concept
     if (ip[0] >= 240 && ip[0] <= 254) {
         return {
-            networkId: "kein", // Reserved space, no standard subnetting
-            broadcast: "kein", // Not used for standard networking
+            networkId: "kein",
+            broadcast: "kein",
             ipClass: "E",
-            usableIps: "kein", // Reserved, not for host addressing
+            usableIps: "kein",
             isPointToPoint: false,
             isSpecial: true,
         };
     }
 
-    // Loopback addresses (127.x.x.x) - Special handling - NO network/broadcast concept
     if (ip[0] === 127) {
         return {
-            networkId: "kein", // Loopback doesn't use network/host concept
-            broadcast: "kein", // No broadcast for loopback
+            networkId: "kein",
+            broadcast: "kein",
             ipClass: "Loopback",
-            usableIps: "kein", // All loopback addresses refer to localhost
+            usableIps: "kein",
             isPointToPoint: false,
             isSpecial: true,
         };
     }
 
-    // === NORMAL SUBNET CALCULATIONS (For all other addresses) ===
-
-    // Get subnet mask - this could also return null for invalid CIDR
     const maskStr = cidrToMask(cidrNum);
     if (!maskStr) {
-        return null; // Invalid CIDR conversion
+        return null;
     }
 
     const mask = maskStr.split(".").map(Number);
     const network = ip.map((octet, i) => octet & mask[i]);
 
-    // Special handling for /31 and /32 networks (according to table)
     let broadcast, usable, networkId;
 
     if (cidrNum === 31) {
-        // RFC 3021: /31 networks for point-to-point links
-        // Table says: Network=❌, Broadcast=❌, Hosts=ja (both IPs as hosts)
-        networkId = "kein"; // No network address concept in /31
-        broadcast = "kein"; // No broadcast in /31 networks (Point-to-Point)
-        usable = 2; // Both addresses are usable in /31 (point-to-point)
+        networkId = "kein";
+        broadcast = "kein";
+        usable = 2;
     } else if (cidrNum === 32) {
-        // /32 is a host route - single host address
-        // Table says: Network=❌, Broadcast=❌, Hosts=ja (only one host)
-        networkId = "kein"; // Host route - no network address
-        broadcast = "kein"; // Host route - no broadcast
-        usable = 1; // Single host address - the /32 represents exactly 1 host
+        networkId = "kein";
+        broadcast = "kein";
+        usable = 1;
     } else {
-        // Normal subnet calculations for all other CIDR values
-        // This applies to ALL normal addresses: Class A/B/C (public/private),
-        // Carrier-Grade NAT, Documentation, APIPA - they ALL get normal calculations
         networkId = network.join(".");
         const broadcastArray = ip.map((octet, i) => octet | (~mask[i] & 255));
         broadcast = broadcastArray.join(".");
         usable = Math.pow(2, 32 - cidrNum);
-        usable = usable - 2; // Subtract network and broadcast addresses
+        usable = usable - 2;
     }
 
-    // === COMPREHENSIVE IP CLASS DETECTION ===
-    let ipClass = "";
-
-    // Special individual addresses first (highest priority)
-    if (ipStr === "255.255.255.255") ipClass = "Broadcast";
-    else if (ip[0] === 0) ipClass = "Unspezifiziert";
-    else if (ip[0] === 127) ipClass = "Loopback";
-    // Documentation networks (RFC 5737) - all map to "Dokumentation"
-    else if (ip[0] === 192 && ip[1] === 0 && ip[2] === 2)
-        ipClass = "Dokumentation";
-    else if (ip[0] === 198 && ip[1] === 51 && ip[2] === 100)
-        ipClass = "Dokumentation";
-    else if (ip[0] === 203 && ip[1] === 0 && ip[2] === 113)
-        ipClass = "Dokumentation";
-    // APIPA (Automatic Private IP Addressing)
-    else if (ip[0] === 169 && ip[1] === 254) ipClass = "APIPA";
-    // Carrier-Grade NAT (RFC 6598)
-    else if (ip[0] === 100 && ip[1] >= 64 && ip[1] <= 127)
-        ipClass = "Carrier-Grade NAT";
-    // Private address ranges - distinguish from public (RFC 1918)
-    else if (ip[0] === 10) ipClass = "A (privat)";
-    else if (ip[0] === 172 && ip[1] >= 16 && ip[1] <= 31)
-        ipClass = "B (privat)";
-    else if (ip[0] === 192 && ip[1] === 168) ipClass = "C (privat)";
-    // Class D (Multicast) and E (Reserved) - before public classes
-    else if (ip[0] >= 224 && ip[0] <= 239) ipClass = "D";
-    else if (ip[0] >= 240 && ip[0] <= 254) ipClass = "E";
-    // Public address classes (what remains after excluding special ranges)
-    else if (ip[0] >= 1 && ip[0] <= 126) {
-        // Class A public range: 1-126, but exclude already handled special cases
-        ipClass = "A (öffentlich)";
-    } else if (ip[0] >= 128 && ip[0] <= 191) {
-        // Class B public range: 128-191, but exclude already handled 169.254.x.x
-        if (!(ip[0] === 169 && ip[1] === 254)) {
-            ipClass = "B (öffentlich)";
-        }
-    } else if (ip[0] >= 192 && ip[0] <= 223) {
-        // Class C public range: 192-223, but exclude already handled ranges
-        if (
-            !(ip[0] === 192 && ip[1] === 168) && // Private 192.168.x.x
-            !(ip[0] === 192 && ip[1] === 0 && ip[2] === 2) && // Documentation
-            !(ip[0] === 198 && ip[1] === 51 && ip[2] === 100) && // Documentation
-            !(ip[0] === 203 && ip[1] === 0 && ip[2] === 113)
-        ) {
-            // Documentation
-            ipClass = "C (öffentlich)";
-        }
-    }
+    const ipClass = getIPClass(ipStr, ip);
 
     return {
-        networkId: networkId, // This will be either "kein" for /31 and /32, or the actual network address
-        broadcast: broadcast, // This will be either "kein" or an IP address
+        networkId: networkId,
+        broadcast: broadcast,
         ipClass,
         usableIps: usable.toString(),
-        isPointToPoint: cidrNum === 31 || cidrNum === 32, // Flag for /31 and /32 networks
-        isSpecial: false, // Normal subnet calculation
+        isPointToPoint: cidrNum === 31 || cidrNum === 32,
+        isSpecial: false,
     };
 };
 
@@ -858,7 +752,6 @@ export const validateCIDRInput = (cidrInput) => {
     if (!cidrInput && cidrInput !== 0)
         return { isValid: false, error: "CIDR ist erforderlich" };
 
-    // Handle string input like "/24" or "24"
     const cleanCidr = cidrInput.toString().replace("/", "");
     const cidrNum = parseInt(cleanCidr);
 
@@ -880,7 +773,6 @@ export const validateSubnetMaskInput = (maskInput) => {
     if (!maskInput)
         return { isValid: false, error: "Subnetzmaske ist erforderlich" };
 
-    // Check for 0.0.0.0 specifically
     if (maskInput === "0.0.0.0") {
         return {
             isValid: false,
@@ -896,7 +788,6 @@ export const validateSubnetMaskInput = (maskInput) => {
     return { isValid: true, cidr: cidr };
 };
 
-// Function to detect special addresses that have fixed CIDR/Subnet Mask
 export const getSpecialAddressFixedNetwork = (ipAddress) => {
     if (!ipAddress || typeof ipAddress !== "string") return null;
 
@@ -908,10 +799,6 @@ export const getSpecialAddressFixedNetwork = (ipAddress) => {
         return null;
     }
 
-    // ONLY addresses that return "kein" (❌) for ALL network fields should have fixed values
-    // According to table, these are the ONLY special addresses that don't do normal calculations:
-
-    // Limited Broadcast address - always /32
     if (ipAddress === "255.255.255.255") {
         return {
             cidr: 32,
@@ -920,7 +807,6 @@ export const getSpecialAddressFixedNetwork = (ipAddress) => {
         };
     }
 
-    // Unspezifiziert (default route) - always /32 for the specific address
     if (ipAddress === "0.0.0.0") {
         return {
             cidr: 32,
@@ -929,9 +815,7 @@ export const getSpecialAddressFixedNetwork = (ipAddress) => {
         };
     }
 
-    // Loopback network - these return "kein" so get fixed values
     if (ip[0] === 127) {
-        // For the common 127.0.0.1, use /32, for others in range, use /8
         if (ipAddress === "127.0.0.1") {
             return {
                 cidr: 32,
@@ -947,7 +831,6 @@ export const getSpecialAddressFixedNetwork = (ipAddress) => {
         }
     }
 
-    // Class D (Multicast) - these return "kein" so get fixed values
     if (ip[0] >= 224 && ip[0] <= 239) {
         return {
             cidr: 4,
@@ -956,7 +839,6 @@ export const getSpecialAddressFixedNetwork = (ipAddress) => {
         };
     }
 
-    // Class E (Reserved) - these return "kein" so get fixed values
     if (ip[0] >= 240 && ip[0] <= 254) {
         return {
             cidr: 4,
@@ -965,17 +847,9 @@ export const getSpecialAddressFixedNetwork = (ipAddress) => {
         };
     }
 
-    // ALL OTHER ADDRESSES get normal network calculations with user-provided CIDR
-    // This includes:
-    // - Class A, B, C (both public and private)
-    // - Carrier-Grade NAT (100.64.x.x) - table says "ja" for all fields
-    // - Documentation (192.0.2.x, etc.) - table says "ja" for all fields
-    // - APIPA (169.254.x.x) - table says "ja" for all fields
-
-    return null; // Allow user input for CIDR/mask - normal calculations
+    return null;
 };
 
-// Utility function to check if user input represents "none/kein" for special address fields
 export const isValidNoneValue = (value) => {
     if (!value || typeof value !== "string") return false;
 
@@ -988,7 +862,7 @@ export const isValidNoneValue = (value) => {
         "none",
         "no",
         "nothing",
-        "0", // Also accept "0" as valid "none" answer
+        "0",
     ];
 
     return validNoneAnswers.includes(value.toLowerCase().trim());

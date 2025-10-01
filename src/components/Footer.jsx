@@ -14,7 +14,7 @@ function Footer() {
                 <p>
                     &copy; 2025{" "}
                     <a target="blank" href="https://github.com/MarceloRuediger">
-                        Marcelo Ruediger
+                        MarceloRuediger
                     </a>{" "}
                     ·{" "}
                     <a

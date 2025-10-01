@@ -52,7 +52,7 @@ export const useIPv4 = () => {
         setCheckResults([]);
         setShowCheckResults(false);
         setBottomButtonsAttention(false);
-        setGeneratedField(null); // ← Make sure this is being set to null!
+        setGeneratedField(null);
 
         setUserInput({
             networkId: "",
@@ -92,24 +92,18 @@ export const useIPv4 = () => {
 
         setIpValid(isValid);
 
-        // Apply visual feedback for invalid IP addresses
         const ipInput = e.target;
         if (value.trim() === "") {
-            // Empty input - remove all validation classes
             ipInput.classList.remove("correct", "wrong", "empty");
         } else if (!isValid) {
-            // Invalid IP - mark as wrong
             ipInput.classList.remove("correct");
             ipInput.classList.add("wrong");
         } else {
-            // Valid IP - mark as correct
             ipInput.classList.remove("wrong");
             ipInput.classList.add("correct");
 
-            // Check if this is a special address with fixed network size
             const specialNetwork = getSpecialAddressFixedNetwork(value);
             if (specialNetwork) {
-                // Auto-fill CIDR and subnet mask for special addresses
                 const networkData = calculateNetworkData(
                     value,
                     specialNetwork.cidr
@@ -139,7 +133,6 @@ export const useIPv4 = () => {
                     setSubnetMaskValid(true);
                     setAttention(true);
 
-                    // Mark CIDR and subnet mask inputs as correct immediately
                     setTimeout(() => {
                         const cidrElement = document.getElementById("cidr");
                         const maskElement =
@@ -170,10 +163,6 @@ export const useIPv4 = () => {
                 }
             }
         }
-
-        // Add this line to ensure both CIDR and subnet mask inputs are available
-        // You might want to set mode to a neutral state or create a new mode for your TopInputs component
-        // setMode("both"); // or whatever logic you need for your TopInputs component
     };
 
     const handleCidrOrMaskInput = (e, inputType) => {
@@ -193,7 +182,6 @@ export const useIPv4 = () => {
             return;
         }
 
-        // Check if this IP has a fixed network size
         const specialNetwork = getSpecialAddressFixedNetwork(currentIp);
 
         let cidr = null;
@@ -218,7 +206,7 @@ export const useIPv4 = () => {
                     isInputValid = true;
                     setCidrValid(true);
                 } else {
-                    setCidrValid(false); // <-- Now /0 will be marked as invalid (red)
+                    setCidrValid(false);
                 }
             }
         } else if (inputType === "subnetMask") {
@@ -260,7 +248,6 @@ export const useIPv4 = () => {
             const networkData = calculateNetworkData(currentIp, cidr);
 
             if (networkData === null) {
-                // Don't try to access properties if calculation failed
                 return;
             }
 
@@ -295,7 +282,6 @@ export const useIPv4 = () => {
 
             setAttention(true);
 
-            // Mark generated fields as correct immediately
             setTimeout(() => {
                 const fieldsToMark = [
                     "networkId",
@@ -304,7 +290,6 @@ export const useIPv4 = () => {
                     "usableIps",
                 ];
 
-                // Mark the complementary field (CIDR or subnet mask) that was auto-generated
                 if (inputType === "cidr") {
                     fieldsToMark.push("subnetMask");
                 } else if (inputType === "subnetMask") {
@@ -318,22 +303,16 @@ export const useIPv4 = () => {
                         element.classList.add("correct");
                     }
                 });
-            }, 50); // Small delay to ensure DOM is updated
+            }, 50);
         }
     };
 
-    // Helper function to detect ambiguous cases and suggest better field combinations
     const isAmbiguousCase = (ip, cidr, generatedField) => {
-        // For /31 and /32 networks, certain single fields create ambiguity
         if (cidr === 31 || cidr === 32) {
-            // These fields alone don't provide enough info to distinguish /31 from /32
-            const ambiguousFields = ["broadcast"]; // Both have "kein"
+            const ambiguousFields = ["broadcast"];
 
             return ambiguousFields.includes(generatedField);
         }
-
-        // NetworkId generation has been completely removed to avoid ambiguity issues
-        // where multiple CIDR values could produce the same network address
 
         return false;
     };
@@ -356,48 +335,31 @@ export const useIPv4 = () => {
         let attempts = 0;
         const maxAttempts = 10;
 
-        // Keep generating until we get a non-ambiguous case
         do {
-            // 30% chance to include special addresses for educational purposes
-            // Higher percentage because these are important for certification/learning
             const includeSpecial = Math.random() < 0.3;
             ip = getRandomIp(includeSpecial);
 
-            // Check if this IP has special network requirements
             const specialNetwork = getSpecialAddressFixedNetwork(ip);
             if (specialNetwork) {
-                // Special addresses must use their fixed CIDR/mask values
                 cidr = specialNetwork.cidr;
                 subnetMask = specialNetwork.subnetMask;
             } else {
-                // Normal addresses can use random CIDR values
                 cidr = getRandomCIDR();
                 subnetMask = cidrToMask(cidr);
             }
 
             data = calculateNetworkData(ip, cidr);
 
-            // Check if this is a special address that should auto-fill ipClass
             const isSpecialAddress = !["A", "B", "C", "D", "E"].includes(
                 data.ipClass
             );
 
-            // Randomly select which field to generate
-            // Only these fields provide unambiguous calculation paths and should be generated:
-            // - CIDR: Directly determines all network calculations
-            // - Subnet Mask: Directly determines all network calculations
-            // - usableIps: Can be calculated from to determine network size
-            //
-            // Adresstyp (ipClass) should NEVER be generated - user must always calculate it
             let fieldOptions = ["cidr", "subnetMask", "usableIps"];
 
-            // If CIDR is 30 or 31, remove 'usableIps' to avoid edge case ambiguity
-            // (both /30 and /31 have very few hosts, making calculation tricky)
             if (cidr === 30 || cidr === 31) {
                 fieldOptions = fieldOptions.filter((f) => f !== "usableIps");
             }
 
-            // If this is a special address that returns "kein" for usableIps, don't generate usableIps field
             if (data && data.usableIps === "kein") {
                 fieldOptions = fieldOptions.filter((f) => f !== "usableIps");
             }
@@ -406,13 +368,6 @@ export const useIPv4 = () => {
                 fieldOptions[Math.floor(Math.random() * fieldOptions.length)];
 
             attempts++;
-
-            // Debug logging for ambiguous cases
-            if (isAmbiguousCase(ip, cidr, randomField)) {
-                console.log(
-                    `Avoiding ambiguous case: IP=${ip}, CIDR=/${cidr}, Field=${randomField}`
-                );
-            }
         } while (
             isAmbiguousCase(ip, cidr, randomField) &&
             attempts < maxAttempts
@@ -420,7 +375,6 @@ export const useIPv4 = () => {
 
         setGeneratedField(randomField);
 
-        // Create initial data with only IP and the generated field
         const initialData = {
             ip,
             cidr: "",
@@ -431,7 +385,6 @@ export const useIPv4 = () => {
             usableIps: "",
         };
 
-        // Set the generated field value
         switch (randomField) {
             case "cidr":
                 initialData.cidr = `/${cidr}`;
@@ -470,7 +423,6 @@ export const useIPv4 = () => {
         const { id, value } = e.target;
         setUserInput((prev) => ({ ...prev, [id]: value }));
 
-        // Set bottom buttons attention when user starts inputting in practice mode (not input mode and not when answers are shown)
         if (
             !userIsInputting &&
             !showAnswers &&
@@ -482,19 +434,17 @@ export const useIPv4 = () => {
     };
 
     const handleShowAnswers = () => {
-        // Don't execute if no IP data is generated
         if (!ipData.ip) {
             return;
         }
 
-        // In input mode, once all calculations are complete, don't show answers
         if (
             userIsInputting &&
             ipValid &&
             (ipData.cidr || ipData.subnetMask) &&
             ipData.networkId
         ) {
-            return; // Do nothing - keep existing field states and don't change showAnswers
+            return;
         }
 
         setUserInput({
@@ -506,7 +456,7 @@ export const useIPv4 = () => {
             subnetMask: generated.subnetMask,
         });
         setShowAnswers(true);
-        setAttention(true); // Highlight generate buttons
+        setAttention(true);
         setCheckResults([]);
         setShowCheckResults(false);
         setBottomButtonsAttention(false);
@@ -523,7 +473,6 @@ export const useIPv4 = () => {
         ids.forEach((id) => {
             const input = document.getElementById(id);
             if (input) {
-                // If this field was generated (either in training mode or eingabe mode), keep it with attention class
                 const isGeneratedField =
                     generatedField === id ||
                     (userIsInputting && ipData[id] && id !== "ip");
@@ -543,7 +492,6 @@ export const useIPv4 = () => {
         if (showAnswers) {
             return generated[id];
         } else if (ipData[id] && id !== "ip") {
-            // Show the generated field value
             return ipData[id];
         } else {
             return userInput[id];
@@ -551,23 +499,21 @@ export const useIPv4 = () => {
     };
 
     const handleCheck = () => {
-        // Don't execute if no IP data is generated
         if (!ipData.ip) {
             return;
         }
 
-        // In input mode, once all calculations are complete, don't perform any validation
         if (
             userIsInputting &&
             ipValid &&
             (ipData.cidr || ipData.subnetMask) &&
             ipData.networkId
         ) {
-            return; // Do nothing - keep existing field states
+            return;
         }
 
         resetInputBorders();
-        setShowCheckResults(false); // Reset check results display
+        setShowCheckResults(false);
 
         const fieldsToCheck = [
             "networkId",
@@ -584,7 +530,6 @@ export const useIPv4 = () => {
             const displayedValue = renderValue(fieldId);
             const value = displayedValue?.toString().trim();
 
-            // If this field was generated (either in training mode or eingabe mode), keep it with attention class
             const isGeneratedField =
                 generatedField === fieldId ||
                 (userIsInputting && ipData[fieldId] && fieldId !== "ip");
@@ -619,24 +564,18 @@ export const useIPv4 = () => {
             try {
                 switch (fieldId) {
                     case "networkId":
-                    case "networkId":
                     case "broadcast":
                     case "subnetMask": {
-                        // Special validation for fields that can be "kein" for special addresses
                         if (
                             fieldId === "broadcast" ||
                             fieldId === "networkId"
                         ) {
-                            // Check if it should be "kein" (for special addresses)
                             const correctValue = generated[fieldId];
                             if (correctValue === "kein") {
-                                // Accept comprehensive "none" values using utility function
                                 isValid = isValidNoneValue(value);
                                 break;
                             }
                         }
-
-                        // Standard IP address validation for networkId, broadcast (when not "kein"), and subnetMask
                         const ipParts = value.split(".");
                         if (ipParts.length !== 4)
                             throw new Error("Falsches Format");
@@ -660,7 +599,6 @@ export const useIPv4 = () => {
                     }
 
                     case "ipClass":
-                        // Accept all dropdown values - validation is handled by the dropdown
                         const validDropdownValues = [
                             // Single letter classes
                             "A",
@@ -688,16 +626,13 @@ export const useIPv4 = () => {
                         break;
 
                     case "usableIps":
-                        // Check if the correct answer is "kein" (for special addresses) or "0" (for /32 networks)
                         const correctUsableIps = generated[fieldId];
                         if (
                             correctUsableIps === "kein" ||
                             correctUsableIps === "0"
                         ) {
-                            // Use comprehensive validation for "none" values
                             isValid = isValidNoneValue(value);
                         } else {
-                            // Standard numeric validation for non-zero values
                             isValid = /^\d+$/.test(value);
                         }
                         break;
@@ -743,17 +678,14 @@ export const useIPv4 = () => {
                     }
                 }
 
-                // Special comparison logic for fields that can be "kein" for special addresses
                 if (
                     (fieldId === "broadcast" ||
                         fieldId === "networkId" ||
                         fieldId === "usableIps") &&
                     correctValue === "kein"
                 ) {
-                    // Use the comprehensive validation function for "none" values
                     isCorrect = isValidNoneValue(value);
                 } else if (fieldId === "usableIps" && correctValue === "0") {
-                    // Special comparison logic for usableIps when answer is 0 (legacy support)
                     const validZeroAnswers = [
                         "0",
                         "keiner",
@@ -764,27 +696,20 @@ export const useIPv4 = () => {
                     ];
                     isCorrect = validZeroAnswers.includes(value.toLowerCase());
                 } else if (fieldId === "ipClass") {
-                    // Special comparison logic for IP class with dropdown
                     const userValue = value.trim();
                     const correctValue = generated.ipClass.trim();
 
-                    // For A, B, C classes: extract just the letter from dropdown selection
-                    // The dropdown has options like "A (privat)" or "A (öffentlich)" but value is just "A"
                     if (/^[A-E]$/.test(correctValue)) {
-                        // Correct answer is a basic class letter
                         isCorrect = userValue === correctValue;
                     } else if (
                         ["Testnetz-1", "Testnetz-2", "Testnetz-3"].includes(
                             correctValue
                         )
                     ) {
-                        // Map all documentation test networks to single dropdown option
                         isCorrect = userValue === "Dokumentation";
                     } else if (correctValue === "Dokumentation") {
-                        // Direct match for new documentation detection
                         isCorrect = userValue === "Dokumentation";
                     } else {
-                        // For other special address types, do exact matching
                         isCorrect = userValue === correctValue;
                     }
                 } else {
@@ -810,13 +735,11 @@ export const useIPv4 = () => {
             }
         });
 
-        // Only show check results if we have any results from user-filled fields
         if (results.length > 0) {
             setCheckResults(results);
             setShowCheckResults(true);
-            setBottomButtonsAttention(false); // Remove attention after check
+            setBottomButtonsAttention(false);
 
-            // If all answers are correct, give attention to top buttons
             const allCorrect = results.every((result) => result.isCorrect);
             if (allCorrect) {
                 setAttention(true);
@@ -825,7 +748,6 @@ export const useIPv4 = () => {
     };
 
     return {
-        // State
         ipData,
         userInput,
         showAnswers,
@@ -840,7 +762,6 @@ export const useIPv4 = () => {
         checkResults,
         showCheckResults,
         bottomButtonsAttention,
-        // Functions
         handleIpInput,
         handleCidrOrMaskInput,
         handleStart,
@@ -848,7 +769,6 @@ export const useIPv4 = () => {
         handleShowAnswers,
         handleCheck,
         renderValue,
-        // Setters (if needed elsewhere)
         setAttention,
         generatedField,
     };

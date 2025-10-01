@@ -1,9 +1,3 @@
-/* ==============================================
-   NATIVE MOBILE APP STYLING
-   ============================================== */
-
-/* 1. NATIVE APP BEHAVIORS */
-/* Prevent text selection on interactive elements (like native apps) */
 button,
 .language-button,
 .close-button {
@@ -14,13 +8,11 @@ button,
     -webkit-touch-callout: none;
 }
 
-/* Remove tap highlight that looks un-native */
 * {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
 }
 
-/* 2. NATIVE-STYLE HAPTIC FEEDBACK ANIMATIONS */
 @keyframes nativeTap {
     0% {
         transform: scale(1);
@@ -37,7 +29,6 @@ button,
     animation: nativeTap 0.1s ease-out;
 }
 
-/* 3. NATIVE APP STATUS BAR INTEGRATION */
 @supports (padding-top: env(safe-area-inset-top)) {
     body {
         padding-top: env(safe-area-inset-top);
@@ -47,11 +38,9 @@ button,
     }
 }
 
-/* 4. NATIVE-STYLE BUTTONS WITH DEPTH */
 @media (max-width: 768px) {
     .top-buttons button,
     .bottom-btns button {
-        /* Native iOS/Android button feel */
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -69,15 +58,14 @@ button,
     }
 }
 
-/* 5. NATIVE-STYLE INPUTS */
 @media (max-width: 768px) {
     input,
     select {
-        border-radius: 12px !important; /* Increased border-radius for consistency */
-        font-size: 14px !important; /* Reduced from 16px to maintain content fit */
-        padding: 8px 12px !important; /* Reduced from 12px 16px for better space utilization */
-        min-height: 44px; /* Maintain touch target size */
-        background-color: #000 !important; /* Consistent dark background */
+        border-radius: 12px !important;
+        font-size: 14px !important;
+        padding: 8px 12px !important;
+        min-height: 44px;
+        background-color: #000 !important;
         color: #cccccc !important;
         border: 1px solid transparent;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
@@ -86,12 +74,11 @@ button,
 
     input:focus,
     select:focus {
-        background-color: #000 !important; /* Keep dark on focus */
+        background-color: #000 !important;
         border-color: #646cff !important;
         transform: scale(1.02);
     }
 
-    /* Ensure select elements get proper dark styling */
     select {
         -webkit-appearance: none;
         appearance: none;
@@ -103,14 +90,12 @@ button,
     }
 }
 
-/* 6. NATIVE APP SCROLLING */
 .popup-body {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     scroll-behavior: smooth;
 }
 
-/* 7. NATIVE-STYLE POPUP/MODAL */
 @media (max-width: 768px) {
     .popup-overlay {
         backdrop-filter: blur(10px);
@@ -147,37 +132,28 @@ button,
     }
 }
 
-/* 8. NATIVE-STYLE CARDS/CONTAINERS */
 @media (max-width: 768px) {
     .default-container {
-        border-radius: 12px !important; /* Consistent with all screen sizes */
-        background: rgba(
-            28,
-            28,
-            30,
-            0.8
-        ) !important; /* Consistent with desktop */
-        border: 1px solid rgba(84, 84, 88, 0.6) !important; /* Consistent with desktop */
-        padding: 1rem !important; /* Consistent with desktop */
-        /* Remove conflicting styles */
+        border-radius: 12px !important;
+        background: rgba(28, 28, 30, 0.8) !important;
+        border: 1px solid rgba(84, 84, 88, 0.6) !important;
+        padding: 1rem !important;
         backdrop-filter: none;
-        /* Removed box-shadow: none to allow input validation shadows */
     }
 
     .instruction-container {
-        border-radius: 12px; /* Keep existing instruction container styling */
+        border-radius: 12px;
         backdrop-filter: blur(15px);
         box-shadow: 0 6px 20px rgba(100, 108, 255, 0.2),
             0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .ipv6-container {
-        border-radius: 12px; /* Keep existing IPv6 container styling */
+        border-radius: 12px;
         backdrop-filter: blur(15px);
     }
 }
 
-/* 9. NATIVE-STYLE TOGGLES */
 @media (max-width: 768px) {
     .image-toggle-container > label::before {
         backdrop-filter: blur(10px);
@@ -193,18 +169,16 @@ button,
     }
 }
 
-/* 10. PULL-TO-REFRESH SIMULATION */
 @media (max-width: 768px) {
     body {
         overscroll-behavior-y: contain;
     }
 
     main {
-        transform: translate3d(0, 0, 0); /* Hardware acceleration */
+        transform: translate3d(0, 0, 0);
     }
 }
 
-/* 11. NATIVE-STYLE LOADING STATES */
 @keyframes nativeShimmer {
     0% {
         background-position: -200px 0;
@@ -225,18 +199,16 @@ button,
     animation: nativeShimmer 1.5s infinite;
 }
 
-/* 12. NATIVE APP HEADER/TITLE BAR */
 @media (max-width: 768px) {
     h1 {
         font-weight: 700;
         letter-spacing: -0.5px;
         text-align: center;
-        margin-top: 8px; /* Account for status bar */
+        margin-top: 8px;
         font-size: clamp(1.8rem, 5vw, 2.5rem);
     }
 }
 
-/* 13. HAPTIC FEEDBACK CLASSES */
 .haptic-light {
     animation: nativeTap 0.1s ease-out;
 }
@@ -247,7 +219,6 @@ button,
     animation: nativeTap 0.2s ease-out;
 }
 
-/* 14. NATIVE-STYLE FOCUS INDICATORS */
 @media (max-width: 768px) {
     *:focus-visible {
         outline: 3px solid rgba(100, 108, 255, 0.5);
@@ -256,9 +227,7 @@ button,
     }
 }
 
-/* 15. NATIVE-STYLE ERROR STATES */
 @media (max-width: 768px) {
-    /* Input validation styles - consistent with desktop */
     input.correct {
         border-color: #00ff88;
         box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
@@ -275,7 +244,6 @@ button,
         box-shadow: 0 0 4px #888888, 0 0 8px #888888;
     }
 
-    /* Select validation styles - consistent with desktop */
     select.correct {
         border-color: #00ff88;
         box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
@@ -291,7 +259,6 @@ button,
         box-shadow: 0 0 4px #888888, 0 0 8px #888888;
     }
 
-    /* Disabled select validation styles - consistent with desktop */
     select:disabled.correct {
         color: #cccccc !important;
         border-color: #00ff88;
@@ -330,13 +297,7 @@ button,
     }
 }
 
-/* 16. NATIVE-STYLE DARK MODE ENHANCEMENTS */
 @media (prefers-color-scheme: dark) and (max-width: 768px) {
-    /* Commented out to maintain consistent background across all screen sizes */
-    /* body {
-        background: #000;
-    } */
-
     .default-container {
         background: rgba(28, 28, 30, 0.8);
         border: 1px solid rgba(84, 84, 88, 0.6);
@@ -348,7 +309,6 @@ button,
     }
 }
 
-/* 17. PREVENT OVERSCROLL (NATIVE BEHAVIOR) */
 html,
 body {
     overscroll-behavior: none;

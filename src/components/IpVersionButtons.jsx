@@ -13,9 +13,8 @@ function IpVersionButtons({
 
     useEffect(() => {
         if (attention && buttonsRef.current) {
-            // Scroll up to show the IP version buttons with small margin (2rem = 32px)
             const elementTop = buttonsRef.current.offsetTop;
-            const offset = 13; // 2rem in pixels
+            const offset = 13;
             window.scrollTo({
                 top: elementTop - offset,
                 behavior: "smooth",

@@ -10,7 +10,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
     const [showSpecialAddresses, setShowSpecialAddresses] = useState(false);
     const { language, setLanguage, t } = useLanguage();
 
-    // Use appropriate special addresses based on IP version
     const specialAddresses =
         ipVersion === "ipv6"
             ? getAllIPv6SpecialAddresses()
@@ -35,7 +34,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         }
     };
 
-    // Group addresses by category for better organization
     const groupedAddresses = specialAddresses.reduce((acc, addr) => {
         const category = addr.category || "Sonstige";
         if (!acc[category]) {
@@ -45,7 +43,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         return acc;
     }, {});
 
-    // Define the desired order for categories based on IP version
     const categoryOrder =
         ipVersion === "ipv6"
             ? [
@@ -71,39 +68,10 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                   "Other",
               ];
 
-    // Translation map for categories
-    const categoryTranslations =
-        ipVersion === "ipv6"
-            ? {
-                  Loopback: "Loopback",
-                  Unspecified: "Unspezifiziert",
-                  Documentation: "Dokumentation",
-                  "Link-Local": "Link-Local",
-                  "Private Networks": "Private Netzwerke",
-                  "Global Unicast": "Global Unicast",
-                  Multicast: "Multicast",
-                  Transition: "IPv4-Mapped",
-                  Other: "Sonstige",
-              }
-            : {
-                  Loopback: "Loopback",
-                  APIPA: "APIPA",
-                  Broadcast: "Broadcast",
-                  Routing: "Routing",
-                  "Carrier-Grade NAT": "Carrier-Grade NAT",
-                  Unspezifiziert: "Unspezifiziert",
-                  "Private Networks": "Private Netzwerke",
-                  "Public Networks": "Öffentliche Netzwerke",
-                  "Classes D and E": "Klassen D und E",
-                  Other: "Sonstige",
-              };
-
-    // Simplified common use translations (with spaces after /)
     const getSimplifiedDescription = (addr) => {
         const address = addr.address;
 
         if (ipVersion === "ipv6") {
-            // IPv6 simplified descriptions using translations
             if (address === "::1") return "IPv6 Localhost / Loopback";
             if (address === "::")
                 return t("toggleElements.hintsIPv6.unspecified.commonUse");
@@ -144,7 +112,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             return addr.commonUse;
         } else {
-            // IPv4 descriptions using translations
             if (address === "127.0.0.0")
                 return t("toggleElements.hintsIPv4.loopback.commonUse");
             if (address === "169.254.0.0")
@@ -156,7 +123,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             if (address === "0.0.0.0")
                 return t("toggleElements.hintsIPv4.unspecified.commonUse");
 
-            // Private Networks
             if (address === "10.0.0.0")
                 return t(
                     "toggleElements.hintsIPv4.privateNetworks.classA.commonUse"
@@ -170,7 +136,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     "toggleElements.hintsIPv4.privateNetworks.class C.commonUse"
                 );
 
-            // Public Networks
             if (address === "1.0.0.0")
                 return t(
                     "toggleElements.hintsIPv4.publicNetworks.classA.commonUse"
@@ -184,7 +149,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     "toggleElements.hintsIPv4.publicNetworks.class C.commonUse"
                 );
 
-            // Classes D and E
             if (address === "224.0.0.0")
                 return t(
                     "toggleElements.hintsIPv4.classesDandE.class D.commonUse"
@@ -194,7 +158,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     "toggleElements.hintsIPv4.classesDandE.class E.commonUse"
                 );
 
-            // Documentation
             if (address === "192.0.2.0")
                 return t(
                     "toggleElements.hintsIPv4.documentation.testnet1.commonUse"
@@ -212,24 +175,18 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         }
     };
 
-    // Function to get info badge for each address
     const getInfoBadge = (addr) => {
         const address = addr.address;
 
         if (ipVersion === "ipv6") {
-            // IPv6 address badges using translations
-
-            // Loopback
             if (address === "::1") return { text: "Loopback", class: "system" };
 
-            // Unspecified
             if (address === "::")
                 return {
                     text: t("toggleElements.hintsIPv6.unspecified.badget"),
                     class: "routing",
                 };
 
-            // Documentation
             if (address === "2001:db8::")
                 return {
                     text: t("toggleElements.hintsIPv6.documentation.badget"),
@@ -251,7 +208,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     class: "documentation",
                 };
 
-            // Link-Local
             if (address === "fe80::")
                 return { text: "Link-Local", class: "network" };
             if (address === "fe80::1")
@@ -259,7 +215,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             if (address === "fe80:0000::")
                 return { text: "Link-Local", class: "network" };
 
-            // Private Networks (ULA)
             if (address === "fc00::1")
                 return {
                     text: t(
@@ -289,13 +244,11 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     class: "class-a",
                 };
 
-            // Global Unicast
             if (address === "2001::")
                 return { text: "Global 2xxx", class: "class-b" };
             if (address === "3000::")
                 return { text: "Global 3xxx", class: "class-b" };
 
-            // Multicast
             if (address === "ff00:0000::")
                 return { text: "Multicast", class: "class-d" };
             if (address === "ff02::1")
@@ -313,7 +266,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     class: "class-d",
                 };
 
-            // Transition
             if (address === "::ffff:0:0")
                 return { text: "IPv4-mapped", class: "transition" };
             if (address === "64:ff9b::")
@@ -321,9 +273,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             return null;
         } else {
-            // IPv4 address badges using translations
-
-            // Private Networks
             if (address === "10.0.0.0")
                 return {
                     text: t(
@@ -346,7 +295,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     class: "class-c",
                 };
 
-            // Public Networks
             if (address === "1.0.0.0")
                 return {
                     text: t(
@@ -369,7 +317,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     class: "class-c",
                 };
 
-            // Special addresses
             if (address === "127.0.0.0")
                 return { text: "Loopback", class: "system" };
             if (address === "169.254.0.0")
@@ -422,14 +369,10 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         }
     };
 
-    // Function to get special info text
     const getSpecialInfo = (addr) => {
         const address = addr.address;
 
         if (ipVersion === "ipv6") {
-            // IPv6 special information using translations
-
-            // Loopback
             if (address === "::1")
                 return t("toggleElements.hintsIPv6.loopback.specialInfo");
 
@@ -503,7 +446,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
 
             return null;
         } else {
-            // IPv4 special information using translations
             if (address === "127.0.0.0")
                 return t("toggleElements.hintsIPv4.loopback.specialInfo");
             if (address === "169.254.0.0")
@@ -571,41 +513,62 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
         }
     };
 
-    // Function to get category titles using translations for IPv4
     const getCategoryTitle = (category) => {
-        switch (category) {
-            case "Private Networks":
-                return t("toggleElements.hintsIPv4.privateNetworks.title");
-            case "Public Networks":
-                return t("toggleElements.hintsIPv4.publicNetworks.title");
-            case "Classes D and E":
-                return t("toggleElements.hintsIPv4.classesDandE.title");
-            case "Documentation":
-                return t("toggleElements.hintsIPv4.documentation.title");
-            case "Unspezifiziert":
-                return t("toggleElements.hintsIPv4.unspecified.title");
-            case "Loopback":
-                return "Loopback";
-            case "APIPA":
-                return "APIPA";
-            case "Carrier-Grade NAT":
-                return "Carrier-Grade NAT";
-            case "Broadcast":
-                return "Broadcast";
-            default:
-                return category;
+        if (ipVersion === "ipv6") {
+            switch (category) {
+                case "Loopback":
+                    return "Loopback";
+                case "Unspecified":
+                    return "Unspezifiziert";
+                case "Documentation":
+                    return "Dokumentation";
+                case "Link-Local":
+                    return "Link-Local";
+                case "Private Networks":
+                    return "Private Netzwerke";
+                case "Global Unicast":
+                    return "Global Unicast";
+                case "Multicast":
+                    return "Multicast";
+                case "Transition":
+                    return "IPv4-Mapped";
+                case "Other":
+                    return "Sonstige";
+                default:
+                    return category;
+            }
+        } else {
+            switch (category) {
+                case "Private Networks":
+                    return t("toggleElements.hintsIPv4.privateNetworks.title");
+                case "Public Networks":
+                    return t("toggleElements.hintsIPv4.publicNetworks.title");
+                case "Classes D and E":
+                    return t("toggleElements.hintsIPv4.classesDandE.title");
+                case "Documentation":
+                    return t("toggleElements.hintsIPv4.documentation.title");
+                case "Unspezifiziert":
+                    return t("toggleElements.hintsIPv4.unspecified.title");
+                case "Loopback":
+                    return "Loopback";
+                case "APIPA":
+                    return "APIPA";
+                case "Carrier-Grade NAT":
+                    return "Carrier-Grade NAT";
+                case "Broadcast":
+                    return "Broadcast";
+                default:
+                    return category;
+            }
         }
     };
 
-    // Function to get range translations for IPv4
     const getRangeTranslation = (addr) => {
         const address = addr.address;
 
         if (ipVersion === "ipv6") {
-            // Keep original for IPv6
             return addr.range;
         } else {
-            // IPv4 - only translate special cases with complex text, keep original ranges for simple ones
             const rangeLabel = language === "en" ? "Range" : "Bereich";
 
             switch (address) {
@@ -622,7 +585,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         "toggleElements.hintsIPv4.classesDandE.class E.range"
                     );
                 default:
-                    // For simple cases, use translated label + original range numbers
                     return `${rangeLabel}: ${addr.range}`;
             }
         }
@@ -688,7 +650,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     showImage ? "visible" : "invisible"
                 }`}
             >
-                {/* IPv6 Information Header - only show for IPv6 mode and when image is visible */}
                 {ipVersion === "ipv6" && (
                     <div className="ipv6-info-header">
                         <div className="ipv6-structure-title">
@@ -722,7 +683,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 </div>
             </div>
 
-            {/* Special Addresses Popup */}
             {showSpecialAddresses && (
                 <div className="popup-overlay" onClick={handleOverlayClick}>
                     <div className="popup-content">
@@ -743,7 +703,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                         <div className="popup-body">
                             {ipVersion === "ipv6" ? (
                                 <>
-                                    {/* IPv6 Introduction Section */}
                                     <div className="address-category">
                                         <h3 className="category-title">
                                             {t(
@@ -760,7 +719,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                         />
                                     </div>
 
-                                    {/* IPv6 Abbreviation Rules Section */}
                                     <div className="address-category">
                                         <h3 className="category-title">
                                             {t(
@@ -821,7 +779,6 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                 </>
                             ) : (
                                 <>
-                                    {/* IPv4 Introduction Section */}
                                     <div className="address-category">
                                         <h3 className="category-title">
                                             {t(
@@ -851,11 +808,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                         className="address-category subcategory"
                                     >
                                         <h3 className="category-title">
-                                            {ipVersion === "ipv6"
-                                                ? categoryTranslations[
-                                                      category
-                                                  ] || category
-                                                : getCategoryTitle(category)}
+                                            {getCategoryTitle(category)}
                                         </h3>
 
                                         {addresses.map((addr, index) => {

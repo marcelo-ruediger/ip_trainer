@@ -60,7 +60,7 @@
     font-weight: normal;
     margin-bottom: 0;
     color: #cccccc;
-    font-size: 14px !important;
+    font-size: 14px;
 }
 
 .form-group .radio-label:hover {
@@ -194,7 +194,6 @@
 }
 
 @media (max-width: 600px) {
-    /* Ensure radio buttons maintain proper size on small screens */
     .radio-label input[type="radio"] {
         min-width: 20px;
         min-height: 20px;

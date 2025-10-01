@@ -1,5 +1,4 @@
 //TODO: Cannot scroll to BottomButtons properly. Install prompt on Apple doesn't work properly even with Safari 404 not found.
-//TODO: Code refactoring.
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

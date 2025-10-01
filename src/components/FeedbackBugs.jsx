@@ -33,10 +33,8 @@ function FeedbackBugs({ onClose }) {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Get browser information
         const browserInfo = getBrowserInfo();
 
-        // Create GitHub issue URL with pre-filled content
         const issueTitle = encodeURIComponent(
             `[${formType.toUpperCase()}] ${formData.title}`
         );
@@ -54,14 +52,11 @@ function FeedbackBugs({ onClose }) {
 
         const githubUrl = `https://github.com/MarceloRuediger/ip_trainer/issues/new?title=${issueTitle}&body=${issueBody}`;
 
-        // Open GitHub in new window
         window.open(githubUrl, "_blank");
 
-        // Mark as submitted
         setIsSubmitting(false);
         setSubmitted(true);
 
-        // Auto-close after 2 seconds
         setTimeout(() => {
             onClose();
         }, 2000);

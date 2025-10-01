@@ -10,18 +10,15 @@ const PWAInstaller = () => {
     const { t } = useLanguage();
 
     useEffect(() => {
-        // Detect iOS
         const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
         setIsIOS(iOS);
 
-        // Detect if already installed (standalone mode)
         const standalone =
             window.matchMedia("(display-mode: standalone)").matches ||
             window.navigator.standalone ||
             document.referrer.includes("android-app://");
         setIsInStandaloneMode(standalone);
 
-        // For non-iOS devices, use the standard PWA install prompt
         const handleBeforeInstallPrompt = (e) => {
             e.preventDefault();
             setDeferredPrompt(e);
@@ -36,13 +33,12 @@ const PWAInstaller = () => {
             console.log("PWA installed successfully!");
         };
 
-        // Show iOS instructions if on iOS and not installed
         if (iOS && !standalone) {
             const hasSeenIOSPrompt = localStorage.getItem(
                 "ios-pwa-prompt-seen"
             );
             if (!hasSeenIOSPrompt) {
-                setTimeout(() => setShowInstall(true), 3000); // Show after 3 seconds
+                setTimeout(() => setShowInstall(true), 3000);
             }
         }
 
@@ -80,10 +76,8 @@ const PWAInstaller = () => {
         }
     };
 
-    // Don't show if already installed or if conditions aren't met
     if (!showInstall || isInStandaloneMode) return null;
 
-    // iOS Installation Instructions
     if (isIOS) {
         return (
             <div className="pwa-install-prompt ios-prompt">
@@ -123,7 +117,6 @@ const PWAInstaller = () => {
         );
     }
 
-    // Android/Chrome Installation (Standard PWA prompt)
     return (
         <div className="pwa-install-prompt">
             <div className="install-content">

@@ -1,17 +1,10 @@
 import { useLanguage } from "../contexts/LanguageContext";
 
-function TopInputsIPv6({
-    ipData,
-    renderValue,
-    handleInputChange,
-    showAnswers,
-    mode,
-}) {
+function TopInputsIPv6({ renderValue, handleInputChange, showAnswers, mode }) {
     const { t } = useLanguage();
 
     return (
         <div className="default-container">
-            {/* Full IPv6 Address - Full Width */}
             <div className="ipv6-address-container">
                 <label>
                     {t("topInputsIPv6.fullAddress")}
@@ -28,7 +21,6 @@ function TopInputsIPv6({
                 </label>
             </div>
 
-            {/* Abbreviation (80%) and Prefix (20%) on same line */}
             <div className="ipv6-row-abbreviation-prefix">
                 <div className="ipv6-abbreviation-container">
                     <label>
@@ -54,10 +46,9 @@ function TopInputsIPv6({
                         <br className="responsive-break" />
                         <input
                             id="networkPrefix"
-                            placeholder=""
                             value={renderValue("networkPrefix")}
                             onChange={handleInputChange}
-                            disabled={true} // Always disabled since it's provided data
+                            disabled
                             className="network-prefix attention"
                         />
                     </label>
