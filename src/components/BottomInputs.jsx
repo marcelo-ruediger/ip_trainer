@@ -10,7 +10,6 @@ function BottomInputs({
 
     return (
         <div className="default-container">
-            {/* Network Address and Broadcast Address - 50/50 */}
             <div className="ipv4-row-network-broadcast">
                 <div className="ipv4-network-container">
                     <label>

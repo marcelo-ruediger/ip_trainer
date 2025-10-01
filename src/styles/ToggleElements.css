@@ -331,6 +331,12 @@
     opacity: 0.8;
 }
 
+.close-button:focus,
+.close-button:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
 .close-button {
     min-height: unset;
     min-width: unset;

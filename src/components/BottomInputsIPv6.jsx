@@ -5,7 +5,6 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
 
     return (
         <div className="default-container">
-            {/* Network Address (60%) and Subnet ID (40%) */}
             <div className="ipv6-row-network-subnet">
                 <div className="ipv6-network-container">
                     <label>
@@ -44,7 +43,6 @@ function BottomInputsIPv6({ renderValue, handleInputChange, showAnswers }) {
                 </div>
             </div>
 
-            {/* Interface ID (60%) and Address Type (40%) */}
             <div className="ipv6-row-interface-type">
                 <div className="ipv6-interface-container">
                     <label>
