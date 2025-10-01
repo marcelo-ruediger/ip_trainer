@@ -1,9 +1,3 @@
-/* =================================
-   MOBILE OPTIMIZATION ENHANCEMENTS
-   ================================= */
-
-/* 1. TOUCH TARGET IMPROVEMENTS */
-/* Ensure all interactive elements meet 44px minimum touch target */
 button,
 input,
 select,
@@ -13,19 +7,17 @@ select,
     min-width: 44px;
 }
 
-/* Larger tap targets for mobile */
 @media (max-width: 768px) {
     button {
         padding: 12px 16px;
-        font-size: 16px; /* Prevents iOS zoom on input */
+        font-size: 16px;
     }
 
     input,
     select {
-        padding: 8px 12px !important; /* Override other styles to maintain proper content fit */
-        font-size: 14px !important; /* Smaller than 16px to fit content properly */
-        min-height: 44px; /* Maintain accessibility */
-        /* Ensure inputs can fit IPv4/IPv6 addresses properly */
+        padding: 8px 12px;
+        font-size: 14px;
+        min-height: 44px;
         min-width: 200px;
         box-sizing: border-box;
     }
@@ -37,13 +29,11 @@ select,
     }
 }
 
-/* 2. IMPROVED SCROLLING & MOMENTUM */
 .popup-body {
-    -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
-    overscroll-behavior: contain; /* Prevent scroll chaining */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
-/* 3. PREVENT HORIZONTAL SCROLL */
 html,
 body {
     overflow-x: hidden;
@@ -56,16 +46,14 @@ body {
     max-width: 100vw;
 }
 
-/* 4. MOBILE-FIRST TYPOGRAPHY */
 @media (max-width: 768px) {
-    /* Ensure readable text sizes */
     body {
-        font-size: 16px; /* Base font size for mobile */
+        font-size: 16px;
         line-height: 1.5;
     }
 
     h1 {
-        font-size: 2rem; /* Responsive heading */
+        font-size: 2rem;
         line-height: 1.2;
     }
 
@@ -75,24 +63,20 @@ body {
     }
 }
 
-/* 5. IMPROVED FORM INTERACTIONS */
 @media (max-width: 768px) {
-    /* Better input focus states */
     input:focus,
     select:focus {
         transform: scale(1.02);
         transition: transform 0.2s ease;
     }
 
-    /* Prevent zoom on iOS inputs while maintaining original appearance */
     input[type="text"],
     input[type="number"],
     select {
-        font-size: 14px !important; /* Changed from 16px to maintain better fit */
+        font-size: 14px;
     }
 }
 
-/* 6. LOADING STATES FOR BETTER UX */
 @keyframes shimmer {
     0% {
         transform: translateX(-100%);
@@ -123,47 +107,42 @@ body {
     animation: shimmer 1.5s infinite;
 }
 
-/* 7. DARK MODE SAFE COLORS */
 @media (prefers-color-scheme: dark) {
-    /* Your app is already dark, but ensure consistency */
     input,
     select {
-        background-color: #000 !important;
-        color: #cccccc !important;
+        background-color: #000;
+        color: #cccccc;
     }
 }
 
-/* Enhanced mobile styling for consistent dark theme */
 @media (max-width: 768px) {
     input,
     select {
-        background-color: #000 !important;
-        color: #cccccc !important;
+        background-color: #000;
+        color: #cccccc;
         border: 1px solid transparent;
-        border-radius: 12px !important; /* Increased border-radius for consistency */
+        border-radius: 12px;
         transition: box-shadow 0.3s, border-color 0.3s, transform 0.2s;
     }
 
     input:focus,
     select:focus {
-        border-color: #646cff !important;
-        background-color: #000 !important;
+        border-color: #646cff;
+        background-color: #000;
     }
 }
 
-/* 8. REDUCED MOTION SUPPORT */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+        transition-duration: 0.01ms;
+        scroll-behavior: auto;
     }
 }
 
-/* 9. HIGH CONTRAST SUPPORT */
 @media (prefers-contrast: high) {
     input.correct {
         border-color: #00ff00;
@@ -180,118 +159,110 @@ body {
     }
 }
 
-/* MOBILE VALIDATION SHADOW EFFECTS - COMPREHENSIVE */
 @media (max-width: 768px) {
-    /* Ensure validation shadows work on all mobile screen sizes */
     input.correct,
     select.correct {
-        border-color: #00ff88 !important;
-        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88 !important;
+        border-color: #00ff88;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
     }
 
     input.wrong,
     select.wrong {
-        border-color: #ff0044 !important;
-        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044 !important;
+        border-color: #ff0044;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
     }
 
     input.empty,
     select.empty {
-        border-color: #888888 !important;
-        box-shadow: 0 0 4px #888888, 0 0 8px #888888 !important;
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
     }
 
-    /* Disabled select elements with validation states */
     select:disabled.correct {
-        color: #cccccc !important;
-        border-color: #00ff88 !important;
-        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88 !important;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #cccccc !important;
+        color: #cccccc;
+        border-color: #00ff88;
+        box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
+        opacity: 1;
+        -webkit-text-fill-color: #cccccc;
     }
 
     select:disabled.wrong {
-        color: #cccccc !important;
-        border-color: #ff0044 !important;
-        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044 !important;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #cccccc !important;
+        color: #cccccc;
+        border-color: #ff0044;
+        box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
+        opacity: 1;
+        -webkit-text-fill-color: #cccccc;
     }
 
     select:disabled.empty {
-        color: #cccccc !important;
-        border-color: #888888 !important;
-        box-shadow: 0 0 4px #888888, 0 0 8px #888888 !important;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #cccccc !important;
+        color: #cccccc;
+        border-color: #888888;
+        box-shadow: 0 0 4px #888888, 0 0 8px #888888;
+        opacity: 1;
+        -webkit-text-fill-color: #cccccc;
     }
 }
 
-/* ADDITIONAL MOBILE BREAKPOINTS FOR VALIDATION SHADOWS */
 @media (max-width: 600px) {
-    /* Ensure validation shadows work on smaller screens */
     input.correct,
     select.correct {
-        border-color: #00ff88 !important;
-        box-shadow: 0 0 3px #00ff88, 0 0 6px #00ff88 !important;
+        border-color: #00ff88;
+        box-shadow: 0 0 3px #00ff88, 0 0 6px #00ff88;
     }
 
     input.wrong,
     select.wrong {
-        border-color: #ff0044 !important;
-        box-shadow: 0 0 3px #ff0044, 0 0 6px #ff0044 !important;
+        border-color: #ff0044;
+        box-shadow: 0 0 3px #ff0044, 0 0 6px #ff0044;
     }
 
     input.empty,
     select.empty {
-        border-color: #888888 !important;
-        box-shadow: 0 0 3px #888888, 0 0 6px #888888 !important;
+        border-color: #888888;
+        box-shadow: 0 0 3px #888888, 0 0 6px #888888;
     }
 }
 
 @media (max-width: 450px) {
-    /* Ensure validation shadows work on very small screens */
     input.correct,
     select.correct {
-        border-color: #00ff88 !important;
-        box-shadow: 0 0 2px #00ff88, 0 0 4px #00ff88 !important;
+        border-color: #00ff88;
+        box-shadow: 0 0 2px #00ff88, 0 0 4px #00ff88;
     }
 
     input.wrong,
     select.wrong {
-        border-color: #ff0044 !important;
-        box-shadow: 0 0 2px #ff0044, 0 0 4px #ff0044 !important;
+        border-color: #ff0044;
+        box-shadow: 0 0 2px #ff0044, 0 0 4px #ff0044;
     }
 
     input.empty,
     select.empty {
-        border-color: #888888 !important;
-        box-shadow: 0 0 2px #888888, 0 0 4px #888888 !important;
+        border-color: #888888;
+        box-shadow: 0 0 2px #888888, 0 0 4px #888888;
     }
 }
 
 @media (max-width: 380px) {
-    /* Ensure validation shadows work on the smallest screens */
     input.correct,
     select.correct {
-        border-color: #00ff88 !important;
-        box-shadow: 0 0 2px #00ff88, 0 0 3px #00ff88 !important;
+        border-color: #00ff88;
+        box-shadow: 0 0 2px #00ff88, 0 0 3px #00ff88;
     }
 
     input.wrong,
     select.wrong {
-        border-color: #ff0044 !important;
-        box-shadow: 0 0 2px #ff0044, 0 0 3px #ff0044 !important;
+        border-color: #ff0044;
+        box-shadow: 0 0 2px #ff0044, 0 0 3px #ff0044;
     }
 
     input.empty,
     select.empty {
-        border-color: #888888 !important;
-        box-shadow: 0 0 2px #888888, 0 0 3px #888888 !important;
+        border-color: #888888;
+        box-shadow: 0 0 2px #888888, 0 0 3px #888888;
     }
 }
 
-/* 10. ORIENTATION CHANGE SUPPORT */
 @media (orientation: landscape) and (max-height: 500px) {
     .popup-content {
         max-height: 95vh;
@@ -303,7 +274,6 @@ body {
     }
 }
 
-/* 11. SAFE AREA SUPPORT (iPhone notch, etc.) */
 @supports (padding: max(0px)) {
     .image-toggle-container {
         padding-left: max(1rem, env(safe-area-inset-left));
@@ -318,13 +288,10 @@ body {
     }
 }
 
-/* 12. IMPROVED FOCUS MANAGEMENT */
 .focus-trap {
-    /* For modal accessibility */
     outline: none;
 }
 
-/* 13. MOBILE-OPTIMIZED POPUP */
 @media (max-width: 480px) {
     .popup-content {
         width: calc(100vw - 20px);

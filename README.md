@@ -10,7 +10,7 @@ A comprehensive **Progressive Web App** for German **IHK Fachinformatiker** exam
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/Manobrawn/ip_trainer.git
+git clone https://github.com/MarceloRuediger/ip_trainer.git
 cd ip_trainer
 npm install
 npm run dev
@@ -40,6 +40,7 @@ Visit `http://localhost:5173/ip_trainer/` and install as PWA for offline use!
 -   **Practice Mode**: Generate scenarios → solve missing fields
 -   **Input Mode**: Enter IP/subnet → calculate all parameters
 -   **Visual Feedback**: Color-coded validation (red/green/gray)
+-   **IP Address Hints**: Comprehensive reference for special addresses and ranges
 -   **Bilingual Interface**: German and English for international use
 
 ## 🛠️ Tech Stack
@@ -110,4 +111,4 @@ MIT © 2025 - Built with ❤️ for German IT Students
 
 ---
 
-**[Live Demo](https://manobrawn.github.io/ip_trainer/)** • **[Report Bug](https://github.com/Manobrawn/ip_trainer/issues)** • **[Request Feature](https://github.com/Manobrawn/ip_trainer/issues)**
+**[Live Demo](https://marceloruediger.github.io/ip_trainer/)** • **In-App Feedback** • **[GitHub Issues](https://github.com/MarceloRuediger/ip_trainer/issues)**

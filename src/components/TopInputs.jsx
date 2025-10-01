@@ -2,7 +2,6 @@ import { useLanguage } from "../contexts/LanguageContext";
 
 function TopInputs({
     ipData,
-    mode,
     handleInputChange,
     onIpInput,
     onCidrOrMaskInput,
@@ -10,8 +9,6 @@ function TopInputs({
     cidrValid,
     subnetMaskValid,
     attention,
-    userInput,
-    generated,
     userIsInputting,
     generatedField,
     renderValue,
@@ -20,7 +17,6 @@ function TopInputs({
 
     return (
         <div className="default-container">
-            {/* IPv4 Address - Full Width */}
             <div className="ipv4-address-container">
                 <label>
                     {t("topInputs.ipv4Address")}
@@ -34,7 +30,7 @@ function TopInputs({
                             attention && "attention",
                             ipValid === true ? "correct" : "",
                             ipValid === false ? "wrong" : "",
-                            !userIsInputting ? "attention" : "", // IP is always generated in practice mode
+                            !userIsInputting ? "attention" : "",
                         ]
                             .filter(Boolean)
                             .join(" ")}
@@ -42,7 +38,6 @@ function TopInputs({
                 </label>
             </div>
 
-            {/* CIDR (20%) and Subnet Mask (80%) on same line */}
             <div className="ipv4-row-cidr-subnet">
                 <div className="ipv4-cidr-container">
                     <label>

@@ -1,6 +1,43 @@
-// IPv6 addresses essential for German IHK Fachinformatiker exam
+const createRandomHexGroup = (maxValue = 0x1000, ensureNonZero = false) => {
+    const min = ensureNonZero ? 1 : 0;
+    return (Math.floor(Math.random() * (maxValue - min)) + min)
+        .toString(16)
+        .padStart(4, "0");
+};
+
+const generateRandomIPv6Parts = (count, hasNonZeroRequirement = true) => {
+    const parts = [];
+    let hasNonZero = false;
+
+    for (let i = 0; i < count; i++) {
+        if (i === count - 1 && !hasNonZero && hasNonZeroRequirement) {
+            parts.push(createRandomHexGroup(0x1000, true));
+            hasNonZero = true;
+        } else if (Math.random() < 0.3) {
+            parts.push("0000");
+        } else {
+            const group = createRandomHexGroup();
+            if (group !== "0000") hasNonZero = true;
+            parts.push(group);
+        }
+    }
+
+    return parts;
+};
+
+const validateIPv6Groups = (groups, fallbackAddress = "2001:db8::1") => {
+    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
+        return expandIPv6(fallbackAddress);
+    }
+
+    if (groups.every((group) => group === "0000")) {
+        return expandIPv6(fallbackAddress);
+    }
+
+    return groups.join(":");
+};
+
 const ihkEssentialIPv6Addresses = [
-    // === GRUNDLAGEN (Basics) - Critical for IHK ===
     {
         address: "::1",
         type: "Loopback",
@@ -8,7 +45,7 @@ const ihkEssentialIPv6Addresses = [
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
         range: "::1/128",
-        calculationSuitable: true, // Include for abbreviation learning - but rare
+        calculationSuitable: true,
     },
     {
         address: "::",
@@ -17,17 +54,15 @@ const ihkEssentialIPv6Addresses = [
         importance: "Critical",
         ihkTopic: "IPv6 Grundlagen",
         range: "::/128",
-        calculationSuitable: true, // Include for abbreviation learning - but rare
+        calculationSuitable: true,
     },
-
-    // === DOKUMENTATION - Critical for learning ===
     {
         address: "2001:db8::1",
         type: "Documentation",
         commonUse: "Dokumentations-/Beispieladresse",
         importance: "Critical",
         ihkTopic: "IPv6 Adressierung",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "2001:db8:0000::",
@@ -36,7 +71,7 @@ const ihkEssentialIPv6Addresses = [
         importance: "Critical",
         ihkTopic: "IPv6 Adressierung",
         range: "2001:db8::/32",
-        calculationSuitable: false, // Network address, not suitable for host calculations
+        calculationSuitable: false,
     },
     {
         address: "2001:db8:1::",
@@ -44,17 +79,15 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Dokumentations-Subnetz",
         importance: "Important",
         ihkTopic: "IPv6 Subnetze",
-        calculationSuitable: false, // Network address, not suitable for host calculations
+        calculationSuitable: false,
     },
-
-    // === LINK-LOCAL - Essential for IPv6 operation ===
     {
         address: "fe80::1",
         type: "Link-Local",
         commonUse: "Link-lokale Adresse (Router)",
         importance: "Critical",
         ihkTopic: "IPv6 Autokonfiguration",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "fe80:0000::",
@@ -63,17 +96,15 @@ const ihkEssentialIPv6Addresses = [
         importance: "Important",
         ihkTopic: "IPv6 Autokonfiguration",
         range: "fe80::/10",
-        calculationSuitable: false, // Network address, not suitable for host calculations
+        calculationSuitable: false,
     },
-
-    // === MULTICAST - Basic knowledge ===
     {
         address: "ff02::1",
         type: "Multicast",
         commonUse: "Alle Knoten (All Nodes)",
         importance: "Critical",
         ihkTopic: "IPv6 Multicast",
-        calculationSuitable: true, // Include for abbreviation learning - special case
+        calculationSuitable: true,
     },
     {
         address: "ff02::2",
@@ -81,17 +112,15 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Alle Router (All Routers)",
         importance: "Critical",
         ihkTopic: "IPv6 Multicast",
-        calculationSuitable: true, // Include for abbreviation learning - special case
+        calculationSuitable: true,
     },
-
-    // === UNIQUE LOCAL - Private addressing ===
     {
         address: "fd00::1",
         type: "ULA",
         commonUse: "Private IPv6 Adresse (ULA)",
         importance: "Important",
         ihkTopic: "IPv6 Private Adressen",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "fc00::1",
@@ -99,25 +128,23 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "ULA Zentral zugewiesen",
         importance: "Moderate",
         ihkTopic: "IPv6 Private Adressen",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
-
-    // === GLOBAL UNICAST - Real world examples (CRITICAL for network calculations) ===
     {
         address: "2001:4860:4860::8888",
         type: "Global Unicast",
         commonUse: "Google DNS primär",
-        importance: "Critical", // Elevated to Critical - very common in practice
+        importance: "Critical",
         ihkTopic: "IPv6 Praxis",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "2606:4700:4700::1111",
         type: "Global Unicast",
         commonUse: "Cloudflare DNS primär",
-        importance: "Critical", // Elevated to Critical - very common in practice
+        importance: "Critical",
         ihkTopic: "IPv6 Praxis",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "2001:4860:4860::8844",
@@ -125,7 +152,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Google DNS sekundär",
         importance: "Important",
         ihkTopic: "IPv6 Praxis",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "2606:4700:4700::1001",
@@ -133,7 +160,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Cloudflare DNS sekundär",
         importance: "Important",
         ihkTopic: "IPv6 Praxis",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "2001:500:2::c",
@@ -141,7 +168,7 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Root DNS Server (c.root-servers.net)",
         importance: "Important",
         ihkTopic: "IPv6 DNS Infrastruktur",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
     {
         address: "2001:503:ba3e::2:30",
@@ -149,95 +176,25 @@ const ihkEssentialIPv6Addresses = [
         commonUse: "Root DNS Server (a.root-servers.net)",
         importance: "Important",
         ihkTopic: "IPv6 DNS Infrastruktur",
-        calculationSuitable: true, // Good for network calculations
+        calculationSuitable: true,
     },
-
-    // === IPv4-MAPPED - Transition knowledge ===
     {
         address: "::ffff:192.0.2.1",
         type: "Global Unicast",
         commonUse: "IPv4-mapped IPv6 Adresse",
         importance: "Moderate",
         ihkTopic: "IPv4/IPv6 Übergang",
-        calculationSuitable: false, // Special transition address, not for normal calculations
+        calculationSuitable: false,
     },
 ];
 
-// Check if an IPv6 address is a special-purpose address unsuitable for calculations
-const isSpecialPurposeAddress = (address) => {
-    if (!address || typeof address !== "string") return true;
-
-    const addr = address.toLowerCase();
-
-    // All zeros (unspecified address)
-    if (addr === "0000:0000:0000:0000:0000:0000:0000:0000" || addr === "::") {
-        return true;
-    }
-
-    // Loopback
-    if (addr === "0000:0000:0000:0000:0000:0000:0000:0001" || addr === "::1") {
-        return true;
-    }
-
-    // Multicast addresses (ff00::/8)
-    if (addr.startsWith("ff")) {
-        return true;
-    }
-
-    // IPv4-mapped addresses
-    if (addr.includes("::ffff:")) {
-        return true;
-    }
-
-    // Check if it's effectively all zeros after expansion
-    const groups = addr.split(":");
-    if (groups.length === 8 && groups.every((group) => group === "0000")) {
-        return true;
-    }
-
-    return false;
-};
-
-// IPv6 addresses suitable for network calculations (filtered from essential list)
 const calculationSuitableIPv6Addresses = ihkEssentialIPv6Addresses.filter(
     (addr) => addr.calculationSuitable === true
 );
 
-// Simplified realistic prefixes for IHK exam focus
-const ihkRelevantPrefixes = [
-    // Documentation addresses - most common in training
-    "2001:db8:",
-    "2001:db8:1:",
-    "2001:db8:2:",
-    "2001:db8:a:",
-    "2001:db8:b:",
-    "2001:db8:10:",
-    "2001:db8:100:",
-
-    // Simple ULA patterns
-    "fd00:",
-    "fd01:",
-    "fd10:",
-    "fc00:",
-
-    // Basic Link-local
-    "fe80:",
-
-    // Simple Global Unicast for learning
-    "2001::",
-    "2002:",
-    "2003:",
-];
-
-// Educational IPv6 addresses for training (IHK focused)
-const specialIpv6Addresses = ihkEssentialIPv6Addresses;
-
-// Optimized IPv6 generation for IHK Fachinformatiker exam - calculation suitable only
 export const getRandomIPv6 = () => {
-    // First, directly check for special addresses with low probability
     const specialRand = Math.random();
 
-    // 3% chance for special addresses (rare but educational)
     if (specialRand < 0.03) {
         const specialAddresses = [
             { address: "::1", type: "Loopback" },
@@ -252,11 +209,9 @@ export const getRandomIPv6 = () => {
         return expandIPv6(chosen.address);
     }
 
-    // 50% must-know addresses (fe80::1, fd00::1, fc00::1, etc.), 47% realistic addresses (ZERO duplicate types)
     const useMustKnow = specialRand < 0.53;
 
     if (useMustKnow) {
-        // Only use addresses suitable for network calculations
         const critical = calculationSuitableIPv6Addresses.filter(
             (a) => a.importance === "Critical"
         );
@@ -267,39 +222,30 @@ export const getRandomIPv6 = () => {
             (a) => a.importance === "Moderate"
         );
 
-        // Ensure we have addresses available
         const allSuitable = [...critical, ...important, ...moderate];
         if (allSuitable.length === 0) {
-            // Fallback to generated address if no suitable addresses
             return generateDocumentationIPv6();
         }
 
         const poolRand = Math.random();
         let pool;
-        if (poolRand < 0.6 && critical.length > 0)
-            pool = critical; // 60% critical
-        else if (poolRand < 0.9 && important.length > 0)
-            pool = important; // 30% important
-        else if (moderate.length > 0) pool = moderate; // 10% moderate
-        else pool = allSuitable; // Fallback to any suitable address
+        if (poolRand < 0.6 && critical.length > 0) pool = critical;
+        else if (poolRand < 0.9 && important.length > 0) pool = important;
+        else if (moderate.length > 0) pool = moderate;
+        else pool = allSuitable;
 
         const chosen = pool[Math.floor(Math.random() * pool.length)];
-        // Always expand the address to ensure full form
         return expandIPv6(chosen.address);
     }
 
-    // Rebalanced realistic generation - MAXIMUM Global Unicast focus (no duplicate types)
     const rand = Math.random();
     if (rand < 0.38) {
-        // 38% - Global Unicast addresses (MAXIMIZED - no duplicates with must-know)
         return generateSimpleGlobalUnicast();
     } else {
-        // 15% - Documentation addresses (educational variety beyond must-know 2001:db8::1)
         return generateDocumentationIPv6();
     }
 };
 
-// Generate educational documentation IPv6 addresses
 const generateDocumentationIPv6 = () => {
     const prefixes = [
         "2001:db8:",
@@ -309,231 +255,76 @@ const generateDocumentationIPv6 = () => {
     ];
     const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
 
-    // Calculate remaining parts correctly
     const prefixParts = prefix.split(":").filter((part) => part !== "");
     const remainingParts = 8 - prefixParts.length;
 
-    // Ensure we have valid remaining parts
     if (remainingParts <= 0) {
-        // Fallback to a simple known good address
         return expandIPv6("2001:db8::1");
     }
 
-    // Generate simple, educational patterns - ensure at least one non-zero part
-    const parts = [];
-    let hasNonZero = false;
-
-    for (let i = 0; i < remainingParts; i++) {
-        if (i === remainingParts - 1 && !hasNonZero) {
-            // Ensure the last part is non-zero if all others are zero
-            const nonZeroValues = [
-                "0001",
-                "0010",
-                "0100",
-                "000a",
-                "00ab",
-                "0abc",
-            ];
-            parts.push(
-                nonZeroValues[Math.floor(Math.random() * nonZeroValues.length)]
-            );
-            hasNonZero = true;
-        } else if (Math.random() < 0.3) {
-            parts.push("0000"); // Some zeros for compression practice, but not all
-        } else if (Math.random() < 0.7) {
-            // Simple values for learning - pad to 4 digits
-            const simpleValues = [
-                "0001",
-                "0010",
-                "0100",
-                "000a",
-                "00ab",
-                "0abc",
-                "1000",
-                "0200",
-            ];
-            parts.push(
-                simpleValues[Math.floor(Math.random() * simpleValues.length)]
-            );
-            hasNonZero = true;
-        } else {
-            // Slightly more complex but still educational - ensure 4 digits and non-zero
-            const hex = (Math.floor(Math.random() * 0x1000) + 1) // +1 ensures non-zero
-                .toString(16)
-                .padStart(4, "0");
-            parts.push(hex);
-            hasNonZero = true;
-        }
-    }
+    const parts = generateRandomIPv6Parts(remainingParts);
 
     const fullAddress = prefix + parts.join(":");
     const expanded = expandIPv6(fullAddress);
-
-    // Validate the result - ensure it has exactly 8 groups and is not all zeros
     const groups = expanded.split(":");
-    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
-        // Fallback to a known good address if generation failed
-        return expandIPv6("2001:db8::1");
-    }
 
-    // Ensure it's not all zeros (:: address)
-    if (groups.every((group) => group === "0000")) {
-        return expandIPv6("2001:db8::1");
-    }
-
-    return expanded;
+    return validateIPv6Groups(groups, "2001:db8::1");
 };
 
-// Generate simple ULA addresses for private networking education - calculation suitable
 const generateSimpleULA = () => {
     const prefixes = ["fd00:", "fd01:", "fd10:", "fc00:"];
     const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
 
-    // Calculate remaining parts correctly - ULA prefixes have 1 part
-    const remainingParts = 7; // 8 total - 1 prefix part = 7 remaining
-
-    const parts = [];
-    let hasNonZero = false;
-
-    for (let i = 0; i < remainingParts; i++) {
-        if (i === remainingParts - 1 && !hasNonZero) {
-            // Ensure the last part is non-zero if all others are zero
-            parts.push("0001");
-            hasNonZero = true;
-        } else if (Math.random() < 0.4) {
-            parts.push("0000");
-        } else if (i === 6 && Math.random() < 0.3) {
-            parts.push("0001"); // Often ends with 1 - pad to 4 digits
-            hasNonZero = true;
-        } else {
-            const hex = (Math.floor(Math.random() * 0x100) + 1) // +1 ensures non-zero
-                .toString(16)
-                .padStart(4, "0");
-            parts.push(hex);
-            hasNonZero = true;
-        }
-    }
-
+    const parts = generateRandomIPv6Parts(7);
     const fullAddress = prefix + parts.join(":");
     const expanded = expandIPv6(fullAddress);
-
-    // Validate the result - ensure it has exactly 8 groups and is not all zeros
     const groups = expanded.split(":");
-    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
-        // Fallback to a known good ULA address if generation failed
-        return expandIPv6("fd00::1");
-    }
 
-    // Ensure it's not effectively all zeros (except prefix)
-    const nonPrefixGroups = groups.slice(1); // Skip the first group (prefix)
-    if (nonPrefixGroups.every((group) => group === "0000")) {
-        return expandIPv6("fd00::1");
-    }
-
-    return expanded;
+    return validateIPv6Groups(groups, "fd00::1");
 };
 
-// Generate simple Link-Local addresses
 const generateSimpleLinkLocal = () => {
-    // Link-local addresses start with fe80:0000:0000:0000
     const parts = ["fe80", "0000", "0000", "0000"];
+    const interfaceParts = generateRandomIPv6Parts(4, false);
 
-    // Add 4 more parts with simple patterns for the interface identifier
-    for (let i = 0; i < 4; i++) {
-        if (Math.random() < 0.4) {
-            parts.push("0000");
-        } else if (i === 3 && Math.random() < 0.3) {
-            parts.push("0001"); // Often ends with 1 - pad to 4 digits
-        } else {
-            const hex = Math.floor(Math.random() * 0x1000)
-                .toString(16)
-                .padStart(4, "0");
-            parts.push(hex);
-        }
-    }
-
-    const fullAddress = parts.join(":");
+    const fullAddress = [...parts, ...interfaceParts].join(":");
     const expanded = expandIPv6(fullAddress);
-
-    // Validate the result - ensure it has exactly 8 groups
     const groups = expanded.split(":");
-    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
-        // Fallback to a known good link-local address if generation failed
-        return expandIPv6("fe80::1");
-    }
 
-    return expanded;
+    return validateIPv6Groups(groups, "fe80::1");
 };
 
-// Generate simple Global Unicast addresses for education - calculation suitable
 const generateSimpleGlobalUnicast = () => {
-    // Start with 2xxx for Global Unicast
     const firstPart =
         "2" +
         Math.floor(Math.random() * 0x100)
             .toString(16)
             .padStart(3, "0");
-    const parts = [firstPart];
+    const remainingParts = generateRandomIPv6Parts(7);
 
-    // Generate 7 more parts for a complete IPv6 address - ensure at least one non-zero
-    let hasNonZero = false;
-    for (let i = 0; i < 7; i++) {
-        if (i === 6 && !hasNonZero) {
-            // Ensure the last part is non-zero if all others are zero
-            const hex = (Math.floor(Math.random() * 0x1000) + 1)
-                .toString(16)
-                .padStart(4, "0");
-            parts.push(hex);
-            hasNonZero = true;
-        } else if (Math.random() < 0.4) {
-            parts.push("0000"); // Some zeros for compression
-        } else {
-            const hex = (Math.floor(Math.random() * 0x1000) + 1) // +1 ensures non-zero
-                .toString(16)
-                .padStart(4, "0");
-            parts.push(hex);
-            hasNonZero = true;
-        }
-    }
-
-    const fullAddress = parts.join(":");
+    const fullAddress = [firstPart, ...remainingParts].join(":");
     const expanded = expandIPv6(fullAddress);
-
-    // Validate the result - ensure it has exactly 8 groups and is not all zeros
     const groups = expanded.split(":");
-    if (groups.length !== 8 || groups.some((group) => group.length !== 4)) {
-        // Fallback to a known good global unicast address if generation failed
-        return expandIPv6("2001:db8::1");
-    }
 
-    // Ensure it's not effectively all zeros (except first part)
-    const nonFirstGroups = groups.slice(1);
-    if (nonFirstGroups.every((group) => group === "0000")) {
-        return expandIPv6("2001:db8::1");
-    }
-
-    return expanded;
+    return validateIPv6Groups(groups, "2001:db8::1");
 };
 
 export const abbreviateIPv6 = (ipv6) => {
     if (!ipv6 || typeof ipv6 !== "string") return ipv6;
 
-    // Validate input first
     const inputGroups = ipv6.split(":");
     if (
         inputGroups.length !== 8 ||
         inputGroups.some((group) => !/^[0-9a-fA-F]{4}$/.test(group))
     ) {
         console.warn("Invalid IPv6 address for abbreviation:", ipv6);
-        return ipv6; // Return as-is if invalid
+        return ipv6;
     }
 
-    // Split into groups and remove leading zeros from each group
     let groups = ipv6
         .split(":")
         .map((group) => group.replace(/^0+/, "") || "0");
 
-    // Find all sequences of consecutive zero groups
     let zeroSequences = [];
     let currentStart = -1;
     let currentLength = 0;
@@ -558,14 +349,11 @@ export const abbreviateIPv6 = (ipv6) => {
         }
     }
 
-    // Check the last sequence
     if (currentLength >= 2) {
         zeroSequences.push({ start: currentStart, length: currentLength });
     }
 
-    // If we have zero sequences to compress
     if (zeroSequences.length > 0) {
-        // Find the longest sequence. If there's a tie, choose the leftmost one.
         let maxSequence = zeroSequences.reduce((max, current) => {
             if (current.length > max.length) {
                 return current;
@@ -578,27 +366,21 @@ export const abbreviateIPv6 = (ipv6) => {
             return max;
         });
 
-        // Create the abbreviated address
         let result;
 
         if (maxSequence.start === 0) {
-            // Zero sequence starts at the beginning
             if (maxSequence.length === 8) {
-                // All zeros
                 result = "::";
             } else {
-                // Leading zeros
                 const afterGroups = groups.slice(
                     maxSequence.start + maxSequence.length
                 );
                 result = "::" + afterGroups.join(":");
             }
         } else if (maxSequence.start + maxSequence.length === 8) {
-            // Zero sequence is at the end
             const beforeGroups = groups.slice(0, maxSequence.start);
             result = beforeGroups.join(":") + "::";
         } else {
-            // Zero sequence is in the middle
             const beforeGroups = groups.slice(0, maxSequence.start);
             const afterGroups = groups.slice(
                 maxSequence.start + maxSequence.length
@@ -609,7 +391,6 @@ export const abbreviateIPv6 = (ipv6) => {
         return result;
     }
 
-    // If no compression possible, just return without leading zeros
     return groups.join(":");
 };
 
@@ -617,49 +398,42 @@ export const expandIPv6 = (abbreviatedIPv6) => {
     if (!abbreviatedIPv6 || typeof abbreviatedIPv6 !== "string")
         return abbreviatedIPv6;
 
-    // Handle edge cases
     if (
         abbreviatedIPv6 === ":" ||
         abbreviatedIPv6 === "" ||
         abbreviatedIPv6.startsWith(":::")
     ) {
         console.warn("Invalid IPv6 input for expansion:", abbreviatedIPv6);
-        return "0000:0000:0000:0000:0000:0000:0000:0001"; // Return a fallback valid address
+        return "0000:0000:0000:0000:0000:0000:0000:0001";
     }
 
     let ipv6 = abbreviatedIPv6;
 
-    // Handle double colon expansion
     if (ipv6.includes("::")) {
         const parts = ipv6.split("::");
         const leftPart = parts[0] ? parts[0].split(":") : [];
         const rightPart = parts[1] ? parts[1].split(":") : [];
 
-        // Remove empty strings from parts
         const leftFiltered = leftPart.filter((part) => part !== "");
         const rightFiltered = rightPart.filter((part) => part !== "");
 
         const missingGroups = 8 - leftFiltered.length - rightFiltered.length;
 
-        // Ensure we have a valid number of missing groups
         if (missingGroups < 0) {
             console.warn(
                 "Invalid IPv6 format - too many groups:",
                 abbreviatedIPv6
             );
-            return "0000:0000:0000:0000:0000:0000:0000:0001"; // Return fallback
+            return "0000:0000:0000:0000:0000:0000:0000:0001";
         }
 
         const zeroGroups = Array(missingGroups).fill("0000");
-
         const fullGroups = [...leftFiltered, ...zeroGroups, ...rightFiltered];
         ipv6 = fullGroups.join(":");
     }
 
-    // Pad each group to 4 digits
     const groups = ipv6.split(":");
 
-    // Validate we have exactly 8 groups
     if (groups.length !== 8) {
         console.warn(
             "Invalid IPv6 format - wrong number of groups:",
@@ -667,14 +441,13 @@ export const expandIPv6 = (abbreviatedIPv6) => {
             "groups:",
             groups.length
         );
-        return "0000:0000:0000:0000:0000:0000:0000:0001"; // Return fallback
+        return "0000:0000:0000:0000:0000:0000:0000:0001";
     }
 
     const paddedGroups = groups.map((group) => {
-        // Validate each group contains only hex characters
         if (!/^[0-9a-fA-F]*$/.test(group)) {
             console.warn("Invalid hex characters in group:", group);
-            return "0000"; // Replace invalid group with zeros
+            return "0000";
         }
         return group.padStart(4, "0");
     });
@@ -682,13 +455,11 @@ export const expandIPv6 = (abbreviatedIPv6) => {
     return paddedGroups.join(":");
 };
 
-// Helper function to determine IPv6 address type
 export const getIPv6AddressType = (ipv6) => {
     if (!ipv6) return "Unknown";
 
     const address = ipv6.toLowerCase();
 
-    // Loopback - handle both abbreviated and full forms
     if (
         address === "::1" ||
         address === "0000:0000:0000:0000:0000:0000:0000:0001"
@@ -696,7 +467,6 @@ export const getIPv6AddressType = (ipv6) => {
         return "Loopback";
     }
 
-    // Unspecified - handle both abbreviated and full forms
     if (
         address === "::" ||
         address === "0000:0000:0000:0000:0000:0000:0000:0000"
@@ -704,15 +474,12 @@ export const getIPv6AddressType = (ipv6) => {
         return "Unspecified";
     }
 
-    // Documentation addresses (2001:db8::/32)
     if (address.startsWith("2001:db8:") || address.startsWith("2001:0db8:")) {
         return "Documentation";
     }
 
-    // Multicast (ff00::/8)
     if (address.startsWith("ff")) return "Multicast";
 
-    // Link-Local (fe80::/10)
     if (
         address.startsWith("fe8") ||
         address.startsWith("fe9") ||
@@ -722,62 +489,44 @@ export const getIPv6AddressType = (ipv6) => {
         return "Link-Local";
     }
 
-    // Unique Local (fc00::/7) - now returns "ULA"
     if (address.startsWith("fc") || address.startsWith("fd")) {
         return "ULA";
     }
 
-    // Global Unicast (everything else, primarily 2000::/3)
     return "Global Unicast";
 };
 
-// Helper function to calculate network address
 export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
     if (!ipv6 || !prefixLength) return "";
 
     try {
-        // Expand the IPv6 address first
         const expanded = expandIPv6(ipv6);
         const groups = expanded.split(":");
-
         const prefix = parseInt(prefixLength.replace("/", ""));
-
-        // Calculate which group the prefix ends in and how many bits
         const completeGroups = Math.floor(prefix / 16);
         const remainingBits = prefix % 16;
-
-        // Build the network address
         const networkGroups = [];
-
-        // Add complete groups (remove leading zeros)
         for (let i = 0; i < completeGroups; i++) {
             const cleanGroup = groups[i].replace(/^0+/, "") || "0";
             networkGroups.push(cleanGroup);
         }
 
-        // Handle partial group if prefix doesn't align with group boundary
         if (remainingBits > 0 && completeGroups < 8) {
             const partialGroup = groups[completeGroups];
             const decimal = parseInt(partialGroup, 16);
             const binary = decimal.toString(2).padStart(16, "0");
-
-            // Keep only the network bits (don't add trailing zeros for host portion)
             const networkBits = binary.substring(0, remainingBits);
             const networkDecimal = parseInt(networkBits, 2);
 
-            // Only add the partial group if it's not zero
             if (networkDecimal > 0) {
                 const networkHex = networkDecimal.toString(16);
                 networkGroups.push(networkHex);
             }
         }
 
-        // Create the network address
         if (networkGroups.length === 0) {
             return "::";
         }
-
-        // For /128, we have the complete address - return properly abbreviated form
         if (prefix === 128) {
             const fullAddress = networkGroups
                 .map((group) => group.padStart(4, "0"))
@@ -785,10 +534,7 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
             return abbreviateIPv6(fullAddress);
         }
 
-        // For partial networks, create and abbreviate the network portion
         const networkWithZeros = networkGroups.join(":") + "::";
-
-        // Try to abbreviate the network address properly
         const paddedGroups = [...networkGroups];
         while (paddedGroups.length < 8) {
             paddedGroups.push("0000");
@@ -798,8 +544,6 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
             .join(":");
 
         const abbreviated = abbreviateIPv6(fullNetworkAddress);
-
-        // If abbreviation gives us the same or better result, use it
         if (abbreviated.length <= networkWithZeros.length) {
             return abbreviated;
         }
@@ -811,36 +555,24 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
     }
 };
 
-// Helper function to calculate Interface ID (last 64 bits of IPv6 address)
-// Calculate the Interface-Anteil (interface portion) from an IPv6 address
 export const calculateInterfaceId = (ipv6, prefixLength = 64) => {
     if (!ipv6) return "";
 
     try {
-        // For prefixes >= 65, there's no interface portion (all bits are network/host)
-        // Standard IPv6 has 64-bit interface portion, so only /65 and higher have no interface
         if (prefixLength >= 65) {
             return "kein";
         }
 
-        // Expand the IPv6 address first
         const expanded = expandIPv6(ipv6);
         const groups = expanded.split(":");
-
-        // Get the last 4 groups (64 bits) - the interface portion (Interface-Anteil)
         const interfaceGroups = groups.slice(4);
-
-        // Remove leading zeros from each group
         const cleanedGroups = interfaceGroups.map(
             (group) => group.replace(/^0+/, "") || "0"
         );
-
-        // Check if all groups are zero
         if (cleanedGroups.every((group) => group === "0")) {
             return "::";
         }
 
-        // Find the longest sequence of consecutive zero groups for compression
         let maxZeroStart = -1;
         let maxZeroLength = 0;
         let currentZeroStart = -1;
@@ -855,7 +587,6 @@ export const calculateInterfaceId = (ipv6, prefixLength = 64) => {
                     currentZeroLength++;
                 }
             } else {
-                // End of current zero sequence
                 if (currentZeroLength > maxZeroLength) {
                     maxZeroStart = currentZeroStart;
                     maxZeroLength = currentZeroLength;
@@ -865,13 +596,10 @@ export const calculateInterfaceId = (ipv6, prefixLength = 64) => {
             }
         }
 
-        // Check if the last sequence was the longest
         if (currentZeroLength > maxZeroLength) {
             maxZeroStart = currentZeroStart;
             maxZeroLength = currentZeroLength;
         }
-
-        // Only compress if we have 2 or more consecutive zeros
         if (maxZeroLength >= 2) {
             const before = cleanedGroups.slice(0, maxZeroStart);
             const after = cleanedGroups.slice(maxZeroStart + maxZeroLength);
@@ -887,7 +615,6 @@ export const calculateInterfaceId = (ipv6, prefixLength = 64) => {
             }
         }
 
-        // No compression needed - return the interface groups without leading zeros
         return cleanedGroups.join(":");
     } catch (error) {
         console.error("Error calculating interface ID:", error);
@@ -895,39 +622,28 @@ export const calculateInterfaceId = (ipv6, prefixLength = 64) => {
     }
 };
 
-// Calculate the Subnet-Anteil (subnet portion) from an IPv6 address
 export const calculateSubnetId = (ipv6, prefixLength = 64) => {
     if (!ipv6) return "";
 
     try {
-        // Expand the IPv6 address first
         const expanded = expandIPv6(ipv6);
         const groups = expanded.split(":");
 
-        // The subnet portion depends on the prefix length
-        // IPv6 structure: Network + Subnet + Interface (last 64 bits)
-        // Interface is always the last 64 bits (groups 5-8)
-        // Network + Subnet = first 64 bits (groups 1-4)
-
         if (prefixLength >= 64) {
-            // For /64 or longer prefixes, there's no subnet portion - it's all network
             return "kein";
         }
 
-        // Calculate how many bits are available for subnet (between network and interface)
-        const interfaceStartBit = 64; // Interface always starts at bit 64
+        const interfaceStartBit = 64;
         const subnetStartBit = prefixLength;
         const subnetBits = interfaceStartBit - subnetStartBit;
 
         if (subnetBits <= 0) {
-            return "kein"; // No subnet space available
+            return "kein";
         }
 
-        // Determine which groups contain the subnet portion
         const subnetStartGroup = Math.floor(subnetStartBit / 16);
         const subnetEndGroup = Math.floor((interfaceStartBit - 1) / 16);
 
-        // Extract subnet groups
         const subnetGroups = [];
         for (let i = subnetStartGroup; i <= subnetEndGroup; i++) {
             if (i < groups.length) {
@@ -937,31 +653,20 @@ export const calculateSubnetId = (ipv6, prefixLength = 64) => {
             }
         }
 
-        // For educational purposes, show the complete subnet representation
         if (subnetGroups.length === 1) {
-            // Single group subnet (e.g., /48 to /64)
             const group = subnetGroups[0];
-
-            // Check if we need partial group handling
             const bitsInFirstGroup = subnetStartBit % 16;
             const bitsInLastGroup = interfaceStartBit % 16;
 
             if (bitsInFirstGroup === 0 && bitsInLastGroup === 0) {
-                // Complete group
                 return group.toLowerCase();
             } else {
-                // Partial group - extract only subnet bits
                 const groupValue = parseInt(group, 16);
                 const groupBinary = groupValue.toString(2).padStart(16, "0");
-
                 const startBit = bitsInFirstGroup;
                 const endBit = bitsInLastGroup === 0 ? 16 : bitsInLastGroup;
-
                 const subnetBinary = groupBinary.substring(startBit, endBit);
                 const subnetValue = parseInt(subnetBinary, 2);
-
-                // For subnet portions, show the actual hex value without unnecessary padding
-                // The number of hex digits should reflect the actual number of bits
                 const subnetBits = endBit - startBit;
                 const hexDigits = Math.ceil(subnetBits / 4);
 
@@ -971,8 +676,6 @@ export const calculateSubnetId = (ipv6, prefixLength = 64) => {
                     .toLowerCase();
             }
         } else {
-            // Multiple group subnet (e.g., /32 has 32-bit subnet = 2 groups)
-            // Return all subnet groups joined with colons
             const cleanedGroups = subnetGroups.map((group) =>
                 group.toLowerCase()
             );
@@ -982,7 +685,8 @@ export const calculateSubnetId = (ipv6, prefixLength = 64) => {
         console.error("Error calculating subnet ID:", error);
         return "";
     }
-}; // Helper function to calculate possible subnets based on prefix length
+};
+
 export const calculateIPv6NetworkData = (ipv6, prefix) => {
     if (!ipv6 || !prefix) {
         return {
@@ -995,7 +699,6 @@ export const calculateIPv6NetworkData = (ipv6, prefix) => {
     const addressType = getIPv6AddressType(ipv6);
     const prefixLength = parseInt(prefix.replace("/", ""));
 
-    // Special handling for loopback and unspecified addresses with /128
     if (
         (addressType === "Loopback" || addressType === "Unspecified") &&
         prefixLength === 128
@@ -1023,105 +726,10 @@ export const resetInputBorders = () => {
     });
 };
 
-// Get educational hints for IPv6 address types (helpful for IHK students)
-export const getIPv6EducationalHints = (ipv6, prefix) => {
-    if (!ipv6) return null;
-
-    const addressType = getIPv6AddressType(ipv6);
-    const prefixNum = prefix ? parseInt(prefix.replace("/", "")) : null;
-
-    const hints = {
-        type: addressType,
-        hints: [],
-        educational: true,
-    };
-
-    switch (addressType) {
-        case "Global Unicast":
-            hints.hints.push("🌍 Internet-routbare Adresse");
-            if (prefixNum === 64) {
-                hints.hints.push("🏠 Typische Endnetz-Größe für SLAAC");
-            }
-            break;
-
-        case "Documentation":
-            hints.hints.push(
-                "📚 RFC 3849 Dokumentationsadresse - nur für Beispiele!"
-            );
-            hints.hints.push("🎓 Perfekt zum Lernen von IPv6-Konzepten");
-            hints.hints.push("🚫 Niemals im produktiven Internet verwenden");
-            if (prefixNum === 64) {
-                hints.hints.push("🏠 Typische Endnetz-Größe für SLAAC");
-            }
-            break;
-
-        case "Link-Local":
-            hints.hints.push("🔗 Nur im lokalen Netzwerksegment gültig");
-            hints.hints.push(
-                "⚙️ Automatisch auf jeder IPv6-Schnittstelle konfiguriert"
-            );
-            hints.hints.push("🚫 Wird nicht geroutet");
-            break;
-
-        case "ULA":
-            hints.hints.push("🏢 Private IPv6-Adressen (wie RFC 1918 in IPv4)");
-            hints.hints.push("🔒 Nicht im Internet routbar");
-            if (ipv6.toLowerCase().startsWith("fd")) {
-                hints.hints.push("🎲 Lokal generiert (häufigste Form)");
-            }
-            break;
-
-        case "Multicast":
-            hints.hints.push("📢 Ein-zu-viele Kommunikation");
-            hints.hints.push("🔄 Ersetzt IPv4-Broadcast");
-            if (ipv6.toLowerCase() === "ff02::1") {
-                hints.hints.push("👥 Alle IPv6-Knoten (All Nodes)");
-            }
-            if (ipv6.toLowerCase() === "ff02::2") {
-                hints.hints.push("🗂️ Alle IPv6-Router (All Routers)");
-            }
-            break;
-
-        case "Loopback":
-            hints.hints.push("🔄 IPv6 Localhost (wie 127.0.0.1 in IPv4)");
-            hints.hints.push("🏠 Verweist immer auf den lokalen Rechner");
-            break;
-
-        case "Unspecified":
-            hints.hints.push(
-                "❓ Unspezifizierte Adresse (wie 0.0.0.0 in IPv4)"
-            );
-            hints.hints.push(
-                "🚀 Wird bei der automatischen Konfiguration verwendet"
-            );
-            break;
-    }
-
-    // Add prefix-specific hints
-    if (prefixNum) {
-        if (prefixNum === 128) {
-            hints.hints.push("🎯 Host-Adresse (keine Subnetze möglich)");
-        } else if (prefixNum === 64) {
-            hints.hints.push("📱 Standard-Subnetzgröße für IPv6-Endnetze");
-        } else if (prefixNum === 48) {
-            hints.hints.push(
-                "🏢 Typische Unternehmenszuteilung (65.536 /64-Subnetze)"
-            );
-        } else if (prefixNum === 56) {
-            hints.hints.push(
-                "🏠 Kleine Unternehmen/Privathaushalte (256 /64-Subnetze)"
-            );
-        }
-    }
-
-    return hints;
-};
-
-// Get educational information about the IPv6 address
 export const getIPv6AddressInfo = (ipv6) => {
     if (!ipv6) return null;
 
-    const specialAddress = specialIpv6Addresses.find(
+    const specialAddress = ihkEssentialIPv6Addresses.find(
         (addr) =>
             expandIPv6(addr.address.toLowerCase()) ===
             expandIPv6(ipv6.toLowerCase())
@@ -1185,57 +793,45 @@ export const getIPv6AddressInfo = (ipv6) => {
     };
 };
 
-// IHK-focused prefix generation for educational purposes
 export const generateIPv6Prefix = (ipv6) => {
     if (!ipv6) return "/64";
 
     const addressType = getIPv6AddressType(ipv6);
     const address = ipv6.toLowerCase();
 
-    // Special addresses have specific prefix lengths per RFC standards
-    // Handle both abbreviated and full forms
     if (
         address === "::1" ||
         address === "0000:0000:0000:0000:0000:0000:0000:0001" ||
         address === "::" ||
         address === "0000:0000:0000:0000:0000:0000:0000:0000"
     ) {
-        return "/128"; // Host addresses (Loopback and Unspecified)
+        return "/128";
     }
 
     switch (addressType) {
         case "Link-Local":
-            // Link-Local addresses are always /64 (RFC 4291, Section 2.5.6)
-            // fe80::/10 is the overall range, but individual addresses use /64
             return "/64";
 
         case "ULA":
-            // For IHK: Focus on practical business scenarios
             const ulaOptions = ["/48", "/56", "/64"];
-            const ulaWeights = [0.5, 0.25, 0.25]; // Favor /48 for enterprise scenarios
+            const ulaWeights = [0.5, 0.25, 0.25];
             return weightedRandomChoice(ulaOptions, ulaWeights);
 
         case "Documentation":
-            // Documentation addresses - focus on most educational prefixes
             const docOptions = ["/48", "/56", "/64"];
-            const docWeights = [0.2, 0.3, 0.5]; // Heavy focus on /64 for learning
+            const docWeights = [0.2, 0.3, 0.5];
             return weightedRandomChoice(docOptions, docWeights);
 
         case "Multicast":
-            // Multicast range is ff00::/8, but individual addresses are /128
-            // For education: show both the range concept and specific addresses
             if (address.startsWith("ff")) {
-                // For specific multicast addresses, use /128
                 return "/128";
             } else {
-                // For general multicast range
                 return "/8";
             }
 
         case "Global Unicast":
-            // For other Global Unicast - IHK relevant sizes only
             const globalOptions = ["/32", "/48", "/56", "/64"];
-            const globalWeights = [0.1, 0.3, 0.25, 0.35]; // Practical distribution
+            const globalWeights = [0.1, 0.3, 0.25, 0.35];
             return weightedRandomChoice(globalOptions, globalWeights);
 
         case "Loopback":
@@ -1243,12 +839,10 @@ export const generateIPv6Prefix = (ipv6) => {
             return "/128";
 
         default:
-            // Default to /64 (most important for IHK)
             return "/64";
     }
 };
 
-// Helper function for weighted random selection
 const weightedRandomChoice = (options, weights) => {
     let random = Math.random();
     let cumulativeWeight = 0;
@@ -1260,25 +854,17 @@ const weightedRandomChoice = (options, weights) => {
         }
     }
 
-    return options[options.length - 1]; // Fallback
+    return options[options.length - 1];
 };
 
-// Simplified generation for IHK Fachinformatiker exam focus - calculation suitable only
 export const generateIPv6WithPrefix = () => {
-    // Use the same generation logic as getRandomIPv6() to ensure special addresses appear
     const ipv6 = getRandomIPv6();
-
-    // Generate appropriate prefix for this address
     const targetPrefix = generateIPv6Prefix(ipv6);
 
-    // Ensure we always have both full and abbreviated forms
-    const fullAddress = expandIPv6(ipv6); // Always expand to full form
-    const abbreviatedAddress = abbreviateIPv6(fullAddress); // Create proper abbreviation
-
-    // Determine the actual type of the generated address
+    const fullAddress = expandIPv6(ipv6);
+    const abbreviatedAddress = abbreviateIPv6(fullAddress);
     const actualType = getIPv6AddressType(fullAddress);
 
-    // Final validation - ensure we have valid addresses (allow special addresses now)
     if (
         !isValidIPv6Address(fullAddress) ||
         !abbreviatedAddress ||
@@ -1289,7 +875,6 @@ export const generateIPv6WithPrefix = () => {
             fullAddress,
             abbreviatedAddress
         );
-        // Use a known good fallback suitable for calculations
         const fallbackFull = "2001:0db8:0000:0000:0000:0000:0000:0001";
         const fallbackAbbrev = "2001:db8::1";
         return {
@@ -1302,7 +887,7 @@ export const generateIPv6WithPrefix = () => {
     }
 
     return {
-        ipv6: fullAddress, // Always return full address as base
+        ipv6: fullAddress,
         prefix: targetPrefix,
         abbreviated: abbreviatedAddress,
         networkData: calculateIPv6NetworkData(fullAddress, targetPrefix),
@@ -1310,74 +895,34 @@ export const generateIPv6WithPrefix = () => {
     };
 };
 
-// Generate educational multicast addresses for IHK
 const generateEducationalMulticast = () => {
-    const commonMulticast = [
-        "ff02::1", // All nodes - critical for IHK
-        "ff02::2", // All routers - critical for IHK
-        "ff01::1", // Interface-local all nodes
-        "ff05::2", // Site-local all routers
-    ];
+    const commonMulticast = ["ff02::1", "ff02::2", "ff01::1", "ff05::2"];
 
     if (Math.random() < 0.8) {
-        // 80% chance of well-known multicast (educational)
         const chosen =
             commonMulticast[Math.floor(Math.random() * commonMulticast.length)];
-        return expandIPv6(chosen); // Ensure full format
+        return expandIPv6(chosen);
     } else {
-        // 20% chance of simple custom multicast
-        const scopes = ["1", "2", "5", "8"]; // Interface, Link, Site, Organization
+        const scopes = ["1", "2", "5", "8"];
         const scope = scopes[Math.floor(Math.random() * scopes.length)];
-        const customAddress = `ff0${scope}::${Math.floor(Math.random() * 0x100)
-            .toString(16)
-            .padStart(4, "0")}`;
-        return expandIPv6(customAddress); // Ensure full format
+        const customAddress = `ff0${scope}::${createRandomHexGroup()}`;
+        return expandIPv6(customAddress);
     }
 };
 
-// Generate specific Link-Local address optimized for IHK learning
-const generateLinkLocalAddress = () => {
-    // Use the new simplified function
-    return generateSimpleLinkLocal();
-};
-
-// Generate specific Multicast address optimized for IHK learning
-const generateMulticastAddress = () => {
-    // Use the new educational function
-    return generateEducationalMulticast();
-};
-
-// Generate specific ULA address optimized for IHK learning
-const generateULAAddress = () => {
-    // Use the new simplified function
-    return generateSimpleULA();
-};
-
-// Generate specific Global Unicast address optimized for IHK learning
-const generateGlobalUnicastAddress = () => {
-    // Focus on documentation addresses for education
-    return generateDocumentationIPv6();
-};
-
-// Validate if a string is a complete IPv6 address
 export const isValidIPv6Address = (address) => {
     if (!address || typeof address !== "string") return false;
 
-    // Handle special cases
-    if (address === "::") return true; // Unspecified address
-    if (address === "::1") return true; // Loopback
+    if (address === "::" || address === "::1") return true;
 
-    // Basic IPv6 format validation
     const ipv6Regex =
         /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$|^::$|^([0-9a-fA-F]{0,4}:){1,7}:$|^:([0-9a-fA-F]{0,4}:){1,7}$/;
     const fullFormatRegex = /^([0-9a-fA-F]{4}:){7}[0-9a-fA-F]{4}$/;
 
-    // Check if it matches basic patterns
     if (!ipv6Regex.test(address) && !fullFormatRegex.test(address)) {
         return false;
     }
 
-    // Additional validation: ensure we have exactly 8 groups when expanded
     try {
         const expanded = expandIPv6(address);
         const groups = expanded.split(":");
@@ -1392,21 +937,17 @@ export const isValidIPv6Address = (address) => {
     }
 };
 
-// Check if an address is a network prefix (incomplete address)
 export const isNetworkPrefix = (address) => {
     if (!address || typeof address !== "string") return false;
 
-    // Ends with :: or has fewer than 8 groups when not using ::
     if (address.endsWith("::") && address !== "::") return true;
 
-    // Count colons to estimate if it's incomplete
     const colonCount = (address.match(/:/g) || []).length;
     if (!address.includes("::") && colonCount < 7) return true;
 
     return false;
 };
 
-// IHK-focused IPv6 prefix information for German students
 export const getIPv6PrefixInfo = (prefix) => {
     const prefixNum = parseInt(prefix.replace("/", ""));
 
@@ -1493,132 +1034,6 @@ export const getIPv6PrefixInfo = (prefix) => {
     }
 };
 
-// IPv6 Special Purpose Addresses for IHK Fachinformatiker exam
-const specialPurposeAddresses = [
-    // LOOPBACK - Critical for exam
-    {
-        address: "::1",
-        commonUse: "IPv6 Localhost/Loopback",
-        importance: "Critical",
-        category: "Loopback",
-        range: "::1/128",
-        specialRules:
-            "Verweist immer auf den lokalen Rechner, entspricht 127.0.0.1 in IPv4",
-    },
-
-    // UNSPECIFIED - Critical concept (equivalent to 0.0.0.0)
-    {
-        address: "::",
-        commonUse: "Unspezifizierte Adresse",
-        importance: "Critical",
-        category: "Unspecified",
-        range: "::/128",
-        specialRules: "Unspezifizierte Adresse, entspricht 0.0.0.0 in IPv4",
-    },
-
-    // DOCUMENTATION - Critical for learning (equivalent to test networks)
-    {
-        address: "2001:db8::",
-        commonUse: "Dokumentationsbereich",
-        importance: "Critical",
-        category: "Documentation",
-        range: "2001:db8::/32",
-        specialRules:
-            "RFC 3849 - Ausschließlich für Dokumentation und Beispiele, entspricht 192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24 in IPv4",
-    },
-
-    // LINK-LOCAL - Critical for IPv6 operation (equivalent to APIPA)
-    {
-        address: "fe80::",
-        commonUse: "Link-lokale Adressen",
-        importance: "Critical",
-        category: "Link-Local",
-        range: "fe80::/10",
-        specialRules:
-            "Automatisch konfiguriert, entspricht APIPA (169.254.0.0/16) in IPv4",
-    },
-
-    // UNIQUE LOCAL - Critical for private networks (equivalent to RFC 1918)
-    {
-        address: "fc00:0000::",
-        commonUse: "ULA Central Network",
-        importance: "Important",
-        category: "Private Networks",
-        range: "fc00::/7",
-        specialRules:
-            "Zentral zugewiesene private IPv6-Adressen (seltener verwendet), entspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
-    },
-    {
-        address: "fd00:0000::",
-        commonUse: "ULA Local Network",
-        importance: "Critical",
-        category: "Private Networks",
-        range: "fc00::/7",
-        specialRules:
-            "Meist verwendete private IPv6-Adressen in Unternehmen, entspricht RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) in IPv4",
-    },
-
-    // GLOBAL UNICAST - Critical for understanding (equivalent to public IPv4)
-    {
-        address: "2001::",
-        commonUse: "Global Unicast 2xxx - Häufigster ISP-Bereich",
-        importance: "Critical",
-        category: "Global Unicast",
-        range: "2000::/3",
-        specialRules:
-            "Internet-routbare IPv6-Adressen, häufig von ISPs zugewiesen, entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)",
-    },
-    {
-        address: "3000::",
-        commonUse: "Global Unicast 3xxx - Weiterer Global Bereich",
-        importance: "Important",
-        category: "Global Unicast",
-        range: "2000::/3",
-        specialRules:
-            "Weiterer Global Unicast Adressbereich, Internet-routbar, entspricht öffentlichen IPv4-Adressen (Klasse A, B, C)",
-    },
-
-    // MULTICAST - Important concept (equivalent to Class D)
-    {
-        address: "ff00:0000::",
-        commonUse: "Multicast Network",
-        importance: "Critical",
-        category: "Multicast",
-        range: "ff00::/8",
-        specialRules:
-            "Gruppenkommunkation, ersetzt IPv4-Broadcast, entspricht Klasse D (224.0.0.0/4) in IPv4",
-    },
-    {
-        address: "ff02::1",
-        commonUse: "Alle IPv6-Knoten (All Nodes)",
-        importance: "Important",
-        category: "Multicast",
-        range: "ff00::/8",
-        specialRules:
-            "Ersetzt IPv4-Broadcast, entspricht 255.255.255.255 in IPv4",
-    },
-    {
-        address: "ff02::2",
-        commonUse: "Alle IPv6-Router (All Routers)",
-        importance: "Important",
-        category: "Multicast",
-        range: "ff00::/8",
-        specialRules:
-            "Spezielle Multicast-Adresse für alle Router, kein direktes IPv4-Äquivalent (IPv4 nutzt Broadcast)",
-    },
-
-    // IPv4-COMPATIBLE (Basic transition concept)
-    {
-        address: "::ffff:0:0",
-        commonUse: "IPv4-mapped IPv6 (Grundlagen)",
-        importance: "Important",
-        category: "Transition",
-        range: "::ffff:0:0/96",
-        specialRules: "Ermöglicht IPv4-Kompatibilität in IPv6-Umgebungen",
-    },
-];
-
-// Function to get all IPv6 special addresses
 export const getAllSpecialAddresses = () => {
-    return specialPurposeAddresses;
+    return ihkEssentialIPv6Addresses;
 };

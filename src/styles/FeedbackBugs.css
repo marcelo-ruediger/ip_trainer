@@ -1,0 +1,226 @@
+.feedback-content {
+    max-width: 600px;
+}
+
+.feedback-content .modal-header h2 {
+    color: #888888;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #cccccc;
+    font-size: 16px;
+}
+
+.form-group input:not([type="radio"]),
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #333;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #000;
+    color: #cccccc;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:not([type="radio"])::placeholder,
+.form-group textarea::placeholder {
+    font-size: 14px;
+    color: #666;
+}
+
+.form-group input:not([type="radio"]):focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #646cff;
+    box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.2);
+}
+
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.form-group .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+    margin-bottom: 0;
+    color: #cccccc;
+    font-size: 14px;
+}
+
+.form-group .radio-label:hover {
+    color: #646cff;
+}
+
+.radio-label input[type="radio"] {
+    min-width: 26px;
+    min-height: 20px;
+    max-width: 26px;
+    max-height: 20px;
+    width: 26px;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    border: 1.5px solid #888888;
+    border-radius: 50%;
+    cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+}
+
+.radio-label input[type="radio"]:checked {
+    border: 1.5px solid #646cff;
+}
+
+.radio-label input[type="radio"]:checked::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #646cff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.radio-label input[type="radio"]:focus {
+    outline: 2px solid #646cff;
+    outline-offset: 2px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+    margin-bottom: 0;
+    color: #cccccc;
+    font-size: 14px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-around;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-cancel {
+    background-color: #333;
+    color: #cccccc;
+    border: 1px solid #444;
+}
+
+.btn-cancel:hover {
+    background-color: #444;
+    color: #ffffff;
+}
+
+.btn-submit {
+    background-color: #646cff;
+    color: white;
+    min-width: 120px;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background-color: #8a8aff;
+}
+
+.btn-submit:disabled {
+    background-color: #444;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.info-note {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #242424;
+    border-radius: 12px;
+    border-left: 4px solid #646cff;
+}
+
+.info-note p {
+    margin: 0;
+    color: #cccccc;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .radio-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .radio-label input[type="radio"] {
+        min-width: 20px;
+        min-height: 20px;
+        max-width: 20px;
+        max-height: 20px;
+        width: 20px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-group input:not([type="radio"]),
+    .form-group textarea {
+        padding: 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .info-note {
+        padding: 0.8rem;
+        margin-top: 1.2rem;
+    }
+
+    .info-note p {
+        font-size: 0.85rem;
+    }
+}

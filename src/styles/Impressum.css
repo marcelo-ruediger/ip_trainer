@@ -1,0 +1,145 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.impressum-content {
+    max-width: 700px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    background-color: #242424;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #888888;
+    font-size: 1.5rem;
+}
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+    background-color: #1a1a1a;
+    border-radius: 0 0 12px 12px;
+}
+
+.impressum-section {
+    margin-bottom: 2rem;
+}
+
+.impressum-section h3 {
+    color: #cccccc;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #646cff;
+    padding-bottom: 0.5rem;
+}
+
+.impressum-section:first-child h3 {
+    margin-top: 0;
+}
+
+.impressum-section p {
+    line-height: 1.6;
+    color: #cccccc;
+    margin-bottom: 1rem;
+}
+
+.impressum-section a {
+    color: #646cff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.impressum-section a:hover {
+    color: #8a8aff;
+    text-decoration: underline;
+}
+
+.impressum-contact-link {
+    color: #646cff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.impressum-contact-link:hover {
+    color: #8a8aff;
+}
+
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 10px;
+    }
+
+    .modal-content {
+        max-height: 95vh;
+    }
+
+    .modal-header {
+        padding: 15px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+
+    .impressum-section h3 {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-header {
+        padding: 12px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .modal-body {
+        padding: 12px;
+    }
+
+    .impressum-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .impressum-section h3 {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+    }
+}

@@ -80,7 +80,6 @@
     }
 }
 
-/* Responsive design for screens smaller than 570px */
 @media (max-width: 570px) {
     .pwa-install-prompt {
         position: fixed;
@@ -160,7 +159,6 @@
     }
 }
 
-/* Additional adjustments for very small screens */
 @media (max-width: 400px) {
     .pwa-install-prompt {
         width: 80%;
@@ -192,7 +190,6 @@
     }
 }
 
-/* iOS-specific install prompt styling */
 .pwa-install-prompt.ios-prompt {
     position: fixed;
     bottom: 20px;
@@ -293,7 +290,6 @@
     font-style: italic;
 }
 
-/* Mobile adjustments for iOS prompt */
 @media (max-width: 480px) {
     .pwa-install-prompt.ios-prompt {
         width: 95%;
