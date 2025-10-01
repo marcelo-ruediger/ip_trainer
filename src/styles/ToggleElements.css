@@ -841,6 +841,11 @@
         padding: 12px 15px;
     }
 
+    /* Add padding to Help table label for better separation */
+    .image-toggle-container > label:not(.info-label) .label-text {
+        padding-left: 0.5rem;
+    }
+
     .popup-header h2 {
         font-size: 1.2rem;
     }

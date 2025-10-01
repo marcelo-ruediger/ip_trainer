@@ -18,7 +18,7 @@
     font-size: 16px;
 }
 
-.form-group input,
+.form-group input:not([type="radio"]),
 .form-group textarea,
 .form-group select {
     width: 100%;
@@ -32,13 +32,13 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-group input::placeholder,
+.form-group input:not([type="radio"])::placeholder,
 .form-group textarea::placeholder {
     font-size: 14px;
     color: #666;
 }
 
-.form-group input:focus,
+.form-group input:not([type="radio"]):focus,
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
@@ -72,6 +72,7 @@
     min-height: 20px;
     max-width: 26px;
     max-height: 20px;
+    width: 26px;
     margin: 0;
     padding: 0;
     background-color: #000;
@@ -192,12 +193,24 @@
     }
 }
 
+@media (max-width: 600px) {
+    /* Ensure radio buttons maintain proper size on small screens */
+    .radio-label input[type="radio"] {
+        min-width: 20px;
+        min-height: 20px;
+        max-width: 20px;
+        max-height: 20px;
+        width: 20px;
+        flex-shrink: 0;
+    }
+}
+
 @media (max-width: 480px) {
     .form-group {
         margin-bottom: 1.2rem;
     }
 
-    .form-group input,
+    .form-group input:not([type="radio"]),
     .form-group textarea {
         padding: 0.6rem;
         font-size: 0.95rem;

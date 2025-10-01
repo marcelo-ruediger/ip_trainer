@@ -937,10 +937,10 @@ footer {
         text-align: left !important;
     }
 
-    /* All inputs take full width by default */
-    .default-container label input,
+    /* All inputs take full width by default - exclude radio buttons */
+    .default-container label input:not([type="radio"]),
     .default-container label select,
-    .three-inputs-container label input,
+    .three-inputs-container label input:not([type="radio"]),
     .three-inputs-container label select {
         width: 100% !important;
         margin-top: 0.5rem !important;
@@ -1084,8 +1084,8 @@ footer {
         margin-bottom: 0.75rem;
     }
 
-    /* Ensure consistent input sizing and padding */
-    .default-container input,
+    /* Ensure consistent input sizing and padding - exclude radio buttons */
+    .default-container input:not([type="radio"]),
     .default-container select {
         padding: 8px 12px;
         font-size: 14px;
@@ -1100,10 +1100,10 @@ footer {
         display: none !important;
     }
 
-    /* Consistent input and select spacing */
-    .default-container label input,
+    /* Consistent input and select spacing - exclude radio buttons */
+    .default-container label input:not([type="radio"]),
     .default-container label select,
-    .three-inputs-container label input,
+    .three-inputs-container label input:not([type="radio"]),
     .three-inputs-container label select {
         margin-top: 0.5rem !important;
         margin-left: 0 !important;
