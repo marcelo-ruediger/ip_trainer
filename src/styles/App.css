@@ -358,6 +358,17 @@ footer {
     font-size: 12px;
 }
 
+.footer-link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #646cff;
+}
+
 .attention {
     border: solid 2px #646cff;
     transform: scale(1.01); /* Minimal scale to prevent overflow */

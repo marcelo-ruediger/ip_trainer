@@ -293,7 +293,7 @@
 }
 
 .popup-content {
-    background: #242424;
+    background: #1a1a1a;
     color: #888888;
     border-radius: 12px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
@@ -302,45 +302,54 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border: 1px solid #646cff;
 }
 
 .popup-header {
-    background: linear-gradient(135deg, #646cff 0%, #4338ca 100%);
-    color: white;
-    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    background-color: #242424;
     border-radius: 12px 12px 0 0;
 }
 
 .popup-header h2 {
     margin: 0;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #ffffff;
-    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
-    letter-spacing: 0.5px;
+    color: #888888;
+    font-size: 1.5rem;
 }
 
 .close-button {
-    background: rgba(255, 255, 255, 0.2);
+    background: none;
     border: none;
-    color: white;
-    font-size: 20px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
+    font-size: 48px;
+    color: #888;
     cursor: pointer;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    border-radius: 50%;
+    transition: color 0.2s ease, opacity 0.2s ease;
+    font-family: Arial, sans-serif;
+    line-height: 1;
 }
 
 .close-button:hover {
-    background: rgba(255, 255, 255, 0.3);
+    color: #aaa;
+    opacity: 0.8;
+}
+
+/* Override mobile optimizations that affect close button size */
+.close-button {
+    min-height: unset !important;
+    min-width: unset !important;
+}
+
+/* Remove top margin from first category title in IP Hints */
+.address-category:first-child .category-title {
+    margin-top: 0;
 }
 
 .popup-body {
@@ -761,23 +770,23 @@
 
 /* Info Icon Checkbox Styles (for Hinweise) */
 .image-toggle-container > .info-label > input[type="checkbox"] {
-    display: none !important; /* Hide the checkbox for info label since we use the icon */
-    position: absolute !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    display: none; /* Hide the checkbox for info label since we use the icon */
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
 }
 
 /* Override any general label styling for info-label */
 .image-toggle-container > .info-label::before {
-    display: none !important; /* Remove any pseudo-element styling */
+    display: none; /* Remove any pseudo-element styling */
 }
 
 .image-toggle-container > .info-label::after {
-    display: none !important; /* Remove any pseudo-element styling */
+    display: none; /* Remove any pseudo-element styling */
 }
 
 /* Style the actual info icon image */

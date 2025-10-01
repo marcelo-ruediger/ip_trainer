@@ -1,4 +1,4 @@
-//TODO: Cannot scroll to BottomButtons properly. Install prompt on Apple doesn't work.
+//TODO: Cannot scroll to BottomButtons properly. Install prompt on Apple doesn't work properly even with Safari 404 not found.
 //TODO: Impressum und Bugs and Feedback report funktion. Code refactoring.
 
 import { StrictMode } from "react";

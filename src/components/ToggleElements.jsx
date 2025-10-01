@@ -736,7 +736,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                                 className="close-button"
                                 onClick={closePopup}
                             >
-                                ✕
+                                ×
                             </button>
                         </div>
 

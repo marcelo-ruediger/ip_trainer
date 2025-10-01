@@ -329,6 +329,49 @@
             "iosStep2": "Scrollen Sie runter und wählen Sie 'Zum Home-Bildschirm'",
             "iosStep3": "Bestätigen Sie mit 'Hinzufügen'",
             "iosNote": "Hinweis: Diese Funktion ist nur in Safari verfügbar"
+        },
+        "impressum": {
+            "title": "Impressum",
+            "responsibleFor": "Verantwortlich für den Inhalt",
+            "developer": "Entwickler und Betreiber",
+            "contact": "Kontakt",
+            "contactForm": "Kontaktformular",
+            "projectInfo": "Projekt Information",
+            "projectDescription": "IP Trainer ist eine Web-Anwendung zum Lernen und Üben von IPv4- und IPv6-Adressierung. Die Anwendung läuft vollständig im Browser und speichert keine persönlichen Daten.",
+            "sourceCode": "Quellcode verfügbar unter",
+            "disclaimer": "Haftungsausschluss",
+            "disclaimerText": "Die Inhalte dieser App wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden.",
+            "privacy": "Datenschutz",
+            "privacyText": "Diese Anwendung speichert keine persönlichen Daten. Alle Berechnungen finden lokal im Browser statt. Es werden keine Daten an externe Server übertragen.",
+            "license": "Lizenz",
+            "licenseText": "Dieses Projekt steht unter der MIT-Lizenz.",
+            "licenseLink": "Vollständige Lizenz"
+        },
+        "feedbackBugs": {
+            "title": "Feedback & Bugs",
+            "type": "Was möchten Sie melden?",
+            "feedback": "Feedback / Verbesserungsvorschlag",
+            "bugReport": "Fehler melden",
+            "titleLabel": "Titel",
+            "description": "Beschreibung",
+            "email": "E-Mail (optional)",
+            "additionalInfo": "Zusätzliche Informationen",
+            "cancel": "Abbrechen",
+            "submit": "Absenden",
+            "submitting": "Wird gesendet...",
+            "thankYou": "Vielen Dank!",
+            "redirected": "Sie wurden zu GitHub weitergeleitet, um Ihr Feedback zu übermitteln.",
+            "githubNote": "Ihre Eingabe wird als GitHub Issue erstellt. Sie benötigen einen GitHub-Account, um das Issue zu veröffentlichen.",
+            "bugTitlePlaceholder": "z.B. Berechnung der Subnetzmaske funktioniert nicht",
+            "feedbackTitlePlaceholder": "z.B. Neue Funktion für IPv6-Bereiche",
+            "bugDescriptionPlaceholder": "Beschreiben Sie den Fehler so detailliert wie möglich: Was haben Sie getan? Was ist passiert? Was sollte passieren?",
+            "feedbackDescriptionPlaceholder": "Beschreiben Sie Ihren Verbesserungsvorschlag oder Ihr Feedback...",
+            "emailPlaceholder": "ihre.email@beispiel.de",
+            "additionalInfoPlaceholder": "Weitere Details, Betriebssystem, Browser-Version, etc."
+        },
+        "footer": {
+            "impressum": "Impressum",
+            "feedbackBugs": "Feedback & Bugs"
         }
     },
     "en": {
@@ -662,6 +705,49 @@
             "iosStep2": "Scroll down and select 'Add to Home Screen'",
             "iosStep3": "Confirm by tapping 'Add'",
             "iosNote": "Note: This feature is only available in Safari"
+        },
+        "impressum": {
+            "title": "Legal Notice",
+            "responsibleFor": "Responsible for Content",
+            "developer": "Developer and Operator",
+            "contact": "Contact",
+            "contactForm": "Contact Form",
+            "projectInfo": "Project Information",
+            "projectDescription": "IP Trainer is a web application for learning and practicing IPv4 and IPv6 addressing. The application runs completely in the browser and stores no personal data.",
+            "sourceCode": "Source code available at",
+            "disclaimer": "Disclaimer",
+            "disclaimerText": "The contents of this app have been created with the greatest possible care. However, no guarantee can be given for the accuracy, completeness and timeliness of the content.",
+            "privacy": "Privacy",
+            "privacyText": "This application does not store any personal data. All calculations take place locally in the browser. No data is transmitted to external servers.",
+            "license": "License",
+            "licenseText": "This project is licensed under the MIT License.",
+            "licenseLink": "Full License"
+        },
+        "feedbackBugs": {
+            "title": "Feedback & Bugs",
+            "type": "What would you like to report?",
+            "feedback": "Feedback / Feature Request",
+            "bugReport": "Report Bug",
+            "titleLabel": "Title",
+            "description": "Description",
+            "email": "Email (optional)",
+            "additionalInfo": "Additional Information",
+            "cancel": "Cancel",
+            "submit": "Submit",
+            "submitting": "Submitting...",
+            "thankYou": "Thank you!",
+            "redirected": "You have been redirected to GitHub to submit your feedback.",
+            "githubNote": "Your input will be created as a GitHub Issue. You need a GitHub account to publish the issue.",
+            "bugTitlePlaceholder": "e.g. Subnet mask calculation not working",
+            "feedbackTitlePlaceholder": "e.g. New feature for IPv6 ranges",
+            "bugDescriptionPlaceholder": "Describe the bug in as much detail as possible: What did you do? What happened? What should have happened?",
+            "feedbackDescriptionPlaceholder": "Describe your suggestion for improvement or feedback...",
+            "emailPlaceholder": "your.email@example.com",
+            "additionalInfoPlaceholder": "Additional details, operating system, browser version, etc."
+        },
+        "footer": {
+            "impressum": "Legal Notice",
+            "feedbackBugs": "Feedback & Bugs"
         }
     }
 }
