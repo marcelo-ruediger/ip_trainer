@@ -39,11 +39,11 @@ function Impressum({ onClose, onOpenContact }) {
                             <br />
                             GitHub:{" "}
                             <a
-                                href="https://github.com/MarceloRuediger"
+                                href="https://github.com/marcelo-ruediger"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                github.com/MarceloRuediger
+                                github.com/marcelo-ruediger
                             </a>
                         </p>
                     </div>
@@ -54,11 +54,11 @@ function Impressum({ onClose, onOpenContact }) {
                         <p>
                             {t("impressum.sourceCode")}:{" "}
                             <a
-                                href="https://github.com/MarceloRuediger/ip_trainer"
+                                href="https://github.com/marcelo-ruediger/ip_trainer"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                github.com/MarceloRuediger/ip_trainer
+                                github.com/marcelo-ruediger/ip_trainer
                             </a>
                         </p>
                     </div>
@@ -78,7 +78,7 @@ function Impressum({ onClose, onOpenContact }) {
                         <p>
                             {t("impressum.licenseText")}{" "}
                             <a
-                                href="https://github.com/MarceloRuediger/ip_trainer/blob/main/LICENSE"
+                                href="https://github.com/marcelo-ruediger/ip_trainer/blob/main/LICENSE"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

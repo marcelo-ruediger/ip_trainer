@@ -13,13 +13,16 @@ function Footer() {
             <footer>
                 <p>
                     &copy; 2025{" "}
-                    <a target="blank" href="https://github.com/MarceloRuediger">
-                        MarceloRuediger
+                    <a
+                        target="blank"
+                        href="https://github.com/marcelo-ruediger"
+                    >
+                        marcelo-ruediger
                     </a>{" "}
                     ·{" "}
                     <a
                         target="blank"
-                        href="https://github.com/MarceloRuediger/ip_trainer"
+                        href="https://github.com/marcelo-ruediger/ip_trainer"
                     >
                         IP Trainer
                     </a>{" "}

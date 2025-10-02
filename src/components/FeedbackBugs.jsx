@@ -50,7 +50,7 @@ function FeedbackBugs({ onClose }) {
                 }`
         );
 
-        const githubUrl = `https://github.com/MarceloRuediger/ip_trainer/issues/new?title=${issueTitle}&body=${issueBody}`;
+        const githubUrl = `https://github.com/marcelo-ruediger/ip_trainer/issues/new?title=${issueTitle}&body=${issueBody}`;
 
         window.open(githubUrl, "_blank");
 

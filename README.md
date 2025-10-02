@@ -10,7 +10,7 @@ A comprehensive **Progressive Web App** for German **IHK Fachinformatiker** exam
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/MarceloRuediger/ip_trainer.git
+git clone https://github.com/marcelo-ruediger/ip_trainer.git
 cd ip_trainer
 npm install
 npm run dev
@@ -111,4 +111,4 @@ MIT © 2025 - Built with ❤️ for German IT Students
 
 ---
 
-**[Live Demo](https://marceloruediger.github.io/ip_trainer/)** • **In-App Feedback** • **[GitHub Issues](https://github.com/MarceloRuediger/ip_trainer/issues)**
+**[Live Demo](https://marcelo-ruediger.github.io/ip_trainer/)** • **In-App Feedback** • **[GitHub Issues](https://github.com/marcelo-ruediger/ip_trainer/issues)**
