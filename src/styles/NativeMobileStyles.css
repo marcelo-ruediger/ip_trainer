@@ -29,27 +29,23 @@ button,
     animation: nativeTap 0.1s ease-out;
 }
 
+/* iOS safe area handling - only for #root to avoid viewport issues */
 @supports (padding-top: env(safe-area-inset-top)) {
-    body {
+    #root {
         padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
         padding-left: env(safe-area-inset-left);
         padding-right: env(safe-area-inset-right);
-    }
-}
-
-/* iOS Safari specific fixes */
-@supports (-webkit-touch-callout: none) {
-    body {
-        min-height: -webkit-fill-available;
-    }
-
-    #root {
-        min-height: -webkit-fill-available;
+        /* Don't add bottom padding to avoid footer being cut off */
     }
 }
 
 @media (max-width: 768px) {
+    .top-buttons {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        /* Ensure buttons are visible below mobile browser UI */
+    }
+
     .top-buttons button,
     .bottom-btns button {
         border-radius: 12px;
@@ -111,6 +107,14 @@ button,
     .popup-overlay {
         backdrop-filter: blur(10px);
         background-color: rgba(0, 0, 0, 0.7);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .popup-content {
@@ -120,6 +124,10 @@ button,
         border: 1px solid rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
         background: rgba(36, 36, 36, 0.95);
+        margin: 20px auto;
+        max-width: 90vw;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
     }
 
     .popup-header {
@@ -221,8 +229,17 @@ button,
         font-weight: 700;
         letter-spacing: -0.5px;
         text-align: center;
-        margin-top: 8px;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding-top: 0.5rem;
         font-size: clamp(1.8rem, 5vw, 2.5rem);
+        /* Ensure title is visible above mobile browser UI */
+    }
+
+    /* Add spacing to prevent content being hidden behind mobile browser UI */
+    body {
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
 }
 
@@ -336,32 +353,31 @@ body {
     padding: 0;
     overflow-x: hidden;
     width: 100%;
-    min-height: 100vh;
-    overscroll-behavior-y: none;
+    /* Remove min-height to allow natural content height */
 }
 
 #root {
-    min-height: 100vh;
     overflow-x: hidden;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
     html {
-        height: 100%;
         overflow-x: hidden;
+        /* Remove height: 100% that causes viewport issues */
     }
 
     body {
-        height: 100%;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: none;
+        overscroll-behavior: none;
+        /* Remove height: 100% to allow natural scrolling */
     }
 
     #root {
-        min-height: 100vh;
         overflow-x: hidden;
         padding: 0;
         margin: 0;
+        width: 100%;
     }
 }
