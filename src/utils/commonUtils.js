@@ -1,5 +1,5 @@
 export const resetInputBorders = () => {
     document.querySelectorAll("input, select").forEach((element) => {
-        element.classList.remove("correct", "wrong", "empty");
+        element.classList.remove("correct", "wrong", "empty", "attention");
     });
 };

@@ -26,14 +26,14 @@ function TopInputs({
                         value={ipData.ip}
                         onChange={onIpInput}
                         placeholder={t("topInputs.placeholder")}
-                        className={[
-                            attention && "attention",
-                            ipValid === true ? "correct" : "",
-                            ipValid === false ? "wrong" : "",
-                            !userIsInputting ? "attention" : "",
-                        ]
-                            .filter(Boolean)
-                            .join(" ")}
+                        className={(() => {
+                            // Priority: wrong > correct > attention
+                            if (ipValid === false) return "wrong";
+                            if (ipValid === true) return "correct";
+                            if (attention || (!userIsInputting && !ipData.ip))
+                                return "attention";
+                            return "";
+                        })()}
                     />
                 </label>
             </div>
@@ -45,16 +45,23 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             id="cidr"
-                            className={[
-                                ipValid === true && "attention",
-                                cidrValid === true ? "correct" : "",
-                                cidrValid === false ? "wrong" : "",
-                                !userIsInputting && generatedField === "cidr"
-                                    ? "attention"
-                                    : "",
-                            ]
-                                .filter(Boolean)
-                                .join(" ")}
+                            className={(() => {
+                                // Priority: wrong > correct > attention
+                                if (cidrValid === false) return "wrong";
+                                if (cidrValid === true) return "correct";
+                                if (
+                                    !userIsInputting &&
+                                    generatedField === "cidr"
+                                )
+                                    return "attention";
+                                if (
+                                    ipValid === true &&
+                                    cidrValid === null &&
+                                    userIsInputting
+                                )
+                                    return "attention";
+                                return "";
+                            })()}
                             placeholder={
                                 userIsInputting && ipValid === true
                                     ? t("topInputs.placeholder")
@@ -80,17 +87,23 @@ function TopInputs({
                         <br className="responsive-break" />
                         <input
                             id="subnetMask"
-                            className={[
-                                ipValid === true && "attention",
-                                subnetMaskValid === true ? "correct" : "",
-                                subnetMaskValid === false ? "wrong" : "",
-                                !userIsInputting &&
-                                generatedField === "subnetMask"
-                                    ? "attention"
-                                    : "",
-                            ]
-                                .filter(Boolean)
-                                .join(" ")}
+                            className={(() => {
+                                // Priority: wrong > correct > attention
+                                if (subnetMaskValid === false) return "wrong";
+                                if (subnetMaskValid === true) return "correct";
+                                if (
+                                    !userIsInputting &&
+                                    generatedField === "subnetMask"
+                                )
+                                    return "attention";
+                                if (
+                                    ipValid === true &&
+                                    subnetMaskValid === null &&
+                                    userIsInputting
+                                )
+                                    return "attention";
+                                return "";
+                            })()}
                             placeholder={
                                 userIsInputting && ipValid === true
                                     ? t("topInputs.placeholder")

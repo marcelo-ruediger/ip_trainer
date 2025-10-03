@@ -313,6 +313,7 @@
 .close-button {
     background: none;
     border: none;
+    outline: none;
     font-size: 48px;
     color: #888;
     cursor: pointer;
@@ -320,7 +321,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
     transition: color 0.2s ease, opacity 0.2s ease;
     font-family: Arial, sans-serif;
     line-height: 1;
@@ -332,9 +332,11 @@
 }
 
 .close-button:focus,
-.close-button:focus-visible {
-    outline: none;
-    box-shadow: none;
+.close-button:focus-visible,
+.close-button:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
 }
 
 .close-button {

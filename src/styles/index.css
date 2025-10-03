@@ -53,3 +53,15 @@ button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
+
+.close-button:hover {
+    border: none !important;
+}
+
+.close-button:focus,
+.close-button:focus-visible,
+.close-button:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}

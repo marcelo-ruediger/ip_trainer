@@ -155,7 +155,11 @@ export const useIPv4 = () => {
                             ipClassElement,
                         ].forEach((element) => {
                             if (element) {
-                                element.classList.remove("wrong", "empty");
+                                element.classList.remove(
+                                    "wrong",
+                                    "empty",
+                                    "attention"
+                                );
                                 element.classList.add("correct");
                             }
                         });
@@ -299,7 +303,7 @@ export const useIPv4 = () => {
                 fieldsToMark.forEach((fieldId) => {
                     const element = document.getElementById(fieldId);
                     if (element) {
-                        element.classList.remove("wrong");
+                        element.classList.remove("wrong", "attention", "empty");
                         element.classList.add("correct");
                     }
                 });

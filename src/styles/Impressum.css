@@ -95,6 +95,35 @@
     color: #8a8aff;
 }
 
+.close-button {
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 48px;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, opacity 0.2s ease;
+    font-family: Arial, sans-serif;
+    line-height: 1;
+}
+
+.close-button:hover {
+    color: #aaa;
+    opacity: 0.8;
+}
+
+.close-button:focus,
+.close-button:focus-visible,
+.close-button:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
 @media (max-width: 768px) {
     .modal-overlay {
         padding: 10px;

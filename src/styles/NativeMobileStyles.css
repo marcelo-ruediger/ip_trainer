@@ -119,15 +119,22 @@ button,
     .close-button {
         width: 40px;
         height: 40px;
-        border-radius: 20px;
         background: rgba(255, 255, 255, 0.15);
         border: none;
+        outline: none;
         transition: all 0.2s ease;
     }
 
     .close-button:active {
         transform: scale(0.9);
         background: rgba(255, 255, 255, 0.2);
+    }
+
+    .close-button:focus,
+    .close-button:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+        border: none !important;
     }
 }
 
