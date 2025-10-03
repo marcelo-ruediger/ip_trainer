@@ -820,15 +820,15 @@
 
     /* Fix hover scaling cutoff issues on mobile */
     .image-toggle-container > label {
-        padding: 4px 8px;
         margin: 2px;
         overflow: visible;
     }
 
+    /* Add padding only to text, not the whole label to avoid affecting toggle positioning */
     .image-toggle-container > label .label-text {
         overflow: visible;
         white-space: nowrap;
-        padding: 0 4px;
+        padding: 4px 8px 4px 4px;
     }
 
     .popup-header h2 {

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import "../styles/PWAInstaller.css";
+import iosShareIcon from "../images/ios_share.svg";
+import arrowDownIcon from "../images/arrow_down.svg";
+import doneDownloadIcon from "../images/done_download.svg";
 
 const PWAInstaller = () => {
     const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -97,19 +100,31 @@ const PWAInstaller = () => {
                         <p>{t("pwaInstaller.iosDescription")}</p>
                         <ol>
                             <li>
-                                <span className="step-icon">📤</span>
+                                <span className="step-icon">
+                                    <img src={iosShareIcon} alt="Share icon" />
+                                </span>
                                 <span className="step-text">
                                     {t("pwaInstaller.iosStep1")}
                                 </span>
                             </li>
                             <li>
-                                <span className="step-icon">➕</span>
+                                <span className="step-icon">
+                                    <img
+                                        src={arrowDownIcon}
+                                        alt="Arrow down icon"
+                                    />
+                                </span>
                                 <span className="step-text">
                                     {t("pwaInstaller.iosStep2")}
                                 </span>
                             </li>
                             <li>
-                                <span className="step-icon">✅</span>
+                                <span className="step-icon">
+                                    <img
+                                        src={doneDownloadIcon}
+                                        alt="Done download icon"
+                                    />
+                                </span>
                                 <span className="step-text">
                                     {t("pwaInstaller.iosStep3")}
                                 </span>

@@ -345,7 +345,9 @@
             "privacyText": "Diese Anwendung speichert keine persönlichen Daten. Alle Berechnungen finden lokal im Browser statt. Es werden keine Daten an externe Server übertragen.",
             "license": "Lizenz",
             "licenseText": "Dieses Projekt steht unter der MIT-Lizenz.",
-            "licenseLink": "Vollständige Lizenz"
+            "licenseLink": "Vollständige Lizenz",
+            "resources": "Ressourcen & Danksagungen",
+            "resourcesText": "Diese Anwendung verwendet Schriftarten und Symbole von"
         },
         "feedbackBugs": {
             "title": "Feedback & Bugs",
@@ -721,7 +723,9 @@
             "privacyText": "This application does not store any personal data. All calculations take place locally in the browser. No data is transmitted to external servers.",
             "license": "License",
             "licenseText": "This project is licensed under the MIT License.",
-            "licenseLink": "Full License"
+            "licenseLink": "Full License",
+            "resources": "Resources & Attribution",
+            "resourcesText": "This application uses fonts and icons from"
         },
         "feedbackBugs": {
             "title": "Feedback & Bugs",

@@ -289,10 +289,17 @@
 }
 
 .step-icon {
-    font-size: 16px;
     margin-right: 12px;
     margin-top: 2px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.step-icon img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
 }
 
 .step-text {
@@ -357,7 +364,11 @@
     }
 
     .step-icon {
-        font-size: 14px;
         margin-right: 10px;
+    }
+
+    .step-icon img {
+        width: 14px;
+        height: 14px;
     }
 }

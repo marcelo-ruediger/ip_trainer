@@ -86,6 +86,21 @@ function Impressum({ onClose, onOpenContact }) {
                             </a>
                         </p>
                     </div>
+
+                    <div className="impressum-section">
+                        <h3>{t("impressum.resources")}</h3>
+                        <p>
+                            {t("impressum.resourcesText")}{" "}
+                            <a href="https://fonts.google.com/" target="blank">
+                                Google Fonts
+                            </a>{" "}
+                            &{" "}
+                            <a href="https://icon-icons.com" target="blank">
+                                icon-icons.com
+                            </a>
+                            .
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
