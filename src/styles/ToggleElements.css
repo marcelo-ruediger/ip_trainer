@@ -818,6 +818,19 @@
         padding-left: 0.5rem;
     }
 
+    /* Fix hover scaling cutoff issues on mobile */
+    .image-toggle-container > label {
+        padding: 4px 8px;
+        margin: 2px;
+        overflow: visible;
+    }
+
+    .image-toggle-container > label .label-text {
+        overflow: visible;
+        white-space: nowrap;
+        padding: 0 4px;
+    }
+
     .popup-header h2 {
         font-size: 1.2rem;
     }
@@ -835,10 +848,14 @@
 
     .image-toggle-container > label {
         font-size: 15px;
+        min-width: 0;
+        flex-shrink: 0;
     }
 
     .image-toggle-container > label .label-text {
         font-size: 15px;
+        display: inline-block;
+        min-width: max-content;
     }
 
     .language-button {
@@ -867,12 +884,12 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto auto;
-        gap: 0.8rem;
+        gap: 1rem;
         align-items: center;
         justify-items: center;
-        padding: 0 1.5rem 1rem 1.5rem;
+        padding: 0 2rem 1rem 2rem;
         max-width: 100%;
-        overflow-x: hidden;
+        overflow: visible;
         box-sizing: border-box;
     }
 
@@ -1049,8 +1066,19 @@
 
     .image-toggle-container > label .label-text {
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 200px;
+        /* Remove overflow hidden to prevent cutoff on hover scaling */
+        overflow: visible;
+        /* Keep max-width but allow overflow for scaling */
+        max-width: 180px;
+        display: inline-block;
+    }
+
+    /* Reduce scaling on very small screens to prevent overflow */
+    .image-toggle-container > label:hover .label-text {
+        transform: scale(1.02);
+    }
+
+    .image-toggle-container > .info-label:hover .label-text {
+        transform: scale(1.02);
     }
 }

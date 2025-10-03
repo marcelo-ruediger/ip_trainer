@@ -88,6 +88,7 @@ const PWAInstaller = () => {
                         <button
                             onClick={handleCloseClick}
                             className="install-close"
+                            aria-label="Close"
                         >
                             ×
                         </button>
@@ -97,15 +98,21 @@ const PWAInstaller = () => {
                         <ol>
                             <li>
                                 <span className="step-icon">📤</span>
-                                {t("pwaInstaller.iosStep1")}
+                                <span className="step-text">
+                                    {t("pwaInstaller.iosStep1")}
+                                </span>
                             </li>
                             <li>
                                 <span className="step-icon">➕</span>
-                                {t("pwaInstaller.iosStep2")}
+                                <span className="step-text">
+                                    {t("pwaInstaller.iosStep2")}
+                                </span>
                             </li>
                             <li>
                                 <span className="step-icon">✅</span>
-                                {t("pwaInstaller.iosStep3")}
+                                <span className="step-text">
+                                    {t("pwaInstaller.iosStep3")}
+                                </span>
                             </li>
                         </ol>
                         <div className="ios-note">

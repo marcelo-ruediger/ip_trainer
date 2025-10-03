@@ -233,10 +233,8 @@ button,
         margin-bottom: 1rem;
         padding-top: 0.5rem;
         font-size: clamp(1.8rem, 5vw, 2.5rem);
-        /* Ensure title is visible above mobile browser UI */
     }
 
-    /* Add spacing to prevent content being hidden behind mobile browser UI */
     body {
         padding-top: 20px;
         padding-bottom: 20px;

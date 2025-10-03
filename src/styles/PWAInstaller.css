@@ -213,9 +213,10 @@
 
 .ios-install-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     margin-bottom: 16px;
+    position: relative;
 }
 
 .ios-install-header h3 {
@@ -224,12 +225,15 @@
     font-weight: 600;
     color: #646cff;
     flex-grow: 1;
-    text-align: center;
+    text-align: left;
+    padding-right: 40px;
+    /* Ensure title doesn't overlap close button */
 }
 
 .ios-install-header .install-icon {
     font-size: 24px;
-    margin-right: 8px;
+    margin-right: 12px;
+    flex-shrink: 0;
 }
 
 .ios-install-header .install-close {
@@ -240,6 +244,10 @@
     width: 32px;
     height: 32px;
     font-size: 18px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    flex-shrink: 0;
 }
 
 .ios-install-header .install-close:hover {
@@ -248,6 +256,9 @@
 
 .ios-install-steps {
     text-align: left;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .ios-install-steps p {
@@ -255,12 +266,16 @@
     font-size: 14px;
     line-height: 1.4;
     color: #cccccc;
+    width: 100%;
 }
 
 .ios-install-steps ol {
     margin: 0;
     padding-left: 0;
     list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .ios-install-steps li {
@@ -269,6 +284,8 @@
     margin-bottom: 12px;
     font-size: 14px;
     line-height: 1.4;
+    width: 100%;
+    text-align: left;
 }
 
 .step-icon {
@@ -276,6 +293,11 @@
     margin-right: 12px;
     margin-top: 2px;
     flex-shrink: 0;
+}
+
+.step-text {
+    flex: 1;
+    line-height: 1.4;
 }
 
 .ios-note {
@@ -294,19 +316,48 @@
     .pwa-install-prompt.ios-prompt {
         width: 95%;
         bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .ios-prompt .install-content {
         padding: 16px;
         border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .ios-install-header {
+        margin-bottom: 12px;
     }
 
     .ios-install-header h3 {
         font-size: 16px;
+        padding-right: 45px;
+    }
+
+    .ios-install-header .install-close {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+
+    .ios-install-steps {
+        width: 100%;
     }
 
     .ios-install-steps p,
     .ios-install-steps li {
         font-size: 13px;
+    }
+
+    .ios-install-steps li {
+        margin-bottom: 10px;
+    }
+
+    .step-icon {
+        font-size: 14px;
+        margin-right: 10px;
     }
 }
