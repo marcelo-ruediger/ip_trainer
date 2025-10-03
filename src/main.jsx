@@ -1,4 +1,4 @@
-//TODO: Cannot scroll to BottomButtons properly. Install prompt on Apple doesn't work properly even with Safari 404 not found.
+//TODO: Phone vertical spacing in the Modals (Specially Feedback & Bugs' and Impressum's titels) still need to be adjusted.
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
