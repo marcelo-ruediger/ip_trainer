@@ -202,29 +202,28 @@
 }
 
 .pwa-install-prompt.ios-prompt .install-content {
-        padding: 12px 14px;
-        border-radius: 20px;
-    }
+    padding: 12px 14px;
+    border-radius: 20px;
+}
 
-    .install-icon {
-        font-size: 20px;
-    }
+.install-icon {
+    font-size: 20px;
+}
 
-    .install-text {
-        font-size: 14px;
-    }
+.install-text {
+    font-size: 14px;
+}
 
-    .install-button {
-        padding: 5px 10px;
-        font-size: 13px;
-        border-radius: 6px;
-    }
+.install-button {
+    padding: 5px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+}
 
-    .install-close {
-        font-size: 24px;
-        width: 30px;
-        height: 30px;
-    }
+.install-close {
+    font-size: 24px;
+    width: 30px;
+    height: 30px;
 }
 
 .pwa-install-prompt.ios-prompt {
