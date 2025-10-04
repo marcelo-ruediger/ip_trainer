@@ -1,5 +1,3 @@
-//TODO: For phones the vertical spacing in the Modals (Specially Feedback & Bugs' and Impressum's titels) still need to be adjusted.
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/index.css";
