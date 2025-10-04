@@ -27,7 +27,6 @@ function TopInputs({
                         onChange={onIpInput}
                         placeholder={t("topInputs.placeholder")}
                         className={(() => {
-                            // Priority: wrong > correct > attention
                             if (ipValid === false) return "wrong";
                             if (ipValid === true) return "correct";
                             if (attention || (!userIsInputting && !ipData.ip))
@@ -46,7 +45,6 @@ function TopInputs({
                         <input
                             id="cidr"
                             className={(() => {
-                                // Priority: wrong > correct > attention
                                 if (cidrValid === false) return "wrong";
                                 if (cidrValid === true) return "correct";
                                 if (
@@ -88,7 +86,6 @@ function TopInputs({
                         <input
                             id="subnetMask"
                             className={(() => {
-                                // Priority: wrong > correct > attention
                                 if (subnetMaskValid === false) return "wrong";
                                 if (subnetMaskValid === true) return "correct";
                                 if (

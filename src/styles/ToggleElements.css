@@ -1066,14 +1066,11 @@
 
     .image-toggle-container > label .label-text {
         white-space: nowrap;
-        /* Remove overflow hidden to prevent cutoff on hover scaling */
         overflow: visible;
-        /* Keep max-width but allow overflow for scaling */
         max-width: 180px;
         display: inline-block;
     }
 
-    /* Reduce scaling on very small screens to prevent overflow */
     .image-toggle-container > label:hover .label-text {
         transform: scale(1.02);
     }

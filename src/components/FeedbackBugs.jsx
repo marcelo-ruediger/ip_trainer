@@ -4,7 +4,7 @@ import "../styles/FeedbackBugs.css";
 
 function FeedbackBugs({ onClose }) {
     const { t } = useLanguage();
-    const [formType, setFormType] = useState("feedback"); // "feedback" or "bug"
+    const [formType, setFormType] = useState("feedback");
     const [formData, setFormData] = useState({
         title: "",
         description: "",

@@ -604,20 +604,17 @@ export const useIPv4 = () => {
 
                     case "ipClass":
                         const validDropdownValues = [
-                            // Single letter classes
                             "A",
                             "B",
                             "C",
                             "D",
                             "E",
-                            // Private/Public class distinctions
                             "A (privat)",
                             "A (öffentlich)",
                             "B (privat)",
                             "B (öffentlich)",
                             "C (privat)",
                             "C (öffentlich)",
-                            // Special address types (exact match with dropdown options)
                             "Loopback",
                             "APIPA",
                             "Carrier-Grade NAT",

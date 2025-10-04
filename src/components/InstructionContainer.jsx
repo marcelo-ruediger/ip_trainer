@@ -38,7 +38,7 @@ function InstructionContainer({
 
             if (allCorrect) {
                 const elementTop = containerRef.current.offsetTop;
-                const offset = 32; // 2rem margin
+                const offset = 32;
                 window.scrollTo({
                     top: elementTop - offset,
                     behavior: "smooth",

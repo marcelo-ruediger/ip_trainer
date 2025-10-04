@@ -263,7 +263,6 @@
     flex-grow: 1;
     text-align: left;
     padding-right: 40px;
-    /* Ensure title doesn't overlap close button */
 }
 
 .ios-install-header .install-icon {

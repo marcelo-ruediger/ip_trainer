@@ -35,7 +35,6 @@ button,
         padding-top: env(safe-area-inset-top);
         padding-left: env(safe-area-inset-left);
         padding-right: env(safe-area-inset-right);
-        /* Don't add bottom padding to avoid footer being cut off */
     }
 }
 
@@ -43,7 +42,6 @@ button,
     .top-buttons {
         margin-top: 1rem;
         margin-bottom: 0.5rem;
-        /* Ensure buttons are visible below mobile browser UI */
     }
 
     .top-buttons button,
@@ -345,7 +343,6 @@ body {
     padding: 0;
     overflow-x: hidden;
     width: 100%;
-    /* Remove min-height to allow natural content height */
 }
 
 #root {
@@ -356,14 +353,12 @@ body {
 @media (max-width: 768px) {
     html {
         overflow-x: hidden;
-        /* Remove height: 100% that causes viewport issues */
     }
 
     body {
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: none;
-        /* Remove height: 100% to allow natural scrolling */
     }
 
     #root {

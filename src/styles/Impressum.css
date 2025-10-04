@@ -127,8 +127,8 @@
 @media (max-width: 768px) {
     .modal-overlay {
         padding: 10px;
-        /* Minimal top padding - headers appear right under URL bar */
-        padding-top: 20px;
+        padding-top: 0.5rem;
+        padding-bottom: 0.3rem;
     }
 
     .modal-content {
@@ -154,8 +154,8 @@
 
 @media (max-width: 480px) {
     .modal-overlay {
-        /* Minimal top padding for small screens too */
-        padding-top: 15px;
+        padding-top: 0.4rem;
+        padding-bottom: 0.2rem;
     }
 
     .modal-header {
