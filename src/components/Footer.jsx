@@ -14,14 +14,16 @@ function Footer() {
                 <p>
                     &copy; 2025{" "}
                     <a
-                        target="blank"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         href="https://github.com/marcelo-ruediger"
                     >
                         marcelo-ruediger
                     </a>{" "}
                     ·{" "}
                     <a
-                        target="blank"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         href="https://github.com/marcelo-ruediger/ip_trainer"
                     >
                         IP Trainer

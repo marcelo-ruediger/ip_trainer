@@ -127,10 +127,20 @@
 @media (max-width: 768px) {
     .modal-overlay {
         padding: 10px;
+        /* Extra top padding for Chrome iOS URL bar */
+        padding-top: 80px;
+    }
+
+    /* Chrome specific adjustments */
+    @supports (-webkit-touch-callout: none) {
+        .modal-overlay {
+            /* Additional top padding for Chrome iOS */
+            padding-top: 90px;
+        }
     }
 
     .modal-content {
-        max-height: 95vh;
+        max-height: 80vh;
     }
 
     .modal-header {
@@ -151,6 +161,11 @@
 }
 
 @media (max-width: 480px) {
+    .modal-overlay {
+        /* Extra padding for small screens in Chrome */
+        padding-top: 100px;
+    }
+
     .modal-header {
         padding: 12px;
     }

@@ -314,6 +314,25 @@ button,
         opacity: 1 !important;
         -webkit-text-fill-color: #cccccc !important;
     }
+
+    /* Fix disabled fields with attention class to maintain visibility on mobile */
+    select:disabled.attention {
+        color: #ffffff !important;
+        background-color: #2a2a2a !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border-color: #646cff !important;
+        box-shadow: 0 0 4px #646cff, 0 0 8px #646cff !important;
+    }
+
+    input:disabled.attention {
+        color: #ffffff !important;
+        background-color: #2a2a2a !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border-color: #646cff !important;
+        box-shadow: 0 0 4px #646cff, 0 0 8px #646cff !important;
+    }
 }
 
 @keyframes shake {

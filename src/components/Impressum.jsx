@@ -91,11 +91,19 @@ function Impressum({ onClose, onOpenContact }) {
                         <h3>{t("impressum.resources")}</h3>
                         <p>
                             {t("impressum.resourcesText")}{" "}
-                            <a href="https://fonts.google.com/" target="blank">
+                            <a
+                                href="https://fonts.google.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 Google Fonts
                             </a>{" "}
                             &{" "}
-                            <a href="https://icon-icons.com" target="blank">
+                            <a
+                                href="https://icon-icons.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 icon-icons.com
                             </a>
                             .
