@@ -68,12 +68,12 @@ button,
 @media (max-width: 768px) {
     input,
     select {
-        border-radius: 12px !important;
-        font-size: 14px !important;
-        padding: 8px 12px !important;
+        border-radius: 12px;
+        font-size: 14px;
+        padding: 8px 12px;
         min-height: 44px;
-        background-color: #000 !important;
-        color: #cccccc !important;
+        background-color: #000;
+        color: #cccccc;
         border: 1px solid transparent;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
         outline: none;
@@ -81,8 +81,8 @@ button,
 
     input:focus,
     select:focus {
-        background-color: #000 !important;
-        border-color: #646cff !important;
+        background-color: #000;
+        border-color: #646cff;
         transform: scale(1.02);
     }
 
@@ -151,18 +151,18 @@ button,
 
     .close-button:focus,
     .close-button:focus-visible {
-        outline: none !important;
-        box-shadow: none !important;
-        border: none !important;
+        outline: none;
+        box-shadow: none;
+        border: none;
     }
 }
 
 @media (max-width: 768px) {
     .default-container {
-        border-radius: 12px !important;
-        background: rgba(28, 28, 30, 0.8) !important;
-        border: 1px solid rgba(84, 84, 88, 0.6) !important;
-        padding: 1rem !important;
+        border-radius: 12px;
+        background: rgba(28, 28, 30, 0.8);
+        border: 1px solid rgba(84, 84, 88, 0.6);
+        padding: 1rem;
         backdrop-filter: none;
     }
 
@@ -292,46 +292,21 @@ button,
     }
 
     select:disabled.correct {
-        color: #cccccc !important;
+        color: #cccccc;
         border-color: #00ff88;
         box-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #cccccc !important;
     }
 
     select:disabled.wrong {
-        color: #cccccc !important;
+        color: #cccccc;
         border-color: #ff0044;
         box-shadow: 0 0 4px #ff0044, 0 0 8px #ff0044;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #cccccc !important;
     }
 
     select:disabled.empty {
-        color: #cccccc !important;
+        color: #cccccc;
         border-color: #888888;
         box-shadow: 0 0 4px #888888, 0 0 8px #888888;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #cccccc !important;
-    }
-
-    /* Fix disabled fields with attention class to maintain visibility on mobile */
-    select:disabled.attention {
-        color: #ffffff !important;
-        background-color: #2a2a2a !important;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #ffffff !important;
-        border-color: #646cff !important;
-        box-shadow: 0 0 4px #646cff, 0 0 8px #646cff !important;
-    }
-
-    input:disabled.attention {
-        color: #ffffff !important;
-        background-color: #2a2a2a !important;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #ffffff !important;
-        border-color: #646cff !important;
-        box-shadow: 0 0 4px #646cff, 0 0 8px #646cff !important;
     }
 }
 

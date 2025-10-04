@@ -334,9 +334,9 @@
 .close-button:focus,
 .close-button:focus-visible,
 .close-button:active {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
+    outline: none;
+    box-shadow: none;
+    border: none;
 }
 
 .close-button {

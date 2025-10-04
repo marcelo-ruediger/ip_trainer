@@ -119,28 +119,20 @@
 .close-button:focus,
 .close-button:focus-visible,
 .close-button:active {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
+    outline: none;
+    box-shadow: none;
+    border: none;
 }
 
 @media (max-width: 768px) {
     .modal-overlay {
         padding: 10px;
-        /* Extra top padding for Chrome iOS URL bar */
-        padding-top: 80px;
-    }
-
-    /* Chrome specific adjustments */
-    @supports (-webkit-touch-callout: none) {
-        .modal-overlay {
-            /* Additional top padding for Chrome iOS */
-            padding-top: 90px;
-        }
+        /* Minimal top padding - headers appear right under URL bar */
+        padding-top: 20px;
     }
 
     .modal-content {
-        max-height: 80vh;
+        max-height: 90vh;
     }
 
     .modal-header {
@@ -162,8 +154,8 @@
 
 @media (max-width: 480px) {
     .modal-overlay {
-        /* Extra padding for small screens in Chrome */
-        padding-top: 100px;
+        /* Minimal top padding for small screens too */
+        padding-top: 15px;
     }
 
     .modal-header {
