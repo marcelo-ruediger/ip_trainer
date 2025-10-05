@@ -523,19 +523,27 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 case "Loopback":
                     return "Loopback";
                 case "Unspecified":
-                    return language === "german" ? "Unspezifiziert" : "Unspecified";
+                    return language === "german"
+                        ? "Unspezifiziert"
+                        : "Unspecified";
                 case "Documentation":
-                    return language === "german" ? "Dokumentation" : "Documentation";
+                    return language === "german"
+                        ? "Dokumentation"
+                        : "Documentation";
                 case "Link-Local":
                     return "Link-Local";
                 case "Private Networks":
-                    return language === "german" ? "Private Netzwerke (ULA)" : "Private Networks (ULA)";
+                    return language === "german"
+                        ? "Private Netzwerke (ULA)"
+                        : "Private Networks (ULA)";
                 case "Global Unicast":
                     return "Global Unicast";
                 case "Multicast":
                     return "Multicast";
                 case "Transition":
-                    return language === "german" ? "IPv4/IPv6 Übergang" : "IPv4/IPv6 Transition";
+                    return language === "german"
+                        ? "IPv4/IPv6 Übergang"
+                        : "IPv4/IPv6 Transition";
                 case "Other":
                     return language === "german" ? "Sonstige" : "Other";
                 default:
