@@ -805,8 +805,8 @@
 
 @media (max-width: 768px) {
     .popup-overlay {
-        padding-top: 0.2rem !important;
-        padding-bottom: 0.2rem !important;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
     }
 
     .popup-content {
