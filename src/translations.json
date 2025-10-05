@@ -246,6 +246,10 @@
                 "ipv4Mapped": {
                     "commonUse": "IPv4-kompatibel / Übergangs-Adresse",
                     "specialInfo": "Ermöglicht IPv4-Kompatibilität in reinen IPv6-Umgebungen"
+                },
+                "ipv4Embedded": {
+                    "commonUse": "IPv4-eingebettet / NAT64-Übersetzung",
+                    "specialInfo": "Bekanntes Präfix für NAT64/DNS64 Übersetzung - ermöglicht IPv6-only Clients Zugriff auf IPv4-Services"
                 }
             }
         },
@@ -624,6 +628,10 @@
                 "ipv4Mapped": {
                     "commonUse": "IPv4-compatible / Transition address",
                     "specialInfo": "Enables IPv4 compatibility in pure IPv6 environments"
+                },
+                "ipv4Embedded": {
+                    "commonUse": "IPv4-embedded / NAT64 Translation",
+                    "specialInfo": "Well-Known Prefix for NAT64/DNS64 translation - enables IPv6-only clients to access IPv4 services"
                 }
             }
         },

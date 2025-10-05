@@ -11,3 +11,5 @@ createRoot(document.getElementById("root")).render(
         </LanguageProvider>
     </StrictMode>
 );
+
+// TODO: IPv6 Hinweise - Delete repeated addresses and make sure the mains address is abbreviated.

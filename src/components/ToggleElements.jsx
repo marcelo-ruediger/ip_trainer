@@ -109,6 +109,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 );
             if (address === "::ffff:0:0")
                 return t("toggleElements.hintsIPv6.ipv4Mapped.commonUse");
+            if (address === "64:ff9b::")
+                return t("toggleElements.hintsIPv6.ipv4Embedded.commonUse");
 
             return addr.commonUse;
         } else {
@@ -222,7 +224,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     ),
                     class: "class-a",
                 };
-            if (address === "fc00:0000::")
+            if (address === "fc00::")
                 return {
                     text: t(
                         "toggleElements.hintsIPv6.privateNetworks.ulaCentral.badget"
@@ -236,7 +238,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                     ),
                     class: "class-a",
                 };
-            if (address === "fd00:0000::")
+            if (address === "fd00::")
                 return {
                     text: t(
                         "toggleElements.hintsIPv6.privateNetworks.ulaLocal.badget"
@@ -249,7 +251,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             if (address === "3000::")
                 return { text: "Global 3xxx", class: "class-b" };
 
-            if (address === "ff00:0000::")
+            if (address === "ff00::")
                 return { text: "Multicast", class: "class-d" };
             if (address === "ff02::1")
                 return {
@@ -403,7 +405,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 return t(
                     "toggleElements.hintsIPv6.privateNetworks.ulaCentral.specialInfo"
                 );
-            if (address === "fc00:0000::")
+            if (address === "fc00::")
                 return t(
                     "toggleElements.hintsIPv6.privateNetworks.ulaCentral.specialInfo"
                 );
@@ -411,7 +413,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 return t(
                     "toggleElements.hintsIPv6.privateNetworks.ulaLocal.speciaInfo"
                 );
-            if (address === "fd00:0000::")
+            if (address === "fd00::")
                 return t(
                     "toggleElements.hintsIPv6.privateNetworks.ulaLocal.speciaInfo"
                 );
@@ -427,7 +429,7 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 );
 
             // Multicast
-            if (address === "ff00:0000::")
+            if (address === "ff00::")
                 return t(
                     "toggleElements.hintsIPv6.multicast.multicast.specialInfo"
                 );
@@ -443,6 +445,8 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
             // Transition
             if (address === "::ffff:0:0")
                 return t("toggleElements.hintsIPv6.ipv4Mapped.specialInfo");
+            if (address === "64:ff9b::")
+                return t("toggleElements.hintsIPv6.ipv4Embedded.specialInfo");
 
             return null;
         } else {
@@ -519,21 +523,21 @@ function ToggleElements({ showImage, onToggle, tableImg, ipVersion }) {
                 case "Loopback":
                     return "Loopback";
                 case "Unspecified":
-                    return "Unspezifiziert";
+                    return language === "german" ? "Unspezifiziert" : "Unspecified";
                 case "Documentation":
-                    return "Dokumentation";
+                    return language === "german" ? "Dokumentation" : "Documentation";
                 case "Link-Local":
                     return "Link-Local";
                 case "Private Networks":
-                    return "Private Netzwerke";
+                    return language === "german" ? "Private Netzwerke (ULA)" : "Private Networks (ULA)";
                 case "Global Unicast":
                     return "Global Unicast";
                 case "Multicast":
                     return "Multicast";
                 case "Transition":
-                    return "IPv4-Mapped";
+                    return language === "german" ? "IPv4/IPv6 Übergang" : "IPv4/IPv6 Transition";
                 case "Other":
-                    return "Sonstige";
+                    return language === "german" ? "Sonstige" : "Other";
                 default:
                     return category;
             }
