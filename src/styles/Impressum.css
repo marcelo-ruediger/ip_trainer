@@ -127,8 +127,8 @@
 @media (max-width: 768px) {
     .modal-overlay {
         padding: 10px;
-        padding-top: 0.5rem;
-        padding-bottom: 0.3rem;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
     }
 
     .modal-content {
@@ -154,7 +154,7 @@
 
 @media (max-width: 480px) {
     .modal-overlay {
-        padding-top: 0.4rem;
+        padding-top: 0.2rem;
         padding-bottom: 0.2rem;
     }
 
