@@ -30,7 +30,6 @@ button,
 }
 
 /* iOS safe area handling - only for #root to avoid viewport issues */
-/* Mobile spacing fix - use margins to prevent content cutoff */
 @media (max-width: 768px) {
     :root {
         --mobile-padding-y: 1rem;
@@ -41,7 +40,6 @@ button,
         margin: var(--mobile-padding-y) var(--mobile-padding-x);
         min-height: calc(100vh - calc(var(--mobile-padding-y) * 2));
         box-sizing: border-box;
-        /* Force positioning to prevent overlap */
         position: relative;
         z-index: 1;
     }
@@ -68,7 +66,6 @@ button,
     }
 }
 
-/* Extra aggressive approach for phones with problematic viewport handling */
 @media (max-width: 480px) {
     :root {
         --mobile-padding-y: 1.25rem;
@@ -79,7 +76,6 @@ button,
         margin: var(--mobile-padding-y) var(--mobile-padding-x);
     }
 
-    /* Standardized modals: same 80% height on all screen sizes */
     .popup-overlay,
     .modal-overlay {
         padding: 10vh 0.75rem;
@@ -171,7 +167,6 @@ button,
         z-index: 1000;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        /* Standardized: 10% top/bottom padding for vertical centering */
         padding: 10vh 1rem;
         padding-left: max(1rem, env(safe-area-inset-left));
         padding-right: max(1rem, env(safe-area-inset-right));
@@ -188,7 +183,6 @@ button,
         background: rgba(36, 36, 36, 0.95);
         width: 100%;
         max-width: 90vw;
-        /* Standardized: exactly 80% of viewport height */
         height: 80vh;
         max-height: 80vh;
         overflow-y: auto;

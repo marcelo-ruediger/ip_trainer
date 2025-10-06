@@ -288,7 +288,6 @@ body {
     }
 
     .modal-overlay {
-        /* Standardized: 10% top/bottom padding with safe areas */
         padding: 10vh max(1rem, env(safe-area-inset-left)) 10vh
             max(1rem, env(safe-area-inset-right));
         display: flex;
@@ -297,7 +296,6 @@ body {
 
     .modal-content,
     .popup-content {
-        /* Standardized: exactly 80% height */
         height: 80vh;
         max-height: 80vh;
     }
