@@ -334,7 +334,7 @@ label {
 }
 
 footer {
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .footer-link {
@@ -1074,6 +1074,28 @@ footer {
     }
     footer {
         padding: 0 0.5rem 0 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    footer p {
+        line-height: 1.6;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    /* Force line break after IP Trainer link */
+    footer p a[href*="ip_trainer"] {
+        position: relative;
+    }
+
+    footer p a[href*="ip_trainer"]::after {
+        content: "";
+        width: 100%;
+        height: 0;
+        display: block;
     }
 }
 
