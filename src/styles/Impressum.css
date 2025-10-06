@@ -10,6 +10,9 @@
     align-items: center;
     z-index: 1000;
     padding: 20px;
+    /* Chrome mobile viewport fix */
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for modern browsers */
 }
 
 .modal-content {
@@ -126,13 +129,18 @@
 
 @media (max-width: 768px) {
     .modal-overlay {
-        padding: 10px;
-        padding-top: 0.2rem;
-        padding-bottom: 0.2rem;
+        padding: 1.5rem 1rem;
+        /* Enhanced padding for Chrome mobile */
+        padding-top: max(1.5rem, env(safe-area-inset-top, 1.5rem));
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+        /* Use dynamic viewport height to handle Chrome UI changes */
+        height: 100dvh;
+        min-height: 100vh;
     }
 
     .modal-content {
-        max-height: 90vh;
+        max-height: calc(100dvh - 3rem);
+        max-height: calc(100vh - 3rem); /* Fallback for browsers without dvh */
     }
 
     .modal-header {
@@ -154,8 +162,15 @@
 
 @media (max-width: 480px) {
     .modal-overlay {
-        padding-top: 0.2rem;
-        padding-bottom: 0.2rem;
+        padding: 2rem 0.75rem;
+        /* Extra padding for small phones with Chrome UI */
+        padding-top: max(2rem, env(safe-area-inset-top, 2rem));
+        padding-bottom: max(2rem, env(safe-area-inset-bottom, 2rem));
+    }
+
+    .modal-content {
+        max-height: calc(100dvh - 4rem);
+        max-height: calc(100vh - 4rem);
     }
 
     .modal-header {

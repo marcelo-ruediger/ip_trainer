@@ -78,6 +78,20 @@ button,
     #root {
         margin: var(--mobile-padding-y) var(--mobile-padding-x) !important;
     }
+
+    /* Extra padding for modals on small screens (Chrome fix) */
+    .popup-overlay,
+    .modal-overlay {
+        padding: 2rem 0.75rem !important;
+        padding-top: max(2rem, env(safe-area-inset-top, 2rem)) !important;
+        padding-bottom: max(2rem, env(safe-area-inset-bottom, 2rem)) !important;
+    }
+
+    .popup-content,
+    .modal-content {
+        max-height: calc(100dvh - 4rem) !important;
+        max-height: calc(100vh - 4rem) !important;
+    }
 }
 
 @media (max-width: 768px) {
@@ -155,6 +169,12 @@ button,
         z-index: 1000;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        /* Chrome mobile viewport fix */
+        height: 100dvh;
+        min-height: 100vh;
+        padding: 1.5rem 1rem;
+        padding-top: max(1.5rem, env(safe-area-inset-top, 1.5rem));
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
     }
 
     .popup-content {
@@ -164,9 +184,10 @@ button,
         border: 1px solid rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
         background: rgba(36, 36, 36, 0.95);
-        margin: 20px auto;
+        margin: 0 auto;
         max-width: 90vw;
-        max-height: calc(100vh - 40px);
+        max-height: calc(100dvh - 3rem);
+        max-height: calc(100vh - 3rem);
         overflow-y: auto;
     }
 

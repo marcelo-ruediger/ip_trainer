@@ -288,10 +288,13 @@ body {
     }
 
     .modal-overlay {
-        padding-top: max(0.2rem, env(safe-area-inset-top));
-        padding-bottom: max(0.2rem, env(safe-area-inset-bottom));
-        padding-left: max(20px, env(safe-area-inset-left));
-        padding-right: max(20px, env(safe-area-inset-right));
+        padding-top: max(1.5rem, env(safe-area-inset-top));
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+        /* Chrome dynamic viewport fix */
+        height: 100dvh;
+        min-height: 100vh;
     }
 }
 
