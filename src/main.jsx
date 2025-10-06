@@ -11,3 +11,5 @@ createRoot(document.getElementById("root")).render(
         </LanguageProvider>
     </StrictMode>
 );
+
+//TODO: Buy me a Coffee or PayPal.me or Ko-fi or GitHub Sponsors (most professional and no fees)?
