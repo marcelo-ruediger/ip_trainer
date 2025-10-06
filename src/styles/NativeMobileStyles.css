@@ -36,7 +36,7 @@ button,
         --mobile-padding-y: 1rem;
         --mobile-padding-x: 0.5rem;
     }
-    
+
     #root {
         margin: var(--mobile-padding-y) var(--mobile-padding-x);
         min-height: calc(100vh - calc(var(--mobile-padding-y) * 2));
@@ -52,9 +52,18 @@ button,
     @media (max-width: 768px) {
         #root {
             margin-top: max(var(--mobile-padding-y), env(safe-area-inset-top));
-            margin-bottom: max(var(--mobile-padding-y), env(safe-area-inset-bottom));
-            margin-left: max(var(--mobile-padding-x), env(safe-area-inset-left));
-            margin-right: max(var(--mobile-padding-x), env(safe-area-inset-right));
+            margin-bottom: max(
+                var(--mobile-padding-y),
+                env(safe-area-inset-bottom)
+            );
+            margin-left: max(
+                var(--mobile-padding-x),
+                env(safe-area-inset-left)
+            );
+            margin-right: max(
+                var(--mobile-padding-x),
+                env(safe-area-inset-right)
+            );
         }
     }
 }
@@ -65,7 +74,7 @@ button,
         --mobile-padding-y: 1.25rem;
         --mobile-padding-x: 0.75rem;
     }
-    
+
     #root {
         margin: var(--mobile-padding-y) var(--mobile-padding-x) !important;
     }
