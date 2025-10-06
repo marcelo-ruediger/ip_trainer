@@ -298,7 +298,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 5px 15px;
     border-bottom: 1px solid #333;
     background-color: #242424;
     border-radius: 12px 12px 0 0;
@@ -813,10 +813,6 @@
         width: 95%;
         margin: 10px;
         max-height: 90vh;
-    }
-
-    .popup-header {
-        padding: 12px 15px;
     }
 
     .image-toggle-container > label:not(.info-label) .label-text {

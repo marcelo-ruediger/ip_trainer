@@ -288,13 +288,18 @@ body {
     }
 
     .modal-overlay {
-        padding-top: max(1.5rem, env(safe-area-inset-top));
-        padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
-        padding-left: max(1rem, env(safe-area-inset-left));
-        padding-right: max(1rem, env(safe-area-inset-right));
-        /* Chrome dynamic viewport fix */
-        height: 100dvh;
-        min-height: 100vh;
+        /* Standardized: 10% top/bottom padding with safe areas */
+        padding: 10vh max(1rem, env(safe-area-inset-left)) 10vh
+            max(1rem, env(safe-area-inset-right));
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-content,
+    .popup-content {
+        /* Standardized: exactly 80% height */
+        height: 80vh;
+        max-height: 80vh;
     }
 }
 
@@ -311,7 +316,6 @@ body {
     }
 
     .popup-header {
-        padding: 10px 15px;
         border-radius: 8px 8px 0 0;
     }
 

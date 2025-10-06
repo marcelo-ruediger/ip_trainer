@@ -76,22 +76,26 @@ button,
     }
 
     #root {
-        margin: var(--mobile-padding-y) var(--mobile-padding-x) !important;
+        margin: var(--mobile-padding-y) var(--mobile-padding-x);
     }
 
-    /* Extra padding for modals on small screens (Chrome fix) */
+    /* Standardized modals: same 80% height on all screen sizes */
     .popup-overlay,
     .modal-overlay {
-        padding: 2rem 0.75rem !important;
-        padding-top: max(2rem, env(safe-area-inset-top, 2rem)) !important;
-        padding-bottom: max(2rem, env(safe-area-inset-bottom, 2rem)) !important;
+        padding: 10vh 0.75rem;
+        padding-left: max(0.75rem, env(safe-area-inset-left));
+        padding-right: max(0.75rem, env(safe-area-inset-right));
+        display: flex;
+        align-items: center;
     }
 
     .popup-content,
     .modal-content {
-        max-height: calc(100dvh - 4rem) !important;
-        max-height: calc(100vh - 4rem) !important;
+        height: 80vh;
+        max-height: 80vh;
     }
+
+
 }
 
 @media (max-width: 768px) {
@@ -169,12 +173,12 @@ button,
         z-index: 1000;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        /* Chrome mobile viewport fix */
-        height: 100dvh;
-        min-height: 100vh;
-        padding: 1.5rem 1rem;
-        padding-top: max(1.5rem, env(safe-area-inset-top, 1.5rem));
-        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+        /* Standardized: 10% top/bottom padding for vertical centering */
+        padding: 10vh 1rem;
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+        display: flex;
+        align-items: center;
     }
 
     .popup-content {
@@ -184,16 +188,16 @@ button,
         border: 1px solid rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
         background: rgba(36, 36, 36, 0.95);
-        margin: 0 auto;
+        width: 100%;
         max-width: 90vw;
-        max-height: calc(100dvh - 3rem);
-        max-height: calc(100vh - 3rem);
+        /* Standardized: exactly 80% of viewport height */
+        height: 80vh;
+        max-height: 80vh;
         overflow-y: auto;
     }
 
     .popup-header {
         border-radius: 20px 20px 0 0;
-        padding: 16px 20px;
     }
 
     .close-button {

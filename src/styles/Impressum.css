@@ -9,10 +9,8 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    padding: 20px;
-    /* Chrome mobile viewport fix */
-    min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for modern browsers */
+    /* Standardized: 10% top/bottom padding for all screen sizes */
+    padding: 10vh 20px;
 }
 
 .modal-content {
@@ -21,7 +19,9 @@
     border-radius: 12px;
     width: 100%;
     max-width: 600px;
-    max-height: 90vh;
+    /* Standardized: 80% height on all screen sizes */
+    height: 80vh;
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -35,7 +35,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 5px 15px;
     border-bottom: 1px solid #333;
     background-color: #242424;
     border-radius: 12px 12px 0 0;
@@ -129,22 +129,18 @@
 
 @media (max-width: 768px) {
     .modal-overlay {
-        padding: 1.5rem 1rem;
-        /* Enhanced padding for Chrome mobile */
-        padding-top: max(1.5rem, env(safe-area-inset-top, 1.5rem));
-        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
-        /* Use dynamic viewport height to handle Chrome UI changes */
-        height: 100dvh;
-        min-height: 100vh;
+        /* Standardized: 10% top/bottom padding for vertical centering */
+        padding: 10vh 1rem;
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+        display: flex;
+        align-items: center;
     }
 
     .modal-content {
-        max-height: calc(100dvh - 3rem);
-        max-height: calc(100vh - 3rem); /* Fallback for browsers without dvh */
-    }
-
-    .modal-header {
-        padding: 15px;
+        /* Standardized: exactly 80% of viewport height */
+        height: 80vh;
+        max-height: 80vh;
     }
 
     .modal-header h2 {
@@ -162,19 +158,16 @@
 
 @media (max-width: 480px) {
     .modal-overlay {
-        padding: 2rem 0.75rem;
-        /* Extra padding for small phones with Chrome UI */
-        padding-top: max(2rem, env(safe-area-inset-top, 2rem));
-        padding-bottom: max(2rem, env(safe-area-inset-bottom, 2rem));
+        /* Standardized: same 10% padding on small screens */
+        padding: 10vh 0.75rem;
+        padding-left: max(0.75rem, env(safe-area-inset-left));
+        padding-right: max(0.75rem, env(safe-area-inset-right));
     }
 
     .modal-content {
-        max-height: calc(100dvh - 4rem);
-        max-height: calc(100vh - 4rem);
-    }
-
-    .modal-header {
-        padding: 12px;
+        /* Standardized: same 80% height on all screen sizes */
+        height: 80vh;
+        max-height: 80vh;
     }
 
     .modal-header h2 {
