@@ -12,4 +12,11 @@ createRoot(document.getElementById("root")).render(
     </StrictMode>
 );
 
-//TODO: Buy me a Coffee or PayPal.me or Ko-fi or GitHub Sponsors (most professional and no fees)?
+/* TODO: Buy me a Coffee or PayPal.me or Ko-fi or GitHub Sponsors (most professional and no fees)?
+So hast du:
+
+GitHub Sponsors → für Entwickler, Dozenten, Open-Source-Fans
+
+Buy Me a Coffee → für Studierende oder Nicht-Techniker
+
+Beide Zielgruppen fühlen sich angesprochen, und du wirkst gleichzeitig professionell und sympathisch.*/
