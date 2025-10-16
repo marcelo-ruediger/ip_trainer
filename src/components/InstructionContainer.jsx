@@ -90,7 +90,7 @@ function InstructionContainer({
         return (
             <div className="instruction-container answers-shown correct-answers">
                 <div className="instruction-text">
-                    Antworten wurden ausgefüllt. Versuche es nochmal{" "}
+                    {t("instructionContainer.answersShown")}{" "}
                     <img src={againIcon} alt="again" className="again-icon" />
                 </div>
             </div>

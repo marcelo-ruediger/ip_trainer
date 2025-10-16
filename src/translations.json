@@ -282,12 +282,12 @@
             }
         },
         "instructionContainer": {
-            "initialState": "Erzeugen Sie eine IP + ein Feld zum Üben oder geben Sie IP + CIDR/Subnetzmaske für automatische Berechnungen ein ",
+            "initialState": "Lass dir eine zufälige IP-Aufgabe erzeugen oder gib eine IP-Adresse (mit CIDR oder Subnetzmaske) ein, um automatisch zu berechnen ",
             "ipHints": "Für Hilfe jederzeit IPv4-/IPv6-Hilfstabelle und Hinweise verwenden",
             "practiceMode": "Aufgabe",
             "ipPracticeMode": "Fülle die anderen Felder anhand der generierten Daten aus",
             "ipv4Hints": "\"Kein\" Netzwerk-, Broadcast- und Hostadressen möglich",
-            "ipv6Hints1": "Kürzeste gültige Abkürzung für Netzadresse + Interfaceanteil nutzen (\"kein\" möglich)",
+            "ipv6Hints1": "Kürzeste Schreibweise für Netzadresse und Interfaceanteil eingeben (\"kein\" möglich)",
             "ipv6Hints2": "Subnetzanteil alle Bits eingeben (\"kein\" möglich)",
             "feedback": {
                 "correct": "Richtig",
@@ -310,7 +310,8 @@
                 "askForCIDR": "Geben Sie nun die CIDR oder die Subnetzmaske ein",
                 "calculationCompletedTitle": "Berechnung abgeschlossen",
                 "calculationCompletedMessage": "Alle Felder wurden automatisch berechnet"
-            }
+            },
+            "answersShown": "Antworten wurden ausgefüllt. Versuche es nochmal"
         },
         "tooltips": {
             "ipv4": {
@@ -664,12 +665,12 @@
             }
         },
         "instructionContainer": {
-            "initialState": "Generate an IP + one field to practice, or enter an IP + CIDR/subnet mask for automatic calculation ",
+            "initialState": "Generate a random IP task or enter an IP address (with CIDR or subnet mask) to calculate automatically ",
             "ipHints": "Use the IPv4/IPv6 Help Table and Hints for help at any time",
             "practiceMode": "Task",
             "ipPracticeMode": "Fill in the other fields based on the generated data",
             "ipv4Hints": "\"No\" Network, Broadcast and Host Addresses possible",
-            "ipv6Hints1": "Use the shortest valid abbreviation for the Network Address + Interface ID (\"none\" possible)",
+            "ipv6Hints1": "Use the shortest notation for the Network Address and Interface ID (\"none\" possible)",
             "ipv6Hints2": "Enter all bits of the Subnet ID (\"none\" possible)",
             "feedback": {
                 "correct": "Correct",
@@ -692,7 +693,8 @@
                 "askForCIDR": "Now enter the CIDR notation or the Subnet Mask",
                 "calculationCompletedTitle": "Calculation completed",
                 "calculationCompletedMessage": "All fields were calculated automatically"
-            }
+            },
+            "answersShown": "Answers have been filled in. Try again"
         },
         "tooltips": {
             "ipv4": {
