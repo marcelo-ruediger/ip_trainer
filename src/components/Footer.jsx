@@ -49,6 +49,15 @@ function Footer() {
                         }}
                     >
                         {t("footer.feedbackBugs")}
+                    </a>{" "}
+                    ·{" "}
+                    <a
+                        className="footer-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://ko-fi.com/marcelo_ruediger"
+                    >
+                        Buy Me a Coffee ☕
                     </a>
                 </p>
             </footer>

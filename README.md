@@ -5,7 +5,8 @@
 
 Progressive Web App for **IPv4/IPv6 networking practice**. Designed for German **IHK Fachinformatiker** exam prep with offline support and bilingual interface (German/English).
 
-**[🔗 Try Live Demo](https://marcelo-ruediger.github.io/ip_trainer/)**
+**[🔗 Live App](https://marcelo-ruediger.github.io/ip_trainer/)**
+**[📝 Issues](https://github.com/marcelo-ruediger/ip_trainer/issues)**
 
 ## 🚀 Quick Start
 
@@ -41,6 +42,10 @@ npm run deploy   # Deploy to GitHub Pages
 
 MIT © 2025 Marcelo Ruediger
 
----
+## ☕ Support
 
-**[🔗 Live App](https://marcelo-ruediger.github.io/ip_trainer/)** • **[📝 Issues](https://github.com/marcelo-ruediger/ip_trainer/issues)**
+If you find this project helpful, consider buying me a coffee!
+
+**[☕ Ko-fi](https://ko-fi.com/marcelo_ruediger)**
+
+---
