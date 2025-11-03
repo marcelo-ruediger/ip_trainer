@@ -12,8 +12,9 @@ dist/
 build/
 dist-ssr
 *.local
+
+# Source maps (keep package-lock.json, package.json, tsconfig.json)
 *.map
-*.json
 
 # Editor directories and files
 .vscode/*
