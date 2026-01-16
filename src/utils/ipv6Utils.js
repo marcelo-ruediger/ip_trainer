@@ -509,12 +509,14 @@ export const calculateIPv6NetworkAddress = (ipv6, prefixLength) => {
             const decimal = parseInt(partialGroup, 16);
             const binary = decimal.toString(2).padStart(16, "0");
             const networkBits = binary.substring(0, remainingBits);
-            const networkDecimal = parseInt(networkBits, 2);
-
-            if (networkDecimal > 0) {
-                const networkHex = networkDecimal.toString(16);
-                networkGroups.push(networkHex);
-            }
+            // Pad the network bits to 16 bits to preserve position (trailing zeros matter!)
+            const paddedBinary = networkBits.padEnd(16, "0");
+            const networkDecimal = parseInt(paddedBinary, 2);
+            const networkHex = networkDecimal.toString(16).padStart(4, "0");
+            // Remove only leading zeros, NOT trailing zeros
+            const cleanedHex = networkHex.replace(/^0+/, "") || "0";
+            
+            networkGroups.push(cleanedHex);
         }
 
         if (networkGroups.length === 0) {

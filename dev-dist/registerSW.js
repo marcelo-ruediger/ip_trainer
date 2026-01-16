@@ -1,1 +1,0 @@
-if('serviceWorker' in navigator) navigator.serviceWorker.register('/ip_trainer/dev-sw.js?dev-sw', { scope: '/ip_trainer/', type: 'classic' })
