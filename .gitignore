@@ -27,5 +27,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-test_ipv6_fix.js

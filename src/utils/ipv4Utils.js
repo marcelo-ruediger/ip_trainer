@@ -21,7 +21,7 @@ export const getRandomIp = (includeSpecialAddresses = false) => {
         return getRandomSpecialIp();
     }
 
-    const useImportantAddress = Math.random() < 0.35;
+    const useImportantAddress = Math.random() < 0.25;
 
     if (useImportantAddress) {
         const validAddresses = subnetCalculationAddresses;
@@ -538,12 +538,57 @@ export const getIPv4AddressInfo = (ipAddress) => {
 };
 
 export const getRandomCIDR = () => {
-    const commonCidrs = [8, 16, 24, 25, 26, 27, 28, 29, 30, 31, 32];
-    const allCidrs = Math.floor(Math.random() * 32) + 1;
+    // Weighted CIDR distribution reflecting real-world usage
+    const cidrOptions = [
+        // Most common CIDRs (65% probability)
+        { cidr: 24, weight: 20 },        // /24 - Most common for small networks
+        { cidr: 16, weight: 15 },        // /16 - Common for medium networks
+        { cidr: 8, weight: 10 },         // /8 - Large enterprise networks
+        { cidr: 25, weight: 3 },         // /25 - Subnet divisions
+        { cidr: 26, weight: 3 },         // /26 - Subnet divisions
+        { cidr: 27, weight: 4 },         // /27 - Subnet divisions
+        { cidr: 28, weight: 3 },         // /28-/30 - Small subnets
+        { cidr: 29, weight: 3 },         // /29 - Small subnets
+        { cidr: 30, weight: 4 },         // /30 - Small subnets
+        
+        // Less common but important (23% probability)
+        { cidr: 32, weight: 5 },         // /32 - Single host
+        { cidr: 31, weight: 5 },         // /31 - Point-to-point
+        { cidr: 20, weight: 2 },         // /20-/23 - Medium subnets
+        { cidr: 21, weight: 2 },         
+        { cidr: 22, weight: 2 },         
+        { cidr: 23, weight: 2 },         
+        { cidr: 12, weight: 2 },         // /12-/15 - Larger networks
+        { cidr: 13, weight: 2 },         
+        { cidr: 14, weight: 2 },         
+        { cidr: 15, weight: 1 },         
+        
+        // Rare but educational (12% probability)
+        { cidr: 1, weight: 0.5 },        // /1-/7 - Very rare
+        { cidr: 2, weight: 0.5 },        
+        { cidr: 3, weight: 0.5 },        
+        { cidr: 4, weight: 0.5 },        
+        { cidr: 5, weight: 0.5 },        
+        { cidr: 6, weight: 0.5 },        
+        { cidr: 7, weight: 1 },          
+        { cidr: 9, weight: 1 },          // /9-/11 - Uncommon
+        { cidr: 10, weight: 1 },         
+        { cidr: 11, weight: 1 },         
+        { cidr: 17, weight: 2 },         // /17-/19 - Less common
+        { cidr: 18, weight: 2 },         
+        { cidr: 19, weight: 1 },         
+    ];
 
-    return Math.random() < 0.5
-        ? commonCidrs[Math.floor(Math.random() * commonCidrs.length)]
-        : allCidrs;
+    // Create weighted array
+    const weightedCidrs = [];
+    cidrOptions.forEach((option) => {
+        const count = Math.floor(option.weight);
+        for (let i = 0; i < count; i++) {
+            weightedCidrs.push(option.cidr);
+        }
+    });
+
+    return weightedCidrs[Math.floor(Math.random() * weightedCidrs.length)];
 };
 
 export const cidrToMask = (cidr) => {

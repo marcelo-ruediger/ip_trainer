@@ -186,9 +186,10 @@ const calculationSuitableIPv6Addresses = ihkEssentialIPv6Addresses.filter(
 );
 
 export const getRandomIPv6 = () => {
-    const specialRand = Math.random();
+    const rand = Math.random();
 
-    if (specialRand < 0.03) {
+    // 10% - Special critical addresses (Loopback, Unspecified, critical Multicast)
+    if (rand < 0.10) {
         const specialAddresses = [
             { address: "::1", type: "Loopback" },
             { address: "::", type: "Unspecified" },
@@ -202,41 +203,51 @@ export const getRandomIPv6 = () => {
         return expandIPv6(chosen.address);
     }
 
-    const useMustKnow = specialRand < 0.53;
-
-    if (useMustKnow) {
-        const critical = calculationSuitableIPv6Addresses.filter(
-            (a) => a.importance === "Critical"
-        );
-        const important = calculationSuitableIPv6Addresses.filter(
-            (a) => a.importance === "Important"
-        );
-        const moderate = calculationSuitableIPv6Addresses.filter(
-            (a) => a.importance === "Moderate"
-        );
-
-        const allSuitable = [...critical, ...important, ...moderate];
-        if (allSuitable.length === 0) {
-            return generateDocumentationIPv6();
-        }
-
-        const poolRand = Math.random();
-        let pool;
-        if (poolRand < 0.6 && critical.length > 0) pool = critical;
-        else if (poolRand < 0.9 && important.length > 0) pool = important;
-        else if (moderate.length > 0) pool = moderate;
-        else pool = allSuitable;
-
-        const chosen = pool[Math.floor(Math.random() * pool.length)];
-        return expandIPv6(chosen.address);
-    }
-
-    const rand = Math.random();
-    if (rand < 0.38) {
-        return generateSimpleGlobalUnicast();
-    } else {
+    // 25% - Documentation addresses (most common for training/examples)
+    if (rand < 0.35) {
         return generateDocumentationIPv6();
     }
+
+    // 15% - Link-Local addresses (fe80::)
+    if (rand < 0.50) {
+        return generateSimpleLinkLocal();
+    }
+
+    // 15% - ULA addresses (fd00::, fc00::)
+    if (rand < 0.65) {
+        return generateSimpleULA();
+    }
+
+    // 20% - Global Unicast addresses
+    if (rand < 0.85) {
+        return generateSimpleGlobalUnicast();
+    }
+
+    // 15% - Educational/Important addresses from the knowledge base
+    const critical = calculationSuitableIPv6Addresses.filter(
+        (a) => a.importance === "Critical"
+    );
+    const important = calculationSuitableIPv6Addresses.filter(
+        (a) => a.importance === "Important"
+    );
+    const moderate = calculationSuitableIPv6Addresses.filter(
+        (a) => a.importance === "Moderate"
+    );
+
+    const allSuitable = [...critical, ...important, ...moderate];
+    if (allSuitable.length === 0) {
+        return generateDocumentationIPv6();
+    }
+
+    const poolRand = Math.random();
+    let pool;
+    if (poolRand < 0.6 && critical.length > 0) pool = critical;
+    else if (poolRand < 0.9 && important.length > 0) pool = important;
+    else if (moderate.length > 0) pool = moderate;
+    else pool = allSuitable;
+
+    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    return expandIPv6(chosen.address);
 };
 
 const generateDocumentationIPv6 = () => {
